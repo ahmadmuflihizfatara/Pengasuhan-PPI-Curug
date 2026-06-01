@@ -1,258 +1,71 @@
 <x-guest-layout>
-    <div class="login-container">
-        <!-- Header -->
-        <div class="login-header mb-5">
-            <h1 class="login-title">
-                <i class="fas fa-sign-in-alt me-2"></i>Welcome Back
-            </h1>
-            <p class="login-subtitle">Sign in to your account</p>
-        </div>
-
-        <form method="POST" action="{{ route('login') }}" novalidate>
-            @csrf
-
-            <!-- Email Address -->
-            <div class="mb-4">
-                <label for="email" class="form-label fw-600">
-                    <i class="fas fa-envelope me-2"></i>Email Address
-                </label>
-                <div class="input-group">
-                    <span class="input-group-text glass-input-icon">
-                        <i class="fas fa-at"></i>
+    <div class="flex flex-col md:flex-row w-full max-w-5xl rounded-3xl overflow-hidden shadow-2xl">
+        
+        <div class="w-full md:w-5/12 glass-panel p-10 md:p-12 flex flex-col justify-center text-white relative">
+            <div class="relative z-10">
+                <div class="flex items-center gap-4 mb-10">
+                    <img src="{{ asset('images/logo.png') }}" alt="Logo" class="w-20 h-20 rounded-full shadow-lg object-cover">
+                    <span class="font-bold tracking-widest uppercase text-sm leading-tight text-yellow-500">
+                        POLITEKNIK PENERBANGAN INDONESIA<br><span class="text-white">CURUG</span>
                     </span>
-                    <input 
-                        id="email" 
-                        type="email" 
-                        class="form-control glass-input @error('email') is-invalid @enderror"
-                        name="email" 
-                        placeholder="name@example.com" 
-                        value="{{ old('email') }}" 
-                        required 
-                        autofocus 
-                        autocomplete="username"
-                    />
                 </div>
-                @error('email')
-                    <div class="invalid-feedback d-block mt-2">
-                        <i class="fas fa-exclamation-circle me-1"></i>{{ $message }}
-                    </div>
-                @enderror
-            </div>
 
-            <!-- Password -->
-            <div class="mb-4">
-                <label for="password" class="form-label fw-600">
-                    <i class="fas fa-lock me-2"></i>Password
-                </label>
-                <div class="input-group">
-                    <span class="input-group-text glass-input-icon">
-                        <i class="fas fa-key"></i>
-                    </span>
-                    <input 
-                        id="password" 
-                        type="password" 
-                        class="form-control glass-input @error('password') is-invalid @enderror"
-                        name="password" 
-                        placeholder="••••••••" 
-                        required 
-                        autocomplete="current-password"
-                    />
-                </div>
-                @error('password')
-                    <div class="invalid-feedback d-block mt-2">
-                        <i class="fas fa-exclamation-circle me-1"></i>{{ $message }}
-                    </div>
-                @enderror
-            </div>
-
-            <!-- Remember Me & Forgot Password -->
-            <div class="mb-4 d-flex justify-content-between align-items-center">
-                <div class="form-check">
-                    <input 
-                        class="form-check-input" 
-                        type="checkbox" 
-                        id="remember" 
-                        name="remember" 
-                        {{ old('remember') ? 'checked' : '' }}
-                    />
-                    <label class="form-check-label fw-500" for="remember">
-                        Remember me
-                    </label>
-                </div>
-                @if (Route::has('password.request'))
-                    <a href="{{ route('password.request') }}" class="text-white fw-500 text-decoration-none forgot-pwd-link">
-                        Forgot Password?
-                    </a>
-                @endif
-            </div>
-
-            <!-- Login Button -->
-            <button type="submit" class="btn btn-primary w-100 py-2 fw-600 mb-3">
-                <i class="fas fa-sign-in-alt me-2"></i>Sign In
-            </button>
-
-            <!-- Divider -->
-            <div class="divider small-text text-center mb-4">
-                or
-            </div>
-
-            <!-- Register Link -->
-            <div class="text-center">
-                <p class="small-text mb-0">
-                    Don't have an account? 
-                    <a href="{{ route('register') }}" class="text-white fw-600 register-link">
-                        Create One
-                    </a>
+                <h1 class="text-3xl md:text-4xl font-bold leading-tight mb-4">
+                    SELAMAT DATANG DI PANEL KONTROL KARIR IMPIAN ANDA.
+                </h1>
+                <p class="text-slate-300 text-sm leading-relaxed">
+                    Mulailah perjalanan Anda sebagai pilot profesional sekarang.
                 </p>
             </div>
-        </form>
+        </div>
+
+        <div class="w-full md:w-7/12 form-panel p-10 md:p-14 flex flex-col justify-center">
+            <form method="POST" action="{{ route('login') }}" novalidate>
+                @csrf
+
+                <div class="mb-6">
+                    <label for="email" class="block text-xs font-semibold text-slate-600 mb-2 uppercase tracking-wide">Email atau Username</label>
+                    <div class="input-group">
+                        <svg class="input-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 9h3.75M15 12h3.75M15 15h3.75M4.5 19.5h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5zm6-10.125a1.875 1.875 0 11-3.75 0 1.875 1.875 0 013.75 0zm1.294 6.336a6.721 6.721 0 01-3.17.789 6.721 6.721 0 01-3.168-.789 3.376 3.376 0 016.338 0z" />
+                        </svg>
+                        <input id="email" type="email" name="email" value="{{ old('email') }}" required autofocus class="aviation-input" placeholder="contoh@aviation.ac.id" />
+                    </div>
+                    @error('email') <span class="text-red-500 text-xs mt-1 block">{{ $message }}</span> @enderror
+                </div>
+
+                <div class="mb-6">
+                    <label for="password" class="block text-xs font-semibold text-slate-600 mb-2 uppercase tracking-wide">Kata Sandi</label>
+                    <div class="input-group">
+                        <svg class="input-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
+                        </svg>
+                        <input id="password" type="password" name="password" required class="aviation-input" placeholder="••••••••" />
+                    </div>
+                    @error('password') <span class="text-red-500 text-xs mt-1 block">{{ $message }}</span> @enderror
+                </div>
+
+                <div class="flex items-center justify-between mb-8">
+                    <label class="flex items-center gap-2 cursor-pointer">
+                        <input type="checkbox" name="remember" class="w-4 h-4 rounded border-slate-300 text-slate-800 focus:ring-slate-800" {{ old('remember') ? 'checked' : '' }}>
+                        <span class="text-sm text-slate-600 font-medium">Ingat Saya</span>
+                    </label>
+                    @if (Route::has('password.request'))
+                        <a href="{{ route('password.request') }}" class="text-sm font-bold text-slate-800 hover:text-yellow-600 hover:underline">LUPA KATA SANDI?</a>
+                    @endif
+                </div>
+
+                <button type="submit" class="w-full btn-primary flex items-center justify-center gap-2 py-3.5 rounded-lg font-bold tracking-widest shadow-lg">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-5 h-5 text-yellow-500">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5" />
+                    </svg>
+                    MASUK KE KOKPIT
+                </button>
+
+                <p class="text-center mt-8 text-sm text-slate-600 font-medium">
+                    BELUM PUNYA AKUN? <a href="{{ route('register') }}" class="font-bold text-slate-800 hover:text-yellow-600 hover:underline">DAFTAR</a>
+                </p>
+            </form>
+        </div>
     </div>
-
-    <style>
-        .login-container {
-            width: 100%;
-        }
-
-        .login-header {
-            text-align: center;
-            padding-bottom: 20px;
-        }
-
-        .login-title {
-            font-size: 32px;
-            font-weight: 700;
-            color: #ffffff;
-            margin-bottom: 8px;
-            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-        }
-
-        .login-subtitle {
-            font-size: 14px;
-            color: rgba(255, 255, 255, 0.85);
-            margin: 0;
-        }
-
-        .form-label {
-            color: rgba(255, 255, 255, 0.95);
-            font-size: 14px;
-            margin-bottom: 8px;
-            display: flex;
-            align-items: center;
-        }
-
-        .glass-input-icon {
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-right: none;
-            color: rgba(255, 255, 255, 0.7);
-        }
-
-        .glass-input {
-            background: rgba(255, 255, 255, 0.2) !important;
-            border: 1px solid rgba(255, 255, 255, 0.3) !important;
-            color: #ffffff !important;
-            font-weight: 500;
-            transition: all 0.3s ease;
-        }
-
-        .glass-input::placeholder {
-            color: rgba(255, 255, 255, 0.6) !important;
-        }
-
-        .glass-input:focus {
-            background: rgba(255, 255, 255, 0.25) !important;
-            border-color: rgba(255, 255, 255, 0.5) !important;
-            color: #ffffff !important;
-            box-shadow: 0 0 15px rgba(255, 255, 255, 0.2) !important;
-        }
-
-        .glass-input.is-invalid {
-            border-color: #ff6b6b !important;
-            background: rgba(255, 107, 107, 0.1) !important;
-        }
-
-        .glass-input.is-invalid:focus {
-            box-shadow: 0 0 15px rgba(255, 107, 107, 0.3) !important;
-        }
-
-        .invalid-feedback {
-            color: #ff6b6b;
-            font-size: 13px;
-            font-weight: 500;
-        }
-
-        .form-check {
-            display: flex;
-            align-items: center;
-        }
-
-        .form-check-input {
-            width: 18px;
-            height: 18px;
-            margin-top: 2px;
-            background-color: rgba(255, 255, 255, 0.2);
-            border: 1px solid rgba(255, 255, 255, 0.4);
-            cursor: pointer;
-        }
-
-        .form-check-input:checked {
-            background-color: #667eea;
-            border-color: #667eea;
-        }
-
-        .form-check-label {
-            color: rgba(255, 255, 255, 0.9);
-            cursor: pointer;
-            user-select: none;
-            font-size: 14px;
-            margin-left: 8px;
-            margin-bottom: 0;
-        }
-
-        .forgot-pwd-link {
-            font-size: 14px;
-            transition: all 0.3s ease;
-        }
-
-        .forgot-pwd-link:hover {
-            color: #e0e0e0 !important;
-            text-decoration: underline !important;
-        }
-
-        .register-link {
-            transition: all 0.3s ease;
-            font-size: 14px;
-        }
-
-        .register-link:hover {
-            color: #e0e0e0 !important;
-        }
-
-        .fw-500 {
-            font-weight: 500;
-        }
-
-        .fw-600 {
-            font-weight: 600;
-        }
-
-        .input-group-text {
-            background: transparent;
-            border: none;
-        }
-
-        @media (max-width: 576px) {
-            .login-title {
-                font-size: 24px;
-            }
-
-            .login-subtitle {
-                font-size: 13px;
-            }
-
-            .form-label {
-                font-size: 13px;
-            }
-        }
-    </style>
 </x-guest-layout>
