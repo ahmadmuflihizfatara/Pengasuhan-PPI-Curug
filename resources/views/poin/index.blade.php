@@ -832,4 +832,5 @@ function submitPoinDeleteForm() {
 document.getElementById('poinDeleteModal').addEventListener('click', function(e) { if (e.target===this) closePoinDeleteModal(); });
 document.addEventListener('keydown', function(e) { if (e.key==='Escape') closePoinDeleteModal(); });
 </script>
+        @endif
 </x-app-layout>
