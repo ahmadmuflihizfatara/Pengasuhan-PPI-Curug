@@ -5,9 +5,12 @@ namespace App\Http\Controllers;
 use App\Models\Surat;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use App\Traits\LogsActivity; // <-- TAMBAHAN
 
 class SuratController extends Controller
 {
+    use LogsActivity; // <-- TAMBAHAN
+
     public function index(Request $request)
     {
         $query = Surat::latest();
@@ -67,7 +70,25 @@ class SuratController extends Controller
             $validated['file_path'] = $request->file('file')->store('surat', 'public');
         }
 
-        Surat::create($validated);
+        $surat = Surat::create($validated);
+
+        // ========== ACTIVITY LOG ==========
+        $this->logActivity(
+            modul: 'surat',
+            aksi: 'buat',
+            deskripsi: "Buat surat baru: \"{$surat->perihal}\" ({$surat->jenis_surat}) dari {$surat->pengirim} kepada {$surat->penerima}",
+            detail: [
+                'nomor_surat'   => $surat->nomor_surat,
+                'jenis_surat'   => $surat->jenis_surat,
+                'perihal'       => $surat->perihal,
+                'pengirim'      => $surat->pengirim,
+                'penerima'      => $surat->penerima,
+                'tanggal_surat' => $surat->tanggal_surat?->format('Y-m-d'),
+                'status'        => $surat->status,
+            ],
+            subject: $surat
+        );
+        // ==================================
 
         return redirect()->route('surat.index')->with('success', 'Surat berhasil ditambahkan!');
     }
@@ -99,6 +120,9 @@ class SuratController extends Controller
             'file'           => 'nullable|file|mimes:pdf,doc,docx,jpg,jpeg,png|max:5120',
         ]);
 
+        $statusLama  = $surat->status;
+        $perihalLama = $surat->perihal;
+
         if ($request->hasFile('file')) {
             if ($surat->file_path) {
                 Storage::disk('public')->delete($surat->file_path);
@@ -108,11 +132,59 @@ class SuratController extends Controller
 
         $surat->update($validated);
 
+        // ========== ACTIVITY LOG ==========
+        // Cek apakah status berubah untuk deskripsi yang lebih informatif
+        $aksi = 'ubah';
+        $deskripsi = "Ubah surat \"{$perihalLama}\"";
+        if ($statusLama !== $surat->status) {
+            $aksi = match ($surat->status) {
+                'Selesai'  => 'selesai',
+                'Ditolak'  => 'tolak',
+                'Disetujui'=> 'setujui',
+                default    => 'ubah',
+            };
+            $deskripsi = "Ubah status surat \"{$perihalLama}\": {$statusLama} → {$surat->status}";
+        }
+
+        $this->logActivity(
+            modul: 'surat',
+            aksi: $aksi,
+            deskripsi: $deskripsi,
+            detail: [
+                'nomor_surat'   => $surat->nomor_surat,
+                'jenis_surat'   => $surat->jenis_surat,
+                'perihal'       => $surat->perihal,
+                'pengirim'      => $surat->pengirim,
+                'penerima'      => $surat->penerima,
+                'status_lama'   => $statusLama,
+                'status_baru'   => $surat->status,
+            ],
+            subject: $surat
+        );
+        // ==================================
+
         return redirect()->route('surat.index')->with('success', 'Surat berhasil diperbarui!');
     }
 
     public function destroy(Surat $surat)
     {
+        // ========== ACTIVITY LOG (sebelum delete) ==========
+        $this->logActivity(
+            modul: 'surat',
+            aksi: 'hapus',
+            deskripsi: "Hapus surat \"{$surat->perihal}\" ({$surat->jenis_surat}) dari {$surat->pengirim} — Status terakhir: {$surat->status}",
+            detail: [
+                'nomor_surat' => $surat->nomor_surat,
+                'jenis_surat' => $surat->jenis_surat,
+                'perihal'     => $surat->perihal,
+                'pengirim'    => $surat->pengirim,
+                'penerima'    => $surat->penerima,
+                'status'      => $surat->status,
+            ],
+            subject: $surat
+        );
+        // ====================================================
+
         if ($surat->file_path) {
             Storage::disk('public')->delete($surat->file_path);
         }

@@ -7,9 +7,12 @@ use Illuminate\View\View;
 use Illuminate\Http\RedirectResponse;
 use App\Models\PoinMahasiswa;
 use App\Http\Controllers\MahasiswaController;
+use App\Traits\LogsActivity; // <-- TAMBAHAN
 
 class PoinController extends Controller
 {
+    use LogsActivity; // <-- TAMBAHAN
+
     public function index(Request $request): View
     {
         $allMahasiswa = MahasiswaController::getAllMahasiswa();
@@ -32,7 +35,6 @@ class PoinController extends Controller
             $selectedStudent = null;
             $kelas = null;
 
-            // Cocokkan username user dengan nickname mahasiswa
             foreach ($flatMahasiswa as $m) {
                 if (strtolower($m['nickname']) === strtolower($user->username ?? '')
                     || strtolower($m['nickname']) === strtolower($user->nama_panggilan ?? '')
@@ -127,7 +129,7 @@ class PoinController extends Controller
             return back()->withErrors(['npm' => 'Mahasiswa tidak ditemukan'])->withInput();
         }
 
-        PoinMahasiswa::create([
+        $poin = PoinMahasiswa::create([
             'npm'            => $request->npm,
             'nama_mahasiswa' => $student['nama'],
             'kelas'          => $kelas,
@@ -139,6 +141,26 @@ class PoinController extends Controller
             'keterangan'     => $request->keterangan,
         ]);
 
+        // ========== ACTIVITY LOG ==========
+        $kategoriLabel = $request->kategori === 'prestasi' ? 'Prestasi' : 'Pelanggaran';
+        $this->logActivity(
+            modul: 'poin',
+            aksi: 'tambah',
+            deskripsi: "Tambah poin {$kategoriLabel} untuk {$student['nama']} (NPM: {$request->npm}) — Kegiatan: {$request->kegiatan}, Nilai: {$request->nilai}",
+            detail: [
+                'npm'            => $request->npm,
+                'nama_mahasiswa' => $student['nama'],
+                'kelas'          => $kelas,
+                'kategori'       => $request->kategori,
+                'kegiatan'       => $request->kegiatan,
+                'nilai'          => abs((int)$request->nilai),
+                'tanggal'        => $request->tanggal,
+                'pengasuh'       => $request->pengasuh,
+            ],
+            subject: $poin
+        );
+        // ==================================
+
         return redirect()->route('poin.index', ['npm' => $request->npm])
             ->with('success', 'Poin berhasil ditambahkan!');
     }
@@ -146,7 +168,28 @@ class PoinController extends Controller
     public function destroy(int $id): RedirectResponse
     {
         $poin = PoinMahasiswa::findOrFail($id);
-        $npm = $poin->npm;
+        $npm  = $poin->npm;
+
+        // ========== ACTIVITY LOG ==========
+        $kategoriLabel = $poin->kategori === 'prestasi' ? 'Prestasi' : 'Pelanggaran';
+        $this->logActivity(
+            modul: 'poin',
+            aksi: 'hapus',
+            deskripsi: "Hapus poin {$kategoriLabel} milik {$poin->nama_mahasiswa} (NPM: {$npm}) — Kegiatan: {$poin->kegiatan}, Nilai: {$poin->nilai}",
+            detail: [
+                'npm'            => $poin->npm,
+                'nama_mahasiswa' => $poin->nama_mahasiswa,
+                'kelas'          => $poin->kelas,
+                'kategori'       => $poin->kategori,
+                'kegiatan'       => $poin->kegiatan,
+                'nilai'          => $poin->nilai,
+                'tanggal'        => $poin->tanggal?->format('Y-m-d'),
+                'pengasuh'       => $poin->pengasuh,
+            ],
+            subject: $poin
+        );
+        // ==================================
+
         $poin->delete();
 
         return redirect()->route('poin.index', ['npm' => $npm])

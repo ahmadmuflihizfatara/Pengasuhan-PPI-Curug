@@ -6,146 +6,92 @@ body { font-family: 'Inter', sans-serif; background: #f0f2f5; }
 
 .app-layout {
     display: flex;
-    min-height: calc(100vh - 100px);
-    margin-top: -40px;
-    margin-left: -25px;
-    margin-right: -25px;
+    min-height: 100vh;
 }
-
-/* ===== SIDEBAR ===== */
-.sidebar {
-    width: 240px;
-    background: #fff;
-    border-right: 1px solid #edf0f7;
-    padding: 28px 16px;
-    min-height: 100%;
-    flex-shrink: 0;
-    position: sticky;
-    top: 0;
-}
-.sidebar-logo { font-size: 18px; font-weight: 700; color: #5a67d8; text-decoration: none; display: flex; align-items: center; gap: 8px; margin-bottom: 32px; }
-.sidebar-section-title { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: #aab; margin-bottom: 10px; padding-left: 8px; }
-.sidebar-nav { list-style: none; padding: 0; margin: 0 0 24px 0; }
-.sidebar-nav li { margin-bottom: 2px; }
-.sidebar-nav a { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 10px; text-decoration: none; font-size: 14px; font-weight: 500; color: #555; transition: all .15s; }
-.sidebar-nav a:hover { background: #f0f0fb; color: #5a67d8; }
-.sidebar-nav a.active { background: linear-gradient(135deg, #667eea, #764ba2); color: #fff; }
-.sidebar-nav a.active i { color: #fff; }
-.sidebar-divider { border: none; border-top: 1px solid #edf0f7; margin: 12px 0 20px 0; }
-.logout-link { color: #e05252 !important; }
 
 /* ===== MAIN ===== */
 .main-content { flex: 1; padding: 28px 30px; min-width: 0; }
 
 .page-header {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    border-radius: 18px;
-    padding: 28px 32px;
-    color: white;
-    margin-bottom: 24px;
-    position: relative;
-    overflow: hidden;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+    border-radius: 18px; padding: 28px 32px; color: white;
+    margin-bottom: 24px; position: relative; overflow: hidden;
+    display: flex; align-items: center; justify-content: space-between;
 }
-.page-header::before { content: ''; position: absolute; right: -50px; top: -50px; width: 180px; height: 180px; background: rgba(255,255,255,.08); border-radius: 50%; }
-.page-header::after { content: ''; position: absolute; right: 80px; bottom: -60px; width: 140px; height: 140px; background: rgba(255,255,255,.06); border-radius: 50%; }
-.page-header-text { position: relative; z-index: 1; }
-.page-header h1 { margin: 0 0 4px 0; font-size: 22px; font-weight: 800; }
-.page-header p { margin: 0; opacity: .85; font-size: 13px; }
-.page-header .btn-add {
-    position: relative; z-index: 1;
-    background: white; color: #667eea;
-    padding: 11px 22px; border-radius: 25px;
-    text-decoration: none; font-size: 13px; font-weight: 800;
-    display: flex; align-items: center; gap: 7px;
-    white-space: nowrap;
-    box-shadow: 0 4px 15px rgba(0,0,0,.15);
-    transition: transform .15s, box-shadow .15s;
+.page-header::before { content:''; position:absolute; right:-50px; top:-50px; width:180px; height:180px; background:rgba(255,255,255,.08); border-radius:50%; }
+.page-header::after  { content:''; position:absolute; right:80px; bottom:-60px; width:140px; height:140px; background:rgba(255,255,255,.06); border-radius:50%; }
+.page-header-text { position:relative; z-index:1; }
+.page-header h1 { margin:0 0 4px; font-size:22px; font-weight:800; }
+.page-header p  { margin:0; opacity:.85; font-size:13px; }
+.btn-add {
+    position:relative; z-index:1;
+    background:white; color:#667eea;
+    padding:11px 22px; border-radius:25px;
+    text-decoration:none; font-size:13px; font-weight:800;
+    display:flex; align-items:center; gap:7px;
+    white-space:nowrap; box-shadow:0 4px 15px rgba(0,0,0,.15);
+    transition:transform .15s, box-shadow .15s;
 }
-.page-header .btn-add:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,.2); }
+.btn-add:hover { transform:translateY(-2px); box-shadow:0 6px 20px rgba(0,0,0,.2); color:#667eea; }
 
 .alert-success {
-    background: linear-gradient(135deg, #43e97b, #38f9d7);
-    color: white; padding: 14px 20px; border-radius: 12px;
-    margin-bottom: 20px; display: flex; align-items: center; gap: 10px;
-    font-weight: 600; font-size: 14px;
+    background:linear-gradient(135deg,#43e97b,#38f9d7);
+    color:white; padding:14px 20px; border-radius:12px;
+    margin-bottom:20px; display:flex; align-items:center; gap:10px;
+    font-weight:600; font-size:14px;
 }
 
-.card { background: white; border-radius: 16px; overflow: hidden; box-shadow: 0 2px 16px rgba(0,0,0,.06); }
-.empty-state { text-align: center; padding: 60px 20px; }
-.empty-state i { font-size: 56px; color: #e2e5ee; margin-bottom: 16px; display: block; }
-.empty-state h4 { color: #aab; margin: 0 0 8px 0; font-size: 16px; }
-.empty-state p { color: #ccc; margin: 0 0 20px 0; font-size: 14px; }
+.card { background:white; border-radius:16px; overflow:hidden; box-shadow:0 2px 16px rgba(0,0,0,.06); }
+.empty-state { text-align:center; padding:60px 20px; }
+.empty-state i  { font-size:56px; color:#e2e5ee; margin-bottom:16px; display:block; }
+.empty-state h4 { color:#aab; margin:0 0 8px; font-size:16px; }
+.empty-state p  { color:#ccc; margin:0 0 20px; font-size:14px; }
 .btn-primary-pill {
-    background: linear-gradient(135deg, #667eea, #764ba2);
-    color: white; padding: 11px 28px; border-radius: 25px;
-    text-decoration: none; font-size: 13px; font-weight: 700;
-    display: inline-flex; align-items: center; gap: 7px;
-    box-shadow: 0 4px 15px rgba(102,126,234,.4);
+    background:linear-gradient(135deg,#667eea,#764ba2);
+    color:white; padding:11px 28px; border-radius:25px;
+    text-decoration:none; font-size:13px; font-weight:700;
+    display:inline-flex; align-items:center; gap:7px;
+    box-shadow:0 4px 15px rgba(102,126,234,.4);
 }
 
-table { width: 100%; border-collapse: collapse; }
-thead tr { background: linear-gradient(135deg, #667eea, #764ba2); }
-th { padding: 14px 18px; text-align: left; color: white; font-size: 11px; font-weight: 700; letter-spacing: .06em; }
-td { padding: 14px 18px; font-size: 13px; color: #444; border-top: 1px solid #f0f2f7; }
-tbody tr { transition: background .1s; }
-tbody tr:hover { background: #f8f9ff; }
+table { width:100%; border-collapse:collapse; }
+thead tr { background:linear-gradient(135deg,#667eea,#764ba2); }
+th { padding:14px 18px; text-align:left; color:white; font-size:11px; font-weight:700; letter-spacing:.06em; }
+td { padding:14px 18px; font-size:13px; color:#444; border-top:1px solid #f0f2f7; }
+tbody tr { transition:background .1s; }
+tbody tr:hover { background:#f8f9ff; }
 
-.icon-box { width: 38px; height: 38px; border-radius: 10px; background: linear-gradient(135deg, #667eea, #764ba2); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-.time-badge { background: #eef0ff; color: #667eea; padding: 4px 12px; border-radius: 20px; font-size: 11px; font-weight: 700; }
-.btn-edit { background: #eef0ff; color: #667eea; border: none; padding: 6px 14px; border-radius: 20px; font-size: 11px; font-weight: 700; text-decoration: none; cursor: pointer; display: inline-flex; align-items: center; gap: 5px; transition: background .1s; }
-.btn-edit:hover { background: #dde2ff; }
-.btn-delete { background: #fff0f0; color: #e53e3e; border: none; padding: 6px 14px; border-radius: 20px; font-size: 11px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 5px; transition: background .1s; }
-.btn-delete:hover { background: #ffe0e0; }
+.icon-box  { width:38px; height:38px; border-radius:10px; background:linear-gradient(135deg,#667eea,#764ba2); display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+.time-badge { background:#eef0ff; color:#667eea; padding:4px 12px; border-radius:20px; font-size:11px; font-weight:700; }
+.btn-edit   { background:#eef0ff; color:#667eea; border:none; padding:6px 14px; border-radius:20px; font-size:11px; font-weight:700; text-decoration:none; cursor:pointer; display:inline-flex; align-items:center; gap:5px; transition:background .1s; }
+.btn-edit:hover   { background:#dde2ff; }
+.btn-delete { background:#fff0f0; color:#e53e3e; border:none; padding:6px 14px; border-radius:20px; font-size:11px; font-weight:700; cursor:pointer; display:inline-flex; align-items:center; gap:5px; transition:background .1s; }
+.btn-delete:hover { background:#ffe0e0; }
 
-/* ===== MODAL KONFIRMASI ===== */
-.modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.45); z-index: 9999; align-items: center; justify-content: center; }
-.modal-overlay.open { display: flex; }
-.modal-box { background: white; border-radius: 20px; padding: 32px 28px; max-width: 400px; width: 90%; box-shadow: 0 20px 60px rgba(0,0,0,.2); text-align: center; animation: modalIn .2s ease; }
-@keyframes modalIn { from { transform: scale(.93); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-.modal-icon { width: 60px; height: 60px; border-radius: 50%; background: #fff0f0; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; }
-.modal-icon i { font-size: 26px; color: #e53e3e; }
-.modal-box h3 { margin: 0 0 8px; font-size: 18px; font-weight: 800; color: #333; }
-.modal-box p { margin: 0 0 24px; font-size: 13px; color: #888; line-height: 1.5; }
-.modal-actions { display: flex; gap: 10px; justify-content: center; }
-.modal-cancel { background: #f4f5f9; color: #666; border: none; padding: 11px 28px; border-radius: 25px; font-size: 13px; font-weight: 700; cursor: pointer; transition: background .15s; }
-.modal-cancel:hover { background: #e8e9f0; }
-.modal-confirm { background: linear-gradient(135deg, #fc5c7d, #e53e3e); color: white; border: none; padding: 11px 28px; border-radius: 25px; font-size: 13px; font-weight: 700; cursor: pointer; box-shadow: 0 4px 15px rgba(229,62,62,.35); transition: opacity .15s; }
-.modal-confirm:hover { opacity: .9; }
+/* Modal */
+.modal-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,.45); z-index:9999; align-items:center; justify-content:center; }
+.modal-overlay.open { display:flex; }
+.modal-box { background:white; border-radius:20px; padding:32px 28px; max-width:400px; width:90%; box-shadow:0 20px 60px rgba(0,0,0,.2); text-align:center; animation:modalIn .2s ease; }
+@keyframes modalIn { from{transform:scale(.93);opacity:0} to{transform:scale(1);opacity:1} }
+.modal-icon { width:60px; height:60px; border-radius:50%; background:#fff0f0; display:flex; align-items:center; justify-content:center; margin:0 auto 16px; }
+.modal-icon i  { font-size:26px; color:#e53e3e; }
+.modal-box h3  { margin:0 0 8px; font-size:18px; font-weight:800; color:#333; }
+.modal-box p   { margin:0 0 24px; font-size:13px; color:#888; line-height:1.5; }
+.modal-actions { display:flex; gap:10px; justify-content:center; }
+.modal-cancel  { background:#f4f5f9; color:#666; border:none; padding:11px 28px; border-radius:25px; font-size:13px; font-weight:700; cursor:pointer; }
+.modal-cancel:hover  { background:#e8e9f0; }
+.modal-confirm { background:linear-gradient(135deg,#fc5c7d,#e53e3e); color:white; border:none; padding:11px 28px; border-radius:25px; font-size:13px; font-weight:700; cursor:pointer; }
+.modal-confirm:hover { opacity:.9; }
 </style>
 
 <div class="app-layout">
-    <!-- Sidebar -->
-    <div class="sidebar">
-        <a href="{{ route('dashboard') }}" class="sidebar-logo">
-            <i class="fas fa-graduation-cap"></i> Pengasuhan
-        </a>
-        <p class="sidebar-section-title">Overview</p>
-        <ul class="sidebar-nav">
-            <li><a href="{{ route('dashboard') }}"><i class="fas fa-th-large" style="width:16px;"></i> Dashboard</a></li>
-            <li><a href="{{ route('surat.index') }}"><i class="fas fa-envelope-open-text" style="width:16px;"></i> Administrasi Surat</a></li>
-            <li><a href="{{ route('acara.index') }}" class="active"><i class="fas fa-calendar-alt" style="width:16px;"></i> Acara</a></li>
-            <li><a href="{{ route('poin.index') }}"><i class="fas fa-star" style="width:16px;"></i> POIN</a></li>
-            <li><a href="{{ route('mahasiswa.index') }}"><i class="fas fa-users" style="width:16px;"></i> Database Mahasiswa</a></li>
-        </ul>
-        <hr class="sidebar-divider">
-        <p class="sidebar-section-title">Pengaturan</p>
-        <ul class="sidebar-nav">
-            <li><a href="{{ route('setting.index') }}"><i class="fas fa-cog" style="width:16px;"></i> Setting</a></li>
-            <li>
-                <a href="{{ route('logout') }}" class="logout-link"
-                   onclick="event.preventDefault(); document.getElementById('logout-form-acara').submit();">
-                    <i class="fas fa-sign-out-alt" style="width:16px;"></i> Logout
-                </a>
-                <form id="logout-form-acara" action="{{ route('logout') }}" method="POST" style="display:none;">@csrf</form>
-            </li>
-        </ul>
-    </div>
+
+    {{-- ── SIDEBAR ── --}}
+    <x-sidebar active="acara" />
 
     <!-- Main Content -->
     <div class="main-content">
+
         <!-- Header -->
         <div class="page-header">
             <div class="page-header-text">
@@ -157,14 +103,12 @@ tbody tr:hover { background: #f8f9ff; }
             </a>
         </div>
 
-        <!-- Flash Message -->
         @if(session('success'))
         <div class="alert-success">
             <i class="fas fa-check-circle" style="font-size:18px;"></i>{{ session('success') }}
         </div>
         @endif
 
-        <!-- Content -->
         @if($acara->isEmpty())
         <div class="card">
             <div class="empty-state">
@@ -207,17 +151,19 @@ tbody tr:hover { background: #f8f9ff; }
                         </td>
                         <td>
                             <span class="time-badge">
-                                <i class="fas fa-clock" style="margin-right:4px;"></i>{{ \Carbon\Carbon::parse($a->jam)->format('H:i') }} WIB
+                                <i class="fas fa-clock" style="margin-right:4px;"></i>
+                                {{ \Carbon\Carbon::parse($a->jam)->format('H:i') }} WIB
                             </span>
                         </td>
-                        <td style="max-width:200px; color:#777;">{{ $a->keterangan ? Str::limit($a->keterangan, 80) : '<span style="color:#ccc;">—</span>' }}</td>
+                        <td style="max-width:200px; color:#777;">
+                            {!! $a->keterangan ? Str::limit($a->keterangan, 80) : '<span style="color:#ccc;">—</span>' !!}
+                        </td>
                         <td style="text-align:center;">
                             <div style="display:flex; align-items:center; justify-content:center; gap:7px;">
                                 <a href="{{ route('acara.edit', $a->id) }}" class="btn-edit">
                                     <i class="fas fa-edit"></i> Edit
                                 </a>
-                                <button type="button"
-                                        class="btn-delete"
+                                <button type="button" class="btn-delete"
                                         onclick="showDeleteModal('delete-acara-{{ $a->id }}', '{{ addslashes($a->nama_acara) }}')">
                                     <i class="fas fa-trash"></i> Hapus
                                 </button>
@@ -229,22 +175,16 @@ tbody tr:hover { background: #f8f9ff; }
             </table>
         </div>
 
-        {{-- Form-form DELETE diletakkan di LUAR tabel agar valid secara HTML --}}
         @foreach($acara as $a)
-        <form id="delete-acara-{{ $a->id }}"
-              method="POST"
-              action="{{ route('acara.destroy', $a->id) }}"
-              style="display:none;">
-            @csrf
-            @method('DELETE')
+        <form id="delete-acara-{{ $a->id }}" method="POST" action="{{ route('acara.destroy', $a->id) }}" style="display:none;">
+            @csrf @method('DELETE')
         </form>
         @endforeach
-
         @endif
-    </div>
-</div>
 
-{{-- Modal Konfirmasi Hapus --}}
+    </div>{{-- end main-content --}}
+</div>{{-- end app-layout --}}
+
 <div class="modal-overlay" id="deleteModal">
     <div class="modal-box">
         <div class="modal-icon"><i class="fas fa-trash-alt"></i></div>
@@ -255,7 +195,7 @@ tbody tr:hover { background: #f8f9ff; }
             <button class="modal-cancel" onclick="closeDeleteModal()">
                 <i class="fas fa-times"></i> Batal
             </button>
-            <button class="modal-confirm" id="modalConfirmBtn" onclick="submitDeleteForm()">
+            <button class="modal-confirm" onclick="submitDeleteForm()">
                 <i class="fas fa-trash"></i> Ya, Hapus
             </button>
         </div>
@@ -264,30 +204,21 @@ tbody tr:hover { background: #f8f9ff; }
 
 <script>
 let targetFormId = null;
-
-function showDeleteModal(formId, namaAcara) {
+function showDeleteModal(formId, nama) {
     targetFormId = formId;
-    document.getElementById('modalAcaraName').textContent = namaAcara;
+    document.getElementById('modalAcaraName').textContent = nama;
     document.getElementById('deleteModal').classList.add('open');
 }
-
 function closeDeleteModal() {
     document.getElementById('deleteModal').classList.remove('open');
     targetFormId = null;
 }
-
 function submitDeleteForm() {
-    if (targetFormId) {
-        document.getElementById(targetFormId).submit();
-    }
+    if (targetFormId) document.getElementById(targetFormId).submit();
 }
-
-// Tutup modal ketika klik di luar box
 document.getElementById('deleteModal').addEventListener('click', function(e) {
     if (e.target === this) closeDeleteModal();
 });
-
-// Tutup dengan Escape
 document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape') closeDeleteModal();
 });

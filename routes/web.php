@@ -7,6 +7,7 @@ use App\Http\Controllers\PoinController;
 use App\Http\Controllers\AcaraController;
 use App\Http\Controllers\SuratController;
 use App\Http\Controllers\SettingController;
+use App\Http\Controllers\ActivityLogController; // <-- TAMBAHAN
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -139,6 +140,13 @@ Route::middleware('auth')->group(function () {
     Route::delete('/users/{user}', [\App\Http\Controllers\UserManagementController::class, 'destroy'])
         ->middleware('role:penyelenggara')
         ->name('users.destroy');
+
+    // ===========================
+    // LOG AKTIVITAS — hanya penyelenggara       ← TAMBAHAN
+    // ===========================
+    Route::get('/activity-log', [ActivityLogController::class, 'index'])
+        ->middleware('role:penyelenggara')
+        ->name('activity-log.index');
 });
 
 require __DIR__.'/auth.php';
