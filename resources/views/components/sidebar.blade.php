@@ -145,6 +145,20 @@
                     <i class="fas fa-star nav-icon"></i> Raport Poin
                 </a>
             </li>
+            <li>
+                <a href="{{ route('surat-taruna.index') }}" class="{{ $active==='surat-taruna'?'active':'' }}">
+                    <i class="fas fa-file-signature nav-icon"></i> Pengajuan Surat
+                    @php
+                        $unreadSurat = \App\Models\Surat::where('user_id', auth()->id())
+                            ->where('taruna_baca', false)
+                            ->whereIn('status', ['Disetujui', 'Ditolak'])
+                            ->count();
+                    @endphp
+                    @if($unreadSurat > 0)
+                    <span style="background:#e53e3e; color:white; border-radius:50%; width:17px; height:17px; font-size:10px; font-weight:800; display:inline-flex; align-items:center; justify-content:center; margin-left:auto;">{{ $unreadSurat }}</span>
+                    @endif
+                </a>
+            </li>
         @else
             <li>
                 <a href="{{ route('surat.index') }}" class="{{ $active==='surat'?'active':'' }}">

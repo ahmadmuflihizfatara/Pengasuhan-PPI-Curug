@@ -46,6 +46,22 @@ body { font-family: 'Inter', sans-serif; background: #f0f2f5; }
 .btn-reject { background: #fff5f5; color: #e53e3e; border: none; padding: 8px 18px; border-radius: 10px; font-size: 12px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; transition: background .1s; }
 .btn-reject:hover { background: #fed7d7; }
 .alert-success { background: linear-gradient(135deg,#43e97b,#38f9d7); color: white; padding: 13px 18px; border-radius: 12px; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; font-weight: 600; font-size: 13px; }
+
+/* Modal styles */
+.modal-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,.45); z-index:9999; align-items:center; justify-content:center; }
+.modal-overlay.open { display:flex; }
+.modal-box { background:white; border-radius:20px; padding:32px; max-width:480px; width:90%; box-shadow:0 20px 60px rgba(0,0,0,.2); }
+.modal-box h3 { margin:0 0 8px; font-size:17px; font-weight:800; color:#333; }
+.modal-box p  { margin:0 0 18px; font-size:13px; color:#666; line-height:1.6; }
+.modal-textarea { width:100%; padding:12px 14px; border:2px solid #edf0f7; border-radius:10px; font-size:13px; font-family:'Inter',sans-serif; resize:vertical; min-height:90px; outline:none; }
+.modal-textarea:focus { border-color:#667eea; }
+.modal-actions { display:flex; gap:10px; justify-content:flex-end; margin-top:18px; }
+.modal-btn-cancel { background:#f4f5f9; color:#666; border:none; padding:10px 22px; border-radius:25px; font-size:13px; font-weight:700; cursor:pointer; }
+.modal-btn-confirm-approve { background:linear-gradient(135deg,#38a169,#48bb78); color:white; border:none; padding:10px 24px; border-radius:25px; font-size:13px; font-weight:800; cursor:pointer; }
+.modal-btn-confirm-reject  { background:linear-gradient(135deg,#e53e3e,#fc5c7d); color:white; border:none; padding:10px 24px; border-radius:25px; font-size:13px; font-weight:800; cursor:pointer; }
+
+/* Taruna submission info */
+.taruna-tag { background:#fff4e6; color:#c05621; border-radius:8px; padding:8px 14px; font-size:12px; font-weight:700; display:inline-flex; align-items:center; gap:6px; margin-bottom:16px; }
 </style>
 
 <div class="app-layout">
@@ -59,20 +75,12 @@ body { font-family: 'Inter', sans-serif; background: #f0f2f5; }
             </a>
             <div class="action-btns" style="display: flex; gap: 8px; align-items: center;">
                 @if($surat->status === 'Diproses')
-                    <form method="POST" action="{{ route('surat.updateStatus', $surat->id) }}" style="margin: 0;">
-                        @csrf @method('PATCH')
-                        <input type="hidden" name="status" value="Disetujui">
-                        <button type="submit" class="btn-approve">
-                            <i class="fas fa-check"></i> Setujui
-                        </button>
-                    </form>
-                    <form method="POST" action="{{ route('surat.updateStatus', $surat->id) }}" style="margin: 0;">
-                        @csrf @method('PATCH')
-                        <input type="hidden" name="status" value="Ditolak">
-                        <button type="submit" class="btn-reject">
-                            <i class="fas fa-times"></i> Tolak
-                        </button>
-                    </form>
+                    <button type="button" class="btn-approve" onclick="openModal('approve')">
+                        <i class="fas fa-check"></i> Setujui
+                    </button>
+                    <button type="button" class="btn-reject" onclick="openModal('reject')">
+                        <i class="fas fa-times"></i> Tolak
+                    </button>
                 @endif
                 <a href="{{ route('surat.edit', $surat->id) }}" class="btn-edit-top">
                     <i class="fas fa-edit"></i> Edit
@@ -90,6 +98,14 @@ body { font-family: 'Inter', sans-serif; background: #f0f2f5; }
         @if(session('success'))
         <div class="alert-success">
             <i class="fas fa-check-circle" style="font-size:17px;"></i> {{ session('success') }}
+        </div>
+        @endif
+
+        {{-- Taruna submission tag --}}
+        @if($surat->isDiajukanTaruna())
+        <div class="taruna-tag">
+            <i class="fas fa-user-graduate"></i>
+            Diajukan oleh Taruna: <strong>{{ $surat->diajukan_oleh ?? $surat->pengirim }}</strong>
         </div>
         @endif
 
@@ -166,6 +182,13 @@ body { font-family: 'Inter', sans-serif; background: #f0f2f5; }
                     @endif
                 </div>
 
+                @if($surat->catatan_pengasuhan)
+                <div style="margin-top:16px; padding:16px 18px; background:{{ in_array($surat->status,['Disetujui','Selesai']) ? '#f0fff4' : '#fff5f5' }}; border-radius:12px; border-left:4px solid {{ in_array($surat->status,['Disetujui','Selesai']) ? '#38a169' : '#e53e3e' }};">
+                    <div class="field-label"><i class="fas fa-comment-dots"></i> Catatan Pengasuhan</div>
+                    <div style="font-size:13px; color:#333; line-height:1.6;">{{ $surat->catatan_pengasuhan }}</div>
+                </div>
+                @endif
+
                 <!-- Timestamps -->
                 <div class="timestamps">
                     <span><i class="fas fa-clock"></i> Dibuat: {{ $surat->created_at->locale('id')->isoFormat('D MMM Y, HH:mm') }}</span>
@@ -175,4 +198,68 @@ body { font-family: 'Inter', sans-serif; background: #f0f2f5; }
         </div>
     </div>
 </div>
+
+{{-- Hidden form that the modal will submit --}}
+<form method="POST" action="{{ route('surat.updateStatus', $surat->id) }}" id="statusForm" style="display:none;">
+    @csrf @method('PATCH')
+    <input type="hidden" name="status" id="statusInput">
+    <input type="hidden" name="catatan_pengasuhan" id="catatanInput">
+</form>
+
+{{-- Approve Modal --}}
+<div class="modal-overlay" id="modalOverlay">
+    <div class="modal-box">
+        <h3 id="modalTitle">Konfirmasi</h3>
+        <p id="modalDesc">Tambahkan catatan untuk taruna (opsional):</p>
+        <textarea class="modal-textarea" id="modalCatatan" placeholder="Tulis catatan atau pesan untuk taruna..."></textarea>
+        <div class="modal-actions">
+            <button class="modal-btn-cancel" onclick="closeModal()">Batal</button>
+            <button class="modal-btn-confirm-approve" id="modalConfirmBtn" onclick="submitModal()">Konfirmasi</button>
+        </div>
+    </div>
+</div>
+
+<script>
+let currentAction = null;
+
+function openModal(action) {
+    currentAction = action;
+    const overlay = document.getElementById('modalOverlay');
+    const title   = document.getElementById('modalTitle');
+    const desc    = document.getElementById('modalDesc');
+    const btn     = document.getElementById('modalConfirmBtn');
+    document.getElementById('modalCatatan').value = '';
+
+    if (action === 'approve') {
+        title.innerHTML = '<i class="fas fa-check-circle" style="color:#38a169; margin-right:8px;"></i> Setujui Surat';
+        desc.textContent  = 'Anda akan menyetujui surat ini. Tambahkan catatan atau pesan untuk taruna (opsional):';
+        btn.className     = 'modal-btn-confirm-approve';
+        btn.textContent   = 'Ya, Setujui';
+    } else {
+        title.innerHTML = '<i class="fas fa-times-circle" style="color:#e53e3e; margin-right:8px;"></i> Tolak Surat';
+        desc.textContent  = 'Anda akan menolak surat ini. Tambahkan alasan penolakan untuk taruna (opsional):';
+        btn.className     = 'modal-btn-confirm-reject';
+        btn.textContent   = 'Ya, Tolak';
+    }
+
+    overlay.classList.add('open');
+}
+
+function closeModal() {
+    document.getElementById('modalOverlay').classList.remove('open');
+    currentAction = null;
+}
+
+function submitModal() {
+    if (!currentAction) return;
+    document.getElementById('statusInput').value  = currentAction === 'approve' ? 'Disetujui' : 'Ditolak';
+    document.getElementById('catatanInput').value = document.getElementById('modalCatatan').value;
+    document.getElementById('statusForm').submit();
+}
+
+// Close on overlay click
+document.getElementById('modalOverlay').addEventListener('click', function(e) {
+    if (e.target === this) closeModal();
+});
+</script>
 </x-app-layout>

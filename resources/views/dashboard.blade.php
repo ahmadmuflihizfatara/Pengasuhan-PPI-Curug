@@ -143,7 +143,7 @@ body { font-family: 'Inter', sans-serif; background: #f0f2f5; }
                 <div class="stat-icon" style="background:linear-gradient(135deg,#f093fb,#f5576c);">
                     <i class="fas fa-star"></i>
                 </div>
-                <div class="stat-count">Lihat</div>
+                <div class="stat-count" id="taruna-total-poin">{{ $totalPoin >= 0 ? '+' : '' }}{{ $totalPoin }}</div>
                 <div class="stat-label">Raport Poin Saya</div>
                 <div class="stat-change up"><i class="fas fa-arrow-right"></i> Klik untuk buka</div>
             </a>
@@ -376,5 +376,30 @@ body { font-family: 'Inter', sans-serif; background: #f0f2f5; }
 
     </div>{{-- end main-content --}}
 </div>{{-- end app-layout --}}
+
+@if(Auth::user()->isTaruna())
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const totalPoinEl = document.getElementById('taruna-total-poin');
+        
+        function pollPoints() {
+            fetch("{{ route('api.myPoints') }}")
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success) {
+                        const total = data.totalPoin;
+                        if (totalPoinEl) {
+                            totalPoinEl.textContent = (total >= 0 ? '+' : '') + total;
+                        }
+                    }
+                })
+                .catch(err => console.error("Error polling points:", err));
+        }
+
+        // Poll every 3 seconds
+        setInterval(pollPoints, 3000);
+    });
+</script>
+@endif
 
 </x-app-layout>

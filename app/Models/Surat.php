@@ -12,6 +12,8 @@ class Surat extends Model
     protected $table = 'surat';
 
     protected $fillable = [
+        'user_id',
+        'diajukan_oleh',
         'nomor_surat',
         'jenis_surat',
         'perihal',
@@ -21,13 +23,28 @@ class Surat extends Model
         'tanggal_terima',
         'status',
         'keterangan',
+        'catatan_pengasuhan',
+        'taruna_baca',
         'file_path',
     ];
 
     protected $casts = [
-        'tanggal_surat' => 'date',
+        'tanggal_surat'  => 'date',
         'tanggal_terima' => 'date',
+        'taruna_baca'    => 'boolean',
     ];
+
+    /** Taruna yang mengajukan surat */
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    /** Apakah surat ini diajukan oleh taruna */
+    public function isDiajukanTaruna(): bool
+    {
+        return $this->user_id !== null;
+    }
 
     public static function jenisSuratList(): array
     {

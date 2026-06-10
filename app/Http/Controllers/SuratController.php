@@ -196,13 +196,25 @@ class SuratController extends Controller
     public function updateStatus(Request $request, Surat $surat)
     {
         $validated = $request->validate([
-            'status' => 'required|in:Diproses,Disetujui,Ditolak,Selesai',
+            'status'              => 'required|in:Diproses,Disetujui,Ditolak,Selesai',
+            'catatan_pengasuhan'  => 'nullable|string|max:1000',
         ]);
 
         $statusLama  = $surat->status;
         $perihalLama = $surat->perihal;
 
-        $surat->update(['status' => $validated['status']]);
+        $updateData = [
+            'status'             => $validated['status'],
+            'catatan_pengasuhan' => $validated['catatan_pengasuhan'] ?? null,
+        ];
+
+        // Jika surat diajukan taruna dan status berubah ke Disetujui/Ditolak,
+        // reset taruna_baca agar notifikasi muncul
+        if ($surat->user_id && in_array($validated['status'], ['Disetujui', 'Ditolak'])) {
+            $updateData['taruna_baca'] = false;
+        }
+
+        $surat->update($updateData);
 
         // ========== ACTIVITY LOG ==========
         $aksi = match ($surat->status) {
@@ -218,13 +230,14 @@ class SuratController extends Controller
             aksi: $aksi,
             deskripsi: $deskripsi,
             detail: [
-                'nomor_surat'   => $surat->nomor_surat,
-                'jenis_surat'   => $surat->jenis_surat,
-                'perihal'       => $surat->perihal,
-                'pengirim'      => $surat->pengirim,
-                'penerima'      => $surat->penerima,
-                'status_lama'   => $statusLama,
-                'status_baru'   => $surat->status,
+                'nomor_surat'        => $surat->nomor_surat,
+                'jenis_surat'        => $surat->jenis_surat,
+                'perihal'            => $surat->perihal,
+                'pengirim'           => $surat->pengirim,
+                'penerima'           => $surat->penerima,
+                'status_lama'        => $statusLama,
+                'status_baru'        => $surat->status,
+                'catatan_pengasuhan' => $surat->catatan_pengasuhan,
             ],
             subject: $surat
         );

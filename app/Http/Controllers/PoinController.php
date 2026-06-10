@@ -196,4 +196,69 @@ class PoinController extends Controller
         return redirect()->route('poin.index', ['npm' => $npm])
             ->with('success', 'Poin berhasil dihapus.');
     }
+
+    public function myPointsApi(Request $request): \Illuminate\Http\JsonResponse
+    {
+        $user = auth()->user();
+        if (!$user) {
+            return response()->json(['error' => 'Unauthorized'], 401);
+        }
+
+        $allMahasiswa = MahasiswaController::enrichMahasiswa(MahasiswaController::getAllMahasiswa());
+        $flatMahasiswa = [];
+        foreach ($allMahasiswa as $kelas => $students) {
+            foreach ($students as $s) {
+                $flatMahasiswa[] = array_merge($s, ['kelas' => $kelas]);
+            }
+        }
+
+        $selectedStudent = null;
+        foreach ($flatMahasiswa as $m) {
+            if (strtolower($m['nickname'] ?? '') === strtolower($user->username ?? '')
+                || strtolower($m['nickname'] ?? '') === strtolower($user->nama_panggilan ?? '')
+                || strtolower($m['npm'] ?? '') === strtolower($user->username ?? '')
+                || strtolower($m['email'] ?? '') === strtolower($user->email ?? ''))
+            {
+                $selectedStudent = $m;
+                break;
+            }
+        }
+
+        if (!$selectedStudent) {
+            return response()->json([
+                'success' => false,
+                'error' => 'Student data not found'
+            ]);
+        }
+
+        $riwayat = PoinMahasiswa::where('npm', $selectedStudent['npm'])
+            ->orderByDesc('tanggal')
+            ->orderByDesc('created_at')
+            ->get();
+
+        $totalPoin = $riwayat->sum('nilai_efektif');
+        $totalPrestasi = $riwayat->where('kategori', 'prestasi')->sum('nilai');
+        $totalPelanggaran = $riwayat->where('kategori', 'pelanggaran')->sum('nilai');
+
+        $formattedRiwayat = $riwayat->map(function ($r) {
+            return [
+                'id' => $r->id,
+                'tanggal' => $r->tanggal->format('d M Y'),
+                'kategori' => $r->kategori,
+                'kegiatan' => $r->kegiatan,
+                'nilai' => $r->nilai,
+                'pengasuh' => $r->pengasuh,
+                'keterangan' => $r->keterangan ?? '-',
+            ];
+        });
+
+        return response()->json([
+            'success' => true,
+            'totalPoin' => $totalPoin,
+            'totalPrestasi' => $totalPrestasi,
+            'totalPelanggaran' => $totalPelanggaran,
+            'riwayat' => $formattedRiwayat,
+            'student' => $selectedStudent,
+        ]);
+    }
 }

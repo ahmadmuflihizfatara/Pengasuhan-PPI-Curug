@@ -226,6 +226,11 @@ tbody tr:hover { background: #f8f9ff; }
                             <div style="font-size:11px; color:#aab; display:flex; align-items:center; gap:4px;">
                                 <i class="fas fa-arrow-right" style="font-size:9px;"></i>{{ $s->penerima }}
                             </div>
+                            @if($s->isDiajukanTaruna())
+                            <span style="background:#fff4e6; color:#c05621; border-radius:6px; padding:1px 7px; font-size:10px; font-weight:700; margin-top:3px; display:inline-flex; align-items:center; gap:4px;">
+                                <i class="fas fa-user-graduate"></i> Taruna
+                            </span>
+                            @endif
                         </td>
                         <td style="white-space:nowrap;">
                             <div style="font-size:12px; color:#555;">
@@ -249,12 +254,16 @@ tbody tr:hover { background: #f8f9ff; }
                                     <form method="POST" action="{{ route('surat.updateStatus', $s->id) }}" style="display:inline; margin:0;">
                                         @csrf @method('PATCH')
                                         <input type="hidden" name="status" value="Disetujui">
-                                        <button type="submit" class="btn-approve-ico" title="Setujui"><i class="fas fa-check"></i></button>
+                                        <button type="submit" class="btn-approve-ico" title="Setujui"
+                                            onclick="return confirm('Setujui surat: {{ addslashes($s->perihal) }}?')"
+                                        ><i class="fas fa-check"></i></button>
                                     </form>
                                     <form method="POST" action="{{ route('surat.updateStatus', $s->id) }}" style="display:inline; margin:0;">
                                         @csrf @method('PATCH')
                                         <input type="hidden" name="status" value="Ditolak">
-                                        <button type="submit" class="btn-reject-ico" title="Tolak"><i class="fas fa-times"></i></button>
+                                        <button type="submit" class="btn-reject-ico" title="Tolak"
+                                            onclick="return confirm('Tolak surat: {{ addslashes($s->perihal) }}?')"
+                                        ><i class="fas fa-times"></i></button>
                                     </form>
                                 @endif
                                 <a href="{{ route('surat.show', $s->id) }}" class="btn-view" title="Detail"><i class="fas fa-eye"></i></a>

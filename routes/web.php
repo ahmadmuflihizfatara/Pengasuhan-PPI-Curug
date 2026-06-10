@@ -38,6 +38,26 @@ Route::middleware('auth')->group(function () {
     // POIN — semua role (taruna hanya baca, pengasuh/penyelenggara bisa edit)
     // ===========================
     Route::get('/poin', [PoinController::class, 'index'])->name('poin.index');
+    Route::get('/api/my-points', [PoinController::class, 'myPointsApi'])->name('api.myPoints');
+
+    // ===========================
+    // PENGAJUAN SURAT — khusus taruna
+    // ===========================
+    Route::get('/surat-taruna', [\App\Http\Controllers\SuratTarunaController::class, 'index'])
+        ->middleware('role:taruna')
+        ->name('surat-taruna.index');
+    Route::get('/surat-taruna/create', [\App\Http\Controllers\SuratTarunaController::class, 'create'])
+        ->middleware('role:taruna')
+        ->name('surat-taruna.create');
+    Route::post('/surat-taruna', [\App\Http\Controllers\SuratTarunaController::class, 'store'])
+        ->middleware('role:taruna')
+        ->name('surat-taruna.store');
+    Route::get('/surat-taruna/{surat}', [\App\Http\Controllers\SuratTarunaController::class, 'show'])
+        ->middleware('role:taruna')
+        ->name('surat-taruna.show');
+    Route::get('/api/my-surat-notifications', [\App\Http\Controllers\SuratTarunaController::class, 'notifications'])
+        ->middleware('role:taruna')
+        ->name('api.suratNotifications');
 
     // Tambah & hapus poin: hanya pengasuh & penyelenggara
     Route::post('/poin', [PoinController::class, 'store'])

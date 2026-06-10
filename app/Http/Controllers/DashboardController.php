@@ -48,6 +48,28 @@ class DashboardController extends Controller
         // Surat terbaru
         $suratTerbaru = Surat::latest()->take(5)->get();
 
+        // Point total if Taruna
+        $totalPoin = 0;
+        if (auth()->user()->isTaruna()) {
+            $user = auth()->user();
+            $allMahasiswa = \App\Http\Controllers\MahasiswaController::enrichMahasiswa(\App\Http\Controllers\MahasiswaController::getAllMahasiswa());
+            $studentNpm = null;
+            foreach ($allMahasiswa as $kelas => $students) {
+                foreach ($students as $s) {
+                    if (strtolower($s['nickname'] ?? '') === strtolower($user->username ?? '')
+                        || strtolower($s['nickname'] ?? '') === strtolower($user->nama_panggilan ?? '')
+                        || strtolower($s['npm'] ?? '') === strtolower($user->username ?? '')
+                        || strtolower($s['email'] ?? '') === strtolower($user->email ?? '')) {
+                        $studentNpm = $s['npm'];
+                        break 2;
+                    }
+                }
+            }
+            if ($studentNpm) {
+                $totalPoin = \App\Models\PoinMahasiswa::where('npm', $studentNpm)->get()->sum('nilai_efektif');
+            }
+        }
+
         return view('dashboard', [
             'mahasiswaSidebar' => $mahasiswaSidebar,
             'totalMahasiswa'   => $totalMahasiswa,
@@ -55,6 +77,7 @@ class DashboardController extends Controller
             'semuaAcara'       => $semuaAcara,
             'suratStats'       => $suratStats,
             'suratTerbaru'     => $suratTerbaru,
+            'totalPoin'        => $totalPoin,
         ]);
     }
 
