@@ -282,8 +282,7 @@ tbody tr:hover { background: #fdf0ff; }
                             <div class="form-group">
                                 <label class="form-label">Nama Pengasuh</label>
                                 <input type="text" name="pengasuh" class="form-control"
-                                       placeholder="Nama pengasuh..."
-                                       value="{{ old('pengasuh', Auth::user()->name) }}" required>
+                                       value="{{ Auth::user()->name }}" readonly style="background-color: #f3f4f6; color: #4b5563; cursor: not-allowed;">
                             </div>
 
                             <div class="form-group">

@@ -99,6 +99,9 @@ Route::middleware('auth')->group(function () {
     Route::delete('/surat/{surat}', [SuratController::class, 'destroy'])
         ->middleware('role:pengasuh,penyelenggara')
         ->name('surat.destroy');
+    Route::patch('/surat/{surat}/status', [SuratController::class, 'updateStatus'])
+        ->middleware('role:pengasuh,penyelenggara')
+        ->name('surat.updateStatus');
 
     // ===========================
     // DATABASE MAHASISWA — hanya penyelenggara

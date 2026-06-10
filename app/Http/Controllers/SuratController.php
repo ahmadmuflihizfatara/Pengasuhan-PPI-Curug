@@ -192,4 +192,44 @@ class SuratController extends Controller
 
         return redirect()->route('surat.index')->with('success', 'Surat berhasil dihapus!');
     }
+
+    public function updateStatus(Request $request, Surat $surat)
+    {
+        $validated = $request->validate([
+            'status' => 'required|in:Diproses,Disetujui,Ditolak,Selesai',
+        ]);
+
+        $statusLama  = $surat->status;
+        $perihalLama = $surat->perihal;
+
+        $surat->update(['status' => $validated['status']]);
+
+        // ========== ACTIVITY LOG ==========
+        $aksi = match ($surat->status) {
+            'Selesai'   => 'selesai',
+            'Ditolak'   => 'tolak',
+            'Disetujui' => 'setujui',
+            default     => 'ubah',
+        };
+        $deskripsi = "Ubah status surat \"{$perihalLama}\": {$statusLama} → {$surat->status}";
+
+        $this->logActivity(
+            modul: 'surat',
+            aksi: $aksi,
+            deskripsi: $deskripsi,
+            detail: [
+                'nomor_surat'   => $surat->nomor_surat,
+                'jenis_surat'   => $surat->jenis_surat,
+                'perihal'       => $surat->perihal,
+                'pengirim'      => $surat->pengirim,
+                'penerima'      => $surat->penerima,
+                'status_lama'   => $statusLama,
+                'status_baru'   => $surat->status,
+            ],
+            subject: $surat
+        );
+        // ==================================
+
+        return redirect()->back()->with('success', 'Status surat berhasil diperbarui menjadi ' . $surat->status . '!');
+    }
 }

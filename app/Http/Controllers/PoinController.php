@@ -128,6 +128,8 @@ class PoinController extends Controller
             return back()->withErrors(['npm' => 'Mahasiswa tidak ditemukan'])->withInput();
         }
 
+        $pengasuhName = auth()->user()->name;
+
         $poin = PoinMahasiswa::create([
             'npm'            => $request->npm,
             'nama_mahasiswa' => $student['nama'],
@@ -136,7 +138,7 @@ class PoinController extends Controller
             'kegiatan'       => $request->kegiatan,
             'tanggal'        => $request->tanggal,
             'nilai'          => abs((int)$request->nilai),
-            'pengasuh'       => $request->pengasuh,
+            'pengasuh'       => $pengasuhName,
             'keterangan'     => $request->keterangan,
         ]);
 
@@ -154,7 +156,7 @@ class PoinController extends Controller
                 'kegiatan'       => $request->kegiatan,
                 'nilai'          => abs((int)$request->nilai),
                 'tanggal'        => $request->tanggal,
-                'pengasuh'       => $request->pengasuh,
+                'pengasuh'       => $pengasuhName,
             ],
             subject: $poin
         );

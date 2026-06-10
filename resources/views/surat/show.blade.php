@@ -41,6 +41,11 @@ body { font-family: 'Inter', sans-serif; background: #f0f2f5; }
 
 .timestamps { margin-top: 18px; padding-top: 14px; border-top: 1px solid #f0f2f7; display: flex; gap: 20px; }
 .timestamps span { font-size: 11px; color: #ccc; display: flex; align-items: center; gap: 5px; }
+.btn-approve { background: #e6fff5; color: #38a169; border: none; padding: 8px 18px; border-radius: 10px; font-size: 12px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; transition: background .1s; }
+.btn-approve:hover { background: #c6f6d5; }
+.btn-reject { background: #fff5f5; color: #e53e3e; border: none; padding: 8px 18px; border-radius: 10px; font-size: 12px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; transition: background .1s; }
+.btn-reject:hover { background: #fed7d7; }
+.alert-success { background: linear-gradient(135deg,#43e97b,#38f9d7); color: white; padding: 13px 18px; border-radius: 12px; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; font-weight: 600; font-size: 13px; }
 </style>
 
 <div class="app-layout">
@@ -52,12 +57,28 @@ body { font-family: 'Inter', sans-serif; background: #f0f2f5; }
             <a href="{{ route('surat.index') }}" class="back-link">
                 <i class="fas fa-arrow-left"></i> Kembali ke Daftar Surat
             </a>
-            <div class="action-btns">
+            <div class="action-btns" style="display: flex; gap: 8px; align-items: center;">
+                @if($surat->status === 'Diproses')
+                    <form method="POST" action="{{ route('surat.updateStatus', $surat->id) }}" style="margin: 0;">
+                        @csrf @method('PATCH')
+                        <input type="hidden" name="status" value="Disetujui">
+                        <button type="submit" class="btn-approve">
+                            <i class="fas fa-check"></i> Setujui
+                        </button>
+                    </form>
+                    <form method="POST" action="{{ route('surat.updateStatus', $surat->id) }}" style="margin: 0;">
+                        @csrf @method('PATCH')
+                        <input type="hidden" name="status" value="Ditolak">
+                        <button type="submit" class="btn-reject">
+                            <i class="fas fa-times"></i> Tolak
+                        </button>
+                    </form>
+                @endif
                 <a href="{{ route('surat.edit', $surat->id) }}" class="btn-edit-top">
                     <i class="fas fa-edit"></i> Edit
                 </a>
                 <form method="POST" action="{{ route('surat.destroy', $surat->id) }}"
-                      onsubmit="return confirm('Hapus surat ini secara permanen?');">
+                      onsubmit="return confirm('Hapus surat ini secara permanen?');" style="margin: 0;">
                     @csrf @method('DELETE')
                     <button type="submit" class="btn-delete-top">
                         <i class="fas fa-trash"></i> Hapus
@@ -65,6 +86,12 @@ body { font-family: 'Inter', sans-serif; background: #f0f2f5; }
                 </form>
             </div>
         </div>
+
+        @if(session('success'))
+        <div class="alert-success">
+            <i class="fas fa-check-circle" style="font-size:17px;"></i> {{ session('success') }}
+        </div>
+        @endif
 
         <!-- Detail Card -->
         <div class="detail-card">

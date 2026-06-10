@@ -68,6 +68,10 @@ tbody tr:hover { background: #f8f9ff; }
 .btn-view:hover   { background: #c0efff; }
 .btn-edit:hover   { background: #dde2ff; }
 .btn-delete:hover { background: #ffe0e0; }
+.btn-approve-ico { background: #e6fff5; color: #38a169; border: none; padding: 6px 9px; border-radius: 8px; font-size: 11px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; transition: background .1s; }
+.btn-approve-ico:hover { background: #c6f6d5; }
+.btn-reject-ico { background: #fff5f5; color: #e53e3e; border: none; padding: 6px 9px; border-radius: 8px; font-size: 11px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; transition: background .1s; }
+.btn-reject-ico:hover { background: #fed7d7; }
 
 /* Modal */
 .modal-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,.45); z-index:9999; align-items:center; justify-content:center; }
@@ -241,9 +245,21 @@ tbody tr:hover { background: #f8f9ff; }
                         </td>
                         <td style="text-align:center;">
                             <div style="display:flex; align-items:center; justify-content:center; gap:5px;">
-                                <a href="{{ route('surat.show', $s->id) }}" class="btn-view"><i class="fas fa-eye"></i></a>
-                                <a href="{{ route('surat.edit', $s->id) }}" class="btn-edit"><i class="fas fa-edit"></i></a>
-                                <button type="button" class="btn-delete"
+                                @if($s->status === 'Diproses')
+                                    <form method="POST" action="{{ route('surat.updateStatus', $s->id) }}" style="display:inline; margin:0;">
+                                        @csrf @method('PATCH')
+                                        <input type="hidden" name="status" value="Disetujui">
+                                        <button type="submit" class="btn-approve-ico" title="Setujui"><i class="fas fa-check"></i></button>
+                                    </form>
+                                    <form method="POST" action="{{ route('surat.updateStatus', $s->id) }}" style="display:inline; margin:0;">
+                                        @csrf @method('PATCH')
+                                        <input type="hidden" name="status" value="Ditolak">
+                                        <button type="submit" class="btn-reject-ico" title="Tolak"><i class="fas fa-times"></i></button>
+                                    </form>
+                                @endif
+                                <a href="{{ route('surat.show', $s->id) }}" class="btn-view" title="Detail"><i class="fas fa-eye"></i></a>
+                                <a href="{{ route('surat.edit', $s->id) }}" class="btn-edit" title="Edit"><i class="fas fa-edit"></i></a>
+                                <button type="button" class="btn-delete" title="Hapus"
                                         onclick="showSuratDeleteModal('del-surat-{{ $s->id }}', '{{ addslashes(Str::limit($s->perihal, 50)) }}')">
                                     <i class="fas fa-trash"></i>
                                 </button>
