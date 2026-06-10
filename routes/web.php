@@ -48,10 +48,11 @@ Route::middleware('auth')->group(function () {
         ->name('poin.destroy');
 
     // ===========================
-    // ACARA — pengasuh & penyelenggara
+    // ACARA — daftar acara (semua pengguna terautentikasi dapat melihat kalender)
+    // Pengasuh & penyelenggara masih butuh role untuk CRUD route lainnya
     // ===========================
     Route::get('/acara', [AcaraController::class, 'index'])
-        ->middleware('role:pengasuh,penyelenggara')
+        ->middleware('auth')
         ->name('acara.index');
     Route::get('/acara/create', [AcaraController::class, 'create'])
         ->middleware('role:pengasuh,penyelenggara')

@@ -136,6 +136,11 @@
 
         @if($user->isTaruna())
             <li>
+                <a href="{{ route('acara.index') }}" class="{{ $active==='acara'?'active':'' }}">
+                    <i class="fas fa-calendar-alt nav-icon"></i> Acara
+                </a>
+            </li>
+            <li>
                 <a href="{{ route('poin.index') }}" class="{{ $active==='poin'?'active':'' }}">
                     <i class="fas fa-star nav-icon"></i> Raport Poin
                 </a>

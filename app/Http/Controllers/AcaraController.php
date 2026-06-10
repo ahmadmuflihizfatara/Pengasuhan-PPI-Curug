@@ -4,25 +4,37 @@ namespace App\Http\Controllers;
 
 use App\Models\Acara;
 use Illuminate\Http\Request;
-use App\Traits\LogsActivity; 
+use Illuminate\Support\Facades\Auth;
+use App\Traits\LogsActivity;
 
 class AcaraController extends Controller
 {
-    use LogsActivity; 
+    use LogsActivity;
 
+    /**
+     * Daftar acara.
+     * - Taruna    : hanya bisa melihat (view kalender)
+     * - Pengasuh / Penyelenggara : bisa kelola (tabel + kalender + CRUD)
+     */
     public function index()
     {
         $acara = Acara::orderBy('tanggal', 'asc')->orderBy('jam', 'asc')->get();
         return view('acara.index', compact('acara'));
     }
 
+    /**
+     * Form tambah acara — hanya pengasuh & penyelenggara.
+     */
     public function create()
     {
+        $this->authorizeStaff();
         return view('acara.create');
     }
 
     public function store(Request $request)
     {
+        $this->authorizeStaff();
+
         $request->validate([
             'nama_acara' => 'required|string|max:255',
             'tanggal'    => 'required|date',
@@ -32,7 +44,6 @@ class AcaraController extends Controller
 
         $acara = Acara::create($request->only(['nama_acara', 'tanggal', 'jam', 'keterangan']));
 
-        // ========== ACTIVITY LOG ==========
         $this->logActivity(
             modul: 'acara',
             aksi: 'buat',
@@ -45,19 +56,21 @@ class AcaraController extends Controller
             ],
             subject: $acara
         );
-        // ==================================
 
         return redirect()->route('acara.index')->with('success', 'Acara berhasil ditambahkan!');
     }
 
     public function edit($id)
     {
+        $this->authorizeStaff();
         $acara = Acara::findOrFail($id);
         return view('acara.edit', compact('acara'));
     }
 
     public function update(Request $request, $id)
     {
+        $this->authorizeStaff();
+
         $request->validate([
             'nama_acara' => 'required|string|max:255',
             'tanggal'    => 'required|date',
@@ -69,7 +82,6 @@ class AcaraController extends Controller
         $namaLama = $acara->nama_acara;
         $acara->update($request->only(['nama_acara', 'tanggal', 'jam', 'keterangan']));
 
-        // ========== ACTIVITY LOG ==========
         $this->logActivity(
             modul: 'acara',
             aksi: 'ubah',
@@ -83,16 +95,16 @@ class AcaraController extends Controller
             ],
             subject: $acara
         );
-        // ==================================
 
         return redirect()->route('acara.index')->with('success', 'Acara berhasil diperbarui!');
     }
 
     public function destroy($id)
     {
+        $this->authorizeStaff();
+
         $acara = Acara::findOrFail($id);
 
-        // ========== ACTIVITY LOG ==========
         $this->logActivity(
             modul: 'acara',
             aksi: 'hapus',
@@ -105,10 +117,19 @@ class AcaraController extends Controller
             ],
             subject: $acara
         );
-        // ==================================
 
         $acara->delete();
 
         return redirect()->route('acara.index')->with('success', 'Acara berhasil dihapus!');
+    }
+
+    // ─────────────────────────────────────────────────────
+    // Helper: tolak taruna yang mencoba akses endpoint CRUD
+    // ─────────────────────────────────────────────────────
+    private function authorizeStaff(): void
+    {
+        if (Auth::user()->isTaruna()) {
+            abort(403, 'Akses ditolak. Taruna tidak dapat mengelola acara.');
+        }
     }
 }
