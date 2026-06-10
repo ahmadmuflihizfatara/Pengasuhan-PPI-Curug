@@ -219,11 +219,13 @@
     <hr class="sb-divider">
     <span class="sb-label">Pengaturan</span>
     <ul class="sb-nav">
+        @if(!$user->isTaruna())
         <li>
             <a href="{{ route('profile.edit') }}" class="{{ $active==='profile'?'active':'' }}">
                 <i class="fas fa-user-circle nav-icon"></i> Profil Saya
             </a>
         </li>
+        @endif
         @if($user->canManageSystem())
         <li>
             <a href="{{ route('users.index') }}" class="{{ $active==='users'?'active':'' }}">
@@ -246,7 +248,6 @@
     </ul>
 
 </aside>
-
 <script>
 function sbFilter() {
     const q = document.getElementById('sbSearchInput').value.toLowerCase().trim();

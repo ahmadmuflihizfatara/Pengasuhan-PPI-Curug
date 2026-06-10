@@ -3,17 +3,7 @@
 <style>
 * { box-sizing: border-box; }
 body { font-family: 'Inter', sans-serif; background: #f0f2f5; }
-.app-layout { display: flex; min-height: calc(100vh - 100px); margin-top: -40px; margin-left: -25px; margin-right: -25px; }
-.sidebar { width: 240px; background: #fff; border-right: 1px solid #edf0f7; padding: 28px 16px; min-height: 100%; flex-shrink: 0; }
-.sidebar-logo { font-size: 18px; font-weight: 700; color: #5a67d8; text-decoration: none; display: flex; align-items: center; gap: 8px; margin-bottom: 32px; }
-.sidebar-section-title { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: #aab; margin-bottom: 10px; padding-left: 8px; }
-.sidebar-nav { list-style: none; padding: 0; margin: 0 0 24px 0; }
-.sidebar-nav li { margin-bottom: 2px; }
-.sidebar-nav a { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 10px; text-decoration: none; font-size: 13px; font-weight: 500; color: #555; transition: all .15s; }
-.sidebar-nav a:hover { background: #f0f0fb; color: #5a67d8; }
-.sidebar-nav a.active { background: linear-gradient(135deg, #667eea, #764ba2); color: #fff; }
-.sidebar-divider { border: none; border-top: 1px solid #edf0f7; margin: 12px 0 16px 0; }
-.logout-link { color: #e05252 !important; }
+.app-layout { display: flex; min-height: 100vh; }
 .main-content { flex: 1; padding: 28px 28px 28px 24px; min-width: 0; max-width: 860px; }
 
 .back-link { display: inline-flex; align-items: center; gap: 7px; color: #667eea; text-decoration: none; font-size: 13px; font-weight: 600; margin-bottom: 20px; }
@@ -54,31 +44,7 @@ textarea.form-control { resize: vertical; min-height: 90px; }
 </style>
 
 <div class="app-layout">
-    <div class="sidebar">
-        <a href="{{ route('dashboard') }}" class="sidebar-logo">
-            <i class="fas fa-graduation-cap"></i> Pengasuhan
-        </a>
-        <p class="sidebar-section-title">Overview</p>
-        <ul class="sidebar-nav">
-            <li><a href="{{ route('dashboard') }}"><i class="fas fa-th-large" style="width:16px;"></i> Dashboard</a></li>
-            <li><a href="{{ route('surat.index') }}" class="active"><i class="fas fa-envelope-open-text" style="width:16px;"></i> Administrasi Surat</a></li>
-            <li><a href="{{ route('acara.index') }}"><i class="fas fa-calendar-alt" style="width:16px;"></i> Acara</a></li>
-            <li><a href="{{ route('poin.index') }}"><i class="fas fa-star" style="width:16px;"></i> POIN</a></li>
-            <li><a href="{{ route('mahasiswa.index') }}"><i class="fas fa-users" style="width:16px;"></i> Database Mahasiswa</a></li>
-        </ul>
-        <hr class="sidebar-divider">
-        <p class="sidebar-section-title">Pengaturan</p>
-        <ul class="sidebar-nav">
-            <li><a href="{{ route('setting.index') }}"><i class="fas fa-cog" style="width:16px;"></i> Setting</a></li>
-            <li>
-                <a href="{{ route('logout') }}" class="logout-link"
-                   onclick="event.preventDefault(); document.getElementById('logout-form-sc').submit();">
-                    <i class="fas fa-sign-out-alt" style="width:16px;"></i> Logout
-                </a>
-                <form id="logout-form-sc" action="{{ route('logout') }}" method="POST" style="display:none;">@csrf</form>
-            </li>
-        </ul>
-    </div>
+    <x-sidebar active="surat" />
 
     <div class="main-content">
         <a href="{{ route('surat.index') }}" class="back-link">

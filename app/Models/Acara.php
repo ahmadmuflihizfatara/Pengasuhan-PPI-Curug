@@ -17,4 +17,8 @@ class Acara extends Model
         'jam',
         'keterangan',
     ];
+
+    protected $casts = [
+        'tanggal' => 'date',
+    ];
 }

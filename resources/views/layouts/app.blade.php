@@ -48,5 +48,8 @@
 
     {{-- Bootstrap 5 JS --}}
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    {{-- Per-page scripts (outside #app so Vue doesn't interfere) --}}
+    @stack('scripts')
 </body>
 </html>

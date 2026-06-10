@@ -12,10 +12,9 @@ use App\Traits\LogsActivity; // <-- TAMBAHAN
 class PoinController extends Controller
 {
     use LogsActivity; // <-- TAMBAHAN
-
     public function index(Request $request): View
     {
-        $allMahasiswa = MahasiswaController::getAllMahasiswa();
+        $allMahasiswa = MahasiswaController::enrichMahasiswa(MahasiswaController::getAllMahasiswa());
 
         // Flatten for search/select
         $flatMahasiswa = [];
@@ -33,12 +32,12 @@ class PoinController extends Controller
         // ====================================================
         if ($user->isTaruna()) {
             $selectedStudent = null;
-            $kelas = null;
 
             foreach ($flatMahasiswa as $m) {
-                if (strtolower($m['nickname']) === strtolower($user->username ?? '')
-                    || strtolower($m['nickname']) === strtolower($user->nama_panggilan ?? '')
-                    || strtolower($m['npm'] ?? '') === strtolower($user->username ?? ''))
+                if (strtolower($m['nickname'] ?? '') === strtolower($user->username ?? '')
+                    || strtolower($m['nickname'] ?? '') === strtolower($user->nama_panggilan ?? '')
+                    || strtolower($m['npm'] ?? '') === strtolower($user->username ?? '')
+                    || strtolower($m['email'] ?? '') === strtolower($user->email ?? ''))
                 {
                     $selectedStudent = $m;
                     break;

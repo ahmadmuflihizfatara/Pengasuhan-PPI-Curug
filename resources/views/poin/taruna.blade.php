@@ -3,17 +3,7 @@
 <style>
 * { box-sizing: border-box; }
 body { font-family: 'Inter', sans-serif; background: #f0f2f5; }
-.poin-layout { display: flex; min-height: calc(100vh - 100px); margin-top: -40px; margin-left: -25px; margin-right: -25px; }
-.sidebar { width: 240px; background: #fff; border-right: 1px solid #edf0f7; padding: 28px 16px; min-height: 100%; flex-shrink: 0; }
-.sidebar-logo { font-size:18px; font-weight:700; color:#5a67d8; text-decoration:none; display:flex; align-items:center; gap:8px; margin-bottom:32px; }
-.sidebar-section-title { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.08em; color:#aab; margin-bottom:10px; padding-left:8px; }
-.sidebar-nav { list-style:none; padding:0; margin:0 0 24px 0; }
-.sidebar-nav li { margin-bottom:2px; }
-.sidebar-nav a { display:flex; align-items:center; gap:10px; padding:10px 12px; border-radius:10px; text-decoration:none; font-size:14px; font-weight:500; color:#555; transition:all .15s; }
-.sidebar-nav a:hover { background:#f0f0fb; color:#5a67d8; }
-.sidebar-nav a.active { background:linear-gradient(135deg,#667eea,#764ba2); color:#fff; }
-.sidebar-divider { border:none; border-top:1px solid #edf0f7; margin:12px 0 20px 0; }
-.logout-link { color:#e05252 !important; }
+.poin-layout { display: flex; min-height: 100vh; }
 .main-content { flex:1; padding:28px 30px; min-width:0; }
 .page-header { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); border-radius:18px; padding:28px 36px; color:white; margin-bottom:24px; position:relative; overflow:hidden; }
 .page-header::before { content:''; position:absolute; right:-60px; top:-60px; width:200px; height:200px; background:rgba(255,255,255,.1); border-radius:50%; }
@@ -46,28 +36,7 @@ tbody tr:hover { background:#fafbff; }
 </style>
 
 <div class="poin-layout">
-    <div class="sidebar">
-        <a href="{{ route('dashboard') }}" class="sidebar-logo">
-            <i class="fas fa-graduation-cap"></i> Pengasuhan
-        </a>
-        <p class="sidebar-section-title">Menu</p>
-        <ul class="sidebar-nav">
-            <li><a href="{{ route('dashboard') }}"><i class="fas fa-th-large" style="width:16px;"></i> Dashboard</a></li>
-            <li><a href="{{ route('poin.index') }}" class="active"><i class="fas fa-star" style="width:16px;"></i> Raport Poin Saya</a></li>
-        </ul>
-        <hr class="sidebar-divider">
-        <p class="sidebar-section-title">Akun</p>
-        <ul class="sidebar-nav">
-            <li><a href="{{ route('profile.edit') }}"><i class="fas fa-user-circle" style="width:16px;"></i> Profil Saya</a></li>
-            <li>
-                <a href="{{ route('logout') }}" class="logout-link"
-                   onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                    <i class="fas fa-sign-out-alt" style="width:16px;"></i> Logout
-                </a>
-                <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display:none;">@csrf</form>
-            </li>
-        </ul>
-    </div>
+    <x-sidebar active="poin" />
 
     <div class="main-content">
         <div class="page-header">

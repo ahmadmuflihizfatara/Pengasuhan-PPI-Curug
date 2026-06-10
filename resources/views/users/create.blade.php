@@ -3,17 +3,7 @@
 <style>
 * { box-sizing: border-box; }
 body { font-family: 'Inter', sans-serif; background: #f0f2f5; }
-.app-layout { display: flex; min-height: calc(100vh - 100px); margin-top: -40px; margin-left: -25px; margin-right: -25px; }
-.sidebar { width: 240px; background: #fff; border-right: 1px solid #edf0f7; padding: 28px 16px; min-height: 100%; flex-shrink: 0; position: sticky; top: 0; align-self: flex-start; max-height: 100vh; overflow-y: auto; }
-.sidebar-logo { font-size: 18px; font-weight: 700; color: #5a67d8; text-decoration: none; display: flex; align-items: center; gap: 8px; margin-bottom: 32px; }
-.sidebar-section-title { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: #aab; margin-bottom: 10px; padding-left: 8px; }
-.sidebar-nav { list-style: none; padding: 0; margin: 0 0 24px 0; }
-.sidebar-nav li { margin-bottom: 2px; }
-.sidebar-nav a { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 10px; text-decoration: none; font-size: 13px; font-weight: 500; color: #555; transition: all .15s; }
-.sidebar-nav a:hover { background: #f0f0fb; color: #5a67d8; }
-.sidebar-nav a.active { background: linear-gradient(135deg, #667eea, #764ba2); color: #fff; }
-.sidebar-divider { border: none; border-top: 1px solid #edf0f7; margin: 12px 0 16px 0; }
-.logout-link { color: #e05252 !important; }
+.app-layout { display: flex; min-height: 100vh; }
 .main-content { flex: 1; padding: 28px; display: flex; align-items: center; justify-content: center; }
 
 .form-card { background: white; border-radius: 20px; padding: 36px; box-shadow: 0 4px 24px rgba(0,0,0,.08); width: 100%; max-width: 520px; }
@@ -46,16 +36,7 @@ body { font-family: 'Inter', sans-serif; background: #f0f2f5; }
 </style>
 
 <div class="app-layout">
-    <div class="sidebar">
-        <a href="{{ route('dashboard') }}" class="sidebar-logo">
-            <i class="fas fa-graduation-cap"></i> Pengasuhan
-        </a>
-        <p class="sidebar-section-title">Sistem</p>
-        <ul class="sidebar-nav">
-            <li><a href="{{ route('users.index') }}" class="active"><i class="fas fa-user-shield" style="width:16px;"></i> Manajemen Akun</a></li>
-            <li><a href="{{ route('dashboard') }}"><i class="fas fa-th-large" style="width:16px;"></i> Dashboard</a></li>
-        </ul>
-    </div>
+    <x-sidebar active="users" />
 
     <div class="main-content">
         <div class="form-card">
