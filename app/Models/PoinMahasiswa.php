@@ -22,13 +22,13 @@ class PoinMahasiswa extends Model
 
     protected $casts = [
         'tanggal' => 'date',
-        'nilai' => 'integer',
+        'nilai' => 'float',
     ];
 
     /**
      * Nilai efektif: positif untuk prestasi, negatif untuk pelanggaran
      */
-    public function getNilaiEfektifAttribute(): int
+    public function getNilaiEfektifAttribute(): float
     {
         return $this->kategori === 'prestasi' ? abs($this->nilai) : -abs($this->nilai);
     }

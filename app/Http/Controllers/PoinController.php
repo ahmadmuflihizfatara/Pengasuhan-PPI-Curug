@@ -105,7 +105,7 @@ class PoinController extends Controller
             'kategori'   => 'required|in:prestasi,pelanggaran',
             'kegiatan'   => 'required|string|max:255',
             'tanggal'    => 'required|date',
-            'nilai'      => 'required|integer|min:1',
+            'nilai'      => 'required|numeric|min:0.001',
             'pengasuh'   => 'required|string|max:255',
             'keterangan' => 'nullable|string|max:500',
         ]);
@@ -137,7 +137,7 @@ class PoinController extends Controller
             'kategori'       => $request->kategori,
             'kegiatan'       => $request->kegiatan,
             'tanggal'        => $request->tanggal,
-            'nilai'          => abs((int)$request->nilai),
+            'nilai'          => abs((float)$request->nilai),
             'pengasuh'       => $pengasuhName,
             'keterangan'     => $request->keterangan,
         ]);
@@ -154,7 +154,7 @@ class PoinController extends Controller
                 'kelas'          => $kelas,
                 'kategori'       => $request->kategori,
                 'kegiatan'       => $request->kegiatan,
-                'nilai'          => abs((int)$request->nilai),
+                'nilai'          => abs((float)$request->nilai),
                 'tanggal'        => $request->tanggal,
                 'pengasuh'       => $pengasuhName,
             ],

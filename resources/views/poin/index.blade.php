@@ -118,6 +118,16 @@ tbody tr:hover { background: #fdf0ff; }
 .modal-cancel:hover  { background:#e8e9f0; }
 .modal-confirm { background:linear-gradient(135deg,#fc5c7d,#e53e3e); color:white; border:none; padding:10px 22px; border-radius:25px; font-size:13px; font-weight:700; cursor:pointer; }
 .modal-confirm:hover { opacity:.9; }
+
+/* File upload area */
+.file-upload-area {
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    border: 2px dashed #d8b4fe; border-radius: 12px; padding: 18px 14px;
+    background: #fdf4ff; cursor: pointer; transition: all .15s; text-align: center;
+    font-size: 12px; color: #9333ea; font-weight: 600;
+}
+.file-upload-area:hover { border-color: #a855f7; background: #fae8ff; }
+.file-upload-area.has-file { border-color: #38a169; background: #e6fff5; color: #276749; }
 </style>
 
 <div class="app-layout">
@@ -233,7 +243,7 @@ tbody tr:hover { background: #fdf0ff; }
                         <h3>Tambah Poin</h3>
                     </div>
                     <div class="card-body">
-                        <form method="POST" action="{{ route('poin.store') }}" id="poinForm">
+                        <form method="POST" action="{{ route('poin.store') }}" id="poinForm" enctype="multipart/form-data">
                             @csrf
                             <input type="hidden" name="npm" value="{{ $selectedStudent['npm'] }}">
 
@@ -257,12 +267,20 @@ tbody tr:hover { background: #fdf0ff; }
                                 </div>
                             </div>
 
+                            {{-- Jenis Kegiatan --}}
                             <div class="form-group">
-                                <label class="form-label">Kegiatan / Keterangan</label>
-                                <input type="text" name="kegiatan" class="form-control"
-                                       placeholder="Nama kegiatan atau pelanggaran..."
-                                       value="{{ old('kegiatan') }}" required>
-                                @error('kegiatan')<div style="color:#e53e3e; font-size:11px; margin-top:4px;">{{ $message }}</div>@enderror
+                                <label class="form-label">Jenis Kegiatan</label>
+                                <select id="jenisKegiatanSelect" class="form-control" onchange="onJenisChange()" required>
+                                    <option value="">-- Pilih Jenis Kegiatan --</option>
+                                </select>
+                            </div>
+
+                            {{-- Kategori Kegiatan --}}
+                            <div class="form-group">
+                                <label class="form-label">Kategori Kegiatan</label>
+                                <select id="kategoriKegiatanSelect" name="kegiatan" class="form-control" onchange="onKategoriKegiatanChange()" required>
+                                    <option value="">-- Pilih Kategori Kegiatan --</option>
+                                </select>
                             </div>
 
                             <div class="form-group">
@@ -273,8 +291,8 @@ tbody tr:hover { background: #fdf0ff; }
 
                             <div class="form-group">
                                 <label class="form-label">Nilai Poin</label>
-                                <input type="number" name="nilai" class="form-control"
-                                       placeholder="Contoh: 10" min="1"
+                                <input type="number" name="nilai" id="nilaiInput" class="form-control"
+                                       placeholder="Contoh: 3.5" min="0" step="0.001"
                                        value="{{ old('nilai') }}" required>
                                 @error('nilai')<div style="color:#e53e3e; font-size:11px; margin-top:4px;">{{ $message }}</div>@enderror
                             </div>
@@ -283,6 +301,18 @@ tbody tr:hover { background: #fdf0ff; }
                                 <label class="form-label">Nama Pengasuh</label>
                                 <input type="text" name="pengasuh" class="form-control"
                                        value="{{ Auth::user()->name }}" readonly style="background-color: #f3f4f6; color: #4b5563; cursor: not-allowed;">
+                            </div>
+
+                            {{-- File Bukti (Prestasi Only) --}}
+                            <div class="form-group" id="buktiFileGroup" style="display:none;">
+                                <label class="form-label">Bukti Prestasi <span style="color:#bbb; font-weight:400;">(PDF/JPG/PNG, maks 5MB)</span></label>
+                                <label for="buktiFile" class="file-upload-area" id="fileUploadLabel">
+                                    <i class="fas fa-cloud-upload-alt" style="font-size:22px; color:#c026d3; margin-bottom:6px;"></i>
+                                    <span id="fileUploadText">Klik atau drag file bukti di sini</span>
+                                    <span id="fileUploadName" style="display:none; font-size:11px; color:#38a169; font-weight:700; margin-top:4px;"></span>
+                                </label>
+                                <input type="file" name="bukti_file" id="buktiFile" accept=".pdf,.jpg,.jpeg,.png"
+                                       style="display:none;" onchange="onFileChange(this)">
                             </div>
 
                             <div class="form-group">
@@ -423,7 +453,393 @@ tbody tr:hover { background: #fdf0ff; }
 </div>
 
 <script>
-// Pilih mahasiswa
+// ============================================================
+// DATA KEGIATAN & PELANGGARAN — Berdasarkan Kepdir No.39/2025
+// Format: { label, nilai } — nilai bisa null (user isi manual)
+// ============================================================
+const PRESTASI_DATA = {
+    "Perlombaan & Pertandingan": [
+        { label: "Perlombaan/Pertandingan Internasional — Juara 1", nilai: 3.8 },
+        { label: "Perlombaan/Pertandingan Internasional — Juara 2", nilai: 3.5 },
+        { label: "Perlombaan/Pertandingan Internasional — Juara 3", nilai: 3.3 },
+        { label: "Perlombaan/Pertandingan Internasional — Pemenang Kategori/Peserta", nilai: 1.2 },
+        { label: "Perlombaan/Pertandingan Nasional — Juara 1", nilai: 3.1 },
+        { label: "Perlombaan/Pertandingan Nasional — Juara 2", nilai: 2.6 },
+        { label: "Perlombaan/Pertandingan Nasional — Juara 3", nilai: 2.1 },
+        { label: "Perlombaan/Pertandingan Nasional — Pemenang Kategori/Peserta", nilai: 0.9 },
+        { label: "Perlombaan/Pertandingan Provinsi — Juara 1", nilai: 2.4 },
+        { label: "Perlombaan/Pertandingan Provinsi — Juara 2", nilai: 1.9 },
+        { label: "Perlombaan/Pertandingan Provinsi — Juara 3", nilai: 1.4 },
+        { label: "Perlombaan/Pertandingan Provinsi — Pemenang Kategori/Peserta", nilai: 0.6 },
+        { label: "Perlombaan/Pertandingan Kotamadya/Kabupaten — Juara 1", nilai: 1.7 },
+        { label: "Perlombaan/Pertandingan Kotamadya/Kabupaten — Juara 2", nilai: 1.2 },
+        { label: "Perlombaan/Pertandingan Kotamadya/Kabupaten — Juara 3", nilai: 0.7 },
+        { label: "Perlombaan/Pertandingan Kotamadya/Kabupaten — Pemenang Kategori/Peserta", nilai: 0.3 },
+    ],
+    "Sertifikasi": [
+        { label: "Sertifikasi Akademik/Non-akademik Tingkat Internasional", nilai: 1.0 },
+        { label: "Sertifikasi Akademik/Non-akademik Tingkat Nasional", nilai: 0.7 },
+    ],
+    "Produk / Jasa Keamanan Siber": [
+        { label: "Produk/Jasa Keamanan Siber — Masyarakat Umum Internasional", nilai: 1.2 },
+        { label: "Produk/Jasa Keamanan Siber — Pihak Tertentu Internasional", nilai: 1.1 },
+        { label: "Produk/Jasa Keamanan Siber — Masyarakat Umum Nasional", nilai: 1.1 },
+        { label: "Produk/Jasa Keamanan Siber — Pihak Tertentu Nasional", nilai: 1.0 },
+        { label: "Produk/Jasa Keamanan Siber — Masyarakat Umum Provinsi", nilai: 0.9 },
+        { label: "Produk/Jasa Keamanan Siber — Pihak Tertentu Provinsi", nilai: 0.7 },
+        { label: "Produk/Jasa Keamanan Siber — Masyarakat Umum Kotamadya/Kabupaten", nilai: 0.6 },
+        { label: "Produk/Jasa Keamanan Siber — Pihak Tertentu Kotamadya/Kabupaten", nilai: 0.6 },
+        { label: "Produk/Jasa Keamanan Siber — Lingkup Kantor BSSN", nilai: 0.7 },
+        { label: "Produk/Jasa Keamanan Siber — Lingkup Poltek SSN", nilai: 0.5 },
+    ],
+    "Organisasi": [
+        { label: "Organisasi Internasional — Ketua/Koordinator", nilai: 2.4 },
+        { label: "Organisasi Internasional — Sekretaris/Bendahara/Kepala Bidang", nilai: 2.2 },
+        { label: "Organisasi Internasional — Anggota", nilai: 1.9 },
+        { label: "Organisasi Nasional — Ketua/Koordinator", nilai: 2.3 },
+        { label: "Organisasi Nasional — Sekretaris/Bendahara/Kepala Bidang", nilai: 2.1 },
+        { label: "Organisasi Nasional — Anggota", nilai: 1.8 },
+        { label: "Organisasi Provinsi — Ketua/Sekretaris/Bendahara", nilai: 2.2 },
+        { label: "Organisasi Provinsi — Kepala Bidang/Sejenisnya", nilai: 2.0 },
+        { label: "Organisasi Provinsi — Anggota", nilai: 1.7 },
+        { label: "Ketua/Wakil/Sekretaris/Bendahara Senat Korps Taruna (Demustar >87)", nilai: 10.0 },
+        { label: "Ketua/Wakil/Sekretaris/Bendahara Senat Korps Taruna (Demustar 71–87)", nilai: 8.0 },
+        { label: "Ketua/Wakil/Sekretaris/Bendahara Senat Korps Taruna (Demustar 50–71)", nilai: 5.0 },
+        { label: "Ketua/Wakil/Sekretaris/Bendahara Senat Korps Taruna (Demustar ≤50)", nilai: 3.0 },
+        { label: "Kepala Seksi Korps Taruna (Demustar >87)", nilai: 9.0 },
+        { label: "Kepala Seksi Korps Taruna (Demustar 71–87)", nilai: 7.2 },
+        { label: "Kepala Seksi Korps Taruna (Demustar 50–71)", nilai: 4.5 },
+        { label: "Kepala Seksi Korps Taruna (Demustar ≤50)", nilai: 2.7 },
+        { label: "Kepala Biro/Anggota Poltar Tk.IV (Demustar >87)", nilai: 8.25 },
+        { label: "Kepala Biro/Anggota Poltar Tk.IV (Demustar 71–87)", nilai: 6.6 },
+        { label: "Kepala Biro/Anggota Poltar Tk.IV (Demustar 50–71)", nilai: 4.125 },
+        { label: "Kepala Biro/Anggota Poltar Tk.IV (Demustar ≤50)", nilai: 2.475 },
+        { label: "Kepala Satuan Korps Taruna Madya (Demustar >87)", nilai: 7.75 },
+        { label: "Kepala Satuan Korps Taruna Madya (Demustar 71–87)", nilai: 6.2 },
+        { label: "Kepala Satuan Korps Taruna Madya (Demustar 50–71)", nilai: 3.875 },
+        { label: "Kepala Satuan Korps Taruna Madya (Demustar ≤50)", nilai: 2.325 },
+        { label: "Kabag Tk.III (Demustar >87)", nilai: 7.5 },
+        { label: "Kabag Tk.III (Demustar 71–87)", nilai: 6.0 },
+        { label: "Kabag Tk.III (Demustar 50–71)", nilai: 3.75 },
+        { label: "Kabag Tk.III (Demustar ≤50)", nilai: 2.25 },
+        { label: "Staf Tk.II (Demustar >87)", nilai: 7.0 },
+        { label: "Staf Tk.II (Demustar 71–87)", nilai: 5.6 },
+        { label: "Staf Tk.II (Demustar 50–71)", nilai: 3.5 },
+        { label: "Staf Tk.II (Demustar ≤50)", nilai: 2.1 },
+        { label: "Ketua Demustar (Pengasuh >87)", nilai: 9.5 },
+        { label: "Ketua Demustar (Pengasuh 71–87)", nilai: 7.6 },
+        { label: "Ketua Demustar (Pengasuh 50–71)", nilai: 4.75 },
+        { label: "Ketua Demustar (Pengasuh ≤50)", nilai: 2.85 },
+        { label: "Sekjen Demustar (Pengasuh >87)", nilai: 9.0 },
+        { label: "Sekjen Demustar (Pengasuh 71–87)", nilai: 7.2 },
+        { label: "Sekjen Demustar (Pengasuh 50–71)", nilai: 4.5 },
+        { label: "Sekjen Demustar (Pengasuh ≤50)", nilai: 2.7 },
+        { label: "Komisi Demustar (Pengasuh >87)", nilai: 8.0 },
+        { label: "Komisi Demustar (Pengasuh 71–87)", nilai: 6.4 },
+        { label: "Komisi Demustar (Pengasuh 50–71)", nilai: 4.0 },
+        { label: "Komisi Demustar (Pengasuh ≤50)", nilai: 2.4 },
+        { label: "Anggota Demustar Tk.4 (Pengasuh >87)", nilai: 6.25 },
+        { label: "Anggota Demustar Tk.3 (Pengasuh >87)", nilai: 6.0 },
+        { label: "Anggota Demustar Tk.2 (Pengasuh >87)", nilai: 5.75 },
+        { label: "Anggota Demustar Tk.1 (Pengasuh >87)", nilai: 5.0 },
+        { label: "KPUT (Demustar >87)", nilai: 3.0 },
+        { label: "Asisten Kesehatan (Demustar >87)", nilai: 4.5 },
+        { label: "Asisten Laboratorium (Demustar >87)", nilai: 3.0 },
+        { label: "Ketua Klub (Demustar >87)", nilai: 3.5 },
+        { label: "Tugas Belajar Korea (Demustar >87)", nilai: 5.5 },
+        { label: "Duta Literasi (Demustar >87)", nilai: 4.0 },
+        { label: "Partisipasi Kaderisasi Tk.1 (Demustar >87)", nilai: 1.5 },
+    ],
+    "Kepanitiaan": [
+        { label: "Kepanitiaan Internasional — Ketua", nilai: 1.2 },
+        { label: "Kepanitiaan Internasional — Sekretaris/Bendahara/Kepala Bidang", nilai: 1.1 },
+        { label: "Kepanitiaan Internasional — Anggota", nilai: 1.0 },
+        { label: "Kepanitiaan Nasional — Ketua", nilai: 1.1 },
+        { label: "Kepanitiaan Nasional — Sekretaris/Bendahara/Kepala Bidang", nilai: 1.0 },
+        { label: "Kepanitiaan Nasional — Anggota", nilai: 0.9 },
+        { label: "Kepanitiaan Provinsi — Ketua", nilai: 1.0 },
+        { label: "Kepanitiaan Provinsi — Sekretaris/Bendahara/Kepala Bidang", nilai: 0.9 },
+        { label: "Kepanitiaan Provinsi — Anggota", nilai: 0.8 },
+        { label: "Kepanitiaan Lokal/Kotamadya/BSSN (Acara Besar) — Ketua", nilai: 0.9 },
+        { label: "Kepanitiaan Lokal/Kotamadya/BSSN (Acara Besar) — Sekretaris/Bendahara", nilai: 0.8 },
+        { label: "Kepanitiaan Lokal/Kotamadya/BSSN (Acara Besar) — Anggota", nilai: 0.7 },
+        { label: "Kepanitiaan Acara Besar Taruna Poltek SSN — Ketua", nilai: 0.9 },
+        { label: "Kepanitiaan Acara Besar Taruna Poltek SSN — Sekretaris/Bendahara", nilai: 0.7 },
+        { label: "Kepanitiaan Acara Besar Taruna Poltek SSN — Anggota", nilai: 0.5 },
+        { label: "Perbantuan Kegiatan Singkat Poltek SSN/BSSN", nilai: 0.3 },
+        { label: "Pengisi Acara BSSN — Penampil Kesenian", nilai: 0.5 },
+        { label: "Pengisi Acara BSSN — Marching Band Display", nilai: 0.7 },
+        { label: "Pengisi Acara BSSN — Marching Band Korsik", nilai: 0.5 },
+        { label: "Pengisi Acara BSSN — Band/Hadroh/Marawis", nilai: 0.4 },
+        { label: "Pengisi Acara BSSN — Penampil Non Kesenian", nilai: 0.4 },
+        { label: "Pengisi Acara BSSN — Kolaborasi (Korsik+Display)", nilai: 0.7 },
+        { label: "Petugas Upacara Kegiatan BSSN", nilai: 0.3 },
+        { label: "Petugas Upacara Kegiatan PSSN", nilai: 0.2 },
+        { label: "Penjaga Booth Stand Kegiatan BSSN/Poltek SSN", nilai: 0.3 },
+        { label: "Peserta Kegiatan BSSN (Upacara, HUT BSSN, dll)", nilai: 0.2 },
+        { label: "Pendamping Pejabat/Tamu BSSN/Poltek SSN", nilai: 0.3 },
+        { label: "Penerima Tamu/Pembawa Baki Poltek SSN/BSSN", nilai: 0.2 },
+        { label: "MC Acara Kedinasan (Wisuda, Pengukuhan, dll)", nilai: 0.3 },
+        { label: "Tugas Pembawa Tanda Kehormatan", nilai: 0.3 },
+    ],
+    "Lain-lain (Tambahan)": [
+        { label: "Perbantuan Penyelenggara Non Panitia", nilai: 0.2 },
+        { label: "Kegiatan Terpuji Sesuai 4 Nilai Dasar Taruna", nilai: null },
+        { label: "Mendampingi Teman Izin Keluar (Bermalam)", nilai: 0.2 },
+        { label: "Mendampingi Teman Izin Keluar (Tidak Bermalam)", nilai: 0.1 },
+        { label: "Jaga Asrama (Non-Rutin)", nilai: 0.1 },
+        { label: "Taruna Jaga >2 kali, catatan baik", nilai: 1.8 },
+        { label: "Taruna Jaga 1 kali, catatan baik (>1 kali krn perbaikan)", nilai: 1.2 },
+        { label: "Taruna Jaga 1 kali, ketidaksesuaian ringan", nilai: 0.6 },
+        { label: "Taruna Jaga 1 kali, ketidaksesuaian sedang/buruk", nilai: 0.3 },
+        { label: "Komandan Regu >2 kali", nilai: 0.7 },
+        { label: "Komandan Regu 1–2 kali", nilai: 0.6 },
+        { label: "Ketua Kelas >2 kali", nilai: 0.4 },
+        { label: "Ketua Kelas 2 kali", nilai: 0.3 },
+        { label: "Ketua Kelas 1 kali", nilai: 0.2 },
+        { label: "Koordinator Penampilan/Perlombaan (Non Panitia)", nilai: 0.3 },
+        { label: "Pemapar Seminar/Sosialisasi Poltek SSN/Pengabdian Masyarakat", nilai: 0.4 },
+        { label: "Jurnal/Seminar Internasional — Penulis 1", nilai: 1.2 },
+        { label: "Jurnal/Seminar Internasional — Penulis 2", nilai: 1.0 },
+        { label: "Jurnal/Seminar Internasional — Penulis 3+", nilai: 0.8 },
+        { label: "Seminar Internasional — Peserta (Undangan Satsuh)", nilai: 0.3 },
+        { label: "Seminar Internasional — Peserta (Mandiri, maks 3x/sem)", nilai: 0.2 },
+        { label: "Seminar Internasional — Peserta Terbaik 1/Kategori Khusus", nilai: 0.6 },
+        { label: "Jurnal/Seminar Nasional/BSSN/PTK — Penulis 1", nilai: 1.0 },
+        { label: "Jurnal/Seminar Nasional/BSSN/PTK — Penulis 2", nilai: 0.9 },
+        { label: "Jurnal/Seminar Nasional/BSSN/PTK — Penulis 3+", nilai: 0.7 },
+        { label: "Seminar Nasional/BSSN — Peserta (Undangan Satsuh)", nilai: 0.3 },
+        { label: "Seminar Nasional/BSSN — Peserta (Mandiri, maks 5x/sem)", nilai: 0.2 },
+        { label: "Seminar Nasional/BSSN — Peserta Terbaik 1/Kategori Khusus", nilai: 0.4 },
+        { label: "Sanapati Cendekia Emas", nilai: 1.1 },
+        { label: "Sanapati Cendekia Perak", nilai: 1.0 },
+        { label: "Sanapati Cendekia Perunggu", nilai: 0.9 },
+        { label: "Kesamaptaan — Peringkat Tertinggi 1", nilai: 1.1 },
+        { label: "Kesamaptaan — Peringkat Tertinggi 2", nilai: 1.0 },
+        { label: "Kesamaptaan — Peringkat Tertinggi 3", nilai: 0.9 },
+        { label: "Kesamaptaan — Nilai Samapta 95–100", nilai: 0.4 },
+        { label: "Mentor Personal (1-2 Mentee) Non Periodik 1–5 Pertemuan", nilai: 0.5 },
+        { label: "Mentor Personal (1-2 Mentee) Non Periodik 6–10 Pertemuan", nilai: 0.8 },
+        { label: "Mentor Personal (1-2 Mentee) Non Periodik 11–15 Pertemuan", nilai: 1.0 },
+        { label: "Mentor Kelas (10-20 Mentee) Non Periodik 1–4 Pertemuan", nilai: 1.4 },
+        { label: "Mentor Kelas (10-20 Mentee) Non Periodik 5–10 Pertemuan", nilai: 2.0 },
+        { label: "Mentor Kelas (10-20 Mentee) Non Periodik 11–15 Pertemuan", nilai: 2.4 },
+        { label: "Pengembangan Diri Rohani (Islam/Kristen/Hindu) — lihat tabel", nilai: null },
+        { label: "Poin Perpustakaan 100–199", nilai: 0.1 },
+        { label: "Poin Perpustakaan 200–299", nilai: 0.2 },
+        { label: "Poin Perpustakaan 300–399", nilai: 0.3 },
+        { label: "Poin Perpustakaan 400–499", nilai: 0.4 },
+        { label: "Poin Perpustakaan 500–599", nilai: 0.5 },
+        { label: "Poin Perpustakaan 600–699", nilai: 0.6 },
+        { label: "Poin Perpustakaan >700", nilai: 0.7 },
+        { label: "PIC Akademik Kelas", nilai: 1.5 },
+        { label: "PIC Mata Kuliah", nilai: 1.2 },
+    ]
+};
+
+const PELANGGARAN_DATA = {
+    "Kegiatan Harian Taruna (KHT)": [
+        { label: "Terlambat KHT (berdampak diri sendiri)", nilai: 0.256 },
+        { label: "Terlambat KHT (berdampak pada organisasi Poltek SSN)", nilai: 0.272 },
+        { label: "Terlambat KHT (berdampak pada lingkungan kantor)", nilai: 0.336 },
+        { label: "Terlambat KHT Pengganti Makan Bersama (hari puasa)", nilai: 0.248 },
+        { label: "Terlambat kembali ke kampus dari izin bermalam/pesiar/libur", nilai: 0.316 },
+        { label: "Tidak mengikuti KHT tanpa izin", nilai: 0.348 },
+        { label: "Tidak mengikuti KHT Makan Sahur", nilai: 0.256 },
+        { label: "Tidak mengikuti KHT Pengganti Makan Bersama (hari puasa)", nilai: 0.256 },
+        { label: "Melanggar jam malam", nilai: 0.324 },
+        { label: "Tidak melaksanakan kegiatan ibadah sesuai ketentuan", nilai: 0.308 },
+        { label: "Tidak tidur di tempat sesuai denah kamar", nilai: 0.204 },
+        { label: "Tidak melaksanakan apel/upacara tertib (Apel Taruna/i)", nilai: 0.324 },
+        { label: "Tidak melaksanakan apel/upacara tertib (Apel/Upacara Pejabat PSSN)", nilai: 0.364 },
+        { label: "Tidak menyimpan device/gawai pada tempat yang ditentukan", nilai: 0.384 },
+        { label: "Tidak menjalankan PBB sesuai ketentuan", nilai: 0.252 },
+        { label: "Tidak melakukan pergerakan sesuai rute yang ditentukan", nilai: 0.248 },
+        { label: "Tidak menjaga kebersihan/kerapihan Kamar", nilai: 0.248 },
+        { label: "Tidak menjaga kebersihan/kerapihan Asrama", nilai: 0.252 },
+        { label: "Tidak menjaga kebersihan/kerapihan Kelas", nilai: 0.252 },
+        { label: "Tidak menjaga kebersihan/kerapihan Tempat ibadah/umum", nilai: 0.312 },
+        { label: "Tidur selama pelaksanaan KHT", nilai: 0.256 },
+        { label: "Menghindari tes kesamaptaan tanpa alasan jelas", nilai: 0.332 },
+        { label: "Tidak melaksanakan salah satu komponen tes kesamaptaan dengan sengaja", nilai: 0.332 },
+        { label: "Tidak memberi penghormatan saat penaikan/penurunan bendera", nilai: 0.256 },
+    ],
+    "Kegiatan Akademik": [
+        { label: "Terlambat datang di tempat ujian", nilai: 0.332 },
+        { label: "Terlambat memasuki kelas >15 menit tanpa izin", nilai: 0.324 },
+        { label: "Makan/minum di ruang ujian/perkuliahan tanpa izin", nilai: 0.128 },
+        { label: "Tidur dalam pelaksanaan perkuliahan/ujian", nilai: 0.256 },
+        { label: "Tidak melaksanakan ketentuan dalam ujian/perkuliahan", nilai: 0.264 },
+        { label: "Mencontek dalam ujian", nilai: 4.352 },
+        { label: "Bekerja sama dalam ujian", nilai: 4.832 },
+        { label: "Menggunakan data palsu/plagiarism saat ujian", nilai: 4.608 },
+        { label: "Tidak menjaga kekondusifan saat ujian", nilai: 0.308 },
+        { label: "Tidak mengerjakan tugas dosen tanpa alasan", nilai: 0.408 },
+        { label: "Bermain game/nonton film di jam perkuliahan tanpa izin", nilai: 0.376 },
+    ],
+    "Prosedur dan Tata Tertib": [
+        { label: "Tidak membawa/menjaga buku saku", nilai: 0.308 },
+        { label: "Berbelanja tidak sesuai ketentuan Perduptar (Pasal 33-34)", nilai: 0.308 },
+        { label: "Mengunjungi pemakaman/orang sakit tidak sesuai ketentuan (Pasal 27-28)", nilai: 0.248 },
+        { label: "Meminjam/mengembalikan sesuatu tidak sesuai ketentuan (Pasal 59)", nilai: 0.308 },
+        { label: "Taruna sakit dan berobat tidak sesuai ketentuan (Pasal 12)", nilai: 0.248 },
+        { label: "Bertamu/menerima tamu tidak sesuai Perduptar (Pasal 30-32)", nilai: 0.256 },
+        { label: "Berpenampilan/berpakaian tidak sesuai ketentuan Perduptar", nilai: 0.316 },
+        { label: "Melanggar ketentuan berkendaraan (Pasal 24)", nilai: 0.368 },
+        { label: "Tidak mempedomani prosedur (izin keluar, surat jalan, dll)", nilai: 0.204 },
+        { label: "Menyalahgunakan fasilitas internet (bukan untuk kepentingan belajar)", nilai: 0.384 },
+        { label: "Membuat janji tidak sesuai ketentuan Perduptar (Pasal 29)", nilai: 0.312 },
+        { label: "Mengunjungi tempat rekreasi/hiburan tidak sesuai Perduptar (Pasal 54)", nilai: 0.484 },
+        { label: "Melanggar ketentuan tata cara meninggalkan ruang kelas", nilai: 0.252 },
+        { label: "Menggunakan pakaian dinas untuk membeli barang terlarang (rokok/vape)", nilai: 1.76 },
+        { label: "Terlambat mengumpulkan tugas pengasuhan/penyelenggara/dosen tanpa konfirmasi", nilai: 0.376 },
+        { label: "Memasuki ruangan tanpa izin (ruang pengasuhan/dosen)", nilai: 0.256 },
+        { label: "Tidak menjunjung sportivitas dalam perlombaan", nilai: 0.248 },
+        { label: "Memiliki/menyimpan barang tidak berizin dari Unit Pengasuhan", nilai: 2.216 },
+        { label: "Memberikan pendapat di media atas nama institusi tanpa izin Direktur", nilai: 2.672 },
+        { label: "Tidak kembali dari izin keluar/pesiar/bermalam/cuti tanpa konfirmasi", nilai: 2.304 },
+    ],
+    "Sikap dan Perilaku": [
+        { label: "Tidak menyapa saat bertemu penyelenggara/pejabat Poltek SSN", nilai: 0.248 },
+        { label: "Berbohong/memberikan keterangan palsu", nilai: 1.648 },
+        { label: "Tidak melaksanakan/menghormati tugas, hak, kewajiban taruna lain", nilai: 0.252 },
+        { label: "Berbicara kasar/memotong pembicaraan di depan umum", nilai: 0.528 },
+        { label: "Melakukan perbuatan yang membahayakan orang lain (Pasal 21)", nilai: 4.128 },
+        { label: "Menghilangkan/membantu menghilangkan barang bukti dengan sengaja", nilai: 4.128 },
+        { label: "Tidak melaksanakan arahan/instruksi pengasuh/penyelenggara/dosen", nilai: 0.392 },
+        { label: "Tidak memelihara keamanan dan ketertiban lingkungan taruna/masyarakat", nilai: 1.28 },
+        { label: "Memiliki/menyebarkan paham yang bertentangan Pancasila/UUD 1945", nilai: 4.384 },
+        { label: "Menindik/menato anggota badan, menggunakan anting (taruna)", nilai: 1.472 },
+        { label: "Tata rias tidak sesuai ketentuan (menyerupai lawan jenis)", nilai: 0.348 },
+        { label: "Bepergian berdua bersama lawan jenis (bukan keluarga)", nilai: 0.472 },
+        { label: "Tidak menjaga sikap/perilaku/kehormatan dalam interaksi lawan jenis", nilai: 1.472 },
+        { label: "Mengakses situs pornografi/perjudian/kekerasan/radikalisme", nilai: 4.864 },
+        { label: "Menyimpan/menyaksikan/mengedarkan konten pornografi", nilai: 4.864 },
+        { label: "Tidak menjaga kontrol sosial saat berkomunikasi/berinteraksi", nilai: 1.264 },
+        { label: "Tidak menjaga nama baik almamater saat berinteraksi dengan luar", nilai: 2.672 },
+        { label: "Taruna/i saling memiliki hubungan asmara", nilai: 1.024 },
+        { label: "Menjadikan indekos/hotel sebagai tujuan bermalam/pesiar", nilai: 0.484 },
+        { label: "Mengambil/mengunggah foto/video bersama lawan jenis di luar kedinasan", nilai: 0.424 },
+        { label: "Perbuatan bertentangan norma agama/hukum/kesusilaan", nilai: 6.304 },
+        { label: "Menyalahgunakan/merusak barang orang lain", nilai: 0.256 },
+        { label: "Tidak mematuhi tata krama bertukar pesan dalam grup", nilai: 0.488 },
+        { label: "Tidak menjaga/merusak/menghilangkan barang pembagian negara", nilai: 0.548 },
+        { label: "Menghina/menghasut/menyebarkan kebencian bernuansa SARA", nilai: 2.912 },
+        { label: "Memiliki/menjual/meminjamkan dokumen/barang milik negara secara tidak sah", nilai: 2.304 },
+        { label: "Melakukan tindakan bertentangan norma kesopanan/etika", nilai: 0.376 },
+        { label: "Menghisap/menyimpan/mengedarkan rokok atau sejenisnya", nilai: 2.416 },
+        { label: "Mencuri/mengambil barang yang bukan haknya", nilai: 4.384 },
+        { label: "Berkelahi/melakukan tindakan kekerasan", nilai: 4.608 },
+        { label: "Membeli/menggunakan software bajakan berpotensi malware", nilai: 1.12 },
+        { label: "Inisiatif berlebih yang mengakibatkan orang lain berbuat salah", nilai: 0.432 },
+        { label: "Tidak memiliki kepekaan/kepedulian sosial/lingkungan", nilai: 0.252 },
+        { label: "Perbuatan tidak pantas sehingga menimbulkan perhatian umum", nilai: 0.456 },
+        { label: "Tidak menjaga rahasia kegiatan/proses Poltek SSN/BSSN", nilai: 0.376 },
+        { label: "Menghasut taruna lain untuk berbuat pelanggaran", nilai: 0.316 },
+        { label: "Pembiaran terhadap taruna lain yang melakukan pelanggaran", nilai: 0.256 },
+        { label: "Berkomplot/membantu taruna lain dalam pelanggaran disiplin", nilai: 0.392 },
+        { label: "Pembinaan tanpa memperhatikan esensi dan nilai positif", nilai: 0.324 },
+    ]
+};
+
+// ===================== STATE =====================
+let currentKategori = document.getElementById('kategoriInput')
+    ? document.getElementById('kategoriInput').value || 'prestasi'
+    : 'prestasi';
+
+// ===================== HELPERS =====================
+function getDataForKategori(kat) {
+    return kat === 'prestasi' ? PRESTASI_DATA : PELANGGARAN_DATA;
+}
+
+function populateJenis(kat) {
+    const sel = document.getElementById('jenisKegiatanSelect');
+    if (!sel) return;
+    sel.innerHTML = '<option value="">-- Pilih Jenis Kegiatan --</option>';
+    const data = getDataForKategori(kat);
+    Object.keys(data).forEach(function(jenis) {
+        const opt = document.createElement('option');
+        opt.value = jenis;
+        opt.textContent = jenis;
+        sel.appendChild(opt);
+    });
+    populateKategoriKegiatan('');
+}
+
+function populateKategoriKegiatan(jenis) {
+    const sel = document.getElementById('kategoriKegiatanSelect');
+    if (!sel) return;
+    sel.innerHTML = '<option value="">-- Pilih Kategori Kegiatan --</option>';
+    if (!jenis) return;
+    const data = getDataForKategori(currentKategori);
+    if (!data[jenis]) return;
+    data[jenis].forEach(function(item) {
+        const opt = document.createElement('option');
+        opt.value = item.label;
+        opt.dataset.nilai = item.nilai !== null ? item.nilai : '';
+        opt.textContent = item.label;
+        sel.appendChild(opt);
+    });
+}
+
+function onJenisChange() {
+    const jenis = document.getElementById('jenisKegiatanSelect').value;
+    populateKategoriKegiatan(jenis);
+    clearNilaiAuto();
+}
+
+function onKategoriKegiatanChange() {
+    const sel = document.getElementById('kategoriKegiatanSelect');
+    const chosen = sel.options[sel.selectedIndex];
+    const nilaiInput = document.getElementById('nilaiInput');
+    if (!nilaiInput) return;
+    if (chosen && chosen.dataset.nilai !== '') {
+        nilaiInput.value = chosen.dataset.nilai;
+    } else {
+        nilaiInput.value = '';
+    }
+}
+
+function clearNilaiAuto() {
+    const nilaiInput = document.getElementById('nilaiInput');
+    if (nilaiInput) nilaiInput.value = '';
+}
+
+// ===================== FILE UPLOAD =====================
+function onFileChange(input) {
+    const label = document.getElementById('fileUploadLabel');
+    const nameSpan = document.getElementById('fileUploadName');
+    const textSpan = document.getElementById('fileUploadText');
+    if (input.files && input.files[0]) {
+        const f = input.files[0];
+        nameSpan.textContent = f.name + ' (' + (f.size/1024).toFixed(1) + ' KB)';
+        nameSpan.style.display = 'block';
+        textSpan.style.display = 'none';
+        label.classList.add('has-file');
+    } else {
+        nameSpan.style.display = 'none';
+        textSpan.style.display = 'block';
+        label.classList.remove('has-file');
+    }
+}
+
+// ===================== KATEGORI TOGGLE =====================
+function setKategori(val) {
+    currentKategori = val;
+    document.getElementById('kategoriInput').value = val;
+    document.getElementById('btnPrestasi').className   = 'kategori-btn' + (val === 'prestasi'   ? ' prestasi-active'   : '');
+    document.getElementById('btnPelanggaran').className = 'kategori-btn' + (val === 'pelanggaran' ? ' pelanggaran-active' : '');
+
+    // Show/hide file upload for prestasi only
+    const buktiGroup = document.getElementById('buktiFileGroup');
+    if (buktiGroup) buktiGroup.style.display = val === 'prestasi' ? 'block' : 'none';
+
+    // Reset dropdowns
+    populateJenis(val);
+    clearNilaiAuto();
+}
+
+// ===================== PILIH MAHASISWA =====================
 function selectMahasiswa(npm, label) {
     window.location = '{{ route('poin.index') }}?npm=' + npm;
 }
@@ -432,22 +848,13 @@ function filterMahasiswaList() {
     const q = document.getElementById('mhsSearchInput').value.toLowerCase();
     const dd = document.getElementById('mhsDropdown');
     dd.style.display = 'block';
-    let found = 0;
     document.querySelectorAll('.mhs-option').forEach(function(el) {
         const match = (el.dataset.search || '').includes(q);
         el.style.display = match ? 'flex' : 'none';
-        if (match) found++;
     });
 }
 
-// Kategori toggle
-function setKategori(val) {
-    document.getElementById('kategoriInput').value = val;
-    document.getElementById('btnPrestasi').className   = 'kategori-btn' + (val === 'prestasi'   ? ' prestasi-active'   : '');
-    document.getElementById('btnPelanggaran').className = 'kategori-btn' + (val === 'pelanggaran' ? ' pelanggaran-active' : '');
-}
-
-// Hapus poin modal
+// ===================== HAPUS MODAL =====================
 let hapusPoinId = null;
 function showHapusModal(id, desc) {
     hapusPoinId = id;
@@ -466,6 +873,19 @@ document.getElementById('hapusPoinModal').addEventListener('click', function(e) 
 });
 document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape') closeHapusModal();
+});
+
+// ===================== INIT =====================
+document.addEventListener('DOMContentLoaded', function() {
+    if (document.getElementById('jenisKegiatanSelect')) {
+        populateJenis(currentKategori);
+
+        // Show/hide file upload based on initial kategori
+        const buktiGroup = document.getElementById('buktiFileGroup');
+        if (buktiGroup) {
+            buktiGroup.style.display = currentKategori === 'prestasi' ? 'block' : 'none';
+        }
+    }
 });
 </script>
 </x-app-layout>
