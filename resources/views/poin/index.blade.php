@@ -291,8 +291,8 @@ tbody tr:hover { background: #fdf0ff; }
 
                             <div class="form-group">
                                 <label class="form-label">Nilai Poin</label>
-                                <input type="number" name="nilai" id="nilaiInput" class="form-control"
-                                       placeholder="Contoh: 3.5" min="0" step="0.001"
+                                <input type="number" step="any" name="nilai" id="nilaiInput" class="form-control"
+                                       placeholder="Contoh: 3.5" min="0"
                                        value="{{ old('nilai') }}" required>
                                 @error('nilai')<div style="color:#e53e3e; font-size:11px; margin-top:4px;">{{ $message }}</div>@enderror
                             </div>

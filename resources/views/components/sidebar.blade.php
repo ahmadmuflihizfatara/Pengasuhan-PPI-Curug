@@ -1,7 +1,7 @@
 {{--
     Komponen Sidebar Reusable
     Penggunaan: <x-sidebar active="dashboard" />
-    Nilai $active: 'dashboard' | 'surat' | 'acara' | 'poin' | 'mahasiswa' | 'activity-log' | 'profile' | 'users' | 'setting'
+    Nilai $active: 'dashboard' | 'berita' | 'surat' | 'acara' | 'poin' | 'mahasiswa' | 'activity-log' | 'profile' | 'users' | 'setting'
 --}}
 @php
     $user         = Auth::user();
@@ -131,6 +131,13 @@
         <li>
             <a href="{{ route('dashboard') }}" class="{{ $active==='dashboard'?'active':'' }}">
                 <i class="fas fa-th-large nav-icon"></i> Dashboard
+            </a>
+        </li>
+
+        {{-- Berita Taruna — semua role bisa akses --}}
+        <li>
+            <a href="{{ route('berita.index') }}" class="{{ $active==='berita'?'active':'' }}">
+                <i class="fas fa-newspaper nav-icon"></i> Berita Taruna
             </a>
         </li>
 

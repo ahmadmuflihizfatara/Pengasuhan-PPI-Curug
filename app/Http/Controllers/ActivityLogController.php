@@ -54,6 +54,7 @@ class ActivityLogController extends Controller
             'poin'    => ActivityLog::where('modul', 'poin')->count(),
             'acara'   => ActivityLog::where('modul', 'acara')->count(),
             'surat'   => ActivityLog::where('modul', 'surat')->count(),
+            'berita'  => ActivityLog::where('modul', 'berita')->count(),
             'hari_ini'=> ActivityLog::whereDate('created_at', today())->count(),
         ];
 

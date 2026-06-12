@@ -8,6 +8,7 @@ use App\Http\Controllers\AcaraController;
 use App\Http\Controllers\SuratController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\ActivityLogController; // <-- TAMBAHAN
+use App\Http\Controllers\BeritaController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -166,11 +167,18 @@ Route::middleware('auth')->group(function () {
         ->name('users.destroy');
 
     // ===========================
-    // LOG AKTIVITAS — hanya penyelenggara       ← TAMBAHAN
+    // LOG AKTIVITAS — hanya penyelenggara       
     // ===========================
     Route::get('/activity-log', [ActivityLogController::class, 'index'])
         ->middleware('role:penyelenggara')
         ->name('activity-log.index');
+    // ===========================
+    // BERITA       
+    // ===========================
+
+    Route::resource('berita', BeritaController::class);
+    Route::patch('/berita/{beritum}/pin', [BeritaController::class, 'togglePin'])
+    ->name('berita.toggle-pin');
 });
 
 require __DIR__.'/auth.php';

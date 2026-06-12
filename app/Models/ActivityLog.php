@@ -45,20 +45,22 @@ class ActivityLog extends Model
     public function getModulColorAttribute(): string
     {
         return match ($this->modul) {
-            'poin'  => '#764ba2',
-            'acara' => '#38a169',
-            'surat' => '#e07020',
-            default => '#667eea',
+            'poin'   => '#764ba2',
+            'acara'  => '#38a169',
+            'surat'  => '#e07020',
+            'berita' => '#3182ce',
+            default  => '#667eea',
         };
     }
 
     public function getModulBgColorAttribute(): string
     {
         return match ($this->modul) {
-            'poin'  => '#f3eeff',
-            'acara' => '#e6fff5',
-            'surat' => '#fff4e6',
-            default => '#eef0ff',
+            'poin'   => '#f3eeff',
+            'acara'  => '#e6fff5',
+            'surat'  => '#fff4e6',
+            'berita' => '#ebf8ff',
+            default  => '#eef0ff',
         };
     }
 
@@ -97,10 +99,11 @@ class ActivityLog extends Model
     public function getModulIconAttribute(): string
     {
         return match ($this->modul) {
-            'poin'  => 'fa-star',
-            'acara' => 'fa-calendar-alt',
-            'surat' => 'fa-envelope',
-            default => 'fa-history',
+            'poin'   => 'fa-star',
+            'acara'  => 'fa-calendar-alt',
+            'surat'  => 'fa-envelope',
+            'berita' => 'fa-newspaper',
+            default  => 'fa-history',
         };
     }
 
@@ -110,10 +113,11 @@ class ActivityLog extends Model
     public function getModulLabelAttribute(): string
     {
         return match ($this->modul) {
-            'poin'  => 'Poin',
-            'acara' => 'Acara',
-            'surat' => 'Surat',
-            default => ucfirst($this->modul),
+            'poin'   => 'Poin',
+            'acara'  => 'Acara',
+            'surat'  => 'Surat',
+            'berita' => 'Berita',
+            default  => ucfirst($this->modul),
         };
     }
 

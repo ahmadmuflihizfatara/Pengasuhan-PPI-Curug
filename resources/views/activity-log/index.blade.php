@@ -34,7 +34,7 @@ body { font-family: 'Inter', sans-serif; background: #f0f2f5; }
 .page-header-badge .desc { font-size:11px; color:rgba(255,255,255,.8); margin-top:3px; }
 
 /* Stats row */
-.stats-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin-bottom:24px; }
+.stats-grid { display:grid; grid-template-columns:repeat(5,1fr); gap:14px; margin-bottom:24px; }
 .stat-card {
     background:white; border-radius:14px; padding:18px;
     box-shadow:0 2px 12px rgba(0,0,0,.05);
@@ -178,7 +178,7 @@ tbody tr:hover { background:#fafbff; }
         <div class="page-header">
             <div class="page-header-text">
                 <h1><i class="fas fa-history"></i> Log Aktivitas</h1>
-                <p>Rekam jejak seluruh aktivitas sistem — Poin, Acara &amp; Surat</p>
+                <p>Rekam jejak seluruh aktivitas sistem — Poin, Acara, Surat &amp; Berita</p>
             </div>
             <div class="page-header-badge">
                 <div class="num">{{ $stats['hari_ini'] }}</div>
@@ -224,6 +224,15 @@ tbody tr:hover { background:#fafbff; }
                     <div class="stat-label">Aktivitas Surat</div>
                 </div>
             </div>
+            <div class="stat-card">
+                <div class="stat-icon" style="background:linear-gradient(135deg,#63b3ed,#3182ce);">
+                    <i class="fas fa-newspaper"></i>
+                </div>
+                <div>
+                    <div class="stat-num">{{ number_format($stats['berita']) }}</div>
+                    <div class="stat-label">Aktivitas Berita</div>
+                </div>
+            </div>
         </div>
 
         {{-- ── FILTER ── --}}
@@ -246,6 +255,7 @@ tbody tr:hover { background:#fafbff; }
                             <option value="poin"  {{ request('modul')==='poin' ?'selected':'' }}>⭐ Poin</option>
                             <option value="acara" {{ request('modul')==='acara'?'selected':'' }}>📅 Acara</option>
                             <option value="surat" {{ request('modul')==='surat'?'selected':'' }}>✉️ Surat</option>
+                            <option value="berita" {{ request('modul')==='berita'?'selected':'' }}>📰 Berita</option>
                         </select>
                     </div>
                     <div>
