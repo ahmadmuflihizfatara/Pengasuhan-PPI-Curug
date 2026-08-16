@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AksesFitur;
 use App\Models\Apel;
 use App\Models\User;
 use App\Traits\LogsActivity;
@@ -29,6 +30,7 @@ class ApelController extends Controller
         return view('apel.index', [
             'daftarApel' => $daftarApel,
             'terpilih'   => $terpilih,
+            'bolehIsi'   => AksesFitur::diizinkan(AksesFitur::APEL),
         ]);
     }
 
@@ -50,8 +52,12 @@ class ApelController extends Controller
         ]);
     }
 
-    public function create(): View
+    public function create(): View|RedirectResponse
     {
+        if ($tolak = $this->tolakBilaAksesDitutup()) {
+            return $tolak;
+        }
+
         return view('apel.form', [
             'apel'        => new Apel(['tanggal' => now()]),
             'daftarPembina' => $this->daftarPembina(),
@@ -60,6 +66,10 @@ class ApelController extends Controller
 
     public function store(Request $request): RedirectResponse
     {
+        if ($tolak = $this->tolakBilaAksesDitutup()) {
+            return $tolak;
+        }
+
         $data = $this->validated($request);
 
         $apel = Apel::create($data + ['dibuat_oleh' => auth()->id()]);
@@ -76,8 +86,12 @@ class ApelController extends Controller
             ->with('success', 'Data apel berhasil disimpan.');
     }
 
-    public function edit(Apel $apel): View
+    public function edit(Apel $apel): View|RedirectResponse
     {
+        if ($tolak = $this->tolakBilaAksesDitutup()) {
+            return $tolak;
+        }
+
         return view('apel.form', [
             'apel'          => $apel,
             'daftarPembina' => $this->daftarPembina(),
@@ -86,6 +100,10 @@ class ApelController extends Controller
 
     public function update(Request $request, Apel $apel): RedirectResponse
     {
+        if ($tolak = $this->tolakBilaAksesDitutup()) {
+            return $tolak;
+        }
+
         $data = $this->validated($request, $apel);
 
         $apel->update($data);
@@ -104,6 +122,10 @@ class ApelController extends Controller
 
     public function destroy(Apel $apel): RedirectResponse
     {
+        if ($tolak = $this->tolakBilaAksesDitutup()) {
+            return $tolak;
+        }
+
         $this->logActivity(
             modul: 'apel',
             aksi: 'hapus',
@@ -115,6 +137,20 @@ class ApelController extends Controller
         $apel->delete();
 
         return redirect()->route('apel.index')->with('success', 'Data apel berhasil dihapus.');
+    }
+
+    /**
+     * Tolak aksi tulis kalau admin sedang menutup akses fitur apel.
+     * Halaman lihat tetap terbuka.
+     */
+    private function tolakBilaAksesDitutup(): ?RedirectResponse
+    {
+        if (AksesFitur::diizinkan(AksesFitur::APEL)) {
+            return null;
+        }
+
+        return redirect()->route('apel.index')
+            ->with('error', 'Akses pengisian data apel sedang ditutup oleh admin.');
     }
 
     /**

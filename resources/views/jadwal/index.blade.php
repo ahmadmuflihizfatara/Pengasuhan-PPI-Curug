@@ -30,6 +30,18 @@ body { font-family: 'Inter', sans-serif; background: #f0f2f5; }
 .btn-primary:hover { transform:translateY(-2px); box-shadow:0 8px 22px rgba(0,0,0,.18); color:#4a3aa7; }
 
 .flash-success { background:#f0fff4; border:1px solid #c6f6d5; color:#276749; padding:12px 18px; border-radius:12px; margin-bottom:18px; font-size:13px; font-weight:600; display:flex; align-items:center; gap:8px; }
+.flash-error { background:#fff5f5; border:1px solid #feb2b2; color:#c53030; padding:12px 18px; border-radius:12px; margin-bottom:18px; font-size:13px; font-weight:600; display:flex; align-items:center; gap:8px; }
+.flash-locked { background:#fff8ec; border:1px solid #fbd38d; color:#a06a0a; padding:12px 18px; border-radius:12px; margin-bottom:18px; font-size:13px; font-weight:600; display:flex; align-items:center; gap:8px; }
+
+/* Sub-tab */
+.subtab-row { display:flex; gap:8px; margin-bottom:20px; flex-wrap:wrap; }
+.subtab {
+    padding:10px 18px; border-radius:11px; font-size:13px; font-weight:700;
+    text-decoration:none; background:white; color:#666; border:2px solid #e8ebf5;
+    display:inline-flex; align-items:center; gap:8px; transition:all .15s;
+}
+.subtab:hover { border-color:#4a3aa7; color:#4a3aa7; }
+.subtab.active { background:linear-gradient(135deg,#4a3aa7,#2a78d6); color:white; border-color:transparent; }
 
 /* Hero: petugas hari ini */
 .hero-card {
@@ -143,9 +155,21 @@ body { font-family: 'Inter', sans-serif; background: #f0f2f5; }
             </div>
         </div>
 
+        @include('jadwal._tabs', ['aktif' => 'pengasuh'])
+
         @if(session('success'))
         <div class="flash-success"><i class="fas fa-check-circle"></i> {{ session('success') }}</div>
         @endif
+        @if(session('error'))
+        <div class="flash-error"><i class="fas fa-exclamation-circle"></i> {{ session('error') }}</div>
+        @endif
+
+        @unless($bolehIsi)
+        <div class="flash-locked">
+            <i class="fas fa-lock"></i>
+            Akses pengisian jadwal pengasuh sedang ditutup admin — halaman tetap dapat dilihat, tetapi tidak dapat diubah.
+        </div>
+        @endunless
 
         {{-- Petugas hari ini --}}
         @if($petugasHariIni && $petugasHariIni['pengasuh'])
@@ -195,9 +219,14 @@ body { font-family: 'Inter', sans-serif; background: #f0f2f5; }
             </div>
 
             @if($semuaPengasuh->isNotEmpty())
-                @if($sudahDigenerate)
+                @if($bulanDepan)
+                {{-- Jadwal hanya diisi sampai bulan berjalan --}}
+                <div class="generated-badge" style="background:#fff8ec; color:#a06a0a; border-color:#fbd38d;">
+                    <i class="fas fa-hourglass-half"></i> Belum waktunya — jadwal hanya sampai bulan berjalan
+                </div>
+                @elseif($sudahDigenerate)
                 <div class="generated-badge"><i class="fas fa-check-circle"></i> Jadwal bulan ini sudah digenerate</div>
-                @else
+                @elseif($bolehIsi)
                 <form method="POST" action="{{ route('jadwal.generate') }}">
                     @csrf
                     <input type="hidden" name="bulan" value="{{ $bulan }}">
@@ -246,10 +275,12 @@ body { font-family: 'Inter', sans-serif; background: #f0f2f5; }
                         {{ $item['tersimpan'] ? 'Tersimpan' : 'Default' }}
                     </span>
 
+                    @if($bolehIsi && !$bulanDepan)
                     <button type="button" class="btn-swap"
                             onclick="bukaSwapModal('{{ $item['tanggal']->format('Y-m-d') }}', '{{ $item['tanggal']->locale('id')->isoFormat('dddd, D MMMM Y') }}', {{ $item['pengasuh']?->id ?? 'null' }}, '{{ addslashes($item['catatan'] ?? '') }}')">
                         <i class="fas fa-right-left"></i> Tukar
                     </button>
+                    @endif
                 </div>
             </div>
             @endforeach

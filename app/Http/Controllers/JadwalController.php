@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AksesFitur;
+use App\Models\DutyTaruna;
 use App\Models\JadwalPengasuh;
 use App\Models\Pengasuh;
 use App\Traits\LogsActivity;
@@ -63,17 +65,28 @@ class JadwalController extends Controller
             'bulan'            => $bulan,
             'tahun'            => $tahun,
             'sudahDigenerate'  => $sudahDigenerate,
+            'bolehIsi'         => AksesFitur::diizinkan(AksesFitur::JADWAL_PENGASUH),
+            'bulanDepan'       => $this->melewatiBulanIni($tahun, $bulan),
         ]);
     }
 
     /**
      * Generate jadwal satu bulan dari roster mingguan (satu pengasuh per hari).
      * Tidak menimpa tanggal yang sudah punya jadwal manual/override.
+     * Hanya sampai bulan berjalan — bulan berikutnya belum boleh digenerate.
      */
     public function generate(Request $request): RedirectResponse
     {
+        if (!AksesFitur::diizinkan(AksesFitur::JADWAL_PENGASUH)) {
+            return back()->with('error', 'Akses pengisian jadwal pengasuh sedang ditutup oleh admin.');
+        }
+
         $tahun = (int) $request->input('tahun', now()->year);
         $bulan = (int) $request->input('bulan', now()->month);
+
+        if ($this->melewatiBulanIni($tahun, $bulan)) {
+            return back()->with('error', 'Jadwal hanya dapat digenerate sampai bulan berjalan.');
+        }
 
         $awalBulan  = Carbon::create($tahun, $bulan, 1);
         $pengasuhByHari = Pengasuh::all()->keyBy('hari');
@@ -112,11 +125,20 @@ class JadwalController extends Controller
      */
     public function set(Request $request): RedirectResponse
     {
+        if (!AksesFitur::diizinkan(AksesFitur::JADWAL_PENGASUH)) {
+            return back()->with('error', 'Akses pengisian jadwal pengasuh sedang ditutup oleh admin.');
+        }
+
         $data = $request->validate([
             'tanggal'     => ['required', 'date'],
             'pengasuh_id' => ['required', Rule::exists('pengasuh', 'id')],
             'catatan'     => ['nullable', 'string', 'max:500'],
         ]);
+
+        $tgl = Carbon::parse($data['tanggal']);
+        if ($this->melewatiBulanIni($tgl->year, $tgl->month)) {
+            return back()->with('error', 'Jadwal hanya dapat diatur sampai bulan berjalan.');
+        }
 
         $jadwal = JadwalPengasuh::updateOrCreate(
             ['tanggal' => $data['tanggal']],
@@ -132,9 +154,38 @@ class JadwalController extends Controller
             subject: $jadwal
         );
 
-        $tgl = Carbon::parse($data['tanggal']);
-
         return redirect()->route('jadwal.index', ['bulan' => $tgl->month, 'tahun' => $tgl->year])
             ->with('success', 'Jadwal tanggal ' . $tgl->locale('id')->isoFormat('D MMMM Y') . ' berhasil diperbarui.');
+    }
+
+    /**
+     * Jadwal untuk taruna — hanya lihat: pengasuh bertugas hari ini + duty taruna minggu ini.
+     */
+    public function taruna(): View
+    {
+        $hariIni  = now()->startOfDay();
+        $jadwal   = JadwalPengasuh::with('pengasuh')->whereDate('tanggal', $hariIni)->first();
+        $pengasuh = $jadwal?->pengasuh ?? Pengasuh::bertugasPada($hariIni);
+
+        $mingguIni = DutyTaruna::awalMinggu();
+        $duty = DutyTaruna::with('mahasiswa')
+            ->whereDate('minggu_mulai', $mingguIni)
+            ->get()
+            ->sortBy(fn ($d) => $d->mahasiswa->nama ?? '')
+            ->values();
+
+        return view('jadwal.taruna', [
+            'hariIni'   => $hariIni,
+            'pengasuh'  => $pengasuh,
+            'catatan'   => $jadwal?->catatan,
+            'mingguIni' => $mingguIni,
+            'duty'      => $duty,
+        ]);
+    }
+
+    /** Bulan yang diminta melewati bulan berjalan? */
+    private function melewatiBulanIni(int $tahun, int $bulan): bool
+    {
+        return Carbon::create($tahun, $bulan, 1)->gt(now()->startOfMonth());
     }
 }

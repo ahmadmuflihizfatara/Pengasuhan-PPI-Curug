@@ -7,6 +7,9 @@ use App\Http\Controllers\PoinController;
 use App\Http\Controllers\AcaraController;
 use App\Http\Controllers\ApelController;
 use App\Http\Controllers\JadwalController;
+use App\Http\Controllers\DutyTarunaController;
+use App\Http\Controllers\AksesController;
+use App\Http\Controllers\KonsinyirController;
 use App\Http\Controllers\SuratController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\ActivityLogController; // <-- TAMBAHAN
@@ -115,12 +118,37 @@ Route::middleware('auth')->group(function () {
         ->name('apel.jadwal');
 
     // ===========================
-    // JADWAL PENGASUH — hanya pengasuh
+    // JADWAL — pengasuh: jadwal pengasuh + duty taruna
     // ===========================
     Route::middleware('role:pengasuh')->group(function () {
         Route::get('/jadwal', [JadwalController::class, 'index'])->name('jadwal.index');
         Route::post('/jadwal/generate', [JadwalController::class, 'generate'])->name('jadwal.generate');
         Route::post('/jadwal/set', [JadwalController::class, 'set'])->name('jadwal.set');
+
+        Route::get('/jadwal/duty', [DutyTarunaController::class, 'index'])->name('duty.index');
+        Route::post('/jadwal/duty', [DutyTarunaController::class, 'store'])->name('duty.store');
+    });
+
+    // Jadwal untuk taruna — hanya lihat (pengasuh hari ini + duty minggu ini)
+    Route::get('/jadwal-saya', [JadwalController::class, 'taruna'])
+        ->middleware('role:taruna')
+        ->name('jadwal.taruna');
+
+    // ===========================
+    // KONSINYIR — hanya pengasuh
+    // ===========================
+    Route::middleware('role:pengasuh')->group(function () {
+        Route::get('/konsinyir', [KonsinyirController::class, 'index'])->name('konsinyir.index');
+        Route::post('/konsinyir', [KonsinyirController::class, 'store'])->name('konsinyir.store');
+        Route::delete('/konsinyir/{konsinyir}', [KonsinyirController::class, 'destroy'])->name('konsinyir.destroy');
+    });
+
+    // ===========================
+    // AKSES FITUR — hanya admin
+    // ===========================
+    Route::middleware('role:admin')->group(function () {
+        Route::get('/akses', [AksesController::class, 'index'])->name('akses.index');
+        Route::post('/akses', [AksesController::class, 'update'])->name('akses.update');
     });
 
     // ===========================

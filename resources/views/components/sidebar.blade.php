@@ -158,6 +158,11 @@
                 </a>
             </li>
             <li>
+                <a href="{{ route('jadwal.taruna') }}" class="{{ $active==='jadwal'?'active':'' }}">
+                    <i class="fas fa-user-clock nav-icon"></i> Jadwal
+                </a>
+            </li>
+            <li>
                 <a href="{{ route('surat-taruna.index') }}" class="{{ $active==='surat-taruna'?'active':'' }}">
                     <i class="fas fa-file-signature nav-icon"></i> Pengajuan Surat
                     @php
@@ -198,6 +203,11 @@
                     <i class="fas fa-user-clock nav-icon"></i> Jadwal
                 </a>
             </li>
+            <li>
+                <a href="{{ route('konsinyir.index') }}" class="{{ $active==='konsinyir'?'active':'' }}">
+                    <i class="fas fa-user-lock nav-icon"></i> Konsinyir
+                </a>
+            </li>
             @endif
             @if($user->canManageSystem())
             <li>
@@ -214,6 +224,11 @@
     <hr class="sb-divider">
     <span class="sb-label">Admin</span>
     <ul class="sb-nav">
+        <li>
+            <a href="{{ route('akses.index') }}" class="{{ $active==='akses'?'active':'' }}">
+                <i class="fas fa-shield-alt nav-icon"></i> Akses
+            </a>
+        </li>
         <li>
             <a href="{{ route('activity-log.index') }}" class="{{ $active==='activity-log'?'active':'' }}">
                 <i class="fas fa-history nav-icon"></i> Log Aktivitas

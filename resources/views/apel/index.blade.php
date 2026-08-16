@@ -30,6 +30,8 @@ body { font-family: 'Inter', sans-serif; background: #f0f2f5; }
 .btn-primary:hover { transform:translateY(-2px); box-shadow:0 8px 22px rgba(0,0,0,.18); color:#1baf7a; }
 
 .flash-success { background:#f0fff4; border:1px solid #c6f6d5; color:#276749; padding:12px 18px; border-radius:12px; margin-bottom:20px; font-size:13px; font-weight:600; display:flex; align-items:center; gap:8px; }
+.flash-error { background:#fff5f5; border:1px solid #feb2b2; color:#c53030; padding:12px 18px; border-radius:12px; margin-bottom:20px; font-size:13px; font-weight:600; display:flex; align-items:center; gap:8px; }
+.flash-locked { background:#fff8ec; border:1px solid #fbd38d; color:#a06a0a; padding:12px 18px; border-radius:12px; margin-bottom:20px; font-size:13px; font-weight:600; display:flex; align-items:center; gap:8px; }
 
 /* Selector */
 .selector-card { background:white; border-radius:16px; padding:20px 22px; box-shadow:0 2px 12px rgba(0,0,0,.05); margin-bottom:20px; }
@@ -103,22 +105,36 @@ body { font-family: 'Inter', sans-serif; background: #f0f2f5; }
                 <h1><i class="fas fa-flag" style="margin-right:10px;"></i>Apel</h1>
                 <p>Pilih apel berdasarkan tanggal dan sesi untuk melihat pembina, informasi, dan lokasi</p>
             </div>
+            @if($bolehIsi)
             <a href="{{ route('apel.create') }}" class="btn-primary">
                 <i class="fas fa-plus"></i> Isi Data Apel
             </a>
+            @endif
         </div>
 
         @if(session('success'))
         <div class="flash-success"><i class="fas fa-check-circle"></i> {{ session('success') }}</div>
         @endif
+        @if(session('error'))
+        <div class="flash-error"><i class="fas fa-exclamation-circle"></i> {{ session('error') }}</div>
+        @endif
+
+        @unless($bolehIsi)
+        <div class="flash-locked">
+            <i class="fas fa-lock"></i>
+            Akses pengisian data apel sedang ditutup admin — data tetap dapat dilihat, tetapi tidak dapat diubah.
+        </div>
+        @endunless
 
         @if($daftarApel->isEmpty())
         <div class="empty-state">
             <i class="fas fa-flag"></i>
             <p>Belum ada data apel yang tercatat.</p>
+            @if($bolehIsi)
             <a href="{{ route('apel.create') }}" class="btn-solid">
                 <i class="fas fa-plus"></i> Isi Data Apel Pertama
             </a>
+            @endif
         </div>
         @else
 
@@ -162,6 +178,7 @@ body { font-family: 'Inter', sans-serif; background: #f0f2f5; }
                         @endif
                     </div>
                 </div>
+                @if($bolehIsi)
                 <div class="detail-actions">
                     <a href="{{ route('apel.edit', $terpilih) }}" class="btn-ghost">
                         <i class="fas fa-pen"></i> Ubah
@@ -170,6 +187,7 @@ body { font-family: 'Inter', sans-serif; background: #f0f2f5; }
                         <i class="fas fa-trash"></i> Hapus
                     </button>
                 </div>
+                @endif
             </div>
 
             <div class="detail-body">
