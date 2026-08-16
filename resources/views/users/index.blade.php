@@ -99,6 +99,11 @@ body { font-family: 'Inter', sans-serif; background: #f0f2f5; }
                         <span class="user-role" style="background:{{ $roleInfo['bg'] }}; color:{{ $roleInfo['color'] }};">
                             {{ $roleInfo['label'] }}
                         </span>
+                        @if($user->prodi)
+                        <span class="user-role" style="background:#f0f2f5; color:#555; margin-left:4px;">
+                            {{ $user->prodi }}
+                        </span>
+                        @endif
                     </div>
                     <div class="user-actions">
                         <a href="{{ route('users.edit', $user) }}" class="btn-icon btn-edit" title="Edit">

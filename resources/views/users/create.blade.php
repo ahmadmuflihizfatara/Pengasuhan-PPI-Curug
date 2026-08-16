@@ -72,6 +72,14 @@ body { font-family: 'Inter', sans-serif; background: #f0f2f5; }
                 </div>
 
                 <div class="form-group">
+                    <label class="form-label">Prodi</label>
+                    <input type="text" name="prodi" value="{{ old('prodi') }}"
+                           class="form-control @error('prodi') is-invalid @enderror"
+                           placeholder="Program studi (opsional)">
+                    @error('prodi')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                </div>
+
+                <div class="form-group">
                     <label class="form-label">Email</label>
                     <input type="email" name="email" value="{{ old('email') }}"
                            class="form-control @error('email') is-invalid @enderror"

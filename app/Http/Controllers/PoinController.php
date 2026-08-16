@@ -5,50 +5,33 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 use Illuminate\Http\RedirectResponse;
+use App\Models\Mahasiswa;
 use App\Models\PoinMahasiswa;
-use App\Http\Controllers\MahasiswaController;
 use App\Traits\LogsActivity; // <-- TAMBAHAN
 
 class PoinController extends Controller
 {
     use LogsActivity; // <-- TAMBAHAN
+
     public function index(Request $request): View
     {
-        $allMahasiswa = MahasiswaController::enrichMahasiswa(MahasiswaController::getAllMahasiswa());
-
-        // Flatten for search/select
-        $flatMahasiswa = [];
-        foreach ($allMahasiswa as $kelas => $students) {
-            foreach ($students as $s) {
-                $flatMahasiswa[] = array_merge($s, ['kelas' => $kelas]);
-            }
-        }
+        $allMahasiswa  = Mahasiswa::with('user')->orderBy('kelas')->orderBy('nama')->get();
+        $flatMahasiswa = $allMahasiswa;
 
         $user = auth()->user();
 
         // ====================================================
         // TARUNA: auto-load poin miliknya sendiri berdasarkan
-        // username yang cocok dengan nickname di data mahasiswa
+        // akun user yang terhubung ke data mahasiswa
         // ====================================================
         if ($user->isTaruna()) {
-            $selectedStudent = null;
-
-            foreach ($flatMahasiswa as $m) {
-                if (strtolower($m['nickname'] ?? '') === strtolower($user->username ?? '')
-                    || strtolower($m['nickname'] ?? '') === strtolower($user->nama_panggilan ?? '')
-                    || strtolower($m['npm'] ?? '') === strtolower($user->username ?? '')
-                    || strtolower($m['email'] ?? '') === strtolower($user->email ?? ''))
-                {
-                    $selectedStudent = $m;
-                    break;
-                }
-            }
+            $selectedStudent = Mahasiswa::where('user_id', $user->id)->first();
 
             $riwayat   = collect();
             $totalPoin = 0;
 
             if ($selectedStudent) {
-                $riwayat   = PoinMahasiswa::where('npm', $selectedStudent['npm'])
+                $riwayat   = PoinMahasiswa::where('mahasiswa_id', $selectedStudent->id)
                     ->orderByDesc('tanggal')
                     ->orderByDesc('created_at')
                     ->get();
@@ -61,7 +44,7 @@ class PoinController extends Controller
                 'selectedStudent',
                 'riwayat',
                 'totalPoin'
-            ) + ['selectedNpm' => $selectedStudent['npm'] ?? null]);
+            ) + ['selectedNpm' => $selectedStudent->npm ?? null]);
         }
 
         // ====================================================
@@ -73,14 +56,10 @@ class PoinController extends Controller
         $totalPoin       = 0;
 
         if ($selectedNpm) {
-            foreach ($flatMahasiswa as $m) {
-                if ($m['npm'] === $selectedNpm) {
-                    $selectedStudent = $m;
-                    break;
-                }
-            }
+            $selectedStudent = $allMahasiswa->firstWhere('npm', $selectedNpm);
+
             if ($selectedStudent) {
-                $riwayat   = PoinMahasiswa::where('npm', $selectedNpm)
+                $riwayat   = PoinMahasiswa::where('mahasiswa_id', $selectedStudent->id)
                     ->orderByDesc('tanggal')
                     ->orderByDesc('created_at')
                     ->get();
@@ -110,19 +89,7 @@ class PoinController extends Controller
             'keterangan' => 'nullable|string|max:500',
         ]);
 
-        // Get student info
-        $allMahasiswa = MahasiswaController::getAllMahasiswa();
-        $student = null;
-        $kelas = null;
-        foreach ($allMahasiswa as $k => $students) {
-            foreach ($students as $s) {
-                if ($s['npm'] === $request->npm) {
-                    $student = $s;
-                    $kelas = $k;
-                    break 2;
-                }
-            }
-        }
+        $student = Mahasiswa::where('npm', $request->npm)->first();
 
         if (!$student) {
             return back()->withErrors(['npm' => 'Mahasiswa tidak ditemukan'])->withInput();
@@ -131,9 +98,10 @@ class PoinController extends Controller
         $pengasuhName = auth()->user()->name;
 
         $poin = PoinMahasiswa::create([
-            'npm'            => $request->npm,
-            'nama_mahasiswa' => $student['nama'],
-            'kelas'          => $kelas,
+            'mahasiswa_id'   => $student->id,
+            'npm'            => $student->npm,
+            'nama_mahasiswa' => $student->nama,
+            'kelas'          => $student->kelas,
             'kategori'       => $request->kategori,
             'kegiatan'       => $request->kegiatan,
             'tanggal'        => $request->tanggal,
@@ -147,11 +115,11 @@ class PoinController extends Controller
         $this->logActivity(
             modul: 'poin',
             aksi: 'tambah',
-            deskripsi: "Tambah poin {$kategoriLabel} untuk {$student['nama']} (NPM: {$request->npm}) — Kegiatan: {$request->kegiatan}, Nilai: {$request->nilai}",
+            deskripsi: "Tambah poin {$kategoriLabel} untuk {$student->nama} (NPM: {$request->npm}) — Kegiatan: {$request->kegiatan}, Nilai: {$request->nilai}",
             detail: [
-                'npm'            => $request->npm,
-                'nama_mahasiswa' => $student['nama'],
-                'kelas'          => $kelas,
+                'npm'            => $student->npm,
+                'nama_mahasiswa' => $student->nama,
+                'kelas'          => $student->kelas,
                 'kategori'       => $request->kategori,
                 'kegiatan'       => $request->kegiatan,
                 'nilai'          => abs((float)$request->nilai),
@@ -204,25 +172,7 @@ class PoinController extends Controller
             return response()->json(['error' => 'Unauthorized'], 401);
         }
 
-        $allMahasiswa = MahasiswaController::enrichMahasiswa(MahasiswaController::getAllMahasiswa());
-        $flatMahasiswa = [];
-        foreach ($allMahasiswa as $kelas => $students) {
-            foreach ($students as $s) {
-                $flatMahasiswa[] = array_merge($s, ['kelas' => $kelas]);
-            }
-        }
-
-        $selectedStudent = null;
-        foreach ($flatMahasiswa as $m) {
-            if (strtolower($m['nickname'] ?? '') === strtolower($user->username ?? '')
-                || strtolower($m['nickname'] ?? '') === strtolower($user->nama_panggilan ?? '')
-                || strtolower($m['npm'] ?? '') === strtolower($user->username ?? '')
-                || strtolower($m['email'] ?? '') === strtolower($user->email ?? ''))
-            {
-                $selectedStudent = $m;
-                break;
-            }
-        }
+        $selectedStudent = Mahasiswa::where('user_id', $user->id)->first();
 
         if (!$selectedStudent) {
             return response()->json([
@@ -231,7 +181,7 @@ class PoinController extends Controller
             ]);
         }
 
-        $riwayat = PoinMahasiswa::where('npm', $selectedStudent['npm'])
+        $riwayat = PoinMahasiswa::where('mahasiswa_id', $selectedStudent->id)
             ->orderByDesc('tanggal')
             ->orderByDesc('created_at')
             ->get();

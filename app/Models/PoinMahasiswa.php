@@ -9,6 +9,7 @@ class PoinMahasiswa extends Model
     protected $table = 'poin_mahasiswa';
 
     protected $fillable = [
+        'mahasiswa_id',
         'npm',
         'nama_mahasiswa',
         'kelas',
@@ -31,5 +32,10 @@ class PoinMahasiswa extends Model
     public function getNilaiEfektifAttribute(): float
     {
         return $this->kategori === 'prestasi' ? abs($this->nilai) : -abs($this->nilai);
+    }
+
+    public function mahasiswa()
+    {
+        return $this->belongsTo(Mahasiswa::class);
     }
 }

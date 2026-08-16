@@ -24,37 +24,39 @@ body { font-family: 'Inter', sans-serif; background: #f0f2f5; }
 .page-header h1 { margin:0 0 4px; font-size:24px; font-weight:700; position:relative; z-index:1; }
 .page-header p  { margin:0; opacity:.85; font-size:14px; position:relative; z-index:1; }
 
-/* Stats bar — dihitung langsung dari $mahasiswaData, bukan $stats */
-.stats-row { display:grid; grid-template-columns:repeat(6,1fr); gap:12px; margin-bottom:24px; }
+/* Stats bar */
+.stats-row { display:grid; grid-template-columns:repeat(5,1fr); gap:12px; margin-bottom:12px; }
 .stat-card {
-    background:white; border-radius:14px; padding:16px 12px;
+    background:white; border-radius:14px; padding:14px 12px;
     text-align:center; box-shadow:0 1px 6px rgba(0,0,0,.05);
     cursor:pointer; border:2px solid transparent; transition:all .2s;
 }
 .stat-card:hover { transform:translateY(-2px); box-shadow:0 4px 14px rgba(0,0,0,.1); }
 .stat-card.active-tab { border-color:#5a67d8; }
-.stat-card .count { font-size:20px; font-weight:700; color:#333; }
-.stat-card .label { font-size:10px; color:#888; margin-top:2px; font-weight:500; }
+.stat-card .count { font-size:19px; font-weight:700; color:#333; }
+.stat-card .label { font-size:11px; color:#555; margin-top:2px; font-weight:700; }
+.stat-card .sub   { font-size:9px; color:#aab; margin-top:1px; font-weight:500; }
 
 /* Search */
 .search-bar {
     display:flex; align-items:center;
     background:white; border-radius:12px;
-    padding:10px 16px; margin-bottom:18px;
+    padding:10px 16px; margin:18px 0;
     box-shadow:0 1px 6px rgba(0,0,0,.05); gap:10px;
 }
 .search-bar i { color:#aab; }
 .search-bar input { border:none; outline:none; width:100%; font-size:14px; font-family:'Inter',sans-serif; color:#333; background:transparent; }
 
-/* Class tabs */
-.class-tabs { display:flex; gap:8px; margin-bottom:18px; flex-wrap:wrap; }
-.class-tab {
-    padding:7px 16px; border-radius:50px; font-size:12px;
+/* Filter rows */
+.filter-row { display:flex; gap:8px; margin-bottom:12px; flex-wrap:wrap; align-items:center; }
+.filter-label { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.06em; color:#8a93b0; margin-right:4px; min-width:52px; }
+.chip {
+    padding:7px 15px; border-radius:50px; font-size:12px;
     font-weight:600; cursor:pointer; border:2px solid #e2e5ee;
     background:white; color:#666; transition:all .15s;
 }
-.class-tab:hover { border-color:#5a67d8; color:#5a67d8; }
-.class-tab.active { background:#5a67d8; color:white; border-color:#5a67d8; }
+.chip:hover { border-color:#5a67d8; color:#5a67d8; }
+.chip.active { background:#5a67d8; color:white; border-color:#5a67d8; }
 
 /* Table */
 .table-container { background:white; border-radius:14px; overflow:hidden; box-shadow:0 2px 12px rgba(0,0,0,.05); }
@@ -69,9 +71,13 @@ td { padding:12px 14px; font-size:13px; color:#444; border-top:1px solid #f0f2f7
 tbody tr { transition:background .1s; }
 tbody tr:hover { background:#fafbff; }
 
-.student-name  { font-weight:600; color:#222; }
-.npm-badge     { font-family:monospace; font-size:12px; color:#777; }
+.student-name   { font-weight:600; color:#222; }
+.npm-badge      { font-family:monospace; font-size:12px; color:#777; }
 .nickname-badge { background:#eef0ff; color:#5a67d8; padding:3px 10px; border-radius:50px; font-size:12px; font-weight:600; }
+.tingkat-badge  { background:#f0fff4; color:#38a169; padding:3px 10px; border-radius:50px; font-size:12px; font-weight:700; }
+.jk-badge       { font-size:11px; font-weight:700; padding:2px 8px; border-radius:50px; }
+.jk-L { background:#ebf4ff; color:#3182ce; }
+.jk-P { background:#fff0f6; color:#d53f8c; }
 
 .btn-edit {
     background:linear-gradient(135deg,#5a67d8,#9f7aea);
@@ -81,8 +87,11 @@ tbody tr:hover { background:#fafbff; }
 }
 .btn-edit:hover { opacity:.85; color:white; }
 
-.class-header-row { background:linear-gradient(135deg,#5a67d8,#9f7aea); }
-.class-header-row td { color:white; font-weight:700; padding:10px 14px; font-size:13px; border-top:none; }
+.prodi-header-row { background:linear-gradient(135deg,#5a67d8,#9f7aea); }
+.prodi-header-row td { color:white; font-weight:700; padding:10px 14px; font-size:13px; border-top:none; }
+.jenjang-pill { background:rgba(255,255,255,.25); padding:2px 9px; border-radius:50px; font-size:11px; font-weight:700; margin-left:6px; }
+
+.flash-success { background:#f0fff4; border:1px solid #c6f6d5; color:#276749; padding:12px 18px; border-radius:12px; margin-bottom:20px; font-size:13px; font-weight:600; display:flex; align-items:center; gap:8px; }
 
 .hidden { display:none; }
 
@@ -101,20 +110,34 @@ tbody tr:hover { background:#fafbff; }
         <!-- Header -->
         <div class="page-header">
             <h1><i class="fas fa-database" style="margin-right:10px;"></i>Database Mahasiswa</h1>
-            <p>Data biodata dan akun seluruh mahasiswa berdasarkan kelas</p>
+            <p>Data biodata dan akun seluruh mahasiswa berdasarkan program studi dan tingkat</p>
         </div>
 
-        {{-- Stats — dihitung langsung, tidak butuh variabel $stats dari controller --}}
-        @php $totalSemua = array_sum(array_map('count', $mahasiswaData)); @endphp
+        @if(session('success'))
+        <div class="flash-success"><i class="fas fa-check-circle"></i> {{ session('success') }}</div>
+        @endif
+
+        @php
+            $prodiList   = \App\Models\Mahasiswa::PRODI;
+            $totalSemua  = $mahasiswaData->flatten(1)->count();
+            $maxTingkat  = 4;
+        @endphp
+
+        {{-- Grafik jumlah taruna per tingkat per prodi --}}
+        <x-prodi-tingkat-chart :chart-data="$chartData" />
+
+        {{-- Stat cards per prodi --}}
         <div class="stats-row">
-            <div class="stat-card active-tab" onclick="filterClass('all', this)">
+            <div class="stat-card active-tab" data-prodi="all" onclick="setProdi('all', this)">
                 <div class="count">{{ $totalSemua }}</div>
-                <div class="label">Semua Kelas</div>
+                <div class="label">Semua Prodi</div>
+                <div class="sub">D-4 &amp; D-3</div>
             </div>
-            @foreach($mahasiswaData as $kelas => $students)
-            <div class="stat-card" onclick="filterClass('{{ str_replace([' ', '-'], '_', $kelas) }}', this)">
-                <div class="count">{{ count($students) }}</div>
-                <div class="label">{{ $kelas }}</div>
+            @foreach($prodiList as $kode => $info)
+            <div class="stat-card" data-prodi="{{ $kode }}" onclick="setProdi('{{ $kode }}', this)">
+                <div class="count">{{ ($mahasiswaData[$kode] ?? collect())->count() }}</div>
+                <div class="label">{{ $kode }}</div>
+                <div class="sub">{{ $info['jenjang'] }} · {{ $info['nama'] }}</div>
             </div>
             @endforeach
         </div>
@@ -124,17 +147,29 @@ tbody tr:hover { background:#fafbff; }
             <i class="fas fa-search"></i>
             <input type="text" id="searchInput"
                    placeholder="Cari nama, NPM, atau nickname..."
-                   oninput="searchStudents()">
+                   oninput="applyFilters()">
         </div>
 
-        <!-- Class Tabs -->
-        <div class="class-tabs">
-            <div class="class-tab active" onclick="filterClass('all', null, this)">Semua</div>
-            @foreach($mahasiswaData as $kelas => $students)
-            <div class="class-tab" onclick="filterClass('{{ str_replace([' ', '-'], '_', $kelas) }}', null, this)">
-                {{ $kelas }}
+        {{-- Filter prodi --}}
+        <div class="filter-row">
+            <span class="filter-label">Prodi</span>
+            <div class="chip active" data-prodi="all" onclick="setProdi('all', null, this)">Semua</div>
+            @foreach($prodiList as $kode => $info)
+            <div class="chip" data-prodi="{{ $kode }}" onclick="setProdi('{{ $kode }}', null, this)">
+                {{ $kode }}
             </div>
             @endforeach
+        </div>
+
+        {{-- Filter tingkat --}}
+        <div class="filter-row">
+            <span class="filter-label">Tingkat</span>
+            <div class="chip active" data-tingkat="all" onclick="setTingkat('all', this)">Semua</div>
+            @for($t = 1; $t <= $maxTingkat; $t++)
+            <div class="chip" data-tingkat="{{ $t }}" onclick="setTingkat('{{ $t }}', this)">
+                Tingkat {{ $t }}
+            </div>
+            @endfor
         </div>
 
         <!-- Table -->
@@ -150,35 +185,46 @@ tbody tr:hover { background:#fafbff; }
                         <th>NPM</th>
                         <th>Nama Lengkap</th>
                         <th>Nickname</th>
+                        <th>L/P</th>
+                        <th>Tingkat</th>
                         <th>Email</th>
                         <th>Username</th>
-                        <th>Password</th>
                         <th>Aksi</th>
                     </tr>
                 </thead>
                 <tbody id="studentTableBody">
                     @php $no = 1; @endphp
-                    @foreach($mahasiswaData as $kelas => $students)
-                    <tr class="class-header-row class-{{ str_replace([' ', '-'], '_', $kelas) }}"
-                        data-class="{{ str_replace([' ', '-'], '_', $kelas) }}">
-                        <td colspan="8">
-                            <i class="fas fa-users"></i>
-                            Kelas {{ $kelas }} &mdash; {{ count($students) }} mahasiswa
+                    @foreach($mahasiswaData as $kode => $students)
+                    @php $info = $prodiList[$kode] ?? ['nama' => $kode, 'jenjang' => '-']; @endphp
+                    <tr class="prodi-header-row" data-prodi="{{ $kode }}">
+                        <td colspan="9">
+                            <i class="fas fa-graduation-cap"></i>
+                            {{ $kode }} &mdash; {{ $info['nama'] }}
+                            <span class="jenjang-pill">{{ $info['jenjang'] }}</span>
+                            <span class="jenjang-pill">{{ count($students) }} mahasiswa</span>
                         </td>
                     </tr>
                     @foreach($students as $student)
-                    <tr class="student-row class-{{ str_replace([' ', '-'], '_', $kelas) }}"
-                        data-class="{{ str_replace([' ', '-'], '_', $kelas) }}"
-                        data-search="{{ strtolower($student['nama']) }} {{ strtolower($student['npm']) }} {{ strtolower($student['nickname']) }}">
+                    <tr class="student-row"
+                        data-prodi="{{ $kode }}"
+                        data-tingkat="{{ $student->tingkat }}"
+                        data-search="{{ strtolower($student->nama) }} {{ strtolower($student->npm ?? '') }} {{ strtolower($student->nickname ?? '') }}">
                         <td style="color:#bbb; font-size:12px;">{{ $no++ }}</td>
-                        <td><span class="npm-badge">{{ $student['npm'] }}</span></td>
-                        <td class="student-name">{{ $student['nama'] }}</td>
-                        <td><span class="nickname-badge">{{ $student['nickname'] }}</span></td>
-                        <td style="font-size:12px; color:#555;">{{ $student['email'] }}</td>
-                        <td style="font-family:monospace; color:#5a67d8; font-size:13px; font-weight:600;">{{ $student['username'] }}</td>
-                        <td style="font-family:monospace; color:#e07020; font-size:13px;">{{ $student['password'] }}</td>
+                        <td><span class="npm-badge">{{ $student->npm ?? '-' }}</span></td>
+                        <td class="student-name">{{ $student->nama }}</td>
+                        <td><span class="nickname-badge">{{ $student->nickname ?? '-' }}</span></td>
                         <td>
-                            <a href="{{ route('mahasiswa.edit', ['npm' => $student['npm']]) }}" class="btn-edit">
+                            @if($student->jenis_kelamin)
+                            <span class="jk-badge jk-{{ $student->jenis_kelamin }}">{{ $student->jenis_kelamin }}</span>
+                            @else
+                            <span style="color:#ccc;">-</span>
+                            @endif
+                        </td>
+                        <td><span class="tingkat-badge">{{ $student->tingkat }}</span></td>
+                        <td style="font-size:12px; color:#555;">{{ $student->user->email ?? '-' }}</td>
+                        <td style="font-family:monospace; color:#5a67d8; font-size:13px; font-weight:600;">{{ $student->user->username ?? '-' }}</td>
+                        <td>
+                            <a href="{{ route('mahasiswa.edit', $student) }}" class="btn-edit">
                                 <i class="fas fa-edit"></i> Edit
                             </a>
                         </td>
@@ -189,7 +235,7 @@ tbody tr:hover { background:#fafbff; }
             </table>
             <div id="emptySearch" class="empty-search hidden">
                 <i class="fas fa-search"></i>
-                Tidak ada mahasiswa yang cocok dengan pencarian
+                Tidak ada mahasiswa yang cocok dengan filter
             </div>
         </div>
 
@@ -197,66 +243,65 @@ tbody tr:hover { background:#fafbff; }
 </div>{{-- end app-layout --}}
 
 <script>
-let currentClass  = 'all';
-let currentSearch = '';
+const PRODI_NAMA = @json(collect($prodiList)->map(fn($i) => $i['nama']));
 
-function filterClass(cls, statCard, tabEl) {
-    currentClass = cls;
+let currentProdi   = 'all';
+let currentTingkat = 'all';
 
-    // Update stat card active
-    document.querySelectorAll('.stat-card').forEach(c => c.classList.remove('active-tab'));
-    if (statCard) statCard.classList.add('active-tab');
+function setProdi(kode, statCard, chipEl) {
+    currentProdi = kode;
 
-    // Update tab active
-    if (tabEl) {
-        document.querySelectorAll('.class-tab').forEach(t => t.classList.remove('active'));
-        tabEl.classList.add('active');
-    } else {
-        // Sinkronisasi tab dari stat card
-        document.querySelectorAll('.class-tab').forEach(t => {
-            const txt = t.textContent.trim().replace(/\s+/g, '_').replace(/-/g, '_');
-            t.classList.toggle('active', cls === 'all' ? t === document.querySelector('.class-tab') : txt === cls);
-        });
-    }
+    document.querySelectorAll('.stat-card').forEach(c =>
+        c.classList.toggle('active-tab', c.dataset.prodi === kode));
+    document.querySelectorAll('.chip[data-prodi]').forEach(c =>
+        c.classList.toggle('active', c.dataset.prodi === kode));
 
     applyFilters();
 }
 
-function searchStudents() {
-    currentSearch = document.getElementById('searchInput').value.toLowerCase().trim();
+function setTingkat(tingkat, chipEl) {
+    currentTingkat = tingkat;
+
+    document.querySelectorAll('.chip[data-tingkat]').forEach(c =>
+        c.classList.toggle('active', c.dataset.tingkat === tingkat));
+
     applyFilters();
 }
 
 function applyFilters() {
+    const search  = document.getElementById('searchInput').value.toLowerCase().trim();
     const rows    = document.querySelectorAll('.student-row');
-    const headers = document.querySelectorAll('.class-header-row');
+    const headers = document.querySelectorAll('.prodi-header-row');
     let visible   = 0;
+    const terlihatPerProdi = {};
 
-    // Tampilkan/sembunyikan header kelas
-    headers.forEach(h => {
-        h.classList.toggle('hidden', currentClass !== 'all' && h.dataset.class !== currentClass);
-    });
-
-    // Tampilkan/sembunyikan baris mahasiswa
     rows.forEach(row => {
-        const classMatch  = currentClass === 'all' || row.dataset.class === currentClass;
-        const searchMatch = !currentSearch || (row.dataset.search || '').includes(currentSearch);
-        const show = classMatch && searchMatch;
-        row.classList.toggle('hidden', !show);
-        if (show) visible++;
+        const cocokProdi   = currentProdi === 'all' || row.dataset.prodi === currentProdi;
+        const cocokTingkat = currentTingkat === 'all' || row.dataset.tingkat === currentTingkat;
+        const cocokSearch  = !search || (row.dataset.search || '').includes(search);
+        const tampil = cocokProdi && cocokTingkat && cocokSearch;
+
+        row.classList.toggle('hidden', !tampil);
+        if (tampil) {
+            visible++;
+            terlihatPerProdi[row.dataset.prodi] = (terlihatPerProdi[row.dataset.prodi] || 0) + 1;
+        }
     });
 
-    // Update counter & judul
+    // Header prodi hanya tampil bila ada barisnya yang lolos filter
+    headers.forEach(h => {
+        h.classList.toggle('hidden', !terlihatPerProdi[h.dataset.prodi]);
+    });
+
     document.getElementById('tableCount').textContent = visible + ' mahasiswa';
     document.getElementById('emptySearch').classList.toggle('hidden', visible > 0);
 
-    if (currentClass === 'all') {
-        document.getElementById('tableTitle').textContent = 'Semua Mahasiswa';
-    } else {
-        const hdr = document.querySelector(`.class-header-row.class-${currentClass} td`);
-        document.getElementById('tableTitle').textContent =
-            hdr ? hdr.textContent.split('—')[0].trim() : currentClass.replace(/_/g, ' ');
-    }
+    // Judul tabel mengikuti filter aktif
+    let judul = currentProdi === 'all'
+        ? 'Semua Mahasiswa'
+        : currentProdi + ' — ' + (PRODI_NAMA[currentProdi] || currentProdi);
+    if (currentTingkat !== 'all') judul += ' · Tingkat ' + currentTingkat;
+    document.getElementById('tableTitle').textContent = judul;
 }
 </script>
 </x-app-layout>

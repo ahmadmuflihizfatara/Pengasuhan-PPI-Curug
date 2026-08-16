@@ -149,6 +149,8 @@ body { font-family: 'Inter', sans-serif; background: #f0f2f5; }
             </a>
         </div>
 
+        <x-prodi-tingkat-chart :chart-data="$chartData" />
+
         @else
         <div class="stats-grid">
             <div class="stat-card" style="cursor:default;">

@@ -29,6 +29,7 @@ class UserManagementController extends Controller
             'role'     => ['required', 'in:taruna,pengasuh,penyelenggara'],
             'username' => ['nullable', 'string', 'max:100'],
             'jabatan'  => ['nullable', 'string', 'max:100'],
+            'prodi'    => ['nullable', 'string', 'max:100'],
         ]);
 
         User::create([
@@ -38,6 +39,7 @@ class UserManagementController extends Controller
             'role'     => $request->role,
             'username' => $request->username,
             'jabatan'  => $request->jabatan,
+            'prodi'    => $request->prodi,
         ]);
 
         return redirect()->route('users.index')
@@ -57,6 +59,7 @@ class UserManagementController extends Controller
             'role'     => ['required', 'in:taruna,pengasuh,penyelenggara'],
             'username' => ['nullable', 'string', 'max:100'],
             'jabatan'  => ['nullable', 'string', 'max:100'],
+            'prodi'    => ['nullable', 'string', 'max:100'],
         ]);
 
         $data = [
@@ -65,6 +68,7 @@ class UserManagementController extends Controller
             'role'     => $request->role,
             'username' => $request->username,
             'jabatan'  => $request->jabatan,
+            'prodi'    => $request->prodi,
         ];
 
         if ($request->filled('password')) {

@@ -215,11 +215,7 @@
     </div>
     <ul class="mhs-list" id="sbMhsList">
         @php
-            $allMhs  = \App\Http\Controllers\MahasiswaController::getAllMahasiswa();
-            $flatMhs = [];
-            foreach ($allMhs as $kls => $arr) {
-                foreach ($arr as $m) { $flatMhs[] = array_merge($m, ['kelas' => $kls]); }
-            }
+            $flatMhs = \App\Models\Mahasiswa::orderBy('kelas')->orderBy('nama')->get();
             $ci = 0;
         @endphp
         @foreach($flatMhs as $mhs)

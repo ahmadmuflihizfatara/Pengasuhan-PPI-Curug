@@ -186,6 +186,18 @@
             align-items: center;
             font-size: 13px;
         }
+        .alert-error {
+            background: #fff5f5;
+            border: 1px solid #feb2b2;
+            color: #c53030;
+            padding: 12px 16px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
+            font-size: 13px;
+        }
         .class-pill {
             background: #eef0ff;
             color: #5a67d8;
@@ -208,7 +220,7 @@
                 <i class="fas fa-chevron-right" style="font-size:10px;"></i>
                 <span>Edit Biodata</span>
                 <i class="fas fa-chevron-right" style="font-size:10px;"></i>
-                <strong style="color:#333;">{{ $student['nama'] }}</strong>
+                <strong style="color:#333;">{{ $student->nama }}</strong>
             </div>
 
             @if(session('success'))
@@ -217,17 +229,28 @@
             </div>
             @endif
 
+            @if($errors->any())
+            <div class="alert-error">
+                <i class="fas fa-exclamation-circle"></i>
+                <ul style="margin:0; padding-left:18px;">
+                    @foreach($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+            @endif
+
             <div class="edit-card">
                 <!-- Card Header -->
                 <div class="edit-card-header">
                     <div class="student-avatar">
-                        {{ strtoupper(substr($student['nickname'], 0, 2)) }}
+                        {{ strtoupper(substr($student->nickname ?: $student->nama, 0, 2)) }}
                     </div>
                     <div>
-                        <h2>{{ $student['nama'] }}</h2>
+                        <h2>{{ $student->nama }}</h2>
                         <p>
-                            NPM: {{ $student['npm'] }} &nbsp;|&nbsp;
-                            <span class="class-pill" style="background:rgba(255,255,255,.25); color:white;">{{ $kelas }}</span>
+                            NPM: {{ $student->npm ?? '-' }} &nbsp;|&nbsp;
+                            <span class="class-pill" style="background:rgba(255,255,255,.25); color:white;">{{ $student->kelas ?? '-' }}</span>
                         </p>
                     </div>
                 </div>
@@ -239,7 +262,7 @@
                         <span>Data yang ditampilkan di bawah adalah informasi biodata dan akun mahasiswa. Field yang berwarna abu-abu bersifat <strong>read-only</strong> (tidak dapat diubah secara manual).</span>
                     </div>
 
-                    <form method="POST" action="#">
+                    <form method="POST" action="{{ route('mahasiswa.update', $student) }}">
                         @csrf
                         @method('PATCH')
 
@@ -248,23 +271,48 @@
                         <div class="form-grid">
                             <div class="form-group">
                                 <label>NPM</label>
-                                <input type="text" class="form-control" value="{{ $student['npm'] }}" readonly>
+                                <input type="text" class="form-control" value="{{ $student->npm ?? '-' }}" readonly>
                             </div>
                             <div class="form-group">
                                 <label>Kelas</label>
-                                <input type="text" class="form-control" value="{{ $kelas }}" readonly>
+                                <input type="text" class="form-control" value="{{ $student->kelas ?? '-' }}" readonly>
                             </div>
                             <div class="form-group full">
                                 <label>Nama Lengkap</label>
-                                <input type="text" name="nama" class="form-control" value="{{ $student['nama'] }}">
+                                <input type="text" name="nama" class="form-control" value="{{ old('nama', $student->nama) }}" required>
                             </div>
                             <div class="form-group">
                                 <label>Nickname / Panggilan</label>
-                                <input type="text" name="nickname" class="form-control" value="{{ $student['nickname'] }}">
+                                <input type="text" name="nickname" class="form-control" value="{{ old('nickname', $student->nickname) }}">
                             </div>
                             <div class="form-group">
-                                <label>Email (auto-generated)</label>
-                                <input type="text" class="form-control" value="{{ $student['email'] }}" readonly>
+                                <label>Jenis Kelamin</label>
+                                <select name="jenis_kelamin" class="form-control">
+                                    <option value="">-- Pilih --</option>
+                                    <option value="L" {{ old('jenis_kelamin', $student->jenis_kelamin) == 'L' ? 'selected' : '' }}>Laki-laki</option>
+                                    <option value="P" {{ old('jenis_kelamin', $student->jenis_kelamin) == 'P' ? 'selected' : '' }}>Perempuan</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Program Studi</label>
+                                <select name="prodi" class="form-control" required>
+                                    @foreach(\App\Models\Mahasiswa::PRODI as $kode => $info)
+                                    <option value="{{ $kode }}" {{ old('prodi', $student->prodi) === $kode ? 'selected' : '' }}>
+                                        {{ $kode }} — {{ $info['nama'] }} ({{ $info['jenjang'] }})
+                                    </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Tingkat</label>
+                                <select name="tingkat" class="form-control" required>
+                                    @for($t = 1; $t <= 4; $t++)
+                                    <option value="{{ $t }}" {{ (string) old('tingkat', $student->tingkat) === (string) $t ? 'selected' : '' }}>
+                                        Tingkat {{ $t }}
+                                    </option>
+                                    @endfor
+                                </select>
+                                <span style="font-size:11px; color:#aab;">D-3 hanya sampai tingkat 3.</span>
                             </div>
                         </div>
 
@@ -275,25 +323,15 @@
                                 <label>Username</label>
                                 <div class="input-prefix-wrapper">
                                     <span class="input-prefix"><i class="fas fa-at"></i></span>
-                                    <input type="text" class="form-control" value="{{ $student['username'] }}" readonly>
+                                    <input type="text" class="form-control" value="{{ $student->user->username ?? '-' }}" readonly>
                                 </div>
-                                <span style="font-size:11px; color:#aab;">Format: nickname (huruf kecil)</span>
-                            </div>
-                            <div class="form-group">
-                                <label>Password</label>
-                                <div class="input-prefix-wrapper">
-                                    <span class="input-prefix"><i class="fas fa-lock"></i></span>
-                                    <input type="text" class="form-control" value="{{ $student['password'] }}" readonly id="passField">
-                                </div>
-                                <span style="font-size:11px; color:#aab;">Format: nickname.3angkabelakangNPM</span>
                             </div>
                             <div class="form-group full">
                                 <label>Email Akun</label>
                                 <div class="input-prefix-wrapper">
                                     <span class="input-prefix"><i class="fas fa-envelope"></i></span>
-                                    <input type="email" name="email" class="form-control" value="{{ $student['email'] }}">
+                                    <input type="email" name="email" class="form-control" value="{{ old('email', $student->user->email ?? '') }}">
                                 </div>
-                                <span style="font-size:11px; color:#aab;">Format: namapertama.namakedua@student.poltekssn.ac.id</span>
                             </div>
                         </div>
 
@@ -301,7 +339,7 @@
                             <a href="{{ route('mahasiswa.index') }}" class="btn-secondary">
                                 <i class="fas fa-arrow-left"></i> Kembali
                             </a>
-                            <button type="button" class="btn-primary" onclick="showSaved()">
+                            <button type="submit" class="btn-primary">
                                 <i class="fas fa-save"></i> Simpan Perubahan
                             </button>
                         </div>
@@ -311,22 +349,4 @@
         </div>
     </div>
 
-    <script>
-        function showSaved() {
-            // Show a temporary success toast
-            const toast = document.createElement('div');
-            toast.style.cssText = `
-                position: fixed; bottom: 28px; right: 28px;
-                background: linear-gradient(135deg, #38a169, #48bb78);
-                color: white; padding: 14px 22px; border-radius: 12px;
-                font-size: 14px; font-weight: 600; font-family: Inter, sans-serif;
-                box-shadow: 0 4px 20px rgba(56,161,105,.35);
-                display: flex; align-items: center; gap: 8px;
-                z-index: 9999; animation: slideIn .3s ease;
-            `;
-            toast.innerHTML = '<i class="fas fa-check-circle"></i> Data berhasil disimpan!';
-            document.body.appendChild(toast);
-            setTimeout(() => toast.remove(), 3000);
-        }
-    </script>
 </x-app-layout>

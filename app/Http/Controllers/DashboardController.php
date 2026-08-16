@@ -6,8 +6,9 @@ use Illuminate\Http\Request;
 use Illuminate\View\View;
 use Illuminate\Http\JsonResponse;
 use App\Helpers\DashboardHelper;
-use App\Http\Controllers\MahasiswaController;
 use App\Models\Acara;
+use App\Models\Mahasiswa;
+use App\Models\PoinMahasiswa;
 use App\Models\Surat;
 
 class DashboardController extends Controller
@@ -17,16 +18,8 @@ class DashboardController extends Controller
      */
     public function index(): View
     {
-        // Flatten all mahasiswa from all classes
-        $allMahasiswaRaw = MahasiswaController::getAllMahasiswa();
-        $mahasiswaSidebar = [];
-        $totalMahasiswa = 0;
-        foreach ($allMahasiswaRaw as $kelas => $students) {
-            foreach ($students as $s) {
-                $mahasiswaSidebar[] = array_merge($s, ['kelas' => $kelas]);
-                $totalMahasiswa++;
-            }
-        }
+        $mahasiswaSidebar = Mahasiswa::orderBy('kelas')->orderBy('nama')->get();
+        $totalMahasiswa   = $mahasiswaSidebar->count();
 
         // Acara mendatang (urut tanggal + jam terdekat)
         $acaraMendatang = Acara::orderBy('tanggal', 'asc')
@@ -48,26 +41,15 @@ class DashboardController extends Controller
         // Surat terbaru
         $suratTerbaru = Surat::latest()->take(5)->get();
 
-        // Point total if Taruna
+        // Point total + grafik prodi/tingkat if Taruna
         $totalPoin = 0;
+        $chartData = null;
         if (auth()->user()->isTaruna()) {
-            $user = auth()->user();
-            $allMahasiswa = \App\Http\Controllers\MahasiswaController::enrichMahasiswa(\App\Http\Controllers\MahasiswaController::getAllMahasiswa());
-            $studentNpm = null;
-            foreach ($allMahasiswa as $kelas => $students) {
-                foreach ($students as $s) {
-                    if (strtolower($s['nickname'] ?? '') === strtolower($user->username ?? '')
-                        || strtolower($s['nickname'] ?? '') === strtolower($user->nama_panggilan ?? '')
-                        || strtolower($s['npm'] ?? '') === strtolower($user->username ?? '')
-                        || strtolower($s['email'] ?? '') === strtolower($user->email ?? '')) {
-                        $studentNpm = $s['npm'];
-                        break 2;
-                    }
-                }
+            $student = Mahasiswa::where('user_id', auth()->id())->first();
+            if ($student) {
+                $totalPoin = PoinMahasiswa::where('mahasiswa_id', $student->id)->get()->sum('nilai_efektif');
             }
-            if ($studentNpm) {
-                $totalPoin = \App\Models\PoinMahasiswa::where('npm', $studentNpm)->get()->sum('nilai_efektif');
-            }
+            $chartData = Mahasiswa::chartDataPerTingkat();
         }
 
         return view('dashboard', [
@@ -78,6 +60,7 @@ class DashboardController extends Controller
             'suratStats'       => $suratStats,
             'suratTerbaru'     => $suratTerbaru,
             'totalPoin'        => $totalPoin,
+            'chartData'        => $chartData,
         ]);
     }
 

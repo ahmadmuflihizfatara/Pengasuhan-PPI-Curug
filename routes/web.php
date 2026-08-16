@@ -130,9 +130,12 @@ Route::middleware('auth')->group(function () {
     Route::get('/mahasiswa', [MahasiswaController::class, 'index'])
         ->middleware('role:penyelenggara')
         ->name('mahasiswa.index');
-    Route::get('/mahasiswa/{npm}/edit', [MahasiswaController::class, 'edit'])
+    Route::get('/mahasiswa/{mahasiswa}/edit', [MahasiswaController::class, 'edit'])
         ->middleware('role:penyelenggara')
         ->name('mahasiswa.edit');
+    Route::patch('/mahasiswa/{mahasiswa}', [MahasiswaController::class, 'update'])
+        ->middleware('role:penyelenggara')
+        ->name('mahasiswa.update');
 
     // ===========================
     // SETTING SISTEM — hanya penyelenggara

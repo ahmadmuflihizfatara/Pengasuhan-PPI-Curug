@@ -30,6 +30,7 @@ class User extends Authenticatable
         'password',
         'no_telepon',
         'jabatan',
+        'prodi',
         'foto',
         'role',
     ];
@@ -57,6 +58,11 @@ class User extends Authenticatable
     // =====================
     // Role Helper Methods
     // =====================
+
+    public function mahasiswa()
+    {
+        return $this->hasOne(Mahasiswa::class);
+    }
 
     public function isTaruna(): bool
     {
