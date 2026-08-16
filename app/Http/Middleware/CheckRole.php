@@ -10,7 +10,7 @@ class CheckRole
 {
     /**
      * Handle an incoming request.
-     * Usage in routes: ->middleware('role:penyelenggara,pengasuh')
+     * Usage in routes: ->middleware('role:admin,pengasuh')
      */
     public function handle(Request $request, Closure $next, string ...$roles): Response
     {

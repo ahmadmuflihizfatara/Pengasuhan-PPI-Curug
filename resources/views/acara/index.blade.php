@@ -135,6 +135,7 @@ tbody tr:hover { background:#f8f9ff; }
     cursor:pointer; transition:opacity .15s; line-height:1.4;
 }
 .cal-event:hover { opacity:.85; }
+.cal-event-apel { background:linear-gradient(135deg,#1baf7a,#2a78d6); }
 .cal-event-more { font-size:10px; font-weight:700; color:#667eea; text-align:center; padding:2px; }
 
 /* ── Popover ── */
@@ -206,12 +207,12 @@ tbody tr:hover { background:#f8f9ff; }
         <div class="page-header">
             <div class="page-header-text">
                 <h1><i class="fas fa-calendar-alt" style="margin-right:10px;"></i>
-                    {{ $isTaruna ? 'Kalender Acara' : 'Kelola Acara' }}
+                    {{ $isTaruna ? 'Kalender' : 'Kelola Acara' }}
                 </h1>
-                <p>{{ $isTaruna ? 'Lihat jadwal acara pengasuhan' : 'Daftar seluruh acara pengasuhan yang dijadwalkan' }}</p>
+                <p>{{ $isTaruna ? 'Lihat jadwal acara dan apel' : 'Daftar acara pengasuhan — kalender juga menampilkan jadwal apel' }}</p>
             </div>
             <div class="header-actions">
-                {{-- Toggle view: hanya tampil untuk pengasuh & penyelenggara --}}
+                {{-- Toggle view: hanya tampil untuk pengasuh & admin --}}
                 @unless($isTaruna)
                 <div class="view-toggle">
                     <button class="toggle-btn active" id="btnTableView" onclick="switchView('table')">
@@ -240,7 +241,7 @@ tbody tr:hover { background:#f8f9ff; }
         @endif
 
         {{-- ══════════════════════════════════════════════
-             TABLE VIEW  (pengasuh & penyelenggara saja)
+             TABLE VIEW  (pengasuh & admin saja)
         ══════════════════════════════════════════════ --}}
         @unless($isTaruna)
         <div id="tableView">
@@ -322,7 +323,7 @@ tbody tr:hover { background:#f8f9ff; }
         {{-- ══════════════════════════════════════════════
              CALENDAR VIEW
              — Selalu ditampilkan untuk taruna (auto-show)
-             — Toggle untuk pengasuh & penyelenggara
+             — Toggle untuk pengasuh & admin
         ══════════════════════════════════════════════ --}}
         <div id="calendarView" @if($isTaruna) style="display:block;" @else style="display:none;" @endif>
             <div class="calendar-wrapper">
@@ -352,6 +353,10 @@ tbody tr:hover { background:#f8f9ff; }
                     <div class="legend-item">
                         <div class="legend-dot" style="background:linear-gradient(135deg,#667eea,#764ba2);"></div>
                         <span>Acara terjadwal</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-dot" style="background:linear-gradient(135deg,#1baf7a,#2a78d6);"></div>
+                        <span>Apel</span>
                     </div>
                     <div class="legend-item">
                         <div class="legend-dot" style="background:#eef0ff; border:2px solid #667eea;"></div>
@@ -389,10 +394,12 @@ tbody tr:hover { background:#f8f9ff; }
     <h4 id="popTitle"></h4>
     <div class="cal-popover-row"><i class="fas fa-calendar"></i><span id="popDate"></span></div>
     <div class="cal-popover-row"><i class="fas fa-clock"></i><span id="popTime"></span></div>
+    <div class="cal-popover-row" id="popPembinaRow" style="display:none;"><i class="fas fa-user-tie"></i><span id="popPembina"></span></div>
+    <div class="cal-popover-row" id="popLokasiRow" style="display:none;"><i class="fas fa-location-dot"></i><span id="popLokasi"></span></div>
     <div class="cal-popover-desc" id="popDesc" style="display:none;"></div>
-    {{-- Tombol edit/hapus di popover hanya untuk pengasuh & penyelenggara --}}
+    {{-- Tombol edit/hapus acara di popover hanya untuk pengasuh & admin. Apel dikelola di tab Apel. --}}
     @unless($isTaruna)
-    <div class="cal-popover-actions">
+    <div class="cal-popover-actions" id="popActions">
         <a href="#" id="popEditBtn" class="pop-btn-edit"><i class="fas fa-edit"></i> Edit</a>
         <button onclick="popoverDelete()" class="pop-btn-del"><i class="fas fa-trash"></i> Hapus</button>
     </div>
@@ -402,8 +409,9 @@ tbody tr:hover { background:#f8f9ff; }
 @php
 $acaraJson = $acara->map(function($a) use ($isTaruna) {
     $item = [
+        'type'       => 'acara',
         'id'         => $a->id,
-        'nama_acara' => $a->nama_acara,
+        'judul'      => $a->nama_acara,
         'tanggal'    => $a->tanggal->format('Y-m-d'),
         'jam'        => \Carbon\Carbon::parse($a->jam)->format('H:i'),
         'keterangan' => $a->keterangan,
@@ -414,15 +422,34 @@ $acaraJson = $acara->map(function($a) use ($isTaruna) {
     }
     return $item;
 })->toJson();
+
+// Taruna tidak melihat informasi apel — hanya jadwal, pembina, lokasi
+$apelJson = $apel->map(function($p) use ($isTaruna) {
+    $item = [
+        'type'    => 'apel',
+        'id'      => $p->id,
+        'judul'   => $p->judul,
+        'tanggal' => $p->tanggal->format('Y-m-d'),
+        'jam'     => $p->jam ? \Carbon\Carbon::parse($p->jam)->format('H:i') : '',
+        'pembina' => $p->pembina,
+        'lokasi'  => $p->lokasi,
+    ];
+    if (!$isTaruna) {
+        $item['keterangan'] = $p->informasi;
+    }
+    return $item;
+})->toJson();
 @endphp
 
 <script>
 // ── Config ─────────────────────────────────────────────
 const IS_TARUNA   = @json($isTaruna);
 const ACARA_DATA  = @json(json_decode($acaraJson));
+const APEL_DATA   = @json(json_decode($apelJson));
+const ALL_EVENTS  = ACARA_DATA.concat(APEL_DATA);
 
 const eventMap = {};
-ACARA_DATA.forEach(ev => {
+ALL_EVENTS.forEach(ev => {
     if (!eventMap[ev.tanggal]) eventMap[ev.tanggal] = [];
     eventMap[ev.tanggal].push(ev);
 });
@@ -516,9 +543,10 @@ function buildCell(day, yr, mo, otherMonth, todayStr) {
     const maxShow = 2;
     events.slice(0, maxShow).forEach(ev => {
         const evEl = document.createElement('div');
-        evEl.className = 'cal-event';
-        evEl.innerHTML = `<i class="fas fa-circle" style="font-size:5px;flex-shrink:0;"></i>${esc(ev.nama_acara)}`;
-        evEl.title     = ev.nama_acara;
+        evEl.className = 'cal-event' + (ev.type === 'apel' ? ' cal-event-apel' : '');
+        const icon = ev.type === 'apel' ? 'fa-flag' : 'fa-circle';
+        evEl.innerHTML = `<i class="fas ${icon}" style="font-size:${ev.type === 'apel' ? '8' : '5'}px;flex-shrink:0;"></i>${esc(ev.judul)}`;
+        evEl.title     = ev.judul;
         evEl.onclick   = e => { e.stopPropagation(); showPopover(ev, e); };
         cell.appendChild(evEl);
     });
@@ -547,7 +575,7 @@ let popoverDeleteFormId = null;
 
 function showPopover(ev, mouseEvent) {
     const pop = document.getElementById('calPopover');
-    document.getElementById('popTitle').textContent = ev.nama_acara;
+    document.getElementById('popTitle').textContent = ev.judul;
 
     const [yr, mo, dy] = ev.tanggal.split('-');
     const d0 = new Date(yr, mo - 1, dy);
@@ -555,16 +583,35 @@ function showPopover(ev, mouseEvent) {
     const MONS  = ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
     document.getElementById('popDate').textContent =
         DAYS[d0.getDay()] + ', ' + parseInt(dy) + ' ' + MONS[parseInt(mo)-1] + ' ' + yr;
-    document.getElementById('popTime').textContent = ev.jam + ' WIB';
+    document.getElementById('popTime').textContent = (ev.jam || '-') + ' WIB';
+
+    const pembinaRow = document.getElementById('popPembinaRow');
+    const lokasiRow  = document.getElementById('popLokasiRow');
+    if (ev.type === 'apel') {
+        document.getElementById('popPembina').textContent = ev.pembina;
+        document.getElementById('popLokasi').textContent  = ev.lokasi;
+        pembinaRow.style.display = 'flex';
+        lokasiRow.style.display  = 'flex';
+    } else {
+        pembinaRow.style.display = 'none';
+        lokasiRow.style.display  = 'none';
+    }
 
     const descEl = document.getElementById('popDesc');
     if (ev.keterangan) { descEl.textContent = ev.keterangan; descEl.style.display = 'block'; }
     else               { descEl.style.display = 'none'; }
 
-    // Actions only exist in DOM for non-taruna
-    if (!IS_TARUNA) {
-        document.getElementById('popEditBtn').href = ev.edit_url;
-        popoverDeleteFormId = ev.delete_form;
+    // Actions (edit/hapus) hanya untuk acara milik non-taruna — apel dikelola di tab Apel
+    const actionsEl = document.getElementById('popActions');
+    if (actionsEl) {
+        if (ev.type === 'acara') {
+            actionsEl.style.display = 'flex';
+            document.getElementById('popEditBtn').href = ev.edit_url;
+            popoverDeleteFormId = ev.delete_form;
+        } else {
+            actionsEl.style.display = 'none';
+            popoverDeleteFormId = null;
+        }
     }
 
     // Position
@@ -641,7 +688,7 @@ function esc(str) {
         // Taruna: selalu tampilkan kalender, langsung render
         renderCalendar();
     } else {
-        // Pengasuh / penyelenggara: restore preferensi tersimpan
+        // Pengasuh / admin: restore preferensi tersimpan
         const saved = sessionStorage.getItem('acaraView');
         if (saved === 'calendar') {
             switchView('calendar');

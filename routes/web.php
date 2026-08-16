@@ -5,6 +5,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\MahasiswaController;
 use App\Http\Controllers\PoinController;
 use App\Http\Controllers\AcaraController;
+use App\Http\Controllers\ApelController;
 use App\Http\Controllers\SuratController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\ActivityLogController; // <-- TAMBAHAN
@@ -36,7 +37,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     // ===========================
-    // POIN — semua role (taruna hanya baca, pengasuh/penyelenggara bisa edit)
+    // POIN — semua role (taruna hanya baca, pengasuh/admin bisa edit)
     // ===========================
     Route::get('/poin', [PoinController::class, 'index'])->name('poin.index');
     Route::get('/api/my-points', [PoinController::class, 'myPointsApi'])->name('api.myPoints');
@@ -60,120 +61,137 @@ Route::middleware('auth')->group(function () {
         ->middleware('role:taruna')
         ->name('api.suratNotifications');
 
-    // Tambah & hapus poin: hanya pengasuh & penyelenggara
+    // Tambah & hapus poin: hanya pengasuh & admin
     Route::post('/poin', [PoinController::class, 'store'])
-        ->middleware('role:pengasuh,penyelenggara')
+        ->middleware('role:pengasuh,admin')
         ->name('poin.store');
     Route::delete('/poin/{id}', [PoinController::class, 'destroy'])
-        ->middleware('role:pengasuh,penyelenggara')
+        ->middleware('role:pengasuh,admin')
         ->name('poin.destroy');
 
     // ===========================
     // ACARA — daftar acara (semua pengguna terautentikasi dapat melihat kalender)
-    // Pengasuh & penyelenggara masih butuh role untuk CRUD route lainnya
+    // Pengasuh & admin masih butuh role untuk CRUD route lainnya
     // ===========================
     Route::get('/acara', [AcaraController::class, 'index'])
         ->middleware('auth')
         ->name('acara.index');
     Route::get('/acara/create', [AcaraController::class, 'create'])
-        ->middleware('role:pengasuh,penyelenggara')
+        ->middleware('role:pengasuh,admin')
         ->name('acara.create');
     Route::post('/acara', [AcaraController::class, 'store'])
-        ->middleware('role:pengasuh,penyelenggara')
+        ->middleware('role:pengasuh,admin')
         ->name('acara.store');
     Route::get('/acara/{acara}', [AcaraController::class, 'show'])
-        ->middleware('role:pengasuh,penyelenggara')
+        ->middleware('role:pengasuh,admin')
         ->name('acara.show');
     Route::get('/acara/{acara}/edit', [AcaraController::class, 'edit'])
-        ->middleware('role:pengasuh,penyelenggara')
+        ->middleware('role:pengasuh,admin')
         ->name('acara.edit');
     Route::put('/acara/{acara}', [AcaraController::class, 'update'])
-        ->middleware('role:pengasuh,penyelenggara')
+        ->middleware('role:pengasuh,admin')
         ->name('acara.update');
     Route::patch('/acara/{acara}', [AcaraController::class, 'update']);
     Route::delete('/acara/{acara}', [AcaraController::class, 'destroy'])
-        ->middleware('role:pengasuh,penyelenggara')
+        ->middleware('role:pengasuh,admin')
         ->name('acara.destroy');
 
     // ===========================
-    // SURAT — pengasuh & penyelenggara
+    // APEL — hanya pengasuh
+    // ===========================
+    Route::middleware('role:pengasuh')->group(function () {
+        Route::get('/apel', [ApelController::class, 'index'])->name('apel.index');
+        Route::get('/apel/create', [ApelController::class, 'create'])->name('apel.create');
+        Route::post('/apel', [ApelController::class, 'store'])->name('apel.store');
+        Route::get('/apel/{apel}/edit', [ApelController::class, 'edit'])->name('apel.edit');
+        Route::put('/apel/{apel}', [ApelController::class, 'update'])->name('apel.update');
+        Route::delete('/apel/{apel}', [ApelController::class, 'destroy'])->name('apel.destroy');
+    });
+
+    // Jadwal apel — taruna, hanya lihat (tanpa informasi apel)
+    Route::get('/jadwal-apel', [ApelController::class, 'jadwalTaruna'])
+        ->middleware('role:taruna')
+        ->name('apel.jadwal');
+
+    // ===========================
+    // SURAT — pengasuh & admin
     // ===========================
     Route::get('/surat', [SuratController::class, 'index'])
-        ->middleware('role:pengasuh,penyelenggara')
+        ->middleware('role:pengasuh,admin')
         ->name('surat.index');
     Route::get('/surat/create', [SuratController::class, 'create'])
-        ->middleware('role:pengasuh,penyelenggara')
+        ->middleware('role:pengasuh,admin')
         ->name('surat.create');
     Route::post('/surat', [SuratController::class, 'store'])
-        ->middleware('role:pengasuh,penyelenggara')
+        ->middleware('role:pengasuh,admin')
         ->name('surat.store');
     Route::get('/surat/{surat}', [SuratController::class, 'show'])
-        ->middleware('role:pengasuh,penyelenggara')
+        ->middleware('role:pengasuh,admin')
         ->name('surat.show');
     Route::get('/surat/{surat}/edit', [SuratController::class, 'edit'])
-        ->middleware('role:pengasuh,penyelenggara')
+        ->middleware('role:pengasuh,admin')
         ->name('surat.edit');
     Route::put('/surat/{surat}', [SuratController::class, 'update'])
-        ->middleware('role:pengasuh,penyelenggara')
+        ->middleware('role:pengasuh,admin')
         ->name('surat.update');
     Route::patch('/surat/{surat}', [SuratController::class, 'update']);
     Route::delete('/surat/{surat}', [SuratController::class, 'destroy'])
-        ->middleware('role:pengasuh,penyelenggara')
+        ->middleware('role:pengasuh,admin')
         ->name('surat.destroy');
     Route::patch('/surat/{surat}/status', [SuratController::class, 'updateStatus'])
-        ->middleware('role:pengasuh,penyelenggara')
+        ->middleware('role:pengasuh,admin')
         ->name('surat.updateStatus');
 
     // ===========================
-    // DATABASE MAHASISWA — hanya penyelenggara
+    // DATABASE MAHASISWA — hanya admin
     // ===========================
     Route::get('/mahasiswa', [MahasiswaController::class, 'index'])
-        ->middleware('role:penyelenggara')
+        ->middleware('role:admin')
         ->name('mahasiswa.index');
     Route::get('/mahasiswa/{mahasiswa}/edit', [MahasiswaController::class, 'edit'])
-        ->middleware('role:penyelenggara')
+        ->middleware('role:admin')
         ->name('mahasiswa.edit');
     Route::patch('/mahasiswa/{mahasiswa}', [MahasiswaController::class, 'update'])
-        ->middleware('role:penyelenggara')
+        ->middleware('role:admin')
         ->name('mahasiswa.update');
 
     // ===========================
-    // SETTING SISTEM — hanya penyelenggara
+    // SETTING SISTEM — hanya admin
     // ===========================
     Route::get('/setting', [SettingController::class, 'index'])
-        ->middleware('role:penyelenggara')
+        ->middleware('role:admin')
         ->name('setting.index');
     Route::post('/setting', [SettingController::class, 'update'])
-        ->middleware('role:penyelenggara')
+        ->middleware('role:admin')
         ->name('setting.update');
 
     // ===========================
-    // MANAJEMEN AKUN TARUNA — hanya penyelenggara
+    // MANAJEMEN AKUN TARUNA — hanya admin
     // ===========================
     Route::get('/users', [\App\Http\Controllers\UserManagementController::class, 'index'])
-        ->middleware('role:penyelenggara')
+        ->middleware('role:admin')
         ->name('users.index');
     Route::get('/users/create', [\App\Http\Controllers\UserManagementController::class, 'create'])
-        ->middleware('role:penyelenggara')
+        ->middleware('role:admin')
         ->name('users.create');
     Route::post('/users', [\App\Http\Controllers\UserManagementController::class, 'store'])
-        ->middleware('role:penyelenggara')
+        ->middleware('role:admin')
         ->name('users.store');
     Route::get('/users/{user}/edit', [\App\Http\Controllers\UserManagementController::class, 'edit'])
-        ->middleware('role:penyelenggara')
+        ->middleware('role:admin')
         ->name('users.edit');
     Route::put('/users/{user}', [\App\Http\Controllers\UserManagementController::class, 'update'])
-        ->middleware('role:penyelenggara')
+        ->middleware('role:admin')
         ->name('users.update');
     Route::delete('/users/{user}', [\App\Http\Controllers\UserManagementController::class, 'destroy'])
-        ->middleware('role:penyelenggara')
+        ->middleware('role:admin')
         ->name('users.destroy');
 
     // ===========================
-    // LOG AKTIVITAS — hanya penyelenggara       
+    // LOG AKTIVITAS — hanya admin       
     // ===========================
     Route::get('/activity-log', [ActivityLogController::class, 'index'])
-        ->middleware('role:penyelenggara')
+        ->middleware('role:admin')
         ->name('activity-log.index');
     // ===========================
     // BERITA       

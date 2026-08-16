@@ -25,7 +25,7 @@ body { font-family: 'Inter', sans-serif; background: #f0f2f5; }
 .role-desc { font-size: 11px; color: #666; padding: 10px 14px; border-radius: 8px; margin-top: 8px; line-height: 1.5; display: none; }
 .role-taruna { background: #f0fff4; border-left: 4px solid #38a169; }
 .role-pengasuh { background: #ebf4ff; border-left: 4px solid #3182ce; }
-.role-penyelenggara { background: #f3eeff; border-left: 4px solid #764ba2; }
+.role-admin { background: #f3eeff; border-left: 4px solid #764ba2; }
 </style>
 
 <div class="app-layout">
@@ -84,7 +84,7 @@ body { font-family: 'Inter', sans-serif; background: #f0f2f5; }
                                 onchange="updateRoleDesc(this.value)" required>
                             <option value="taruna" {{ old('role', $user->role) == 'taruna' ? 'selected' : '' }}>Taruna</option>
                             <option value="pengasuh" {{ old('role', $user->role) == 'pengasuh' ? 'selected' : '' }}>Pengasuh</option>
-                            <option value="penyelenggara" {{ old('role', $user->role) == 'penyelenggara' ? 'selected' : '' }}>Penyelenggara</option>
+                            <option value="admin" {{ old('role', $user->role) == 'admin' ? 'selected' : '' }}>Admin</option>
                         </select>
                     </div>
                     <div id="roleDesc" class="role-desc"></div>
@@ -124,7 +124,7 @@ body { font-family: 'Inter', sans-serif; background: #f0f2f5; }
 const roleDescs = {
     taruna: { cls: 'role-taruna', text: '👤 Taruna hanya dapat melihat dashboard dan raport poin pengasuhan.' },
     pengasuh: { cls: 'role-pengasuh', text: '📋 Pengasuh dapat mengelola kegiatan, poin, acara, dan surat. Tidak dapat akses manajemen akun & setting sistem.' },
-    penyelenggara: { cls: 'role-penyelenggara', text: '👑 Penyelenggara memiliki akses penuh termasuk manajemen akun dan konfigurasi sistem.' },
+    admin: { cls: 'role-admin', text: '👑 Admin memiliki akses penuh termasuk manajemen akun dan konfigurasi sistem.' },
 };
 function updateRoleDesc(role) {
     const el = document.getElementById('roleDesc');

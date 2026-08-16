@@ -31,7 +31,7 @@ body { font-family: 'Inter', sans-serif; background: #f0f2f5; }
 /* Role color indicators */
 .role-taruna        { background: #f0fff4; border-left: 4px solid #38a169; }
 .role-pengasuh      { background: #ebf4ff; border-left: 4px solid #3182ce; }
-.role-penyelenggara { background: #f3eeff; border-left: 4px solid #764ba2; }
+.role-admin { background: #f3eeff; border-left: 4px solid #764ba2; }
 .role-desc { font-size: 11px; color: #666; padding: 10px 14px; border-radius: 8px; margin-top: 8px; line-height: 1.5; }
 </style>
 
@@ -41,7 +41,7 @@ body { font-family: 'Inter', sans-serif; background: #f0f2f5; }
     <div class="main-content">
         <div class="form-card">
             <h1 class="form-title"><i class="fas fa-user-plus" style="color:#764ba2; margin-right:10px;"></i>Tambah Akun</h1>
-            <p class="form-subtitle">Buat akun baru untuk Taruna, Pengasuh, atau Penyelenggara</p>
+            <p class="form-subtitle">Buat akun baru untuk Taruna, Pengasuh, atau Admin</p>
 
             <form action="{{ route('users.store') }}" method="POST">
                 @csrf
@@ -96,7 +96,7 @@ body { font-family: 'Inter', sans-serif; background: #f0f2f5; }
                             <option value="">-- Pilih Role --</option>
                             <option value="taruna" {{ old('role') == 'taruna' ? 'selected' : '' }}>Taruna</option>
                             <option value="pengasuh" {{ old('role') == 'pengasuh' ? 'selected' : '' }}>Pengasuh</option>
-                            <option value="penyelenggara" {{ old('role') == 'penyelenggara' ? 'selected' : '' }}>Penyelenggara</option>
+                            <option value="admin" {{ old('role') == 'admin' ? 'selected' : '' }}>Admin</option>
                         </select>
                     </div>
                     <div id="roleDesc" class="role-desc" style="display:none;"></div>
@@ -135,7 +135,7 @@ body { font-family: 'Inter', sans-serif; background: #f0f2f5; }
 const roleDescs = {
     taruna: { cls: 'role-taruna', text: '👤 Taruna hanya dapat melihat dashboard dan raport poin pengasuhan miliknya.' },
     pengasuh: { cls: 'role-pengasuh', text: '📋 Pengasuh dapat mengelola kegiatan, poin pengasuhan, acara, dan administrasi surat. Tidak dapat mengakses manajemen akun dan setting sistem.' },
-    penyelenggara: { cls: 'role-penyelenggara', text: '👑 Penyelenggara memiliki akses penuh termasuk manajemen akun taruna dan konfigurasi sistem.' },
+    admin: { cls: 'role-admin', text: '👑 Admin memiliki akses penuh termasuk manajemen akun taruna dan konfigurasi sistem.' },
 };
 function updateRoleDesc(role) {
     const el = document.getElementById('roleDesc');

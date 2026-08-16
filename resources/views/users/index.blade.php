@@ -53,7 +53,7 @@ body { font-family: 'Inter', sans-serif; background: #f0f2f5; }
         <div class="page-header">
             <div>
                 <h1 class="page-title"><i class="fas fa-user-shield" style="color:#764ba2; margin-right:10px;"></i>Manajemen Akun</h1>
-                <p class="page-subtitle">Kelola akun Taruna, Pengasuh, dan Penyelenggara</p>
+                <p class="page-subtitle">Kelola akun Taruna, Pengasuh, dan Admin</p>
             </div>
             <a href="{{ route('users.create') }}" class="btn-primary">
                 <i class="fas fa-plus"></i> Tambah Akun
@@ -69,7 +69,7 @@ body { font-family: 'Inter', sans-serif; background: #f0f2f5; }
 
         @php
             $roleGroups = [
-                'penyelenggara' => ['label' => 'Penyelenggara', 'color' => '#764ba2', 'bg' => '#f3eeff', 'icon' => 'fa-crown'],
+                'admin' => ['label' => 'Admin', 'color' => '#764ba2', 'bg' => '#f3eeff', 'icon' => 'fa-crown'],
                 'pengasuh'      => ['label' => 'Pengasuh',      'color' => '#3182ce', 'bg' => '#ebf4ff', 'icon' => 'fa-chalkboard-teacher'],
                 'taruna'        => ['label' => 'Taruna',         'color' => '#38a169', 'bg' => '#f0fff4', 'icon' => 'fa-user-graduate'],
             ];

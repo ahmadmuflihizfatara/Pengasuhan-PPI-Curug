@@ -14,15 +14,15 @@ class RoleSeeder extends Seeder
      */
     public function run(): void
     {
-        // Penyelenggara (super admin)
+        // Admin (super admin)
         User::firstOrCreate(
-            ['email' => 'penyelenggara@poltekssn.ac.id'],
+            ['email' => 'admin@poltekssn.ac.id'],
             [
-                'name'     => 'Penyelenggara',
-                'username' => 'penyelenggara',
-                'jabatan'  => 'Penyelenggara Pengasuhan',
-                'role'     => User::ROLE_PENYELENGGARA,
-                'password' => Hash::make('penyelenggara@12345'),
+                'name'     => 'Admin',
+                'username' => 'admin',
+                'jabatan'  => 'Admin Pengasuhan',
+                'role'     => User::ROLE_ADMIN,
+                'password' => Hash::make('admin@12345'),
             ]
         );
 
@@ -54,9 +54,9 @@ class RoleSeeder extends Seeder
         $this->command->table(
             ['Role', 'Email', 'Password'],
             [
-                ['Penyelenggara', 'penyelenggara@poltekssn.ac.id', 'penyelenggara@12345'],
-                ['Pengasuh',      'pengasuh@poltekssn.ac.id',      'pengasuh@12345'],
-                ['Taruna',        'taruna@poltekssn.ac.id',        'taruna@12345'],
+                ['Admin',    'admin@poltekssn.ac.id',    'admin@12345'],
+                ['Pengasuh', 'pengasuh@poltekssn.ac.id', 'pengasuh@12345'],
+                ['Taruna',   'taruna@poltekssn.ac.id',   'taruna@12345'],
             ]
         );
     }

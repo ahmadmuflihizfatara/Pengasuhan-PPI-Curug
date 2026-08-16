@@ -48,7 +48,7 @@ class PoinController extends Controller
         }
 
         // ====================================================
-        // PENGASUH / PENYELENGGARA: pilih mahasiswa secara bebas
+        // PENGASUH / admin: pilih mahasiswa secara bebas
         // ====================================================
         $selectedNpm     = $request->get('npm');
         $selectedStudent = null;

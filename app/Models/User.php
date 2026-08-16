@@ -13,9 +13,9 @@ class User extends Authenticatable
     use HasApiTokens, HasFactory, Notifiable;
 
     // Konstanta role
-    const ROLE_TARUNA        = 'taruna';
-    const ROLE_PENGASUH      = 'pengasuh';
-    const ROLE_PENYELENGGARA = 'penyelenggara';
+    const ROLE_TARUNA   = 'taruna';
+    const ROLE_PENGASUH = 'pengasuh';
+    const ROLE_ADMIN    = 'admin';
 
     /**
      * The attributes that are mass assignable.
@@ -74,17 +74,17 @@ class User extends Authenticatable
         return $this->role === self::ROLE_PENGASUH;
     }
 
-    public function isPenyelenggara(): bool
+    public function isAdmin(): bool
     {
-        return $this->role === self::ROLE_PENYELENGGARA;
+        return $this->role === self::ROLE_ADMIN;
     }
 
     /**
-     * Cek apakah user punya izin edit (pengasuh atau penyelenggara)
+     * Cek apakah user punya izin edit (pengasuh atau admin)
      */
     public function canEdit(): bool
     {
-        return in_array($this->role, [self::ROLE_PENGASUH, self::ROLE_PENYELENGGARA]);
+        return in_array($this->role, [self::ROLE_PENGASUH, self::ROLE_ADMIN]);
     }
 
     /**
@@ -92,7 +92,7 @@ class User extends Authenticatable
      */
     public function canManageSystem(): bool
     {
-        return $this->role === self::ROLE_PENYELENGGARA;
+        return $this->role === self::ROLE_ADMIN;
     }
 
     /**
@@ -101,10 +101,10 @@ class User extends Authenticatable
     public function getRoleLabelAttribute(): string
     {
         return match($this->role) {
-            self::ROLE_TARUNA        => 'Taruna',
-            self::ROLE_PENGASUH      => 'Pengasuh',
-            self::ROLE_PENYELENGGARA => 'Penyelenggara',
-            default                  => ucfirst($this->role),
+            self::ROLE_TARUNA   => 'Taruna',
+            self::ROLE_PENGASUH => 'Pengasuh',
+            self::ROLE_ADMIN    => 'Admin',
+            default             => ucfirst($this->role),
         };
     }
 
@@ -114,11 +114,10 @@ class User extends Authenticatable
     public function getRoleBadgeColorAttribute(): string
     {
         return match($this->role) {
-            self::ROLE_TARUNA        => '#38a169', // green
-            self::ROLE_PENGASUH      => '#3182ce', // blue
-            self::ROLE_PENYELENGGARA => '#764ba2', // purple
-            default                  => '#888',
+            self::ROLE_TARUNA   => '#38a169', // green
+            self::ROLE_PENGASUH => '#3182ce', // blue
+            self::ROLE_ADMIN    => '#764ba2', // purple
+            default             => '#888',
         };
     }
 }
-

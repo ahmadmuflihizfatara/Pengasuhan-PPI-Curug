@@ -144,12 +144,17 @@
         @if($user->isTaruna())
             <li>
                 <a href="{{ route('acara.index') }}" class="{{ $active==='acara'?'active':'' }}">
-                    <i class="fas fa-calendar-alt nav-icon"></i> Acara
+                    <i class="fas fa-calendar-alt nav-icon"></i> Kalender
                 </a>
             </li>
             <li>
                 <a href="{{ route('poin.index') }}" class="{{ $active==='poin'?'active':'' }}">
                     <i class="fas fa-star nav-icon"></i> Raport Poin
+                </a>
+            </li>
+            <li>
+                <a href="{{ route('apel.jadwal') }}" class="{{ $active==='apel'?'active':'' }}">
+                    <i class="fas fa-flag nav-icon"></i> Apel
                 </a>
             </li>
             <li>
@@ -182,6 +187,13 @@
                     <i class="fas fa-star nav-icon"></i> POIN
                 </a>
             </li>
+            @if($user->isPengasuh())
+            <li>
+                <a href="{{ route('apel.index') }}" class="{{ $active==='apel'?'active':'' }}">
+                    <i class="fas fa-flag nav-icon"></i> Apel
+                </a>
+            </li>
+            @endif
             @if($user->canManageSystem())
             <li>
                 <a href="{{ route('mahasiswa.index') }}" class="{{ $active==='mahasiswa'?'active':'' }}">
@@ -192,10 +204,10 @@
         @endif
     </ul>
 
-    {{-- ── PENYELENGGARA (Log Aktivitas) — hanya muncul jika canManageSystem ── --}}
+    {{-- ── ADMIN (Log Aktivitas) — hanya muncul jika canManageSystem ── --}}
     @if($user->canManageSystem())
     <hr class="sb-divider">
-    <span class="sb-label">Penyelenggara</span>
+    <span class="sb-label">Admin</span>
     <ul class="sb-nav">
         <li>
             <a href="{{ route('activity-log.index') }}" class="{{ $active==='activity-log'?'active':'' }}">
@@ -205,7 +217,7 @@
     </ul>
     @endif
 
-    {{-- ── MAHASISWA QUICK LIST — hanya pengasuh & penyelenggara ── --}}
+    {{-- ── MAHASISWA QUICK LIST — hanya pengasuh & admin ── --}}
     @if(!$user->isTaruna())
     <hr class="sb-divider">
     <span class="sb-label">Mahasiswa</span>

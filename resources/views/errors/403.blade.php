@@ -87,14 +87,14 @@
         <h1 class="title">Akses Ditolak</h1>
         <p class="desc">
             Anda tidak memiliki izin untuk mengakses halaman ini.<br>
-            <strong>{{ $exception->getMessage() ?: 'Hubungi Penyelenggara jika Anda membutuhkan akses.' }}</strong>
+            <strong>{{ $exception->getMessage() ?: 'Hubungi Admin jika Anda membutuhkan akses.' }}</strong>
         </p>
 
         @auth
         <div class="role-info">
             <div class="role-info-label">Role Anda saat ini</div>
             @php
-                $roleColors = ['taruna' => ['#f0fff4','#38a169'], 'pengasuh' => ['#ebf4ff','#3182ce'], 'penyelenggara' => ['#f3eeff','#764ba2']];
+                $roleColors = ['taruna' => ['#f0fff4','#38a169'], 'pengasuh' => ['#ebf4ff','#3182ce'], 'admin' => ['#f3eeff','#764ba2']];
                 $role = auth()->user()->role;
                 $rc = $roleColors[$role] ?? ['#f8f8f8','#888'];
             @endphp

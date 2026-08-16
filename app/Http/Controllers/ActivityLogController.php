@@ -59,7 +59,7 @@ class ActivityLogController extends Controller
         ];
 
         // Daftar user untuk filter dropdown
-        $users = User::whereIn('role', ['pengasuh', 'penyelenggara'])
+        $users = User::whereIn('role', ['pengasuh', 'admin'])
                      ->orderBy('name')
                      ->get(['id', 'name', 'role']);
 

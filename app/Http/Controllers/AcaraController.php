@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Acara;
+use App\Models\Apel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Traits\LogsActivity;
@@ -12,18 +13,20 @@ class AcaraController extends Controller
     use LogsActivity;
 
     /**
-     * Daftar acara.
-     * - Taruna    : hanya bisa melihat (view kalender)
-     * - Pengasuh / Penyelenggara : bisa kelola (tabel + kalender + CRUD)
+     * Kalender: acara + apel digabung.
+     * - Taruna           : hanya bisa melihat (view kalender), tanpa informasi apel
+     * - Pengasuh / admin : bisa kelola acara (tabel + kalender + CRUD), kalender juga menampilkan apel
      */
     public function index()
     {
         $acara = Acara::orderBy('tanggal', 'asc')->orderBy('jam', 'asc')->get();
-        return view('acara.index', compact('acara'));
+        $apel  = Apel::with('pembinaUser')->orderBy('tanggal', 'asc')->orderBy('jam', 'asc')->get();
+
+        return view('acara.index', compact('acara', 'apel'));
     }
 
     /**
-     * Form tambah acara — hanya pengasuh & penyelenggara.
+     * Form tambah acara — hanya pengasuh & admin.
      */
     public function create()
     {

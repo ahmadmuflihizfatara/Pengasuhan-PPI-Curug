@@ -83,7 +83,7 @@ class BeritaController extends Controller
     }
 
     // ──────────────────────────────────────────────────
-    // CREATE — hanya pengasuh & penyelenggara
+    // CREATE — hanya pengasuh & admin
     // ──────────────────────────────────────────────────
     public function create()
     {
@@ -133,7 +133,7 @@ class BeritaController extends Controller
     }
 
     // ──────────────────────────────────────────────────
-    // EDIT / UPDATE — hanya pengasuh & penyelenggara
+    // EDIT / UPDATE — hanya pengasuh & admin
     // ──────────────────────────────────────────────────
     public function edit(BeritaTaruna $beritum)
     {
@@ -188,7 +188,7 @@ class BeritaController extends Controller
     }
 
     // ──────────────────────────────────────────────────
-    // DESTROY — hanya pengasuh & penyelenggara
+    // DESTROY — hanya pengasuh & admin
     // ──────────────────────────────────────────────────
     public function destroy(BeritaTaruna $beritum)
     {
@@ -216,7 +216,7 @@ class BeritaController extends Controller
     }
 
     // ──────────────────────────────────────────────────
-    // TOGGLE PIN — hanya pengasuh & penyelenggara
+    // TOGGLE PIN — hanya pengasuh & admin
     // ──────────────────────────────────────────────────
     public function togglePin(BeritaTaruna $beritum)
     {

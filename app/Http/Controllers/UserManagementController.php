@@ -26,7 +26,7 @@ class UserManagementController extends Controller
             'name'     => ['required', 'string', 'max:255'],
             'email'    => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
-            'role'     => ['required', 'in:taruna,pengasuh,penyelenggara'],
+            'role'     => ['required', 'in:taruna,pengasuh,admin'],
             'username' => ['nullable', 'string', 'max:100'],
             'jabatan'  => ['nullable', 'string', 'max:100'],
             'prodi'    => ['nullable', 'string', 'max:100'],
@@ -56,7 +56,7 @@ class UserManagementController extends Controller
         $request->validate([
             'name'     => ['required', 'string', 'max:255'],
             'email'    => ['required', 'string', 'email', 'max:255', "unique:users,email,{$user->id}"],
-            'role'     => ['required', 'in:taruna,pengasuh,penyelenggara'],
+            'role'     => ['required', 'in:taruna,pengasuh,admin'],
             'username' => ['nullable', 'string', 'max:100'],
             'jabatan'  => ['nullable', 'string', 'max:100'],
             'prodi'    => ['nullable', 'string', 'max:100'],
