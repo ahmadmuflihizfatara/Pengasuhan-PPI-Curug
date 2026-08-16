@@ -143,6 +143,11 @@
 
         @if($user->isTaruna())
             <li>
+                <a href="{{ route('log-pergerakan.tablet') }}" class="{{ $active==='log-pergerakan'?'active':'' }}">
+                    <i class="fas fa-walking nav-icon"></i> Log Pergerakan
+                </a>
+            </li>
+            <li>
                 <a href="{{ route('acara.index') }}" class="{{ $active==='acara'?'active':'' }}">
                     <i class="fas fa-calendar-alt nav-icon"></i> Kalender
                 </a>
@@ -177,6 +182,24 @@
                 </a>
             </li>
         @else
+            {{-- Log Pergerakan untuk Pengasuh & Admin --}}
+            <li>
+                <a href="{{ route('log-pergerakan.index') }}" class="{{ $active==='log-pergerakan'?'active':'' }}">
+                    <i class="fas fa-walking nav-icon"></i> Log Pergerakan
+                    @php
+                        $activeCount = \App\Models\LogPergerakan::where('status', 'berangkat')->count();
+                    @endphp
+                    @if($activeCount > 0)
+                    <span style="background:#dc2626; color:white; border-radius:10px; padding:2px 7px; font-size:10px; font-weight:800; margin-left:auto;">{{ $activeCount }}</span>
+                    @endif
+                </a>
+            </li>
+            <li>
+                <a href="{{ route('log-pergerakan.tv') }}" target="_blank" style="color: #38bdf8;">
+                    <i class="fas fa-tv nav-icon" style="color: #38bdf8;"></i> TV Monitoring Jaga
+                    <span style="background:#10b981; color:white; border-radius:6px; padding:1px 5px; font-size:9px; font-weight:800; margin-left:auto; letter-spacing:0.5px;">LIVE</span>
+                </a>
+            </li>
             <li>
                 <a href="{{ route('surat.index') }}" class="{{ $active==='surat'?'active':'' }}">
                     <i class="fas fa-envelope-open-text nav-icon"></i> Administrasi Surat

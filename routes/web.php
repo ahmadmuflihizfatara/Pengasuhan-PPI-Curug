@@ -234,10 +234,23 @@ Route::middleware('auth')->group(function () {
     // ===========================
     // BERITA       
     // ===========================
-
     Route::resource('berita', BeritaController::class);
     Route::patch('/berita/{beritum}/pin', [BeritaController::class, 'togglePin'])
     ->name('berita.toggle-pin');
+
+    // ===========================
+    // LOG PERGERAKAN TARUNA (TABLET & TV MONITORING)
+    // ===========================
+    Route::get('/log-pergerakan', [\App\Http\Controllers\LogPergerakanController::class, 'index'])->name('log-pergerakan.index');
+    Route::get('/log-pergerakan/tablet', [\App\Http\Controllers\LogPergerakanController::class, 'tablet'])->name('log-pergerakan.tablet');
+    Route::post('/log-pergerakan', [\App\Http\Controllers\LogPergerakanController::class, 'store'])->name('log-pergerakan.store');
+    Route::patch('/log-pergerakan/{id}/kembali', [\App\Http\Controllers\LogPergerakanController::class, 'updateKembali'])->name('log-pergerakan.kembali');
+    Route::get('/log-pergerakan/tv-monitoring', [\App\Http\Controllers\LogPergerakanController::class, 'tvMonitoring'])->name('log-pergerakan.tv');
+    Route::get('/log-pergerakan/api-data', [\App\Http\Controllers\LogPergerakanController::class, 'apiData'])->name('log-pergerakan.api');
+    Route::get('/log-pergerakan/{id}', [\App\Http\Controllers\LogPergerakanController::class, 'show'])->name('log-pergerakan.show');
+    Route::delete('/log-pergerakan/{id}', [\App\Http\Controllers\LogPergerakanController::class, 'destroy'])
+        ->middleware('role:pengasuh,admin')
+        ->name('log-pergerakan.destroy');
 });
 
 require __DIR__.'/auth.php';

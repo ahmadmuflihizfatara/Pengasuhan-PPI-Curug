@@ -192,6 +192,34 @@ body { font-family: 'Inter', sans-serif; background: #f0f2f5; }
         </div>
         @endif
 
+        {{-- ── WIDGET MONITORING PERGERAKAN TARUNA ── --}}
+        @php
+            $activePergerakan = \App\Models\LogPergerakan::where('status', 'berangkat')->count();
+            $kembaliHariIni   = \App\Models\LogPergerakan::whereDate('waktu_berangkat', \Carbon\Carbon::today())->where('status', 'kembali')->count();
+        @endphp
+        <div style="background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); border: 1px solid #334155; border-radius: 16px; padding: 20px 24px; margin-bottom: 24px; color: white; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.15);">
+            <div style="display: flex; align-items: center; gap: 16px;">
+                <div style="width: 50px; height: 50px; border-radius: 14px; background: rgba(59, 130, 246, 0.2); border: 1px solid #3b82f6; display: flex; align-items: center; justify-content: center; font-size: 22px; color: #60a5fa;">
+                    <i class="fas fa-walking"></i>
+                </div>
+                <div>
+                    <div style="font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: #94a3b8;">Log Pergerakan Taruna (Sistem Pos Jaga)</div>
+                    <div style="font-size: 18px; font-weight: 800; color: white; margin-top: 2px;">
+                        <span style="color: #f87171; font-weight: 900;">🔴 {{ $activePergerakan }} Taruna</span> sedang di luar asrama
+                        <span style="font-size: 13px; color: #94a3b8; font-weight: 500; margin-left: 8px;">(🟢 {{ $kembaliHariIni }} kembali hari ini)</span>
+                    </div>
+                </div>
+            </div>
+            <div style="display: flex; gap: 10px;">
+                <a href="{{ route('log-pergerakan.tablet') }}" style="background: #2563eb; color: white; border-radius: 10px; padding: 10px 18px; font-size: 13px; font-weight: 700; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; transition: background 0.2s;">
+                    <i class="fas fa-tablet-alt"></i> Mode Tablet Pos Jaga
+                </a>
+                <a href="{{ route('log-pergerakan.tv') }}" target="_blank" style="background: rgba(16, 185, 129, 0.2); color: #34d399; border: 1px solid #10b981; border-radius: 10px; padding: 10px 18px; font-size: 13px; font-weight: 700; text-decoration: none; display: inline-flex; align-items: center; gap: 8px;">
+                    <i class="fas fa-tv"></i> Buka TV Monitoring
+                </a>
+            </div>
+        </div>
+
         <!-- ── ACARA MENDATANG ── -->
         @if(!Auth::user()->isTaruna())
         <div class="section-header">

@@ -10,8 +10,13 @@ export default defineConfig({
     plugins: [
         laravel({
             input: [
-                'resources/sass/app.scss', // Pastikan ini mengarah ke file utama CoreUI
+                'resources/css/app.css',
+                'resources/sass/app.scss',
                 'resources/js/app.js',
+                'resources/assets/js/pages-account-settings-account.js',
+                'resources/assets/js/ui-modals.js',
+                'resources/assets/js/ui-toasts.js',
+                'resources/assets/js/ui-popover.js',
             ],
             refresh: true,
         }),
