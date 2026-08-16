@@ -45,7 +45,7 @@ body { font-family: 'Inter', sans-serif; background: #f0f2f5; }
 /* === STAT CARDS === */
 .stats-grid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(5, 1fr);
     gap: 14px;
     margin-bottom: 24px;
 }
@@ -188,6 +188,16 @@ body { font-family: 'Inter', sans-serif; background: #f0f2f5; }
                 <div class="stat-count">{{ $suratStats['selesai'] }}</div>
                 <div class="stat-label">Surat Selesai</div>
                 <div class="stat-change up"><i class="fas fa-check-circle"></i> disetujui &amp; selesai</div>
+            </a>
+            <a href="{{ route('keluhan-barak.kelola') }}" class="stat-card">
+                <div class="stat-icon" style="background:linear-gradient(135deg,#f093fb,#f5576c);">
+                    <i class="fas fa-door-open"></i>
+                </div>
+                <div class="stat-count">{{ $keluhanStats['total'] }}</div>
+                <div class="stat-label">Keluhan Barak</div>
+                <div class="stat-change {{ $keluhanStats['diajukan'] > 0 ? 'up' : 'neutral' }}">
+                    <i class="fas fa-hourglass-half"></i> {{ $keluhanStats['diajukan'] }} diajukan
+                </div>
             </a>
         </div>
         @endif

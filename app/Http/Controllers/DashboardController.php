@@ -7,6 +7,7 @@ use Illuminate\View\View;
 use Illuminate\Http\JsonResponse;
 use App\Helpers\DashboardHelper;
 use App\Models\Acara;
+use App\Models\KeluhanBarak;
 use App\Models\Mahasiswa;
 use App\Models\PoinMahasiswa;
 use App\Models\Surat;
@@ -41,6 +42,15 @@ class DashboardController extends Controller
         // Surat terbaru
         $suratTerbaru = Surat::latest()->take(5)->get();
 
+        // Keluhan barak stats
+        $keluhanStats = [
+            'total'     => KeluhanBarak::count(),
+            'diajukan'  => KeluhanBarak::where('status', 'Diajukan')->count(),
+            'diproses'  => KeluhanBarak::where('status', 'Diproses')->count(),
+            'selesai'   => KeluhanBarak::where('status', 'Selesai')->count(),
+            'ditolak'   => KeluhanBarak::where('status', 'Ditolak')->count(),
+        ];
+
         // Point total + grafik prodi/tingkat if Taruna
         $totalPoin = 0;
         $chartData = null;
@@ -59,6 +69,7 @@ class DashboardController extends Controller
             'semuaAcara'       => $semuaAcara,
             'suratStats'       => $suratStats,
             'suratTerbaru'     => $suratTerbaru,
+            'keluhanStats'     => $keluhanStats,
             'totalPoin'        => $totalPoin,
             'chartData'        => $chartData,
         ]);

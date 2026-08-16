@@ -11,6 +11,7 @@ export default defineConfig({
         laravel({
             input: [
                 'resources/sass/app.scss', // Pastikan ini mengarah ke file utama CoreUI
+                'resources/css/app.css',
                 'resources/js/app.js',
             ],
             refresh: true,
