@@ -193,6 +193,11 @@
                     <i class="fas fa-flag nav-icon"></i> Apel
                 </a>
             </li>
+            <li>
+                <a href="{{ route('jadwal.index') }}" class="{{ $active==='jadwal'?'active':'' }}">
+                    <i class="fas fa-user-clock nav-icon"></i> Jadwal
+                </a>
+            </li>
             @endif
             @if($user->canManageSystem())
             <li>

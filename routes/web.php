@@ -6,6 +6,7 @@ use App\Http\Controllers\MahasiswaController;
 use App\Http\Controllers\PoinController;
 use App\Http\Controllers\AcaraController;
 use App\Http\Controllers\ApelController;
+use App\Http\Controllers\JadwalController;
 use App\Http\Controllers\SuratController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\ActivityLogController; // <-- TAMBAHAN
@@ -112,6 +113,15 @@ Route::middleware('auth')->group(function () {
     Route::get('/jadwal-apel', [ApelController::class, 'jadwalTaruna'])
         ->middleware('role:taruna')
         ->name('apel.jadwal');
+
+    // ===========================
+    // JADWAL PENGASUH — hanya pengasuh
+    // ===========================
+    Route::middleware('role:pengasuh')->group(function () {
+        Route::get('/jadwal', [JadwalController::class, 'index'])->name('jadwal.index');
+        Route::post('/jadwal/generate', [JadwalController::class, 'generate'])->name('jadwal.generate');
+        Route::post('/jadwal/set', [JadwalController::class, 'set'])->name('jadwal.set');
+    });
 
     // ===========================
     // SURAT — pengasuh & admin
