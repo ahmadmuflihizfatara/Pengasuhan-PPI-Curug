@@ -218,6 +218,12 @@ body { font-family: 'Inter', sans-serif; background: #f0f2f5; }
                 </a>
             </div>
 
+            <div class="d-flex gap-2 align-items-center">
+                <button type="button" class="btn-generate" id="btnToggleHanyaSaya" onclick="toggleHanyaDinasSaya()" style="background:#f4f3ff; color:#4a3aa7; border:1px solid #4a3aa7;">
+                    <i class="fas fa-filter"></i> Hanya Jadwal Dinas Saya
+                </button>
+            </div>
+
             @if($semuaPengasuh->isNotEmpty())
                 @if($bulanDepan)
                 {{-- Jadwal hanya diisi sampai bulan berjalan --}}
@@ -261,7 +267,12 @@ body { font-family: 'Inter', sans-serif; background: #f0f2f5; }
                         @if($item['pengasuh'])
                         <div class="tl-avatar">{{ strtoupper(substr($item['pengasuh']->nama, 0, 2)) }}</div>
                         <div>
-                            <div class="tl-pengasuh-name">{{ $item['pengasuh']->nama }}</div>
+                            <div class="tl-pengasuh-name">
+                                {{ $item['pengasuh']->nama }}
+                                @if(stripos($item['pengasuh']->nama, Auth::user()->name) !== false || stripos(Auth::user()->name, $item['pengasuh']->nama) !== false)
+                                <span style="background:#e0e7ff; color:#3730a3; font-size:10.5px; font-weight:800; padding:2px 8px; border-radius:12px; margin-left:6px;"><i class="fas fa-user-check"></i> DINAS SAYA</span>
+                                @endif
+                            </div>
                             @if($item['catatan'])
                             <div class="tl-catatan"><i class="fas fa-note-sticky"></i> {{ $item['catatan'] }}</div>
                             @endif
@@ -335,5 +346,28 @@ document.getElementById('swapModal').addEventListener('click', function(e) {
 document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape') tutupSwapModal();
 });
+
+let hanyaDinasSaya = false;
+function toggleHanyaDinasSaya() {
+    hanyaDinasSaya = !hanyaDinasSaya;
+    const btn = document.getElementById('btnToggleHanyaSaya');
+    const items = document.querySelectorAll('.tl-item');
+    const userName = "{{ addslashes(Auth::user()->name) }}".toLowerCase();
+
+    if (hanyaDinasSaya) {
+        btn.style.background = 'linear-gradient(135deg,#4a3aa7,#2a78d6)';
+        btn.style.color = 'white';
+        btn.innerHTML = '<i class="fas fa-check"></i> Menampilkan Dinas Saya Saja';
+        items.forEach(item => {
+            const pName = item.querySelector('.tl-pengasuh-name')?.innerText.toLowerCase() || '';
+            item.style.display = pName.includes(userName) ? 'block' : 'none';
+        });
+    } else {
+        btn.style.background = '#f4f3ff';
+        btn.style.color = '#4a3aa7';
+        btn.innerHTML = '<i class="fas fa-filter"></i> Hanya Jadwal Dinas Saya';
+        items.forEach(item => item.style.display = 'block');
+    }
+}
 </script>
 </x-app-layout>

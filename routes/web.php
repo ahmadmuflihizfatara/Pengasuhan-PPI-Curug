@@ -76,6 +76,9 @@ Route::middleware('auth')->group(function () {
     Route::delete('/poin/{id}', [PoinController::class, 'destroy'])
         ->middleware('role:pengasuh,admin')
         ->name('poin.destroy');
+    Route::patch('/poin/{id}/validasi', [PoinController::class, 'validasi'])
+        ->middleware('role:admin')
+        ->name('poin.validasi');
 
     // ===========================
     // ACARA — daftar acara (semua pengguna terautentikasi dapat melihat kalender)
