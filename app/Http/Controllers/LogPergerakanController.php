@@ -117,13 +117,13 @@ class LogPergerakanController extends Controller
             $validated['foto_keberangkatan'] = $path;
         }
 
-        // Cari user_id jika ada relasi user
+        // Cari user_id jika ada relasi user (npm ada di tabel mahasiswa, bukan users)
         if (!empty($validated['npm'])) {
-            $user = User::where('npm', $validated['npm'])->first();
-            if ($user) {
-                $validated['user_id'] = $user->id;
-                if (empty($validated['prodi']) && !empty($user->prodi)) {
-                    $validated['prodi'] = $user->prodi;
+            $mahasiswa = Mahasiswa::where('npm', $validated['npm'])->first();
+            if ($mahasiswa) {
+                $validated['user_id'] = $mahasiswa->user_id;
+                if (empty($validated['prodi']) && !empty($mahasiswa->prodi)) {
+                    $validated['prodi'] = $mahasiswa->prodi;
                 }
             }
         }
