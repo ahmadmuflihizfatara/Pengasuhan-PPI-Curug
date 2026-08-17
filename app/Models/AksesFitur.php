@@ -11,6 +11,7 @@ class AksesFitur extends Model
     const JADWAL_PENGASUH = 'jadwal_pengasuh';
     const DUTY_TARUNA     = 'duty_taruna';
     const APEL            = 'apel';
+    const KELUHAN_BARAK   = 'keluhan_barak';
 
     /** Fitur yang izinnya dikelola admin lewat tab Akses */
     const DAFTAR = [
@@ -31,6 +32,12 @@ class AksesFitur extends Model
             'ikon'  => 'fa-flag',
             'warna' => '#eb6834',
             'ket'   => 'Izinkan pengasuh mengisi, mengubah, dan menghapus data apel.',
+        ],
+        self::KELUHAN_BARAK => [
+            'label' => 'Keluhan Barak',
+            'ikon'  => 'fa-door-open',
+            'warna' => '#d63384',
+            'ket'   => 'Izinkan pengasuh mengelola dan memproses pengajuan keluhan barak taruna.',
         ],
     ];
 

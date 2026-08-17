@@ -181,6 +181,20 @@
                     @endif
                 </a>
             </li>
+            <li>
+                <a href="{{ route('keluhan-barak.index') }}" class="{{ $active==='keluhan-barak'?'active':'' }}">
+                    <i class="fas fa-door-open nav-icon"></i> Keluhan Barak
+                    @php
+                        $unreadKeluhan = \App\Models\KeluhanBarak::where('user_id', auth()->id())
+                            ->where('taruna_baca', false)
+                            ->whereIn('status', ['Diproses', 'Selesai', 'Ditolak'])
+                            ->count();
+                    @endphp
+                    @if($unreadKeluhan > 0)
+                    <span style="background:#e53e3e; color:white; border-radius:50%; width:17px; height:17px; font-size:10px; font-weight:800; display:inline-flex; align-items:center; justify-content:center; margin-left:auto;">{{ $unreadKeluhan }}</span>
+                    @endif
+                </a>
+            </li>
         @else
             {{-- Log Pergerakan untuk Pengasuh & Admin --}}
             <li>
@@ -203,6 +217,11 @@
             <li>
                 <a href="{{ route('surat.index') }}" class="{{ $active==='surat'?'active':'' }}">
                     <i class="fas fa-envelope-open-text nav-icon"></i> Administrasi Surat
+                </a>
+            </li>
+            <li>
+                <a href="{{ route('keluhan-barak.kelola') }}" class="{{ $active==='keluhan-barak'?'active':'' }}">
+                    <i class="fas fa-door-open nav-icon"></i> Kelola Keluhan Barak
                 </a>
             </li>
             <li>
