@@ -14,6 +14,8 @@ use App\Http\Controllers\SuratController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\ActivityLogController; // <-- TAMBAHAN
 use App\Http\Controllers\BeritaController;
+use App\Http\Controllers\KeluhanBarakController;
+use App\Http\Controllers\KeluhanBarakStaffController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -150,6 +152,34 @@ Route::middleware('auth')->group(function () {
         Route::get('/akses', [AksesController::class, 'index'])->name('akses.index');
         Route::post('/akses', [AksesController::class, 'update'])->name('akses.update');
     });
+
+    // ===========================
+    // KELUHAN BARAK TARUNA — taruna: pengajuan; pengasuh/admin: kelola
+    // ===========================
+    Route::middleware('role:pengasuh,admin')->group(function () {
+        Route::get('/keluhan-barak/kelola', [KeluhanBarakStaffController::class, 'kelola'])
+            ->name('keluhan-barak.kelola');
+        Route::get('/keluhan-barak/{keluhan}/detail', [KeluhanBarakStaffController::class, 'showDetail'])
+            ->name('keluhan-barak.detail');
+        Route::patch('/keluhan-barak/{keluhan}/status', [KeluhanBarakStaffController::class, 'updateStatus'])
+            ->name('keluhan-barak.updateStatus');
+    });
+
+    Route::get('/keluhan-barak', [KeluhanBarakController::class, 'index'])
+        ->middleware('role:taruna')
+        ->name('keluhan-barak.index');
+    Route::get('/keluhan-barak/create', [KeluhanBarakController::class, 'create'])
+        ->middleware('role:taruna')
+        ->name('keluhan-barak.create');
+    Route::post('/keluhan-barak', [KeluhanBarakController::class, 'store'])
+        ->middleware('role:taruna')
+        ->name('keluhan-barak.store');
+    Route::get('/keluhan-barak/{keluhan}', [KeluhanBarakController::class, 'show'])
+        ->middleware('role:taruna')
+        ->name('keluhan-barak.show');
+    Route::get('/api/my-keluhan-notifications', [KeluhanBarakController::class, 'notifications'])
+        ->middleware('role:taruna')
+        ->name('api.keluhanNotifications');
 
     // ===========================
     // SURAT — pengasuh & admin
