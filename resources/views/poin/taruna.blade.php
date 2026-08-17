@@ -1,277 +1,306 @@
 <x-app-layout>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-* { box-sizing: border-box; }
-body { font-family: 'Inter', sans-serif; background: #f0f2f5; }
-.poin-layout { display: flex; min-height: 100vh; }
-.main-content { flex:1; padding:28px 30px; min-width:0; }
-.page-header { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); border-radius:18px; padding:28px 36px; color:white; margin-bottom:24px; position:relative; overflow:hidden; }
-.page-header::before { content:''; position:absolute; right:-60px; top:-60px; width:200px; height:200px; background:rgba(255,255,255,.1); border-radius:50%; }
-.page-header-inner { position:relative; z-index:1; display:flex; align-items:center; justify-content:space-between; }
-.page-header h1 { margin:0 0 4px 0; font-size:22px; font-weight:800; }
-.page-header p { margin:0; opacity:.85; font-size:13px; }
-.poin-badge-header { background:rgba(255,255,255,.2); border-radius:14px; padding:10px 18px; text-align:center; backdrop-filter:blur(4px); }
-.poin-badge-header .num { font-size:26px; font-weight:800; line-height:1; }
-.poin-badge-header .lbl { font-size:11px; opacity:.85; }
-.card { background:white; border-radius:16px; box-shadow:0 2px 12px rgba(0,0,0,.05); overflow:visible; margin-bottom:18px; }
-.table-wrapper { border-radius:16px; overflow:hidden; }
-.card-header { padding:16px 20px; border-bottom:1px solid #f0f2f7; display:flex; align-items:center; gap:10px; }
-.card-header h3 { margin:0; font-size:14px; font-weight:700; color:#333; }
-.icon { width:32px; height:32px; border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:14px; color:white; }
-.icon-green { background:linear-gradient(135deg,#38a169,#48bb78); }
-.card-body { padding:20px; }
-.badge-prestasi { display:inline-flex; align-items:center; gap:4px; background:#e6f9f0; color:#38a169; padding:3px 10px; border-radius:50px; font-size:11px; font-weight:700; }
-.badge-pelanggaran { display:inline-flex; align-items:center; gap:4px; background:#fff5f5; color:#e53e3e; padding:3px 10px; border-radius:50px; font-size:11px; font-weight:700; }
-.poin-positif { color:#38a169; font-weight:700; font-size:14px; }
-.poin-negatif { color:#e53e3e; font-weight:700; font-size:14px; }
-table { width:100%; border-collapse:collapse; }
-thead tr { background:#f8f9ff; }
-th { padding:11px 14px; text-align:left; font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.06em; color:#8a93b0; }
-td { padding:12px 14px; font-size:13px; color:#444; border-top:1px solid #f0f2f7; }
-tbody tr:hover { background:#fafbff; }
-.empty-state { text-align:center; padding:48px; color:#bbb; }
-.empty-state i { font-size:36px; display:block; margin-bottom:12px; }
-.alert { padding:12px 16px; border-radius:10px; font-size:13px; margin-bottom:16px; display:flex; gap:8px; align-items:center; }
-.alert-success { background:#e6f9f0; border:1px solid #9ae6b4; color:#276749; }
+    * { box-sizing: border-box; }
+    body { font-family: 'Inter', sans-serif; background: #f0f3f8; }
+
+    .poin-layout { display: flex; min-height: 100vh; }
+    .main-content { flex: 1; padding: 24px 28px; min-width: 0; }
+
+    .page-header {
+        background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+        border-radius: 20px;
+        padding: 24px 30px;
+        color: white;
+        margin-bottom: 24px;
+        position: relative;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        box-shadow: 0 10px 25px -5px rgba(30, 58, 138, 0.25);
+    }
+    .page-header::after {
+        content: ''; position: absolute; right: -40px; top: -40px; width: 180px; height: 180px;
+        background: rgba(255,255,255,.08); border-radius: 50%;
+    }
+    .header-title { font-size: 22px; font-weight: 800; margin: 0 0 4px 0; }
+    .header-sub   { font-size: 13px; opacity: 0.9; margin: 0; }
+
+    /* Dual Cards */
+    .dual-summary-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+        margin-bottom: 20px;
+    }
+    .summary-card {
+        border-radius: 16px;
+        padding: 20px;
+        background: white;
+        border: 1.5px solid #e2e8f0;
+        box-shadow: 0 4px 14px rgba(0,0,0,0.03);
+    }
+    .summary-card.card-pelanggaran {
+        background: #fff5f5;
+        border-color: #fecaca;
+    }
+    .summary-card.card-penghargaan {
+        background: #f0fdf4;
+        border-color: #bbf7d0;
+    }
+    .summary-num { font-size: 34px; font-weight: 900; line-height: 1; margin-bottom: 6px; }
+    .summary-lbl { font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; }
+
+    /* Sanksi Card */
+    .sanksi-banner {
+        border-radius: 16px;
+        padding: 18px 22px;
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        margin-bottom: 24px;
+        border: 2px solid;
+    }
+    .sanksi-icon { font-size: 36px; }
+    .sanksi-title { font-size: 17px; font-weight: 900; margin-bottom: 2px; }
+    .sanksi-desc  { font-size: 12.5px; margin: 0; line-height: 1.4; }
+
+    /* Threshold Bar */
+    .threshold-bar-container {
+        background: white;
+        border-radius: 14px;
+        padding: 18px 20px;
+        margin-bottom: 24px;
+        border: 1px solid #e2e8f0;
+    }
+    .threshold-bar {
+        height: 12px; border-radius: 20px; background: #e2e8f0; display: flex; overflow: hidden; margin-top: 8px;
+    }
+    .t-step { height: 100%; }
+    .t-aman  { width: 50%; background: #22c55e; }
+    .t-sp1   { width: 25%; background: #eab308; }
+    .t-sp2   { width: 25%; background: #f97316; }
+    .t-sp3   { width: 25%; background: #ef4444; }
+
+    /* Card Panels */
+    .card-panel {
+        background: white;
+        border-radius: 16px;
+        border: 1px solid #e2e8f0;
+        box-shadow: 0 4px 16px rgba(0,0,0,0.03);
+        margin-bottom: 24px;
+        overflow: hidden;
+    }
+    .card-panel-header {
+        padding: 16px 20px;
+        background: #f8fafc;
+        border-bottom: 1px solid #e2e8f0;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+    .card-panel-title { font-size: 15px; font-weight: 800; color: #1e293b; margin: 0; display: flex; align-items: center; gap: 8px; }
+
+    .table-custom th {
+        background: #f8fafc; font-size: 11px; font-weight: 800; text-transform: uppercase;
+        color: #64748b; padding: 12px 14px; border-bottom: 2px solid #e2e8f0;
+    }
+    .table-custom td {
+        padding: 12px 14px; font-size: 13px; color: #334155; vertical-align: middle;
+        border-bottom: 1px solid #f1f5f9;
+    }
 </style>
 
 <div class="poin-layout">
     <x-sidebar active="poin" />
 
-    <div class="main-content">
+    <main class="main-content">
+
+        {{-- Header Banner --}}
         <div class="page-header">
-            <div class="page-header-inner">
-                <div>
-                    <h1><i class="fas fa-star"></i> Raport Poin Saya</h1>
-                    <p>Lihat riwayat poin pengasuhan kamu &mdash; Prestasi &amp; Pelanggaran</p>
-                </div>
-                @if($selectedStudent)
-                <div class="poin-badge-header">
-                    <div class="num" id="total-poin-num">{{ $totalPoin >= 0 ? '+' : '' }}{{ $totalPoin }}</div>
-                    <div class="lbl">Total Poin {{ $selectedStudent['nickname'] }}</div>
-                </div>
-                @endif
+            <div>
+                <h1 class="header-title"><i class="fas fa-star text-warning me-2"></i> Raport Poin &amp; Disiplin Taruna</h1>
+                <p class="header-sub">Pantau akumulasi Poin Pelanggaran (-) dan Poin Penghargaan (+) secara mandiri</p>
             </div>
+            @if($selectedStudent)
+            <div>
+                <span class="badge bg-white text-dark px-3 py-2 fw-bold">
+                    {{ $selectedStudent->nama }} &bull; {{ $selectedStudent->npm }}
+                </span>
+            </div>
+            @endif
         </div>
 
-        @if(session('success'))
-        <div class="alert alert-success"><i class="fas fa-check-circle"></i> {{ session('success') }}</div>
-        @endif
-
         @if(!$selectedStudent)
-        <div class="card">
-            <div class="empty-state">
-                <i class="fas fa-user-graduate" style="color:#e8ebf5;"></i>
-                <p>Data poin kamu tidak ditemukan.<br>Hubungi Pengasuh untuk verifikasi akun.</p>
-            </div>
+        <div class="card p-5 text-center text-muted rounded-4">
+            <i class="fas fa-user-graduate fs-1 mb-3 text-muted"></i>
+            <h5 class="fw-bold">Akun Taruna Tidak Terhubung ke Database Mahasiswa</h5>
+            <p class="small">Silakan hubungi Pengasuh atau Administrator untuk memeriksa data akun Anda.</p>
         </div>
         @else
 
-        {{-- Ringkasan --}}
-        <div class="card">
-            <div class="card-header">
-                <div class="icon icon-green"><i class="fas fa-chart-bar"></i></div>
-                <h3>Ringkasan Poin &mdash; {{ $selectedStudent['nama'] }}</h3>
-                <span style="margin-left:auto; background:#eef0ff; color:#667eea; font-size:11px; font-weight:700; padding:3px 10px; border-radius:50px;">
-                    Kelas {{ $selectedStudent['kelas'] }}
-                </span>
+        {{-- STATUS SANKSI TARUNA (THRESHOLD PELANGGARAN) --}}
+        <div class="sanksi-banner" style="background:{{ $statusSanksi['bg'] }}; border-color:{{ $statusSanksi['border'] }}; color:{{ $statusSanksi['color'] }};">
+            <div class="sanksi-icon"><i class="{{ $statusSanksi['icon'] }}"></i></div>
+            <div>
+                <div class="sanksi-title">Status Kedisiplinan: {{ $statusSanksi['status'] }}</div>
+                <p class="sanksi-desc">{{ $statusSanksi['desc'] }}</p>
             </div>
-            <div class="card-body" style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px;">
-                @php
-                    $totalPrestasi    = $riwayat->where('kategori','prestasi')->sum('nilai');
-                    $totalPelanggaran = $riwayat->where('kategori','pelanggaran')->sum('nilai');
-                @endphp
-                <div style="background:#e6f9f0; border-radius:12px; padding:18px; text-align:center;">
-                    <div id="summary-prestasi" style="font-size:28px; font-weight:800; color:#38a169;">+{{ $totalPrestasi }}</div>
-                    <div style="font-size:12px; color:#38a169; font-weight:600; margin-top:4px;"><i class="fas fa-trophy"></i> Prestasi</div>
+        </div>
+
+        {{-- DUAL SUMMARY GRID (Penghargaan TIDAK mengurangi Pelanggaran) --}}
+        <div class="dual-summary-grid">
+            {{-- Pelanggaran --}}
+            <div class="summary-card card-pelanggaran">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <span class="summary-lbl text-danger"><i class="fas fa-exclamation-triangle me-1"></i> Akumulasi Pelanggaran (-)</span>
+                    <span class="badge bg-danger">{{ $riwayatPelanggaran->count() }} Temuan</span>
                 </div>
-                <div style="background:#fff5f5; border-radius:12px; padding:18px; text-align:center;">
-                    <div id="summary-pelanggaran" style="font-size:28px; font-weight:800; color:#e53e3e;">-{{ $totalPelanggaran }}</div>
-                    <div style="font-size:12px; color:#e53e3e; font-weight:600; margin-top:4px;"><i class="fas fa-exclamation-triangle"></i> Pelanggaran</div>
+                <div class="summary-num text-danger">{{ $totalPelanggaran }} Poin</div>
+                <div class="small text-muted">Poin pelanggaran diakumulasikan untuk menentukan Surat Peringatan (SP).</div>
+            </div>
+
+            {{-- Penghargaan --}}
+            <div class="summary-card card-penghargaan">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <span class="summary-lbl text-success"><i class="fas fa-trophy me-1"></i> Akumulasi Penghargaan (+)</span>
+                    <span class="badge bg-success">{{ $riwayatPenghargaan->count() }} Prestasi</span>
                 </div>
-                <div id="summary-total-container" style="background:{{ $totalPoin >= 0 ? '#e6f9f0' : '#fff5f5' }}; border-radius:12px; padding:18px; text-align:center;">
-                    <div id="summary-total" style="font-size:28px; font-weight:800; color:{{ $totalPoin >= 0 ? '#38a169' : '#e53e3e' }};">
-                        {{ $totalPoin >= 0 ? '+' : '' }}{{ $totalPoin }}
+                <div class="summary-num text-success">+{{ $totalPenghargaan }} Poin</div>
+                <div class="small text-muted">Poin reward prestasi mandiri (tidak mengurangi poin pelanggaran).</div>
+            </div>
+        </div>
+
+        {{-- Threshold Progress Bar --}}
+        <div class="threshold-bar-container">
+            <div class="d-flex justify-content-between text-muted" style="font-size:11px; font-weight:800;">
+                <span>🟢 Status Aman (&lt; 50 Poin)</span>
+                <span>🟡 SP 1 (50 - 74 Poin)</span>
+                <span>🟠 SP 2 (75 - 99 Poin)</span>
+                <span>🔴 SP 3 &amp; Sidang (≥ 100 Poin)</span>
+            </div>
+            <div class="threshold-bar">
+                <div class="t-step t-aman" title="Aman (<50)"></div>
+                <div class="t-step t-sp1" title="SP 1 (50-74)"></div>
+                <div class="t-step t-sp2" title="SP 2 (75-99)"></div>
+                <div class="t-step t-sp3" title="SP 3 (≥100)"></div>
+            </div>
+        </div>
+
+        {{-- NAV TABS DETAIL RIWAYAT --}}
+        <div class="card-panel">
+            <div class="card-panel-header">
+                <ul class="nav nav-pills" id="tarunaPoinTabs" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active fw-bold text-danger" id="tab-pelanggaran-btn" data-bs-toggle="pill" data-bs-target="#panePelanggaran" type="button" role="tab">
+                            <i class="fas fa-ban me-1"></i> Riwayat Pelanggaran ({{ $riwayatPelanggaran->count() }})
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link fw-bold text-success ms-2" id="tab-penghargaan-btn" data-bs-toggle="pill" data-bs-target="#panePenghargaan" type="button" role="tab">
+                            <i class="fas fa-trophy me-1"></i> Riwayat Penghargaan / Prestasi ({{ $riwayatPenghargaan->count() }})
+                        </button>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="tab-content p-3" id="tarunaPoinTabContent">
+                {{-- TAB PELANGGARAN --}}
+                <div class="tab-pane fade show active" id="panePelanggaran" role="tabpanel">
+                    <div class="table-responsive">
+                        <table class="table table-custom mb-0">
+                            <thead>
+                                <tr>
+                                    <th>Tanggal</th>
+                                    <th>Tingkat</th>
+                                    <th>Deskripsi Pelanggaran PTTT</th>
+                                    <th>Poin</th>
+                                    <th>Pengasuh / Pemeriksa</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @forelse($riwayatPelanggaran as $p)
+                                <tr>
+                                    <td>{{ $p->tanggal ? $p->tanggal->format('d/m/Y') : '-' }}</td>
+                                    <td>
+                                        <span class="badge bg-danger bg-opacity-10 text-danger border border-danger fw-bold">
+                                            {{ ucfirst($p->tingkat ?? 'Pelanggaran') }}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <div class="fw-bold">{{ $p->kegiatan }}</div>
+                                        @if($p->keterangan)<div class="small text-muted">{{ $p->keterangan }}</div>@endif
+                                    </td>
+                                    <td class="fw-bold text-danger">-{{ $p->nilai }} Poin</td>
+                                    <td>{{ $p->pengasuh }}</td>
+                                    <td>
+                                        <span class="badge bg-success"><i class="fas fa-check-circle me-1"></i> Tervalidasi</span>
+                                    </td>
+                                </tr>
+                                @empty
+                                <tr>
+                                    <td colspan="6" class="text-center py-4 text-muted">
+                                        <i class="fas fa-shield-alt fs-2 text-success mb-2 d-block"></i>
+                                        Tidak ada catatan pelanggaran. Pertahankan kedisiplinan dan tata tertib!
+                                    </td>
+                                </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
                     </div>
-                    <div style="font-size:12px; color:#888; font-weight:600; margin-top:4px;"><i class="fas fa-star"></i> Total</div>
+                </div>
+
+                {{-- TAB PENGHARGAAN --}}
+                <div class="tab-pane fade" id="panePenghargaan" role="tabpanel">
+                    <div class="table-responsive">
+                        <table class="table table-custom mb-0">
+                            <thead>
+                                <tr>
+                                    <th>Tanggal</th>
+                                    <th>Tingkat</th>
+                                    <th>Prestasi / Penghargaan</th>
+                                    <th>Poin</th>
+                                    <th>Pemberi Rekomendasi</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @forelse($riwayatPenghargaan as $r)
+                                <tr>
+                                    <td>{{ $r->tanggal ? $r->tanggal->format('d/m/Y') : '-' }}</td>
+                                    <td>
+                                        <span class="badge bg-success bg-opacity-10 text-success border border-success fw-bold">
+                                            {{ ucfirst($r->tingkat ?? 'Prestasi') }}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <div class="fw-bold">{{ $r->kegiatan }}</div>
+                                        @if($r->keterangan)<div class="small text-muted">{{ $r->keterangan }}</div>@endif
+                                    </td>
+                                    <td class="fw-bold text-success">+{{ $r->nilai }} Poin</td>
+                                    <td>{{ $r->pengasuh }}</td>
+                                    <td>
+                                        <span class="badge bg-success"><i class="fas fa-check-circle me-1"></i> Tervalidasi</span>
+                                    </td>
+                                </tr>
+                                @empty
+                                <tr>
+                                    <td colspan="6" class="text-center py-4 text-muted">
+                                        <i class="fas fa-award fs-2 text-muted mb-2 d-block"></i>
+                                        Belum ada catatan penghargaan atau prestasi.
+                                    </td>
+                                </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
 
-        {{-- Riwayat (read-only) --}}
-        <div class="card">
-            <div class="card-header">
-                <div class="icon" style="background:linear-gradient(135deg,#f093fb,#f5576c);"><i class="fas fa-history"></i></div>
-                <h3>Riwayat Poin</h3>
-                <span id="riwayat-count-badge" style="margin-left:auto; background:#fdf0ff; color:#c026d3; font-size:12px; font-weight:700; padding:3px 10px; border-radius:50px;">
-                    {{ $riwayat->count() }} entri
-                </span>
-            </div>
-            <div id="riwayat-container">
-                @if($riwayat->isEmpty())
-                <div class="empty-state">
-                    <i class="fas fa-inbox" style="color:#e8ebf5;"></i>
-                    <p>Belum ada data poin untukmu.</p>
-                </div>
-                @else
-                <div class="table-wrapper">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Tanggal</th>
-                                <th>Kategori</th>
-                                <th>Kegiatan</th>
-                                <th>Poin</th>
-                                <th>Pengasuh</th>
-                                <th>Keterangan</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach($riwayat as $r)
-                            <tr>
-                                <td style="white-space:nowrap; font-size:12px; color:#888;">{{ $r->tanggal->format('d M Y') }}</td>
-                                <td>
-                                    @if($r->kategori === 'prestasi')
-                                    <span class="badge-prestasi"><i class="fas fa-trophy"></i> Prestasi</span>
-                                    @else
-                                    <span class="badge-pelanggaran"><i class="fas fa-exclamation-triangle"></i> Pelanggaran</span>
-                                    @endif
-                                </td>
-                                <td style="max-width:200px; font-weight:500;">{{ $r->kegiatan }}</td>
-                                <td>
-                                    @if($r->kategori === 'prestasi')
-                                    <span class="poin-positif">+{{ $r->nilai }}</span>
-                                    @else
-                                    <span class="poin-negatif">-{{ $r->nilai }}</span>
-                                    @endif
-                                </td>
-                                <td style="font-size:12px; color:#666;">{{ $r->pengasuh }}</td>
-                                <td style="font-size:12px; color:#888;">{{ $r->keterangan ?? '-' }}</td>
-                            </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
-                @endif
-            </div>
-        </div>
         @endif
-    </div>
+
+    </main>
 </div>
-
-<script>
-document.addEventListener("DOMContentLoaded", function() {
-    const totalPoinNum = document.getElementById('total-poin-num');
-    const summaryPrestasi = document.getElementById('summary-prestasi');
-    const summaryPelanggaran = document.getElementById('summary-pelanggaran');
-    const summaryTotal = document.getElementById('summary-total');
-    const summaryTotalContainer = document.getElementById('summary-total-container');
-    const riwayatCountBadge = document.getElementById('riwayat-count-badge');
-    const riwayatContainer = document.getElementById('riwayat-container');
-
-    let lastDataJson = "";
-
-    function pollPoints() {
-        fetch("{{ route('api.myPoints') }}")
-            .then(res => res.json())
-            .then(data => {
-                if (data.success) {
-                    const currentJson = JSON.stringify({
-                        totalPoin: data.totalPoin,
-                        totalPrestasi: data.totalPrestasi,
-                        totalPelanggaran: data.totalPelanggaran,
-                        riwayatCount: data.riwayat.length,
-                        riwayatIds: data.riwayat.map(r => r.id)
-                    });
-
-                    if (currentJson === lastDataJson) {
-                        return; // No changes, skip DOM update
-                    }
-                    lastDataJson = currentJson;
-
-                    // Update summary numbers
-                    if (totalPoinNum) {
-                        totalPoinNum.textContent = (data.totalPoin >= 0 ? '+' : '') + data.totalPoin;
-                    }
-                    if (summaryPrestasi) {
-                        summaryPrestasi.textContent = '+' + data.totalPrestasi;
-                    }
-                    if (summaryPelanggaran) {
-                        summaryPelanggaran.textContent = '-' + data.totalPelanggaran;
-                    }
-                    if (summaryTotal) {
-                        summaryTotal.textContent = (data.totalPoin >= 0 ? '+' : '') + data.totalPoin;
-                        summaryTotal.style.color = data.totalPoin >= 0 ? '#38a169' : '#e53e3e';
-                    }
-                    if (summaryTotalContainer) {
-                        summaryTotalContainer.style.background = data.totalPoin >= 0 ? '#e6f9f0' : '#fff5f5';
-                    }
-                    if (riwayatCountBadge) {
-                        riwayatCountBadge.textContent = data.riwayat.length + ' entri';
-                    }
-
-                    // Rebuild history
-                    if (riwayatContainer) {
-                        if (data.riwayat.length === 0) {
-                            riwayatContainer.innerHTML = `
-                                <div class="empty-state">
-                                    <i class="fas fa-inbox" style="color:#e8ebf5;"></i>
-                                    <p>Belum ada data poin untukmu.</p>
-                                </div>
-                            `;
-                        } else {
-                            let rowsHtml = '';
-                            data.riwayat.forEach(r => {
-                                const categoryBadge = r.kategori === 'prestasi'
-                                    ? `<span class="badge-prestasi"><i class="fas fa-trophy"></i> Prestasi</span>`
-                                    : `<span class="badge-pelanggaran"><i class="fas fa-exclamation-triangle"></i> Pelanggaran</span>`;
-                                
-                                const valClass = r.kategori === 'prestasi' ? 'poin-positif' : 'poin-negatif';
-                                const valSign = r.kategori === 'prestasi' ? '+' : '-';
-
-                                rowsHtml += `
-                                    <tr>
-                                        <td style="white-space:nowrap; font-size:12px; color:#888;">${r.tanggal}</td>
-                                        <td>${categoryBadge}</td>
-                                        <td style="max-width:200px; font-weight:500;">${r.kegiatan}</td>
-                                        <td><span class="${valClass}">${valSign}${r.nilai}</span></td>
-                                        <td style="font-size:12px; color:#666;">${r.pengasuh}</td>
-                                        <td style="font-size:12px; color:#888;">${r.keterangan}</td>
-                                    </tr>
-                                `;
-                            });
-
-                            riwayatContainer.innerHTML = `
-                                <div class="table-wrapper">
-                                    <table>
-                                        <thead>
-                                            <tr>
-                                                <th>Tanggal</th>
-                                                <th>Kategori</th>
-                                                <th>Kegiatan</th>
-                                                <th>Poin</th>
-                                                <th>Pengasuh</th>
-                                                <th>Keterangan</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            ${rowsHtml}
-                                        </tbody>
-                                    </table>
-                                </div>
-                            `;
-                        }
-                    }
-                }
-            })
-            .catch(err => console.error("Error polling points:", err));
-    }
-
-    // Set initial lastDataJson by executing poll once
-    pollPoints();
-
-    // Poll every 3 seconds
-    setInterval(pollPoints, 3000);
-});
-</script>
 </x-app-layout>
