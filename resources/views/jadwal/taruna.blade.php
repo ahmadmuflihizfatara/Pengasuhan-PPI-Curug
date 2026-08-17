@@ -1,4 +1,5 @@
 <x-app-layout>
+<x-administration-table-style />
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 * { box-sizing: border-box; }
@@ -87,7 +88,7 @@ tbody tr:hover { background:#fafbff; }
         @endif
 
         {{-- Duty taruna minggu ini --}}
-        <div class="card">
+            <div class="card admin-list-table">
             <div class="card-head">
                 <h2><i class="fas fa-user-group" style="color:#1baf7a;"></i> Duty Taruna Minggu Ini</h2>
                 <span class="periode-badge">{{ \App\Models\DutyTaruna::labelPeriode($mingguIni) }}</span>

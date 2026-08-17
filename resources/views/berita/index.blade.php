@@ -1,4 +1,5 @@
 <x-app-layout>
+<x-administration-table-style />
 <style>
 * { box-sizing: border-box; }
 body { font-family: 'Inter', sans-serif; background: #f0f2f5; }
@@ -248,14 +249,14 @@ body { font-family: 'Inter', sans-serif; background: #f0f2f5; }
             @if(request('kategori'))
                 <input type="hidden" name="kategori" value="{{ request('kategori') }}">
             @endif
-            <div class="filter-bar">
+            <div class="filter-bar admin-list-filter">
                 <div class="search-wrap">
                     <i class="fas fa-search"></i>
-                    <input type="text" name="search" placeholder="Cari judul, isi berita..." value="{{ request('search') }}">
+                    <input type="text" name="search" class="search-input" placeholder="Cari judul, isi berita..." value="{{ request('search') }}">
                 </div>
-                <button type="submit" class="filter-btn primary"><i class="fas fa-search"></i> Cari</button>
+                <button type="submit" class="btn-filter"><i class="fas fa-filter"></i> Filter</button>
                 @if(request('search') || request('kategori'))
-                <a href="{{ route('berita.index') }}" class="filter-btn secondary"><i class="fas fa-times"></i> Reset</a>
+                <a href="{{ route('berita.index') }}" class="btn-reset"><i class="fas fa-times"></i> Reset</a>
                 @endif
             </div>
         </form>

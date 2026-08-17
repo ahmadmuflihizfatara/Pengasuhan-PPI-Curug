@@ -1,4 +1,5 @@
 <x-app-layout>
+<x-administration-table-style />
 <style>
     * { box-sizing: border-box; }
     body { font-family: 'Inter', sans-serif; background: #f0f2f5; }
@@ -463,7 +464,7 @@
         {{-- SECTION USULAN MENUNGGU VALIDASI (JIKA ADA USULAN PENDING) --}}
         {{-- ========================================================== --}}
         @if($allPendingValidation->count() > 0)
-        <div class="card-panel border-warning border-2 mb-4">
+        <div class="card-panel border-warning border-2 mb-4 admin-list-table">
             <div class="card-panel-header bg-warning bg-opacity-10">
                 <div class="card-panel-title text-dark">
                     <i class="fas fa-clipboard-check text-warning"></i>
@@ -567,7 +568,7 @@
             {{-- ── KOLOM KIRI: PILIH TARUNA & STATUS PROFILE ── --}}
             <div>
                 {{-- Card Pilih Taruna --}}
-                <div class="card-panel">
+                <div class="card-panel admin-list-table">
                     <div class="card-panel-header">
                         <div class="card-panel-title">
                             <i class="fas fa-user-graduate text-primary"></i> 1. Pilih Nama Taruna
@@ -806,7 +807,7 @@
                 </div>
 
                 {{-- Kotak Tabel --}}
-                <div class="card-panel">
+                <div class="card-panel admin-list-table">
                     <div class="card-panel-body p-0">
                         <div class="tab-content p-3" id="riwayatTabContent">
                             {{-- Tab 1: Pelanggaran --}}

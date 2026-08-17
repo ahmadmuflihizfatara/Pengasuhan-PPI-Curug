@@ -1,4 +1,5 @@
 <x-app-layout>
+<x-administration-table-style />
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 * { box-sizing: border-box; }
@@ -246,7 +247,7 @@ tbody tr:hover { background:#f8f9ff; }
         @unless($isTaruna)
         <div id="tableView">
             @if($acara->isEmpty())
-            <div class="card">
+            <div class="card admin-list-table">
                 <div class="empty-state">
                     <i class="fas fa-calendar-times"></i>
                     <h4>Belum ada acara dijadwalkan</h4>

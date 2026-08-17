@@ -1,4 +1,5 @@
 <x-app-layout>
+<x-administration-table-style />
 <style>
 * { box-sizing: border-box; }
 body { font-family: 'Inter', sans-serif; background: #f0f2f5; }
@@ -236,9 +237,9 @@ tbody tr:hover { background:#fafbff; }
         </div>
 
         {{-- ── FILTER ── --}}
-        <div class="filter-panel">
+        <div class="filter-panel admin-list-filter">
             <form method="GET" action="{{ route('activity-log.index') }}">
-                <div class="filter-grid">
+                <div class="filter-grid admin-filter-fields">
                     <div>
                         <label class="filter-label">Cari Aktivitas</label>
                         <div class="filter-search">
@@ -294,7 +295,7 @@ tbody tr:hover { background:#fafbff; }
         </div>
 
         {{-- ── TABEL LOG ── --}}
-        <div class="log-card">
+        <div class="log-card admin-list-table">
             <div class="log-card-header">
                 <div class="log-card-title">
                     <i class="fas fa-history" style="color:#667eea;"></i>
@@ -358,8 +359,8 @@ tbody tr:hover { background:#fafbff; }
                             </td>
                             <td style="text-align:center;">
                                 @if($log->detail)
-                                <button class="btn-detail" onclick="toggleDetail({{ $log->id }}, this)">
-                                    <i class="fas fa-eye"></i> Lihat
+                                <button class="btn-view" title="Lihat detail" aria-label="Lihat detail" onclick="toggleDetail({{ $log->id }}, this)">
+                                    <i class="fas fa-eye"></i>
                                 </button>
                                 @else
                                 <span style="color:#ddd;font-size:13px;">—</span>
