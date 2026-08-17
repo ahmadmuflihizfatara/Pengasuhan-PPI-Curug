@@ -1,4 +1,5 @@
 <x-app-layout>
+<x-administration-table-style />
 <style>
     * { box-sizing: border-box; }
     body { font-family: 'Inter', sans-serif; background: #f0f2f5; }
@@ -181,12 +182,12 @@
         </div>
 
         {{-- Filter Card --}}
-        <div class="filter-card">
-            <form action="{{ route('log-pergerakan.index') }}" method="GET" class="row g-2 align-items-center">
-                <div class="col-md-3">
+        <div class="filter-card admin-list-filter">
+            <form action="{{ route('log-pergerakan.index') }}" method="GET" class="admin-log-filter-form">
+                <div>
                     <input type="text" class="form-control" name="search" value="{{ request('search') }}" placeholder="Cari nama, NPM, rute...">
                 </div>
-                <div class="col-md-2">
+                <div>
                     <select class="form-select" name="kategori">
                         <option value="">-- Semua Kategori --</option>
                         <option value="perizinan" {{ request('kategori')==='perizinan'?'selected':'' }}>Perizinan</option>
@@ -194,27 +195,27 @@
                         <option value="olahraga" {{ request('kategori')==='olahraga'?'selected':'' }}>Olahraga</option>
                     </select>
                 </div>
-                <div class="col-md-2">
+                <div>
                     <select class="form-select" name="status">
                         <option value="">-- Semua Status --</option>
                         <option value="berangkat" {{ request('status')==='berangkat'?'selected':'' }}>🔴 Belum Kembali</option>
                         <option value="kembali" {{ request('status')==='kembali'?'selected':'' }}>🟢 Sudah Kembali</option>
                     </select>
                 </div>
-                <div class="col-md-3">
+                <div>
                     <input type="date" class="form-control" name="tanggal" value="{{ request('tanggal') }}">
                 </div>
-                <div class="col-md-2 d-flex gap-1">
-                    <button type="submit" class="btn btn-outline-primary fw-bold w-100"><i class="fas fa-filter"></i> Filter</button>
+                <div class="admin-log-actions">
+                    <button type="submit" class="btn-filter"><i class="fas fa-filter"></i> Filter</button>
                     @if(request()->hasAny(['search', 'kategori', 'status', 'tanggal']))
-                    <a href="{{ route('log-pergerakan.index') }}" class="btn btn-light border text-muted"><i class="fas fa-times"></i></a>
+                    <a href="{{ route('log-pergerakan.index') }}" class="btn-reset"><i class="fas fa-times"></i> Reset</a>
                     @endif
                 </div>
             </form>
         </div>
 
         {{-- Main Table --}}
-        <div class="custom-table-card">
+        <div class="custom-table-card admin-list-table">
             <div class="table-responsive">
                 <table class="table-pergerakan">
                     <thead>
@@ -270,15 +271,15 @@
                                 {!! $item->getStatusBadgeHtml() !!}
                             </td>
                             <td class="text-center">
-                                <div class="btn-group btn-group-sm">
-                                    <a href="{{ route('log-pergerakan.show', $item->id) }}" class="btn btn-outline-primary" title="Lihat Detail">
+                                <div class="table-actions">
+                                    <a href="{{ route('log-pergerakan.show', $item->id) }}" class="btn-view" title="Lihat Detail">
                                         <i class="fas fa-eye"></i>
                                     </a>
                                     @if($item->isBelumKembali())
                                     <form action="{{ route('log-pergerakan.kembali', $item->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Tandai {{ $item->nama }} SUDAH KEMBALI?')">
                                         @csrf
                                         @method('PATCH')
-                                        <button type="submit" class="btn btn-success" title="Tandai Kembali">
+                                        <button type="submit" class="btn-approve-ico" title="Tandai Kembali">
                                             <i class="fas fa-check"></i>
                                         </button>
                                     </form>
@@ -287,7 +288,7 @@
                                     <form action="{{ route('log-pergerakan.destroy', $item->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Hapus data log ini?')">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="btn btn-outline-danger" title="Hapus">
+                                        <button type="submit" class="btn-delete" title="Hapus">
                                             <i class="fas fa-trash"></i>
                                         </button>
                                     </form>

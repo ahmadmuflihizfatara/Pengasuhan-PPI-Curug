@@ -1,4 +1,5 @@
 <x-app-layout>
+<x-administration-table-style />
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 * { box-sizing: border-box; }
@@ -160,7 +161,7 @@ tbody tr:hover { background:#fafbff; }
 
         {{-- Sedang konsinyir --}}
         <div class="section-title"><i class="fas fa-user-clock" style="color:#e34948;"></i> Sedang Konsinyir ({{ $aktif->count() }})</div>
-        <div class="card">
+        <div class="card admin-list-table">
             @if($aktif->isEmpty())
             <div class="empty"><i class="fas fa-circle-check"></i><p>Tidak ada taruna yang sedang konsinyir.</p></div>
             @else
@@ -170,7 +171,7 @@ tbody tr:hover { background:#fafbff; }
 
         {{-- Riwayat --}}
         <div class="section-title"><i class="fas fa-clock-rotate-left" style="color:#98a0b3;"></i> Riwayat Konsinyir ({{ $riwayat->count() }})</div>
-        <div class="card">
+        <div class="card admin-list-table">
             @if($riwayat->isEmpty())
             <div class="empty"><i class="fas fa-inbox"></i><p>Belum ada riwayat konsinyir.</p></div>
             @else

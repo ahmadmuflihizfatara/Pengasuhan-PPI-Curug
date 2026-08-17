@@ -21,6 +21,11 @@
             overflow-x: hidden;
         }
 
+        .table-responsive.table-rounded {
+            border-radius: 16px;
+            overflow: hidden;
+        }
+
         /* === TV HEADER === */
         .tv-header {
             background: #ffffff;
@@ -452,7 +457,7 @@
                     </div>
                 </div>
 
-                <div class="table-responsive">
+                <div class="table-responsive table-rounded">
                     <table class="active-table">
                         <thead>
                             <tr>

@@ -1,4 +1,5 @@
 <x-app-layout>
+<x-administration-table-style />
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 * { box-sizing: border-box; }
@@ -153,7 +154,7 @@ tbody tr:hover { background:#fafbff; }
         </div>
 
         {{-- Daftar duty minggu terpilih --}}
-        <div class="card">
+            <div class="card admin-list-table">
             <div class="card-head">
                 <h2><i class="fas fa-clipboard-list" style="color:#1baf7a;"></i>
                     Duty {{ \App\Models\DutyTaruna::labelPeriode($dipilih) }}

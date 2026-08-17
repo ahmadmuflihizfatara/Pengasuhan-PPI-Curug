@@ -1,4 +1,5 @@
 <x-app-layout>
+<x-administration-table-style />
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 * { box-sizing: border-box; }
@@ -111,7 +112,7 @@ tbody tr:hover { background: #fff8fb; }
             </div>
         </div>
 
-        <div class="filter-bar">
+        <div class="filter-bar admin-list-filter">
             <form method="GET" action="{{ route('keluhan-barak.kelola') }}" style="display:contents;">
                 <div class="search-wrap">
                     <i class="fas fa-search"></i>
@@ -146,7 +147,7 @@ tbody tr:hover { background: #fff8fb; }
             </div>
         </div>
         @else
-        <div class="card">
+        <div class="card admin-list-table">
             <table>
                 <thead>
                     <tr>

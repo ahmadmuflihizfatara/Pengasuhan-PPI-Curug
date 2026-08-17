@@ -1,4 +1,5 @@
 <x-app-layout>
+<x-administration-table-style />
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 * { box-sizing: border-box; }
@@ -142,7 +143,8 @@ tbody tr:hover { background:#fafbff; }
             @endforeach
         </div>
 
-        <!-- Search -->
+        <!-- Search and filters -->
+        <div class="admin-list-filter">
         <div class="search-bar">
             <i class="fas fa-search"></i>
             <input type="text" id="searchInput"
@@ -172,8 +174,10 @@ tbody tr:hover { background:#fafbff; }
             @endfor
         </div>
 
+        </div>
+
         <!-- Table -->
-        <div class="table-container">
+        <div class="table-container admin-list-table">
             <div class="table-head">
                 <h2 id="tableTitle">Semua Mahasiswa</h2>
                 <span class="badge-count" id="tableCount">{{ $totalSemua }} mahasiswa</span>

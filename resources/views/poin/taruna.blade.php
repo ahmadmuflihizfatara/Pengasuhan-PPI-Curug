@@ -1,4 +1,5 @@
 <x-app-layout>
+<x-administration-table-style />
 <style>
     * { box-sizing: border-box; }
     body { font-family: 'Inter', sans-serif; background: #f0f2f5; }
@@ -159,7 +160,7 @@
         </div>
 
         @if(!$selectedStudent)
-        <div class="card-panel">
+        <div class="card-panel admin-list-table">
             <div class="empty-state">
                 <i class="fas fa-user-graduate"></i>
                 <h4>Akun Taruna Tidak Terhubung ke Database Mahasiswa</h4>
@@ -217,7 +218,7 @@
         </div>
 
         {{-- NAV TABS DETAIL RIWAYAT --}}
-        <div class="card-panel">
+        <div class="card-panel admin-list-table">
             <div class="card-panel-header">
                 <ul class="nav riwayat-pills" id="tarunaPoinTabs" role="tablist">
                     <li class="nav-item" role="presentation">
