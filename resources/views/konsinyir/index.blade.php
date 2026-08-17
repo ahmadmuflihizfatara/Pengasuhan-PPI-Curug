@@ -59,8 +59,8 @@ textarea.form-control { resize:vertical; min-height:70px; }
 .card { background:white; border-radius:16px; box-shadow:0 2px 12px rgba(0,0,0,.05); overflow:hidden; margin-bottom:22px; }
 
 table { width:100%; border-collapse:collapse; }
-thead tr { background:#fdf5f5; }
-th { padding:12px 16px; text-align:left; font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.06em; color:#8a93b0; }
+thead tr { background:linear-gradient(135deg,#e34948,#eb6834); }
+th { padding:12px 16px; text-align:left; font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.06em; color:white; }
 td { padding:12px 16px; font-size:13px; color:#444; border-top:1px solid #f0f2f7; vertical-align:middle; }
 tbody tr:hover { background:#fafbff; }
 

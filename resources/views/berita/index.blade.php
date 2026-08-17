@@ -8,7 +8,7 @@ body { font-family: 'Inter', sans-serif; background: #f0f2f5; }
 /* ── Page Header ── */
 .page-header {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    border-radius: 20px; padding: 28px 32px;
+    border-radius: 18px; padding: 28px 32px;
     color: white; margin-bottom: 24px;
     display: flex; align-items: center; justify-content: space-between;
     position: relative; overflow: hidden;

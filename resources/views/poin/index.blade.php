@@ -1,15 +1,15 @@
 <x-app-layout>
 <style>
     * { box-sizing: border-box; }
-    body { font-family: 'Inter', sans-serif; background: #f0f3f8; }
+    body { font-family: 'Inter', sans-serif; background: #f0f2f5; }
 
     .app-layout { display: flex; min-height: 100vh; }
-    .main-content { flex: 1; padding: 24px 28px; min-width: 0; }
+    .main-content { flex: 1; padding: 28px 30px; min-width: 0; }
 
     /* === HEADER === */
     .poin-header-banner {
-        background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 50%, #3b82f6 100%);
-        border-radius: 20px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border-radius: 18px;
         padding: 24px 30px;
         color: white;
         margin-bottom: 24px;
@@ -18,7 +18,7 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
-        box-shadow: 0 10px 25px -5px rgba(30, 58, 138, 0.25);
+        box-shadow: 0 8px 20px -6px rgba(102, 126, 234, 0.28);
     }
     .poin-header-banner::after {
         content: ''; position: absolute; right: -40px; top: -40px; width: 180px; height: 180px;
@@ -33,23 +33,24 @@
         border-radius: 14px;
         padding: 14px 20px;
         margin-bottom: 24px;
-        border: 1px solid #e2e8f0;
+        border: 1px solid #edf0f7;
         display: flex;
         align-items: center;
         justify-content: space-between;
         font-size: 12px;
-        font-weight: 700;
-        color: #475569;
+        font-weight: 600;
+        color: #888;
         flex-wrap: wrap;
         gap: 10px;
     }
     .flow-step { display: flex; align-items: center; gap: 8px; }
     .flow-num {
-        width: 22px; height: 22px; border-radius: 50%; background: #e2e8f0; color: #334155;
-        display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 800;
+        width: 22px; height: 22px; border-radius: 50%; background: #eef0f7; color: #888;
+        display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700;
     }
-    .flow-step.active .flow-num { background: #2563eb; color: white; }
-    .flow-arrow { color: #cbd5e1; font-size: 14px; }
+    .flow-step.active .flow-num { background: #667eea; color: white; }
+    .flow-step.active { color: #555; }
+    .flow-arrow { color: #edf0f7; font-size: 14px; }
 
     /* === LAYOUT GRID === */
     .poin-grid {
@@ -63,20 +64,19 @@
     .card-panel {
         background: white;
         border-radius: 16px;
-        border: 1px solid #e2e8f0;
-        box-shadow: 0 4px 16px rgba(0,0,0,0.03);
+        box-shadow: 0 2px 16px rgba(0,0,0,.06);
         margin-bottom: 24px;
         overflow: hidden;
     }
     .card-panel-header {
         padding: 16px 20px;
-        background: #f8fafc;
-        border-bottom: 1px solid #e2e8f0;
+        background: #fafbff;
+        border-bottom: 1px solid #edf0f7;
         display: flex;
         align-items: center;
         justify-content: space-between;
     }
-    .card-panel-title { font-size: 14px; font-weight: 800; color: #1e293b; margin: 0; display: flex; align-items: center; gap: 8px; }
+    .card-panel-title { font-size: 15px; font-weight: 700; color: #333; margin: 0; display: flex; align-items: center; gap: 8px; }
     .card-panel-body { padding: 20px; }
 
     /* Student Search & List */
@@ -88,50 +88,52 @@
         width: 100%;
         padding: 10px 14px 10px 38px;
         border-radius: 10px;
-        border: 1.5px solid #cbd5e1;
+        border: 1.5px solid #edf0f7;
         font-size: 13px;
     }
     .mhs-search-box i {
-        position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: #94a3b8;
+        position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: #aab;
     }
     .mhs-list-dropdown {
         max-height: 280px;
         overflow-y: auto;
-        border: 1px solid #e2e8f0;
+        border: 1px solid #edf0f7;
         border-radius: 10px;
     }
     .mhs-item-opt {
-        padding: 10px 12px;
+        padding: 7px 10px;
         display: flex;
         align-items: center;
-        gap: 10px;
+        gap: 8px;
         cursor: pointer;
-        border-bottom: 1px solid #f1f5f9;
+        border-bottom: 1px solid #f0f2f7;
         transition: background 0.15s;
     }
-    .mhs-item-opt:hover { background: #f8fafc; }
-    .mhs-item-opt.selected { background: #eff6ff; border-left: 3px solid #2563eb; }
+    .mhs-item-opt:hover { background: #fafbff; }
+    .mhs-item-opt.selected { background: #eef0ff; border-left: 3px solid #667eea; }
     .mhs-opt-ava {
-        width: 32px; height: 32px; border-radius: 8px; background: #3b82f6; color: white;
-        display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 800;
+        width: 26px; height: 26px; border-radius: 7px; background: linear-gradient(135deg, #667eea, #764ba2); color: white;
+        display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 600; flex-shrink: 0;
     }
+    .mhs-opt-name { font-size: 12.5px; font-weight: 600; color: #444; }
+    .mhs-opt-meta { font-size: 11px; color: #aab; }
 
     /* Selected Student Info Card */
     .student-profile-box {
         text-align: center;
         padding: 18px;
-        background: #f8fafc;
+        background: #fafbff;
         border-radius: 14px;
         margin-bottom: 18px;
-        border: 1px solid #e2e8f0;
+        border: 1px solid #edf0f7;
     }
     .student-profile-ava {
-        width: 56px; height: 56px; border-radius: 50%; background: #1e3a8a; color: white;
-        display: flex; align-items: center; justify-content: center; font-size: 22px; font-weight: 800;
+        width: 56px; height: 56px; border-radius: 50%; background: linear-gradient(135deg, #667eea, #764ba2); color: white;
+        display: flex; align-items: center; justify-content: center; font-size: 20px; font-weight: 600;
         margin: 0 auto 10px;
     }
-    .student-profile-name { font-size: 16px; font-weight: 800; color: #1e293b; margin-bottom: 2px; }
-    .student-profile-meta { font-size: 12px; color: #64748b; font-weight: 600; }
+    .student-profile-name { font-size: 16px; font-weight: 600; color: #444; margin-bottom: 2px; }
+    .student-profile-meta { font-size: 12px; color: #aab; font-weight: 500; }
 
     /* === SANKSI & POIN DUAL SCORE BOX === */
     .dual-score-grid {
@@ -154,13 +156,13 @@
         background: #f0fdf4;
         border-color: #bbf7d0;
     }
-    .score-card-lbl { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
-    .pelanggaran-card .score-card-lbl { color: #dc2626; }
-    .penghargaan-card .score-card-lbl { color: #16a34a; }
-    .score-card-val { font-size: 28px; font-weight: 900; line-height: 1; margin-bottom: 4px; }
-    .pelanggaran-card .score-card-val { color: #b91c1c; }
-    .penghargaan-card .score-card-val { color: #15803d; }
-    .score-card-sub { font-size: 11px; color: #64748b; }
+    .score-card-lbl { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+    .pelanggaran-card .score-card-lbl { color: #dc6a6a; }
+    .penghargaan-card .score-card-lbl { color: #4ca86b; }
+    .score-card-val { font-size: 26px; font-weight: 700; line-height: 1; margin-bottom: 4px; }
+    .pelanggaran-card .score-card-val { color: #c05656; }
+    .penghargaan-card .score-card-val { color: #3f9663; }
+    .score-card-sub { font-size: 11px; color: #aab; }
 
     /* Sanksi Status Alert Box */
     .sanksi-status-alert {
@@ -172,14 +174,14 @@
         margin-bottom: 24px;
         border: 1.5px solid;
     }
-    .sanksi-icon { font-size: 28px; }
-    .sanksi-title { font-size: 15px; font-weight: 900; margin-bottom: 2px; }
-    .sanksi-desc  { font-size: 12px; margin: 0; line-height: 1.4; }
+    .sanksi-icon { font-size: 26px; opacity: .85; }
+    .sanksi-title { font-size: 15px; font-weight: 700; margin-bottom: 2px; }
+    .sanksi-desc  { font-size: 12px; margin: 0; line-height: 1.4; opacity: .9; }
 
     /* Progress threshold */
     .threshold-bar-wrapper { margin-top: 8px; margin-bottom: 24px; }
     .threshold-bar {
-        height: 10px; border-radius: 20px; background: #e2e8f0; display: flex; overflow: hidden;
+        height: 10px; border-radius: 20px; background: #edf0f7; display: flex; overflow: hidden;
     }
     .t-step { height: 100%; }
     .t-aman  { width: 50%; background: #22c55e; }
@@ -190,7 +192,7 @@
     /* === FORM USULAN DUAL TOGGLE (A vs B) === */
     .usulan-toggle {
         display: flex;
-        background: #f1f5f9;
+        background: #f0f2f7;
         border-radius: 12px;
         padding: 4px;
         margin-bottom: 20px;
@@ -198,9 +200,9 @@
     }
     .toggle-btn {
         flex: 1;
-        padding: 12px;
-        font-size: 14px;
-        font-weight: 800;
+        padding: 11px;
+        font-size: 12.5px;
+        font-weight: 600;
         border: none;
         border-radius: 9px;
         cursor: pointer;
@@ -209,14 +211,14 @@
         align-items: center;
         justify-content: center;
         gap: 8px;
-        color: #64748b;
+        color: #aab;
         background: transparent;
     }
     .toggle-btn.active-penghargaan {
-        background: #16a34a; color: white; box-shadow: 0 4px 12px rgba(22, 163, 74, 0.25);
+        background: linear-gradient(135deg, #4ca86b, #2f855a); color: white;
     }
     .toggle-btn.active-pelanggaran {
-        background: #dc2626; color: white; box-shadow: 0 4px 12px rgba(220, 38, 38, 0.25);
+        background: linear-gradient(135deg, #d96b6b, #c53030); color: white;
     }
 
     /* Tingkat Pelanggaran Pills (Ringan 5, Sedang 20, Berat 50) */
@@ -227,35 +229,184 @@
         margin-bottom: 16px;
     }
     .tingkat-card {
-        border: 2px solid #cbd5e1;
+        border: none;
         border-radius: 12px;
-        padding: 12px 10px;
+        padding: 10px 8px;
         text-align: center;
         cursor: pointer;
         transition: all 0.2s;
-        background: white;
+        background: #edf0f7;
+        opacity: .55;
     }
-    .tingkat-card:hover { border-color: #94a3b8; }
-    .tingkat-card.active-ringan { border-color: #eab308; background: #fefce8; color: #854d0e; }
-    .tingkat-card.active-sedang { border-color: #f97316; background: #fff7ed; color: #9a3412; }
-    .tingkat-card.active-berat  { border-color: #dc2626; background: #fef2f2; color: #991b1b; }
-    .tingkat-name { font-size: 13px; font-weight: 800; margin-bottom: 2px; }
-    .tingkat-poin { font-size: 18px; font-weight: 900; }
+    .tingkat-card:hover { opacity: .8; }
+    .tingkat-card.tier-ringan { background: #eab308; }
+    .tingkat-card.tier-sedang { background: #f97316; }
+    .tingkat-card.tier-berat  { background: #dc2626; }
+    .tingkat-card.active-ringan,
+    .tingkat-card.active-sedang,
+    .tingkat-card.active-berat { opacity: 1; }
+    .tingkat-name { font-size: 10.5px; font-weight: 500; color: rgba(255,255,255,.85); margin-bottom: 2px; }
+    .tingkat-poin { font-size: 13.5px; font-weight: 700; color: white; }
+
+    /* Riwayat Tabs (custom, replace default bootstrap nav-tabs) */
+    .riwayat-tabs {
+        display: flex;
+        gap: 6px;
+        border-bottom: none;
+        list-style: none;
+        margin: 0;
+    }
+    .riwayat-tabs .nav-link {
+        border: none;
+        border-radius: 10px 10px 0 0;
+        padding: 12px 18px;
+        background: #f0f2f7;
+        color: #888;
+    }
+    .riwayat-tabs .nav-link:hover { background: #edf0f7; }
+    .riwayat-tabs .nav-link { font-weight: 600; }
+    .riwayat-tabs .nav-link.active.text-danger { background: #fdf0f0; color: #c53030 !important; box-shadow: inset 0 -2.5px 0 #e08a8a; }
+    .riwayat-tabs .nav-link.active.text-success { background: #eafaf0; color: #2f855a !important; box-shadow: inset 0 -2.5px 0 #85c9a0; }
+
+    /* Kotak Judul Riwayat — gaya header Acara (gradient + toggle pill) */
+    .riwayat-title-box {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border-radius: 18px;
+        padding: 22px 26px;
+        margin-bottom: 10px;
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 8px 18px -8px rgba(102,126,234,.35);
+    }
+    .riwayat-title-box::before {
+        content: ''; position: absolute; right: -40px; top: -40px; width: 160px; height: 160px;
+        background: rgba(255,255,255,.08); border-radius: 50%;
+    }
+    .riwayat-title-box::after {
+        content: ''; position: absolute; right: 70px; bottom: -60px; width: 120px; height: 120px;
+        background: rgba(255,255,255,.06); border-radius: 50%;
+    }
+    .riwayat-title-inner {
+        position: relative; z-index: 1;
+        display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 14px;
+    }
+    .riwayat-title-text h2 { font-size: 16px; font-weight: 700; color: white; margin: 0 0 3px; display: flex; align-items: center; }
+    .riwayat-title-text p { font-size: 12px; color: rgba(255,255,255,.85); margin: 0; }
+
+    .riwayat-title-box .riwayat-tabs {
+        background: rgba(255,255,255,.18);
+        border-radius: 25px;
+        padding: 4px;
+        gap: 2px;
+        border: 1px solid rgba(255,255,255,.25);
+    }
+    .riwayat-title-box .riwayat-tabs .nav-link {
+        background: transparent; color: rgba(255,255,255,.8);
+        border-radius: 20px; padding: 8px 16px; font-size: 12px;
+    }
+    .riwayat-title-box .riwayat-tabs .nav-link:hover { background: rgba(255,255,255,.12); color: white; }
+    .riwayat-title-box .riwayat-tabs .nav-link.active.text-danger  { background: white; color: #c53030 !important; box-shadow: 0 2px 8px rgba(0,0,0,.15); }
+    .riwayat-title-box .riwayat-tabs .nav-link.active.text-success { background: white; color: #2f855a !important; box-shadow: 0 2px 8px rgba(0,0,0,.15); }
+
+    @media (max-width: 576px) {
+        .riwayat-title-inner { flex-direction: column; align-items: flex-start; }
+    }
 
     /* Tables */
     .table-custom th {
-        background: #f8fafc; font-size: 11px; font-weight: 800; text-transform: uppercase;
-        color: #64748b; padding: 10px 14px; border-bottom: 2px solid #e2e8f0;
+        background: #fafbff; font-size: 11px; font-weight: 600; text-transform: uppercase;
+        letter-spacing: .03em; color: #aab; padding: 10px 14px; border-bottom: 1px solid #edf0f7;
     }
     .table-custom td {
-        padding: 12px 14px; font-size: 13px; color: #334155; vertical-align: middle;
-        border-bottom: 1px solid #f1f5f9;
+        padding: 12px 14px; font-size: 13px; color: #444; vertical-align: middle;
+        border-top: 1px solid #f0f2f7;
     }
+    .table-custom tbody tr:hover td { background: #f8f9ff; }
+
+    /* Tabel Riwayat Poin — gaya samakan seperti tabel Acara */
+    .table-riwayat thead tr { background: linear-gradient(135deg, #667eea, #764ba2); }
+    .table-riwayat th {
+        background: transparent; color: white; font-weight: 700; text-transform: uppercase;
+        letter-spacing: .06em; border-bottom: none; padding: 14px 18px;
+    }
+    .table-riwayat td { padding: 14px 18px; }
+    .riwayat-row-num { color: #bbb; font-weight: 600; }
+    .riwayat-date-icon { color: #764ba2; margin-right: 6px; }
+    .riwayat-icon-box {
+        width: 36px; height: 36px; border-radius: 10px; flex-shrink: 0;
+        display: flex; align-items: center; justify-content: center; color: white; font-size: 14px;
+    }
+    .riwayat-icon-box.tone-pelanggaran { background: linear-gradient(135deg, #e08a8a, #c53030); }
+    .riwayat-icon-box.tone-penghargaan { background: linear-gradient(135deg, #4ca86b, #2f855a); }
+    .riwayat-tier-pill {
+        padding: 4px 12px; border-radius: 20px; font-size: 11px; font-weight: 700;
+        display: inline-flex; align-items: center;
+    }
+    .riwayat-tier-pill.tier-ringan    { background: #fef9e7; color: #92702a; }
+    .riwayat-tier-pill.tier-sedang    { background: #fff4e6; color: #9c5a2e; }
+    .riwayat-tier-pill.tier-berat     { background: #fdecea; color: #a34848; }
+    .riwayat-tier-pill.tier-prestasi  { background: #eafaf0; color: #2f855a; }
+    .riwayat-btn-delete {
+        background: #fff0f0; color: #e53e3e; border: none; padding: 6px 14px; border-radius: 20px;
+        font-size: 11px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center;
+        gap: 5px; transition: background .15s;
+    }
+    .riwayat-btn-delete:hover { background: #ffe0e0; }
 
     @media (max-width: 992px) {
         .poin-grid { grid-template-columns: 1fr; }
         .poin-header-banner { flex-direction: column; align-items: flex-start; gap: 14px; }
     }
+
+    /* === SAMAKAN GAYA DENGAN TAB LAIN (btn/badge/form pill style app) === */
+    .poin-header-banner::before {
+        content: ''; position: absolute; right: 80px; bottom: -60px; width: 140px; height: 140px;
+        background: rgba(255,255,255,.06); border-radius: 50%;
+    }
+    .main-content .badge { border-radius: 20px; font-weight: 600; }
+    .main-content .fw-bold { font-weight: 600 !important; }
+
+    /* Empty state — standar aplikasi */
+    .empty-state   { text-align: center; padding: 60px 20px; }
+    .empty-state i { font-size: 54px; color: #e2e5ee; display: block; margin-bottom: 14px; }
+    .empty-state h4 { color: #aab; margin: 0 0 6px; font-size: 15px; }
+    .empty-state p  { color: #ccc; margin: 0; font-size: 13px; }
+    .main-content .form-select,
+    .main-content .form-control {
+        width: 100%; padding: 11px 14px; border: 2px solid #edf0f7; border-radius: 10px;
+        font-size: 13px; color: #333; background: #fafbff; outline: none; transition: border .15s;
+    }
+    .main-content input[type="file"].form-control {
+        padding: 6px 10px; font-size: 12.5px; color: #888;
+    }
+    .main-content input[type="file"].form-control::file-selector-button {
+        margin-right: 10px; padding: 6px 12px; font-size: 12px; font-weight: 600;
+        color: #4a5068; background: #eef0ff; border: none; border-radius: 8px;
+        cursor: pointer; transition: background .15s;
+    }
+    .main-content input[type="file"].form-control::file-selector-button:hover { background: #e2e4f5; }
+    .main-content .form-select:focus,
+    .main-content .form-control:focus {
+        border-color: #667eea; background: white; box-shadow: none;
+    }
+    .main-content .btn-primary {
+        background: linear-gradient(135deg, #667eea, #764ba2); border: none;
+        border-radius: 25px !important; box-shadow: 0 4px 15px rgba(102,126,234,.4);
+        padding: 11px 28px; font-size: 13px; font-weight: 700;
+    }
+    .main-content .btn-primary:hover { opacity: .92; }
+    .main-content .btn-sm.btn-success {
+        background: #e6fff5; color: #38a169; border: none; border-radius: 20px; font-weight: 700; font-size: 11px;
+    }
+    .main-content .btn-sm.btn-success:hover { background: #d3f3e0; }
+    .main-content .btn-outline-danger,
+    .main-content .btn-outline-primary {
+        border-radius: 20px;
+    }
+    .main-content .btn-sm.btn-outline-danger {
+        background: #fff0f0; color: #e53e3e; border: none; font-weight: 700; font-size: 11px;
+    }
+    .main-content .btn-sm.btn-outline-danger:hover { background: #ffe0e0; color: #e53e3e; }
 </style>
 
 <div class="app-layout">
@@ -436,8 +587,8 @@
                                data-search="{{ strtolower($mhs->nama . ' ' . $mhs->npm . ' ' . $mhs->kelas) }}">
                                 <div class="mhs-opt-ava">{{ strtoupper(substr($mhs->nickname ?? $mhs->nama, 0, 2)) }}</div>
                                 <div style="flex:1; min-width:0;">
-                                    <div class="fw-bold text-dark text-truncate">{{ $mhs->nama }}</div>
-                                    <div class="small text-muted">{{ $mhs->npm }} &bull; {{ $mhs->kelas }}</div>
+                                    <div class="mhs-opt-name text-truncate">{{ $mhs->nama }}</div>
+                                    <div class="mhs-opt-meta">{{ $mhs->npm }} &bull; {{ $mhs->kelas }}</div>
                                 </div>
                             </a>
                             @endforeach
@@ -535,17 +686,17 @@
                                 <label class="form-label fw-bold text-dark mb-2">Tingkat Pelanggaran PTTT (Sistem Menyesuaikan Nilai Otomatis):</label>
                                 
                                 <div class="tingkat-pelanggaran-grid">
-                                    <div class="tingkat-card active-ringan" id="cardRingan" onclick="selectTingkatPelanggaran('ringan', 5)">
-                                        <div class="tingkat-name">🟢 Ringan</div>
-                                        <div class="tingkat-poin text-warning">5 Poin</div>
+                                    <div class="tingkat-card tier-ringan active-ringan" id="cardRingan" onclick="selectTingkatPelanggaran('ringan', 5)">
+                                        <div class="tingkat-name">Ringan</div>
+                                        <div class="tingkat-poin">5 Poin</div>
                                     </div>
-                                    <div class="tingkat-card" id="cardSedang" onclick="selectTingkatPelanggaran('sedang', 20)">
-                                        <div class="tingkat-name">🟡 Sedang</div>
-                                        <div class="tingkat-poin text-warning">20 Poin</div>
+                                    <div class="tingkat-card tier-sedang" id="cardSedang" onclick="selectTingkatPelanggaran('sedang', 20)">
+                                        <div class="tingkat-name">Sedang</div>
+                                        <div class="tingkat-poin">20 Poin</div>
                                     </div>
-                                    <div class="tingkat-card" id="cardBerat" onclick="selectTingkatPelanggaran('berat', 50)">
-                                        <div class="tingkat-name">🔴 Berat</div>
-                                        <div class="tingkat-poin text-danger">50 Poin</div>
+                                    <div class="tingkat-card tier-berat" id="cardBerat" onclick="selectTingkatPelanggaran('berat', 50)">
+                                        <div class="tingkat-name">Berat</div>
+                                        <div class="tingkat-poin">50 Poin</div>
                                     </div>
                                 </div>
 
@@ -632,15 +783,14 @@
                 </div>
 
                 {{-- RIWAYAT POIN TERPISAH (TABEL PELANGGARAN & PENGHARGAAN) --}}
-                <div class="card-panel">
-                    <div class="card-panel-header">
-                        <div class="card-panel-title">
-                            <i class="fas fa-history text-primary"></i> Rekapitulasi Riwayat Poin Taruna
+                {{-- Kotak Judul + Tombol Switch (gaya header Acara) --}}
+                <div class="riwayat-title-box">
+                    <div class="riwayat-title-inner">
+                        <div class="riwayat-title-text">
+                            <h2><i class="fas fa-history me-2"></i> Rekapitulasi Riwayat Poin Taruna</h2>
+                            <p>Riwayat pelanggaran &amp; penghargaan taruna yang tervalidasi</p>
                         </div>
-                    </div>
-                    <div class="card-panel-body p-0">
-                        {{-- Nav Tabs Riwayat --}}
-                        <ul class="nav nav-tabs px-3 pt-2" id="riwayatTab" role="tablist">
+                        <ul class="nav riwayat-tabs" id="riwayatTab" role="tablist">
                             <li class="nav-item" role="presentation">
                                 <button class="nav-link active fw-bold text-danger" id="pelanggaran-tab" data-bs-toggle="tab" data-bs-target="#tabPelanggaran" type="button" role="tab">
                                     <i class="fas fa-exclamation-triangle me-1"></i> Pelanggaran ({{ $riwayatPelanggaran->count() }}) &bull; Total: {{ $totalPelanggaran }} Poin
@@ -652,17 +802,23 @@
                                 </button>
                             </li>
                         </ul>
+                    </div>
+                </div>
 
+                {{-- Kotak Tabel --}}
+                <div class="card-panel">
+                    <div class="card-panel-body p-0">
                         <div class="tab-content p-3" id="riwayatTabContent">
                             {{-- Tab 1: Pelanggaran --}}
                             <div class="tab-pane fade show active" id="tabPelanggaran" role="tabpanel">
                                 <div class="table-responsive">
-                                    <table class="table table-custom mb-0">
+                                    <table class="table table-custom table-riwayat mb-0">
                                         <thead>
                                             <tr>
+                                                <th>#</th>
+                                                <th>Jenis Pelanggaran</th>
                                                 <th>Tanggal</th>
                                                 <th>Tingkat</th>
-                                                <th>Jenis Pelanggaran</th>
                                                 <th>Poin</th>
                                                 <th>Pengusul / Validator</th>
                                                 <th class="text-center">Aksi</th>
@@ -671,15 +827,26 @@
                                         <tbody>
                                             @forelse($riwayatPelanggaran as $p)
                                             <tr>
-                                                <td>{{ $p->tanggal ? $p->tanggal->format('d/m/Y') : '-' }}</td>
+                                                <td class="riwayat-row-num">{{ $loop->iteration }}</td>
                                                 <td>
-                                                    <span class="badge bg-danger bg-opacity-10 text-danger border border-danger fw-bold">
-                                                        {{ ucfirst($p->tingkat ?? 'Pelanggaran') }}
-                                                    </span>
+                                                    <div class="d-flex align-items-center gap-3">
+                                                        <div class="riwayat-icon-box tone-pelanggaran">
+                                                            <i class="fas fa-ban"></i>
+                                                        </div>
+                                                        <div>
+                                                            <div class="fw-bold">{{ $p->kegiatan }}</div>
+                                                            @if($p->keterangan)<div class="small text-muted">{{ $p->keterangan }}</div>@endif
+                                                        </div>
+                                                    </div>
                                                 </td>
                                                 <td>
-                                                    <div class="fw-bold">{{ $p->kegiatan }}</div>
-                                                    @if($p->keterangan)<div class="small text-muted">{{ $p->keterangan }}</div>@endif
+                                                    <i class="fas fa-calendar riwayat-date-icon"></i>
+                                                    {{ $p->tanggal ? $p->tanggal->format('d/m/Y') : '-' }}
+                                                </td>
+                                                <td>
+                                                    <span class="riwayat-tier-pill tier-{{ $p->tingkat ?? 'ringan' }}">
+                                                        {{ ucfirst($p->tingkat ?? 'Pelanggaran') }}
+                                                    </span>
                                                 </td>
                                                 <td class="fw-bold text-danger">-{{ $p->nilai }} Poin</td>
                                                 <td>
@@ -690,14 +857,16 @@
                                                     <form action="{{ route('poin.destroy', $p->id) }}" method="POST" onsubmit="return confirm('Hapus poin ini?')">
                                                         @csrf
                                                         @method('DELETE')
-                                                        <button type="submit" class="btn btn-sm btn-outline-danger" title="Hapus"><i class="fas fa-trash"></i></button>
+                                                        <button type="submit" class="riwayat-btn-delete" title="Hapus">
+                                                            <i class="fas fa-trash"></i> Hapus
+                                                        </button>
                                                     </form>
                                                 </td>
                                             </tr>
                                             @empty
                                             <tr>
-                                                <td colspan="6" class="text-center py-4 text-muted">
-                                                    <i class="fas fa-shield-alt fs-2 text-success mb-2 d-block"></i>
+                                                <td colspan="7" class="text-center py-4 text-muted">
+                                                    <i class="fas fa-shield-alt mb-2 d-block" style="font-size:38px; color:#e2e5ee;"></i>
                                                     Tidak ada catatan pelanggaran tervalidasi. Status Disiplin: <strong>Aman</strong>.
                                                 </td>
                                             </tr>
@@ -710,12 +879,13 @@
                             {{-- Tab 2: Penghargaan --}}
                             <div class="tab-pane fade" id="tabPenghargaan" role="tabpanel">
                                 <div class="table-responsive">
-                                    <table class="table table-custom mb-0">
+                                    <table class="table table-custom table-riwayat mb-0">
                                         <thead>
                                             <tr>
+                                                <th>#</th>
+                                                <th>Prestasi / Penghargaan</th>
                                                 <th>Tanggal</th>
                                                 <th>Tingkat</th>
-                                                <th>Prestasi / Penghargaan</th>
                                                 <th>Poin</th>
                                                 <th>Pemberi Rekomendasi</th>
                                                 <th class="text-center">Aksi</th>
@@ -724,15 +894,26 @@
                                         <tbody>
                                             @forelse($riwayatPenghargaan as $r)
                                             <tr>
-                                                <td>{{ $r->tanggal ? $r->tanggal->format('d/m/Y') : '-' }}</td>
+                                                <td class="riwayat-row-num">{{ $loop->iteration }}</td>
                                                 <td>
-                                                    <span class="badge bg-success bg-opacity-10 text-success border border-success fw-bold">
-                                                        {{ ucfirst($r->tingkat ?? 'Prestasi') }}
-                                                    </span>
+                                                    <div class="d-flex align-items-center gap-3">
+                                                        <div class="riwayat-icon-box tone-penghargaan">
+                                                            <i class="fas fa-trophy"></i>
+                                                        </div>
+                                                        <div>
+                                                            <div class="fw-bold">{{ $r->kegiatan }}</div>
+                                                            @if($r->keterangan)<div class="small text-muted">{{ $r->keterangan }}</div>@endif
+                                                        </div>
+                                                    </div>
                                                 </td>
                                                 <td>
-                                                    <div class="fw-bold">{{ $r->kegiatan }}</div>
-                                                    @if($r->keterangan)<div class="small text-muted">{{ $r->keterangan }}</div>@endif
+                                                    <i class="fas fa-calendar riwayat-date-icon"></i>
+                                                    {{ $r->tanggal ? $r->tanggal->format('d/m/Y') : '-' }}
+                                                </td>
+                                                <td>
+                                                    <span class="riwayat-tier-pill tier-prestasi">
+                                                        {{ ucfirst($r->tingkat ?? 'Prestasi') }}
+                                                    </span>
                                                 </td>
                                                 <td class="fw-bold text-success">+{{ $r->nilai }} Poin</td>
                                                 <td>
@@ -743,14 +924,16 @@
                                                     <form action="{{ route('poin.destroy', $r->id) }}" method="POST" onsubmit="return confirm('Hapus poin ini?')">
                                                         @csrf
                                                         @method('DELETE')
-                                                        <button type="submit" class="btn btn-sm btn-outline-danger" title="Hapus"><i class="fas fa-trash"></i></button>
+                                                        <button type="submit" class="riwayat-btn-delete" title="Hapus">
+                                                            <i class="fas fa-trash"></i> Hapus
+                                                        </button>
                                                     </form>
                                                 </td>
                                             </tr>
                                             @empty
                                             <tr>
-                                                <td colspan="6" class="text-center py-4 text-muted">
-                                                    <i class="fas fa-award fs-2 text-muted mb-2 d-block"></i>
+                                                <td colspan="7" class="text-center py-4 text-muted">
+                                                    <i class="fas fa-award mb-2 d-block" style="font-size:38px; color:#e2e5ee;"></i>
                                                     Belum ada catatan penghargaan/prestasi tervalidasi.
                                                 </td>
                                             </tr>
@@ -763,10 +946,12 @@
                     </div>
                 </div>
                 @else
-                <div class="card-panel text-center py-5 text-muted">
-                    <i class="fas fa-user-check fs-1 text-primary mb-3 d-block"></i>
-                    <h5 class="fw-bold text-dark">Pilih Taruna Terlebih Dahulu</h5>
-                    <p class="small text-muted mb-0">Silakan pilih salah satu taruna di kolom kiri untuk melihat raport poin, sanksi PTTT, dan mengusulkan poin baru.</p>
+                <div class="card-panel">
+                    <div class="empty-state">
+                        <i class="fas fa-user-check"></i>
+                        <h4>Pilih Taruna Terlebih Dahulu</h4>
+                        <p>Silakan pilih salah satu taruna di kolom kiri untuk melihat raport poin, sanksi PTTT, dan mengusulkan poin baru.</p>
+                    </div>
                 </div>
                 @endif
             </div>
@@ -816,10 +1001,10 @@
         document.getElementById('inputTingkatPoin').value = tingkat;
         document.getElementById('inputNilaiPoin').value = poin;
 
-        // Reset visual card classes
-        document.getElementById('cardRingan').className = 'tingkat-card' + (tingkat === 'ringan' ? ' active-ringan' : '');
-        document.getElementById('cardSedang').className = 'tingkat-card' + (tingkat === 'sedang' ? ' active-sedang' : '');
-        document.getElementById('cardBerat').className  = 'tingkat-card' + (tingkat === 'berat' ? ' active-berat' : '');
+        // Reset visual card classes (tetap pertahankan warna tier permanen)
+        document.getElementById('cardRingan').className = 'tingkat-card tier-ringan' + (tingkat === 'ringan' ? ' active-ringan' : '');
+        document.getElementById('cardSedang').className = 'tingkat-card tier-sedang' + (tingkat === 'sedang' ? ' active-sedang' : '');
+        document.getElementById('cardBerat').className  = 'tingkat-card tier-berat'  + (tingkat === 'berat'  ? ' active-berat'  : '');
 
         // Populate dropdown options
         const select = document.getElementById('selectJenisPelanggaran');

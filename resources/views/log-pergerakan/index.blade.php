@@ -1,21 +1,31 @@
 <x-app-layout>
 <style>
     * { box-sizing: border-box; }
-    body { font-family: 'Inter', sans-serif; background: #f0f3f8; }
+    body { font-family: 'Inter', sans-serif; background: #f0f2f5; }
 
     .app-layout { display: flex; min-height: 100vh; }
-    .main-content { flex: 1; padding: 24px 28px; min-width: 0; }
+    .main-content { flex: 1; padding: 28px 30px; min-width: 0; }
 
     .page-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border-radius: 18px;
+        padding: 28px 32px;
+        color: white;
+        margin-bottom: 24px;
+        position: relative;
+        overflow: hidden;
         display: flex;
         align-items: center;
         justify-content: space-between;
-        margin-bottom: 24px;
         flex-wrap: wrap;
         gap: 16px;
     }
-    .page-title { font-size: 24px; font-weight: 800; color: #1e293b; margin: 0; }
-    .page-sub { font-size: 13px; color: #64748b; margin: 4px 0 0 0; }
+    .page-header::before { content:''; position:absolute; right:-50px; top:-50px; width:180px; height:180px; background:rgba(255,255,255,.08); border-radius:50%; }
+    .page-header::after  { content:''; position:absolute; right:80px; bottom:-60px; width:140px; height:140px; background:rgba(255,255,255,.06); border-radius:50%; }
+    .page-header-text { position: relative; z-index: 1; }
+    .page-header-actions { position: relative; z-index: 1; display: flex; gap: 10px; }
+    .page-title { font-size: 22px; font-weight: 800; color: white; margin: 0 0 4px 0; }
+    .page-sub { font-size: 13px; color: rgba(255,255,255,.85); margin: 0; }
 
     /* Stats Grid */
     .stats-row {
@@ -26,22 +36,20 @@
     }
     .stat-card-custom {
         background: white;
-        border-radius: 14px;
+        border-radius: 16px;
         padding: 16px 20px;
-        border: 1px solid #e2e8f0;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+        box-shadow: 0 2px 16px rgba(0,0,0,.06);
     }
     .stat-card-custom .num { font-size: 26px; font-weight: 800; line-height: 1; margin-bottom: 4px; }
-    .stat-card-custom .lbl { font-size: 12px; font-weight: 700; color: #64748b; text-transform: uppercase; }
+    .stat-card-custom .lbl { font-size: 11px; font-weight: 700; color: #888; text-transform: uppercase; letter-spacing: .06em; }
 
     /* Filter Bar */
     .filter-card {
         background: white;
-        border-radius: 14px;
+        border-radius: 16px;
         padding: 16px 20px;
         margin-bottom: 20px;
-        border: 1px solid #e2e8f0;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+        box-shadow: 0 2px 16px rgba(0,0,0,.06);
     }
 
     /* Table */
@@ -49,29 +57,30 @@
         background: white;
         border-radius: 16px;
         padding: 20px;
-        border: 1px solid #e2e8f0;
-        box-shadow: 0 4px 14px rgba(0,0,0,0.03);
+        box-shadow: 0 2px 16px rgba(0,0,0,.06);
     }
     .table-responsive { overflow-x: auto; }
     .table-pergerakan { width: 100%; border-collapse: collapse; }
+    .table-pergerakan thead tr { background: linear-gradient(135deg, #667eea, #764ba2); }
     .table-pergerakan th {
-        background: #f8fafc;
-        padding: 12px 14px;
+        background: transparent;
+        padding: 14px 18px;
         font-size: 11px;
-        font-weight: 800;
+        font-weight: 700;
+        text-align: left;
         text-transform: uppercase;
-        letter-spacing: 0.5px;
-        color: #64748b;
-        border-bottom: 2px solid #e2e8f0;
+        letter-spacing: 0.06em;
+        color: white;
+        border-bottom: none;
     }
     .table-pergerakan td {
-        padding: 14px;
+        padding: 14px 18px;
         font-size: 13px;
-        color: #334155;
-        border-bottom: 1px solid #f1f5f9;
+        color: #444;
+        border-top: 1px solid #f0f2f7;
         vertical-align: middle;
     }
-    .table-pergerakan tr:hover td { background: #f8faff; }
+    .table-pergerakan tbody tr:hover td { background: #f8f9ff; }
 
     /* Badges */
     .badge-status-belum {
@@ -94,6 +103,28 @@
     .badge-kat-ekskul    { background: #e0e7ff; color: #3730a3; padding: 4px 9px; border-radius: 8px; font-size: 11px; font-weight: 700; }
     .badge-kat-olahraga  { background: #dcfce7; color: #166534; padding: 4px 9px; border-radius: 8px; font-size: 11px; font-weight: 700; }
 
+    /* Tombol aksi di dalam banner — gaya pill putih seperti tab Acara */
+    .btn-brand {
+        background: white; color: #667eea; border: none;
+        box-shadow: 0 4px 15px rgba(0,0,0,.15);
+        transition: transform .15s, box-shadow .15s;
+    }
+    .btn-brand:hover { color: #667eea; transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,.2); }
+    .btn-tv-monitor {
+        background: rgba(255,255,255,.18); color: white; border: 1px solid rgba(255,255,255,.3);
+        backdrop-filter: blur(4px); transition: background .15s;
+    }
+    .btn-tv-monitor:hover { color: white; background: rgba(255,255,255,.28); }
+
+    /* Form filter — standar aplikasi */
+    .filter-card .form-control,
+    .filter-card .form-select {
+        padding: 11px 14px; border: 2px solid #edf0f7; border-radius: 10px;
+        font-size: 13px; color: #333; background: #fafbff; outline: none; transition: border .15s;
+    }
+    .filter-card .form-control:focus,
+    .filter-card .form-select:focus { border-color: #667eea; background: white; box-shadow: none; }
+
     @media (max-width: 992px) {
         .stats-row { grid-template-columns: repeat(2, 1fr); }
     }
@@ -115,16 +146,16 @@
 
         {{-- Page Header --}}
         <div class="page-header">
-            <div>
-                <h1 class="page-title"><i class="fas fa-walking text-primary me-2"></i> Log Pergerakan Taruna</h1>
-                <p class="page-sub">Manajemen & Rekapitulasi Data Keberangkatan, Perizinan, Ekstrakurikuler, dan Olahraga</p>
+            <div class="page-header-text">
+                <h1 class="page-title"><i class="fas fa-walking me-2"></i> Log Pergerakan Taruna</h1>
+                <p class="page-sub">Manajemen &amp; Rekapitulasi Data Keberangkatan, Perizinan, Ekstrakurikuler, dan Olahraga</p>
             </div>
-            <div class="d-flex gap-2">
-                <a href="{{ route('log-pergerakan.tablet') }}" class="btn btn-primary fw-bold px-3 py-2 rounded-3 shadow-sm">
+            <div class="page-header-actions">
+                <a href="{{ route('log-pergerakan.tablet') }}" class="btn btn-brand fw-bold px-3 py-2 rounded-pill">
                     <i class="fas fa-tablet-alt me-1"></i> Mode Tablet Pos Jaga
                 </a>
-                <a href="{{ route('log-pergerakan.tv') }}" target="_blank" class="btn btn-dark fw-bold px-3 py-2 rounded-3 shadow-sm">
-                    <i class="fas fa-tv text-warning me-1"></i> Buka TV Monitoring
+                <a href="{{ route('log-pergerakan.tv') }}" target="_blank" class="btn btn-tv-monitor fw-bold px-3 py-2 rounded-pill">
+                    <i class="fas fa-tv me-1"></i> Buka TV Monitoring
                 </a>
             </div>
         </div>
@@ -267,7 +298,7 @@
                         @empty
                         <tr>
                             <td colspan="8" class="text-center py-5 text-muted">
-                                <i class="fas fa-inbox fs-2 text-muted mb-2 d-block"></i>
+                                <i class="fas fa-inbox mb-2 d-block" style="font-size:38px; color:#e2e5ee;"></i>
                                 Belum ada catatan log pergerakan taruna yang sesuai.
                             </td>
                         </tr>

@@ -40,8 +40,8 @@ body { font-family: 'Inter', sans-serif; background: #f0f2f5; }
 .periode-badge { background:#e8f8f2; color:#128a5f; font-size:12px; font-weight:700; padding:4px 13px; border-radius:20px; }
 
 table { width:100%; border-collapse:collapse; }
-thead tr { background:#f8fbfa; }
-th { padding:12px 16px; text-align:left; font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.06em; color:#8a93b0; }
+thead tr { background:linear-gradient(135deg,#4a3aa7,#2a78d6); }
+th { padding:12px 16px; text-align:left; font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.06em; color:white; }
 td { padding:12px 16px; font-size:13px; color:#444; border-top:1px solid #f0f2f7; }
 tbody tr:hover { background:#fafbff; }
 .duty-avatar { width:34px; height:34px; border-radius:50%; background:linear-gradient(135deg,#1baf7a,#2a78d6); color:white; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:800; flex-shrink:0; }

@@ -11,7 +11,7 @@ body { font-family: 'Inter', sans-serif; background: #f0f2f5; }
 .breadcrumb i { font-size:10px; }
 
 .page-header {
-    background: linear-gradient(135deg, #e07020 0%, #c05020 100%);
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     border-radius: 18px; padding: 24px 28px; color: white; margin-bottom: 24px;
     display:flex; align-items:center; gap:14px; position:relative; overflow:hidden;
 }
@@ -74,7 +74,7 @@ select.form-control { appearance:none; background-image:url("data:image/svg+xml,
 
 .btn { padding:11px 22px; border-radius:10px; font-size:13px; font-weight:700; border:none; cursor:pointer; display:inline-flex; align-items:center; gap:8px; text-decoration:none; transition:opacity .15s, transform .1s; }
 .btn:hover     { opacity:.9; transform:translateY(-1px); }
-.btn-primary   { background:linear-gradient(135deg,#e07020,#c05020); color:white; }
+.btn-primary   { background:linear-gradient(135deg,#667eea,#764ba2); color:white; }
 .btn-secondary { background:#f0f1fb; color:#667eea; }
 .btn-group     { display:flex; gap:10px; flex-wrap:wrap; }
 

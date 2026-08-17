@@ -1,17 +1,16 @@
 <x-app-layout>
 <style>
     * { box-sizing: border-box; }
-    body { font-family: 'Inter', sans-serif; background: #f0f3f8; }
+    body { font-family: 'Inter', sans-serif; background: #f0f2f5; }
 
     .app-layout { display: flex; min-height: 100vh; }
     .main-content { flex: 1; padding: 24px 28px; min-width: 0; }
 
     .detail-card {
         background: white;
-        border-radius: 18px;
+        border-radius: 16px;
         padding: 28px;
-        border: 1px solid #e2e8f0;
-        box-shadow: 0 4px 18px rgba(0,0,0,0.03);
+        box-shadow: 0 2px 16px rgba(0,0,0,.06);
     }
     .detail-header {
         display: flex;
@@ -19,11 +18,11 @@
         justify-content: space-between;
         margin-bottom: 24px;
         padding-bottom: 18px;
-        border-bottom: 1px solid #f1f5f9;
+        border-bottom: 1px solid #f0f2f7;
         flex-wrap: wrap;
         gap: 14px;
     }
-    .detail-title { font-size: 22px; font-weight: 800; color: #1e293b; margin: 0; }
+    .detail-title { font-size: 22px; font-weight: 800; color: #333; margin: 0; }
     
     .info-grid {
         display: grid;
@@ -32,19 +31,19 @@
         margin-bottom: 24px;
     }
     .info-item {
-        background: #f8fafc;
+        background: #fafbff;
         border-radius: 12px;
         padding: 14px 18px;
-        border: 1px solid #e2e8f0;
+        border: 1px solid #edf0f7;
     }
-    .info-item .lbl { font-size: 11.5px; font-weight: 700; color: #64748b; text-transform: uppercase; margin-bottom: 4px; }
-    .info-item .val { font-size: 15px; font-weight: 800; color: #1e293b; }
+    .info-item .lbl { font-size: 11.5px; font-weight: 700; color: #888; text-transform: uppercase; margin-bottom: 4px; }
+    .info-item .val { font-size: 15px; font-weight: 700; color: #333; }
 
     .doc-img {
         max-width: 100%;
         max-height: 320px;
         border-radius: 12px;
-        border: 1px solid #cbd5e1;
+        border: 1px solid #edf0f7;
         object-fit: cover;
         box-shadow: 0 4px 12px rgba(0,0,0,0.08);
     }

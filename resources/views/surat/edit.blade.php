@@ -9,7 +9,7 @@ body { font-family: 'Inter', sans-serif; background: #f0f2f5; }
 .back-link { display: inline-flex; align-items: center; gap: 7px; color: #667eea; text-decoration: none; font-size: 13px; font-weight: 600; margin-bottom: 20px; }
 .back-link:hover { text-decoration: underline; }
 
-.page-header { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); border-radius: 18px; padding: 28px 32px; color: white; margin-bottom: 24px; position: relative; overflow: hidden; }
+.page-header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 18px; padding: 28px 32px; color: white; margin-bottom: 24px; position: relative; overflow: hidden; }
 .page-header::before { content: ''; position: absolute; right: -50px; top: -50px; width: 180px; height: 180px; background: rgba(255,255,255,.08); border-radius: 50%; }
 .page-header h1 { margin: 0 0 4px 0; font-size: 22px; font-weight: 800; position: relative; z-index: 1; }
 .page-header p { margin: 0; opacity: .85; font-size: 13px; position: relative; z-index: 1; }
@@ -36,7 +36,7 @@ textarea.form-control { resize: vertical; min-height: 90px; }
 .file-info a { color: #764ba2; margin-left: auto; font-weight: 700; text-decoration: none; }
 
 .btn-row { display: flex; gap: 12px; justify-content: flex-end; margin-top: 28px; padding-top: 20px; border-top: 1px solid #f0f2f7; }
-.btn-submit { background: linear-gradient(135deg, #f093fb, #f5576c); color: white; border: none; padding: 12px 30px; border-radius: 25px; font-size: 13px; font-weight: 800; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 4px 15px rgba(245,87,108,.4); transition: opacity .15s; }
+.btn-submit { background: linear-gradient(135deg, #667eea, #764ba2); color: white; border: none; padding: 12px 30px; border-radius: 25px; font-size: 13px; font-weight: 800; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 4px 15px rgba(102,126,234,.4); transition: opacity .15s; }
 .btn-submit:hover { opacity: .9; }
 .btn-cancel { background: #f4f5f9; color: #666; padding: 12px 24px; border-radius: 25px; text-decoration: none; font-size: 13px; font-weight: 700; display: inline-flex; align-items: center; gap: 8px; border: 2px solid #edf0f7; transition: border .15s; }
 .btn-cancel:hover { border-color: #f5576c; color: #f5576c; }

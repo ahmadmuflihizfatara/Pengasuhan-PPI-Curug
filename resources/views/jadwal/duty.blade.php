@@ -8,7 +8,7 @@ body { font-family: 'Inter', sans-serif; background: #f0f2f5; }
 .main-content { flex: 1; padding: 28px 30px; min-width: 0; }
 
 .page-header {
-    background: linear-gradient(135deg, #1baf7a 0%, #2a78d6 100%);
+    background: linear-gradient(135deg, #4a3aa7 0%, #2a78d6 100%);
     border-radius: 18px; padding: 28px 32px; color: white; margin-bottom: 22px;
     position: relative; overflow: hidden;
 }
@@ -30,7 +30,7 @@ body { font-family: 'Inter', sans-serif; background: #f0f2f5; }
     display:inline-flex; align-items:center; gap:8px; transition:all .15s;
 }
 .subtab:hover { border-color:#1baf7a; color:#1baf7a; }
-.subtab.active { background:linear-gradient(135deg,#1baf7a,#2a78d6); color:white; border-color:transparent; }
+.subtab.active { background:linear-gradient(135deg,#4a3aa7,#2a78d6); color:white; border-color:transparent; }
 
 /* Selector minggu */
 .week-bar { display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; margin-bottom:20px; }
@@ -53,11 +53,11 @@ body { font-family: 'Inter', sans-serif; background: #f0f2f5; }
 .count-badge.kurang { background:#fff8ec; color:#a06a0a; }
 
 table { width:100%; border-collapse:collapse; }
-thead tr { background:#f8fbfa; }
-th { padding:12px 16px; text-align:left; font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.06em; color:#8a93b0; }
+thead tr { background:linear-gradient(135deg,#4a3aa7,#2a78d6); }
+th { padding:12px 16px; text-align:left; font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.06em; color:white; }
 td { padding:12px 16px; font-size:13px; color:#444; border-top:1px solid #f0f2f7; }
 tbody tr:hover { background:#fafbff; }
-.duty-avatar { width:34px; height:34px; border-radius:50%; background:linear-gradient(135deg,#1baf7a,#2a78d6); color:white; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:800; flex-shrink:0; }
+.duty-avatar { width:34px; height:34px; border-radius:50%; background:linear-gradient(135deg,#4a3aa7,#2a78d6); color:white; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:800; flex-shrink:0; }
 .duty-name { font-weight:700; color:#2b2b33; }
 .npm-badge { font-family:monospace; font-size:12px; color:#777; }
 .pill { background:#eef0ff; color:#5a67d8; padding:3px 10px; border-radius:20px; font-size:11.5px; font-weight:700; }
@@ -90,7 +90,7 @@ tbody tr:hover { background:#fafbff; }
 .status-isi { font-size:12.5px; font-weight:700; color:#8a93b0; }
 .status-isi.lengkap { color:#276749; }
 .btn-simpan {
-    background:linear-gradient(135deg,#1baf7a,#2a78d6); color:white; border:none;
+    background:linear-gradient(135deg,#4a3aa7,#2a78d6); color:white; border:none;
     padding:12px 26px; border-radius:11px; font-size:13.5px; font-weight:700;
     cursor:pointer; display:inline-flex; align-items:center; gap:8px; font-family:'Inter',sans-serif; transition:opacity .15s;
 }

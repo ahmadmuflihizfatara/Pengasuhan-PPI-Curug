@@ -1,14 +1,14 @@
 <x-app-layout>
 <style>
     * { box-sizing: border-box; }
-    body { font-family: 'Inter', sans-serif; background: #f0f3f8; }
+    body { font-family: 'Inter', sans-serif; background: #f0f2f5; }
 
     .poin-layout { display: flex; min-height: 100vh; }
-    .main-content { flex: 1; padding: 24px 28px; min-width: 0; }
+    .main-content { flex: 1; padding: 28px 30px; min-width: 0; }
 
     .page-header {
-        background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
-        border-radius: 20px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border-radius: 18px;
         padding: 24px 30px;
         color: white;
         margin-bottom: 24px;
@@ -17,7 +17,7 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
-        box-shadow: 0 10px 25px -5px rgba(30, 58, 138, 0.25);
+        box-shadow: 0 10px 25px -5px rgba(102, 126, 234, 0.35);
     }
     .page-header::after {
         content: ''; position: absolute; right: -40px; top: -40px; width: 180px; height: 180px;
@@ -37,8 +37,8 @@
         border-radius: 16px;
         padding: 20px;
         background: white;
-        border: 1.5px solid #e2e8f0;
-        box-shadow: 0 4px 14px rgba(0,0,0,0.03);
+        border: 1.5px solid #edf0f7;
+        box-shadow: 0 2px 16px rgba(0,0,0,.06);
     }
     .summary-card.card-pelanggaran {
         background: #fff5f5;
@@ -48,7 +48,7 @@
         background: #f0fdf4;
         border-color: #bbf7d0;
     }
-    .summary-num { font-size: 34px; font-weight: 900; line-height: 1; margin-bottom: 6px; }
+    .summary-num { font-size: 30px; font-weight: 800; line-height: 1; margin-bottom: 6px; }
     .summary-lbl { font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; }
 
     /* Sanksi Card */
@@ -62,7 +62,7 @@
         border: 2px solid;
     }
     .sanksi-icon { font-size: 36px; }
-    .sanksi-title { font-size: 17px; font-weight: 900; margin-bottom: 2px; }
+    .sanksi-title { font-size: 16px; font-weight: 800; margin-bottom: 2px; }
     .sanksi-desc  { font-size: 12.5px; margin: 0; line-height: 1.4; }
 
     /* Threshold Bar */
@@ -71,10 +71,10 @@
         border-radius: 14px;
         padding: 18px 20px;
         margin-bottom: 24px;
-        border: 1px solid #e2e8f0;
+        border: 1px solid #edf0f7;
     }
     .threshold-bar {
-        height: 12px; border-radius: 20px; background: #e2e8f0; display: flex; overflow: hidden; margin-top: 8px;
+        height: 12px; border-radius: 20px; background: #edf0f7; display: flex; overflow: hidden; margin-top: 8px;
     }
     .t-step { height: 100%; }
     .t-aman  { width: 50%; background: #22c55e; }
@@ -86,29 +86,56 @@
     .card-panel {
         background: white;
         border-radius: 16px;
-        border: 1px solid #e2e8f0;
-        box-shadow: 0 4px 16px rgba(0,0,0,0.03);
+        box-shadow: 0 2px 16px rgba(0,0,0,.06);
         margin-bottom: 24px;
         overflow: hidden;
     }
     .card-panel-header {
         padding: 16px 20px;
-        background: #f8fafc;
-        border-bottom: 1px solid #e2e8f0;
+        background: #fafbff;
+        border-bottom: 1px solid #edf0f7;
         display: flex;
         align-items: center;
         justify-content: space-between;
     }
-    .card-panel-title { font-size: 15px; font-weight: 800; color: #1e293b; margin: 0; display: flex; align-items: center; gap: 8px; }
+    .card-panel-title { font-size: 15px; font-weight: 700; color: #333; margin: 0; display: flex; align-items: center; gap: 8px; }
 
+    /* Riwayat Pills (custom, replace default bootstrap nav-pills) */
+    .riwayat-pills .nav-link {
+        border-radius: 10px;
+        padding: 9px 16px;
+        background: #f0f2f7;
+        color: #888;
+    }
+    .riwayat-pills .nav-link:hover { background: #edf0f7; }
+    .riwayat-pills .nav-link { font-weight: 700; font-size: 12px; }
+    .riwayat-pills .nav-link.active.text-danger { background: #fff0f0; color: #e53e3e !important; }
+    .riwayat-pills .nav-link.active.text-success { background: #e6fff5; color: #38a169 !important; }
+
+    .table-custom thead tr { background: linear-gradient(135deg, #667eea, #764ba2); }
     .table-custom th {
-        background: #f8fafc; font-size: 11px; font-weight: 800; text-transform: uppercase;
-        color: #64748b; padding: 12px 14px; border-bottom: 2px solid #e2e8f0;
+        background: transparent; font-size: 11px; font-weight: 700; text-transform: uppercase;
+        letter-spacing: .06em; color: white; padding: 14px 18px; border-bottom: none;
     }
     .table-custom td {
-        padding: 12px 14px; font-size: 13px; color: #334155; vertical-align: middle;
-        border-bottom: 1px solid #f1f5f9;
+        padding: 12px 14px; font-size: 13px; color: #444; vertical-align: middle;
+        border-top: 1px solid #f0f2f7;
     }
+    .table-custom tbody tr:hover td { background: #f8f9ff; }
+
+    /* === SAMAKAN GAYA DENGAN TAB LAIN === */
+    .page-header::before {
+        content: ''; position: absolute; right: 80px; bottom: -60px; width: 140px; height: 140px;
+        background: rgba(255,255,255,.06); border-radius: 50%;
+    }
+    .main-content .badge { border-radius: 20px; font-weight: 700; }
+    .main-content .fw-bold { font-weight: 700 !important; }
+
+    /* Empty state — standar aplikasi */
+    .empty-state   { text-align: center; padding: 60px 20px; }
+    .empty-state i { font-size: 54px; color: #e2e5ee; display: block; margin-bottom: 14px; }
+    .empty-state h4 { color: #aab; margin: 0 0 6px; font-size: 15px; }
+    .empty-state p  { color: #ccc; margin: 0; font-size: 13px; }
 </style>
 
 <div class="poin-layout">
@@ -132,10 +159,12 @@
         </div>
 
         @if(!$selectedStudent)
-        <div class="card p-5 text-center text-muted rounded-4">
-            <i class="fas fa-user-graduate fs-1 mb-3 text-muted"></i>
-            <h5 class="fw-bold">Akun Taruna Tidak Terhubung ke Database Mahasiswa</h5>
-            <p class="small">Silakan hubungi Pengasuh atau Administrator untuk memeriksa data akun Anda.</p>
+        <div class="card-panel">
+            <div class="empty-state">
+                <i class="fas fa-user-graduate"></i>
+                <h4>Akun Taruna Tidak Terhubung ke Database Mahasiswa</h4>
+                <p>Silakan hubungi Pengasuh atau Administrator untuk memeriksa data akun Anda.</p>
+            </div>
         </div>
         @else
 
@@ -190,7 +219,7 @@
         {{-- NAV TABS DETAIL RIWAYAT --}}
         <div class="card-panel">
             <div class="card-panel-header">
-                <ul class="nav nav-pills" id="tarunaPoinTabs" role="tablist">
+                <ul class="nav riwayat-pills" id="tarunaPoinTabs" role="tablist">
                     <li class="nav-item" role="presentation">
                         <button class="nav-link active fw-bold text-danger" id="tab-pelanggaran-btn" data-bs-toggle="pill" data-bs-target="#panePelanggaran" type="button" role="tab">
                             <i class="fas fa-ban me-1"></i> Riwayat Pelanggaran ({{ $riwayatPelanggaran->count() }})

@@ -15,16 +15,16 @@
         body {
             margin: 0;
             padding: 0;
-            background-color: #0b0f19;
-            color: #f1f5f9;
+            background-color: #f0f2f5;
+            color: #333;
             font-family: 'Inter', sans-serif;
             overflow-x: hidden;
         }
 
         /* === TV HEADER === */
         .tv-header {
-            background: linear-gradient(180deg, #111827 0%, #0b0f19 100%);
-            border-bottom: 2px solid #1e293b;
+            background: #ffffff;
+            border-bottom: 1px solid #edf0f7;
             padding: 16px 28px;
             display: flex;
             align-items: center;
@@ -32,6 +32,7 @@
             position: sticky;
             top: 0;
             z-index: 100;
+            box-shadow: 0 2px 12px rgba(0,0,0,.04);
         }
         .tv-brand {
             display: flex;
@@ -41,26 +42,26 @@
         .tv-logo-badge {
             width: 48px;
             height: 48px;
-            background: linear-gradient(135deg, #1e3a8a, #3b82f6);
+            background: linear-gradient(135deg, #667eea, #764ba2);
             border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 22px;
             color: white;
-            box-shadow: 0 0 15px rgba(59, 130, 246, 0.5);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.35);
         }
         .tv-title {
             font-size: 20px;
-            font-weight: 900;
+            font-weight: 800;
             letter-spacing: 0.5px;
             margin: 0;
-            color: #ffffff;
+            color: #333;
             text-transform: uppercase;
         }
         .tv-subtitle {
             font-size: 11.5px;
-            color: #94a3b8;
+            color: #888;
             margin: 0;
             letter-spacing: 1px;
             text-transform: uppercase;
@@ -73,9 +74,9 @@
             gap: 20px;
         }
         .live-status-pill {
-            background: rgba(16, 185, 129, 0.15);
+            background: #f0fdf4;
             border: 1px solid #10b981;
-            color: #34d399;
+            color: #15803d;
             padding: 6px 14px;
             border-radius: 20px;
             font-size: 12px;
@@ -102,25 +103,25 @@
             font-family: 'Orbitron', monospace;
             font-size: 24px;
             font-weight: 700;
-            color: #38bdf8;
+            color: #4c51bf;
             letter-spacing: 1.5px;
-            background: #030712;
+            background: #eef0ff;
             padding: 6px 16px;
             border-radius: 10px;
-            border: 1px solid #1e293b;
+            border: 1px solid #edf0f7;
         }
         .btn-fullscreen {
-            background: #1e293b;
-            color: #cbd5e1;
-            border: 1px solid #334155;
-            border-radius: 8px;
-            padding: 8px 14px;
-            font-size: 14px;
+            background: #eef0ff;
+            color: #667eea;
+            border: none;
+            border-radius: 20px;
+            padding: 8px 16px;
+            font-size: 12px;
             font-weight: 700;
             cursor: pointer;
             transition: all 0.2s;
         }
-        .btn-fullscreen:hover { background: #334155; color: white; }
+        .btn-fullscreen:hover { background: #dde2ff; color: #667eea; }
 
         /* === TV BODY CONTAINER === */
         .tv-container {
@@ -135,21 +136,20 @@
             margin-bottom: 24px;
         }
         .tv-stat-card {
-            background: #111827;
-            border: 1px solid #1f2937;
+            background: #ffffff;
             border-radius: 16px;
             padding: 20px 22px;
             position: relative;
             overflow: hidden;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            box-shadow: 0 2px 16px rgba(0,0,0,.06);
         }
         .tv-stat-card.alert-card {
-            background: linear-gradient(135deg, #450a0a 0%, #1f2937 80%);
+            background: #fff5f5;
             border: 2px solid #ef4444;
-            box-shadow: 0 0 25px rgba(239, 68, 68, 0.25);
+            box-shadow: 0 4px 16px rgba(239, 68, 68, 0.12);
         }
         .tv-stat-card.success-card {
-            background: linear-gradient(135deg, #064e3b 0%, #1f2937 80%);
+            background: #f0fdf4;
             border: 1.5px solid #10b981;
         }
         .stat-card-title {
@@ -157,34 +157,32 @@
             font-weight: 800;
             text-transform: uppercase;
             letter-spacing: 1px;
-            color: #94a3b8;
+            color: #888;
             margin-bottom: 6px;
             display: flex;
             align-items: center;
             gap: 8px;
         }
-        .alert-card .stat-card-title { color: #fca5a5; }
-        .success-card .stat-card-title { color: #6ee7b7; }
-        
+        .alert-card .stat-card-title { color: #b91c1c; }
+        .success-card .stat-card-title { color: #15803d; }
+
         .stat-card-number {
             font-family: 'Orbitron', sans-serif;
             font-size: 40px;
             font-weight: 900;
             line-height: 1;
             margin-bottom: 4px;
-            color: #ffffff;
+            color: #333;
         }
         .alert-card .stat-card-number {
-            color: #ef4444;
-            text-shadow: 0 0 15px rgba(239, 68, 68, 0.6);
+            color: #dc2626;
         }
         .success-card .stat-card-number {
-            color: #10b981;
-            text-shadow: 0 0 15px rgba(16, 185, 129, 0.4);
+            color: #16a34a;
         }
         .stat-card-desc {
             font-size: 11px;
-            color: #64748b;
+            color: #aab;
         }
 
         /* === 2 COLUMNS: ACTIVE (BELUM KEMBALI) & HISTORY === */
@@ -196,11 +194,10 @@
 
         /* Section Card */
         .tv-section {
-            background: #111827;
-            border: 1px solid #1e293b;
-            border-radius: 18px;
+            background: #ffffff;
+            border-radius: 16px;
             padding: 22px;
-            box-shadow: 0 6px 20px rgba(0,0,0,0.35);
+            box-shadow: 0 2px 16px rgba(0,0,0,.06);
         }
         .section-hdr {
             display: flex;
@@ -208,12 +205,13 @@
             justify-content: space-between;
             margin-bottom: 18px;
             padding-bottom: 12px;
-            border-bottom: 1px solid #1f2937;
+            border-bottom: 1px solid #edf0f7;
         }
         .section-hdr h3 {
             font-size: 16px;
-            font-weight: 800;
+            font-weight: 700;
             margin: 0;
+            color: #333;
             text-transform: uppercase;
             letter-spacing: 0.5px;
             display: flex;
@@ -236,27 +234,32 @@
             border-collapse: separate;
             border-spacing: 0 8px;
         }
+        .active-table thead tr { background: linear-gradient(135deg, #667eea, #764ba2); }
         .active-table th {
             font-size: 11px;
-            font-weight: 800;
+            font-weight: 700;
+            text-align: left;
             text-transform: uppercase;
-            letter-spacing: 0.8px;
-            color: #64748b;
-            padding: 8px 14px;
-            border-bottom: 1px solid #1e293b;
+            letter-spacing: .06em;
+            color: white;
+            padding: 14px 18px;
+            border-bottom: none;
         }
+        .active-table th:first-child { border-top-left-radius: 10px; border-bottom-left-radius: 10px; }
+        .active-table th:last-child  { border-top-right-radius: 10px; border-bottom-right-radius: 10px; }
         .active-table tbody tr {
-            background: #1e293b;
+            background: #fafbff;
             transition: transform 0.2s, background 0.2s;
             border-radius: 12px;
         }
         .active-table tbody tr:hover {
-            background: #253349;
+            background: #f8f9ff;
             transform: scale(1.005);
         }
         .active-table td {
-            padding: 14px 14px;
-            font-size: 13.5px;
+            padding: 14px 18px;
+            font-size: 13px;
+            color: #444;
             vertical-align: middle;
         }
         .active-table td:first-child { border-top-left-radius: 10px; border-bottom-left-radius: 10px; }
@@ -271,16 +274,16 @@
             width: 38px;
             height: 38px;
             border-radius: 10px;
-            background: #334155;
-            color: #f8fafc;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: #ffffff;
             display: flex;
             align-items: center;
             justify-content: center;
             font-weight: 800;
             font-size: 14px;
         }
-        .taruna-name { font-weight: 800; color: #f8fafc; margin-bottom: 2px; }
-        .taruna-npm { font-size: 11px; color: #94a3b8; }
+        .taruna-name { font-weight: 700; color: #333; margin-bottom: 2px; }
+        .taruna-npm { font-size: 11px; color: #888; }
 
         /* Status Badge TV */
         .tv-badge-belum {
@@ -294,13 +297,13 @@
             display: inline-flex;
             align-items: center;
             gap: 6px;
-            box-shadow: 0 0 10px rgba(220, 38, 38, 0.5);
+            box-shadow: 0 0 10px rgba(220, 38, 38, 0.35);
             animation: pulseRed 2s infinite;
         }
         .tv-badge-sudah {
-            background: rgba(16, 185, 129, 0.2);
-            color: #34d399;
-            border: 1px solid #10b981;
+            background: #dcfce7;
+            color: #15803d;
+            border: 1px solid #86efac;
             padding: 4px 10px;
             border-radius: 20px;
             font-size: 11px;
@@ -331,35 +334,36 @@
             overflow-y: auto;
         }
         .feed-item {
-            background: #1e293b;
+            background: #fafbff;
             border-radius: 12px;
             padding: 12px 14px;
             border-left: 4px solid #10b981;
         }
-        .feed-title { font-size: 13px; font-weight: 800; color: #f1f5f9; }
-        .feed-sub   { font-size: 11px; color: #94a3b8; margin-top: 2px; }
+        .feed-title { font-size: 13px; font-weight: 700; color: #333; }
+        .feed-sub   { font-size: 11px; color: #888; margin-top: 2px; }
 
         /* Empty State */
         .tv-empty {
             text-align: center;
             padding: 48px 16px;
-            color: #64748b;
+            color: #aab;
         }
 
         /* Back button */
         .btn-back-tablet {
-            background: #3b82f6;
+            background: linear-gradient(135deg, #667eea, #764ba2);
             color: white;
             text-decoration: none;
-            padding: 7px 14px;
-            border-radius: 8px;
+            padding: 8px 16px;
+            border-radius: 20px;
             font-size: 12px;
             font-weight: 700;
             display: inline-flex;
             align-items: center;
             gap: 6px;
+            box-shadow: 0 2px 8px rgba(102, 126, 234, 0.35);
         }
-        .btn-back-tablet:hover { background: #2563eb; color: white; }
+        .btn-back-tablet:hover { opacity: .9; color: white; }
     </style>
 </head>
 <body>

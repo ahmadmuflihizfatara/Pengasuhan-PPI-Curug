@@ -1,15 +1,15 @@
 <x-app-layout>
 <style>
     * { box-sizing: border-box; }
-    body { font-family: 'Inter', sans-serif; background: #f0f3f8; }
+    body { font-family: 'Inter', sans-serif; background: #f0f2f5; }
 
     .app-layout { display: flex; min-height: 100vh; }
     .main-content { flex: 1; padding: 24px 28px; min-width: 0; }
 
     /* === HEADER BANNER === */
     .tablet-banner {
-        background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 50%, #0284c7 100%);
-        border-radius: 20px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border-radius: 18px;
         padding: 24px 30px;
         color: white;
         margin-bottom: 24px;
@@ -18,7 +18,7 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
-        box-shadow: 0 10px 25px -5px rgba(30, 58, 138, 0.25);
+        box-shadow: 0 8px 20px -6px rgba(102, 126, 234, 0.35);
     }
     .tablet-banner::after {
         content: ''; position: absolute; right: -40px; top: -40px; width: 180px; height: 180px;
@@ -44,7 +44,7 @@
     /* === TAB SWITCHER (START vs KEMBALI) === */
     .mode-switcher {
         display: flex;
-        background: #e2e8f0;
+        background: #edf0f7;
         border-radius: 14px;
         padding: 4px;
         margin-bottom: 24px;
@@ -56,7 +56,7 @@
         padding: 14px 20px;
         font-size: 15px;
         font-weight: 700;
-        color: #64748b;
+        color: #888;
         background: transparent;
         border: none;
         border-radius: 11px;
@@ -67,10 +67,10 @@
         justify-content: center;
         gap: 10px;
     }
-    .mode-tab:hover { color: #1e293b; }
+    .mode-tab:hover { color: #333; }
     .mode-tab.active {
         background: white;
-        color: #1e3a8a;
+        color: #667eea;
         box-shadow: 0 4px 12px rgba(0,0,0,0.06);
     }
     .tab-badge {
@@ -84,7 +84,7 @@
 
     /* === FLOW CARDS: PILIH KATEGORI (3 CABANG) === */
     .category-selection-title {
-        font-size: 15px; font-weight: 700; color: #334155; margin-bottom: 12px;
+        font-size: 15px; font-weight: 700; color: #444; margin-bottom: 12px;
         display: flex; align-items: center; gap: 8px;
     }
     .category-grid {
@@ -95,7 +95,7 @@
     }
     .cat-card {
         background: white;
-        border: 2px solid #e2e8f0;
+        border: 2px solid #edf0f7;
         border-radius: 16px;
         padding: 20px;
         cursor: pointer;
@@ -104,14 +104,14 @@
         overflow: hidden;
     }
     .cat-card:hover {
-        border-color: #93c5fd;
+        border-color: #a5b0f0;
         transform: translateY(-2px);
-        box-shadow: 0 8px 20px rgba(59, 130, 246, 0.1);
+        box-shadow: 0 8px 20px rgba(102, 126, 234, 0.1);
     }
     .cat-card.active {
-        border-color: #2563eb;
-        background: #f8faff;
-        box-shadow: 0 8px 24px rgba(37, 99, 235, 0.15);
+        border-color: #667eea;
+        background: #f8f9ff;
+        box-shadow: 0 8px 24px rgba(102, 126, 234, 0.15);
     }
     .cat-card.active::after {
         content: '\f00c';
@@ -122,7 +122,7 @@
         right: 14px;
         width: 24px;
         height: 24px;
-        background: #2563eb;
+        background: #667eea;
         color: white;
         border-radius: 50%;
         font-size: 11px;
@@ -139,36 +139,38 @@
     .cat-2 .cat-icon-wrapper { background: #e0e7ff; color: #4338ca; }
     .cat-3 .cat-icon-wrapper { background: #dcfce7; color: #15803d; }
     .cat-num { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; opacity: 0.7; margin-bottom: 2px; }
-    .cat-name { font-size: 17px; font-weight: 800; color: #1e293b; margin-bottom: 4px; }
-    .cat-desc { font-size: 12px; color: #64748b; line-height: 1.4; }
+    .cat-name { font-size: 17px; font-weight: 800; color: #333; margin-bottom: 4px; }
+    .cat-desc { font-size: 12px; color: #888; line-height: 1.4; }
 
     /* === FORM CONTAINER === */
     .form-card {
         background: white;
-        border-radius: 18px;
+        border-radius: 16px;
         padding: 28px;
-        box-shadow: 0 4px 20px rgba(0,0,0,0.04);
-        border: 1px solid #edf2f7;
+        box-shadow: 0 2px 16px rgba(0,0,0,.06);
     }
     .form-section-title {
-        font-size: 16px; font-weight: 800; color: #1e293b; margin-bottom: 18px;
-        padding-bottom: 10px; border-bottom: 1px solid #f1f5f9;
+        font-size: 16px; font-weight: 800; color: #333; margin-bottom: 18px;
+        padding-bottom: 10px; border-bottom: 1px solid #f0f2f7;
         display: flex; align-items: center; justify-content: space-between;
     }
     .form-group { margin-bottom: 18px; }
-    .form-label { font-size: 13px; font-weight: 700; color: #334155; margin-bottom: 6px; display: block; }
+    .form-label { font-size: 13px; font-weight: 700; color: #444; margin-bottom: 6px; display: block; }
     .form-label .req { color: #ef4444; }
     .form-control, .form-select {
         border-radius: 10px;
-        border: 1.5px solid #cbd5e1;
+        border: 2px solid #edf0f7;
         padding: 11px 14px;
-        font-size: 14px;
+        font-size: 13px;
+        color: #333;
+        background: #fafbff;
         width: 100%;
-        transition: border-color 0.15s;
+        transition: border .15s;
     }
     .form-control:focus, .form-select:focus {
-        border-color: #2563eb;
-        box-shadow: 0 0 0 3px rgba(37,99,235,0.12);
+        border-color: #667eea;
+        background: white;
+        box-shadow: none;
         outline: none;
     }
 
@@ -176,12 +178,12 @@
     .subcat-pills { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; }
     .subcat-pill {
         padding: 8px 16px; border-radius: 20px; font-size: 13px; font-weight: 700;
-        border: 1.5px solid #cbd5e1; background: white; color: #475569; cursor: pointer;
+        border: 1.5px solid #edf0f7; background: white; color: #555; cursor: pointer;
         transition: all 0.15s;
     }
-    .subcat-pill:hover { border-color: #94a3b8; background: #f8fafc; }
+    .subcat-pill:hover { border-color: #aab; background: #fafbff; }
     .subcat-pill.active {
-        background: #1e3a8a; border-color: #1e3a8a; color: white;
+        background: #667eea; border-color: #667eea; color: white;
     }
 
     /* Status Awal Box */
@@ -215,13 +217,13 @@
     }
 
     .btn-submit-log {
-        background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         color: white;
         border: none;
-        border-radius: 12px;
+        border-radius: 25px;
         padding: 14px 28px;
-        font-size: 16px;
-        font-weight: 800;
+        font-size: 14px;
+        font-weight: 700;
         width: 100%;
         cursor: pointer;
         transition: transform 0.2s, box-shadow 0.2s;
@@ -232,7 +234,7 @@
     }
     .btn-submit-log:hover {
         transform: translateY(-2px);
-        box-shadow: 0 8px 20px rgba(37, 99, 235, 0.3);
+        box-shadow: 0 6px 20px rgba(102, 126, 234, .4);
     }
 
     /* === MODE 2: KEPULANGAN / TARUNA KEMBALI === */
@@ -244,7 +246,7 @@
         width: 100%;
         padding: 14px 18px 14px 46px;
         border-radius: 14px;
-        border: 2px solid #cbd5e1;
+        border: 2px solid #edf0f7;
         font-size: 15px;
         font-weight: 600;
         background: white;
@@ -254,7 +256,7 @@
         left: 18px;
         top: 50%;
         transform: translateY(-50%);
-        color: #94a3b8;
+        color: #aab;
         font-size: 17px;
     }
 
@@ -267,7 +269,7 @@
         background: white;
         border-radius: 16px;
         padding: 18px 20px;
-        border: 1.5px solid #e2e8f0;
+        border: 1.5px solid #edf0f7;
         box-shadow: 0 2px 10px rgba(0,0,0,0.03);
         display: flex;
         flex-direction: column;
@@ -276,7 +278,7 @@
     }
     .return-card:hover {
         transform: translateY(-2px);
-        border-color: #cbd5e1;
+        border-color: #edf0f7;
         box-shadow: 0 6px 16px rgba(0,0,0,0.06);
     }
     .return-header {
@@ -285,8 +287,8 @@
         align-items: flex-start;
         margin-bottom: 12px;
     }
-    .return-name { font-size: 16px; font-weight: 800; color: #1e293b; margin-bottom: 2px; }
-    .return-meta { font-size: 12px; color: #64748b; }
+    .return-name { font-size: 16px; font-weight: 800; color: #333; margin-bottom: 2px; }
+    .return-meta { font-size: 12px; color: #888; }
     .badge-belum-kembali {
         background: #fee2e2;
         color: #b91c1c;
@@ -303,11 +305,11 @@
         width: 7px; height: 7px; background: #dc2626; border-radius: 50%; display: inline-block;
     }
     .return-detail {
-        background: #f8fafc;
+        background: #fafbff;
         border-radius: 10px;
         padding: 10px 14px;
         font-size: 12.5px;
-        color: #334155;
+        color: #444;
         margin-bottom: 14px;
     }
     .btn-action-kembali {

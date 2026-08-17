@@ -7,7 +7,7 @@ body { font-family: 'Inter', sans-serif; background: #f0f2f5; }
 .main-content { flex: 1; padding: 28px 30px; min-width: 0; max-width: 760px; }
 
 .page-header {
-    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     border-radius: 18px; padding: 28px 32px; color: white;
     margin-bottom: 24px; position: relative; overflow: hidden;
 }
@@ -31,7 +31,7 @@ textarea.form-control { resize: vertical; min-height: 100px; }
 .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
 
 .btn-row { display: flex; gap: 12px; margin-top: 28px; padding-top: 20px; border-top: 1px solid #f0f2f7; }
-.btn-submit { flex: 1; background: linear-gradient(135deg, #f093fb, #f5576c); color: white; border: none; padding: 13px; border-radius: 12px; font-size: 14px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 4px 15px rgba(245,87,108,.4); transition: opacity .15s; }
+.btn-submit { flex: 1; background: linear-gradient(135deg, #667eea, #764ba2); color: white; border: none; padding: 13px; border-radius: 12px; font-size: 14px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 4px 15px rgba(102,126,234,.4); transition: opacity .15s; }
 .btn-submit:hover { opacity: .9; }
 .btn-cancel { background: #f5f6fa; color: #555; padding: 13px 24px; border-radius: 12px; font-size: 14px; font-weight: 700; text-decoration: none; display: flex; align-items: center; gap: 8px; border: 2px solid #e8ebf5; transition: border .15s; }
 .btn-cancel:hover { border-color: #f5576c; color: #f5576c; }

@@ -8,11 +8,19 @@ body { font-family: 'Inter', sans-serif; background: #f0f2f5; }
 .main-content { flex: 1; padding: 28px 28px 28px 24px; min-width: 0; }
 
 /* Page header */
-.page-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; }
-.page-title { font-size: 22px; font-weight: 800; color: #333; margin: 0; }
-.page-subtitle { font-size: 13px; color: #888; margin: 4px 0 0 0; }
-.btn-primary { background: linear-gradient(135deg, #667eea, #764ba2); color: white; border: none; padding: 10px 20px; border-radius: 10px; font-size: 13px; font-weight: 600; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; transition: all .15s; }
-.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(102,126,234,.35); color: white; }
+.page-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 18px; padding: 28px 32px; color: white;
+    margin-bottom: 24px; position: relative; overflow: hidden;
+    display: flex; align-items: center; justify-content: space-between;
+}
+.page-header::before { content:''; position:absolute; right:-50px; top:-50px; width:180px; height:180px; background:rgba(255,255,255,.08); border-radius:50%; }
+.page-header::after  { content:''; position:absolute; right:80px; bottom:-60px; width:140px; height:140px; background:rgba(255,255,255,.06); border-radius:50%; }
+.page-header-text { position: relative; z-index: 1; }
+.page-title { font-size: 22px; font-weight: 800; color: white; margin: 0 0 4px 0; }
+.page-subtitle { font-size: 13px; color: rgba(255,255,255,.85); margin: 0; }
+.btn-primary { position: relative; z-index: 1; background: white; color: #667eea; border: none; padding: 11px 22px; border-radius: 25px; font-size: 13px; font-weight: 800; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; white-space: nowrap; box-shadow: 0 4px 15px rgba(0,0,0,.15); transition: transform .15s, box-shadow .15s; }
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,.2); color: #667eea; }
 
 /* User cards */
 .role-section { margin-bottom: 32px; }
@@ -51,8 +59,8 @@ body { font-family: 'Inter', sans-serif; background: #f0f2f5; }
     <!-- MAIN CONTENT -->
     <div class="main-content">
         <div class="page-header">
-            <div>
-                <h1 class="page-title"><i class="fas fa-user-shield" style="color:#764ba2; margin-right:10px;"></i>Manajemen Akun</h1>
+            <div class="page-header-text">
+                <h1 class="page-title"><i class="fas fa-user-shield" style="margin-right:10px;"></i>Manajemen Akun</h1>
                 <p class="page-subtitle">Kelola akun Taruna, Pengasuh, dan Admin</p>
             </div>
             <a href="{{ route('users.create') }}" class="btn-primary">

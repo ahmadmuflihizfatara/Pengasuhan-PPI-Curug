@@ -87,8 +87,8 @@ body { font-family: 'Inter', sans-serif; background: #f0f2f5; }
 .log-card-count { font-size:12px; color:#9aa0bc; }
 
 table { width:100%; border-collapse:collapse; }
-thead tr { background:#f8f9ff; }
-th { padding:12px 16px; text-align:left; font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.07em; color:#8a93b0; white-space:nowrap; }
+thead tr { background:linear-gradient(135deg,#667eea,#764ba2); }
+th { padding:12px 16px; text-align:left; font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.07em; color:white; white-space:nowrap; }
 td { padding:13px 16px; font-size:13px; color:#444; border-top:1px solid #f0f2f7; vertical-align:middle; }
 tbody tr { transition:background .1s; }
 tbody tr:hover { background:#fafbff; }

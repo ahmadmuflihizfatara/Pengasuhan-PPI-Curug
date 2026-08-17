@@ -65,8 +65,8 @@ body { font-family: 'Inter', sans-serif; background: #f0f2f5; }
 .badge-count { background:#eef0ff; color:#5a67d8; font-size:12px; font-weight:700; padding:3px 10px; border-radius:50px; }
 
 table { width:100%; border-collapse:collapse; }
-thead tr { background:#f8f9ff; }
-th { padding:12px 14px; text-align:left; font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.06em; color:#8a93b0; }
+thead tr { background:linear-gradient(135deg,#5a67d8,#9f7aea); }
+th { padding:12px 14px; text-align:left; font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.06em; color:white; }
 td { padding:12px 14px; font-size:13px; color:#444; border-top:1px solid #f0f2f7; }
 tbody tr { transition:background .1s; }
 tbody tr:hover { background:#fafbff; }
