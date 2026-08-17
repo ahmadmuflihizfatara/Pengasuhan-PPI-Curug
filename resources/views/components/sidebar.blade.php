@@ -195,6 +195,20 @@
                     @endif
                 </a>
             </li>
+            <li>
+                <a href="{{ route('reward.index') }}" class="{{ $active==='reward'?'active':'' }}">
+                    <i class="fas fa-award nav-icon"></i> Reward
+                    @php
+                        $unreadReward = \App\Models\Reward::where('user_id', auth()->id())
+                            ->where('taruna_baca', false)
+                            ->whereIn('status', ['Diproses', 'Disetujui', 'Ditolak'])
+                            ->count();
+                    @endphp
+                    @if($unreadReward > 0)
+                    <span style="background:#e53e3e; color:white; border-radius:50%; width:17px; height:17px; font-size:10px; font-weight:800; display:inline-flex; align-items:center; justify-content:center; margin-left:auto;">{{ $unreadReward }}</span>
+                    @endif
+                </a>
+            </li>
         @else
             {{-- Log Pergerakan untuk Pengasuh & Admin --}}
             <li>
@@ -222,6 +236,11 @@
             <li>
                 <a href="{{ route('keluhan-barak.kelola') }}" class="{{ $active==='keluhan-barak'?'active':'' }}">
                     <i class="fas fa-door-open nav-icon"></i> Kelola Keluhan Barak
+                </a>
+            </li>
+            <li>
+                <a href="{{ route('reward.kelola') }}" class="{{ $active==='reward'?'active':'' }}">
+                    <i class="fas fa-award nav-icon"></i> Kelola Reward
                 </a>
             </li>
             <li>

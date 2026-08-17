@@ -12,6 +12,7 @@ class AksesFitur extends Model
     const DUTY_TARUNA     = 'duty_taruna';
     const APEL            = 'apel';
     const KELUHAN_BARAK   = 'keluhan_barak';
+    const REWARD          = 'reward';
 
     /** Fitur yang izinnya dikelola admin lewat tab Akses */
     const DAFTAR = [
@@ -38,6 +39,12 @@ class AksesFitur extends Model
             'ikon'  => 'fa-door-open',
             'warna' => '#d63384',
             'ket'   => 'Izinkan pengasuh mengelola dan memproses pengajuan keluhan barak taruna.',
+        ],
+        self::REWARD => [
+            'label' => 'Reward Taruna',
+            'ikon'  => 'fa-award',
+            'warna' => '#f5b301',
+            'ket'   => 'Izinkan pengasuh memproses dan menyetujui pengajuan reward taruna.',
         ],
     ];
 

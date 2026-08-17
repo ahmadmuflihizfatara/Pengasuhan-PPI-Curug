@@ -16,6 +16,8 @@ use App\Http\Controllers\ActivityLogController; // <-- TAMBAHAN
 use App\Http\Controllers\BeritaController;
 use App\Http\Controllers\KeluhanBarakController;
 use App\Http\Controllers\KeluhanBarakStaffController;
+use App\Http\Controllers\RewardController;
+use App\Http\Controllers\RewardStaffController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -180,6 +182,34 @@ Route::middleware('auth')->group(function () {
     Route::get('/api/my-keluhan-notifications', [KeluhanBarakController::class, 'notifications'])
         ->middleware('role:taruna')
         ->name('api.keluhanNotifications');
+
+    // ===========================
+    // REWARD TARUNA — taruna: pengajuan; pengasuh/admin: kelola
+    // ===========================
+    Route::middleware('role:pengasuh,admin')->group(function () {
+        Route::get('/reward/kelola', [RewardStaffController::class, 'kelola'])
+            ->name('reward.kelola');
+        Route::get('/reward/{reward}/detail', [RewardStaffController::class, 'showDetail'])
+            ->name('reward.detail');
+        Route::patch('/reward/{reward}/status', [RewardStaffController::class, 'updateStatus'])
+            ->name('reward.updateStatus');
+    });
+
+    Route::get('/reward', [RewardController::class, 'index'])
+        ->middleware('role:taruna')
+        ->name('reward.index');
+    Route::get('/reward/create', [RewardController::class, 'create'])
+        ->middleware('role:taruna')
+        ->name('reward.create');
+    Route::post('/reward', [RewardController::class, 'store'])
+        ->middleware('role:taruna')
+        ->name('reward.store');
+    Route::get('/reward/{reward}', [RewardController::class, 'show'])
+        ->middleware('role:taruna')
+        ->name('reward.show');
+    Route::get('/api/my-reward-notifications', [RewardController::class, 'notifications'])
+        ->middleware('role:taruna')
+        ->name('api.rewardNotifications');
 
     // ===========================
     // SURAT — pengasuh & admin
