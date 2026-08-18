@@ -1,5 +1,6 @@
 <x-app-layout>
 <x-administration-table-style />
+<x-administration-stats-style />
 <style>
     * { box-sizing: border-box; }
     body { font-family: 'Inter', sans-serif; background: #f0f2f5; }
@@ -162,21 +163,25 @@
         </div>
 
         {{-- Top Stats --}}
-        <div class="stats-row">
-            <div class="stat-card-custom border-danger border-start border-4">
-                <div class="num text-danger">{{ $stats['belum_kembali'] }}</div>
-                <div class="lbl">🔴 Belum Kembali (Di Luar)</div>
+        <div class="stats-row admin-stats admin-stats--four">
+            <div class="stat-card-custom">
+                <div class="stat-icon" style="background:linear-gradient(135deg,#fc8181,#e53e3e);"><i class="fas fa-person-walking"></i></div>
+                <div class="num">{{ $stats['belum_kembali'] }}</div>
+                <div class="lbl">Belum Kembali (Di Luar)</div>
             </div>
-            <div class="stat-card-custom border-success border-start border-4">
-                <div class="num text-success">{{ $stats['sudah_kembali'] }}</div>
-                <div class="lbl">🟢 Sudah Kembali Hari Ini</div>
+            <div class="stat-card-custom">
+                <div class="stat-icon" style="background:linear-gradient(135deg,#48bb78,#38a169);"><i class="fas fa-check-circle"></i></div>
+                <div class="num">{{ $stats['sudah_kembali'] }}</div>
+                <div class="lbl">Sudah Kembali Hari Ini</div>
             </div>
-            <div class="stat-card-custom border-primary border-start border-4">
-                <div class="num text-primary">{{ $stats['total_today'] }}</div>
+            <div class="stat-card-custom">
+                <div class="stat-icon" style="background:linear-gradient(135deg,#63b3ed,#3182ce);"><i class="fas fa-list-alt"></i></div>
+                <div class="num">{{ $stats['total_today'] }}</div>
                 <div class="lbl">Total Log Hari Ini</div>
             </div>
-            <div class="stat-card-custom border-info border-start border-4">
-                <div class="num text-info">{{ $stats['ekskul'] + $stats['olahraga'] }}</div>
+            <div class="stat-card-custom">
+                <div class="stat-icon" style="background:linear-gradient(135deg,#76e4f7,#0bc5ea);"><i class="fas fa-flag-checkered"></i></div>
+                <div class="num">{{ $stats['ekskul'] + $stats['olahraga'] }}</div>
                 <div class="lbl">Ekskul & Olahraga Hari Ini</div>
             </div>
         </div>

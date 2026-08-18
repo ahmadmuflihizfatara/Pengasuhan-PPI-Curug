@@ -568,7 +568,7 @@
             {{-- ── KOLOM KIRI: PILIH TARUNA & STATUS PROFILE ── --}}
             <div>
                 {{-- Card Pilih Taruna --}}
-                <div class="card-panel admin-list-table">
+                <div class="card-panel">
                     <div class="card-panel-header">
                         <div class="card-panel-title">
                             <i class="fas fa-user-graduate text-primary"></i> 1. Pilih Nama Taruna

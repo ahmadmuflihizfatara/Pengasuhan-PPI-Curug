@@ -98,7 +98,7 @@ tbody tr:hover { background:#fff8fb; }
             </div>
         </div>
         @else
-        <div class="card">
+        <div class="card admin-list-table">
             <table>
                 <thead>
                     <tr>

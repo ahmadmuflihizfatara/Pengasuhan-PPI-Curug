@@ -13,16 +13,20 @@
 .admin-list-filter .admin-log-filter-form { display:grid; grid-template-columns:minmax(180px,1.7fr) minmax(130px,.9fr) minmax(130px,.9fr) minmax(150px,1.1fr) auto; gap:10px; align-items:center; width:100%; max-width:100%; }
 .admin-list-filter .admin-log-filter-form > div { min-width:0; }
 .admin-list-filter .admin-log-actions { display:flex; align-items:center; gap:8px; white-space:nowrap; }
-.admin-list-table { background:#fff !important; border-radius:16px !important; overflow-x:auto !important; box-shadow:0 2px 16px rgba(0,0,0,.06) !important; }
+.admin-list-table { background:transparent !important; border-radius:16px !important; padding:0 !important; overflow-x:auto !important; box-shadow:none !important; }
 .admin-list-table .table-responsive { border-radius:16px; overflow-x:auto; }
-.admin-list-table table { width:100%; min-width:720px; border-collapse:separate; border-spacing:0; margin:0; border-radius:16px 16px 0 0; overflow:hidden; }
+.admin-list-table .tab-content { padding:0 !important; }
+.admin-list-table table { width:100%; min-width:720px; border-collapse:separate; border-spacing:0; margin:0; border-radius:16px; overflow:hidden; box-shadow:0 2px 16px rgba(0,0,0,.06); }
 .admin-list-table thead tr { background:linear-gradient(135deg,#667eea,#764ba2) !important; }
 .admin-list-table th { padding:13px 14px !important; border:0 !important; text-align:left; color:#fff !important; font:700 10px 'Inter',sans-serif; letter-spacing:.06em; white-space:nowrap; }
 .admin-list-table thead th:first-child { border-top-left-radius:16px; }
 .admin-list-table thead th:last-child { border-top-right-radius:16px; }
-.admin-list-table td { padding:12px 14px !important; border-top:1px solid #f0f2f7 !important; vertical-align:middle; color:#444; font:13px 'Inter',sans-serif; }
+.admin-list-table td { padding:12px 14px !important; border-top:1px solid #f0f2f7 !important; vertical-align:middle; color:#444; background:#fff; font:13px 'Inter',sans-serif; }
 .admin-list-table tbody tr { transition:background .1s; }
-.admin-list-table tbody tr:hover { background:#f8f9ff; }
+.admin-list-table tbody tr:hover td { background:#f8f9ff; }
+.admin-list-table tbody tr:last-child td:first-child { border-bottom-left-radius:16px; }
+.admin-list-table tbody tr:last-child td:last-child { border-bottom-right-radius:16px; }
+.admin-list-table .empty-state, .admin-list-table .empty { background:#fff; border-radius:16px; }
 .admin-list-table .table-actions { display:flex; align-items:center; justify-content:center; gap:5px; white-space:nowrap; }
 .admin-list-table .btn-view, .admin-list-table .btn-edit, .admin-list-table .btn-delete, .admin-list-table .btn-approve-ico, .admin-list-table .btn-reject-ico { min-width:30px; min-height:28px; padding:5px 9px; border-radius:8px; display:inline-flex; align-items:center; justify-content:center; }
 .admin-list-table .btn-view { background:#e0f7ff; color:#0bc5ea; }

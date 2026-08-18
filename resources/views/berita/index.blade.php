@@ -1,5 +1,6 @@
 <x-app-layout>
 <x-administration-table-style />
+<x-administration-stats-style />
 <style>
 * { box-sizing: border-box; }
 body { font-family: 'Inter', sans-serif; background: #f0f2f5; }
@@ -221,26 +222,31 @@ body { font-family: 'Inter', sans-serif; background: #f0f2f5; }
         </div>
 
         {{-- Stats Row --}}
-        <div class="stats-row">
+        <div class="stats-row admin-stats">
             <a href="{{ route('berita.index') }}" class="stat-pill {{ !request('kategori') || request('kategori') === 'semua' ? 'active' : '' }}">
+                <div class="stat-icon" style="background:linear-gradient(135deg,#667eea,#764ba2);"><i class="fas fa-newspaper"></i></div>
                 <div class="sp-count">{{ $stats['total'] }}</div>
-                <div class="sp-label"><span class="sp-dot" style="background:#667eea;"></span>Semua</div>
+                <div class="sp-label">Semua</div>
             </a>
             <a href="{{ route('berita.index', ['kategori' => 'pengumuman']) }}" class="stat-pill {{ request('kategori') === 'pengumuman' ? 'active' : '' }}">
+                <div class="stat-icon" style="background:linear-gradient(135deg,#fc8181,#e53e3e);"><i class="fas fa-bullhorn"></i></div>
                 <div class="sp-count">{{ $stats['pengumuman'] }}</div>
-                <div class="sp-label"><span class="sp-dot" style="background:#e53e3e;"></span>Pengumuman</div>
+                <div class="sp-label">Pengumuman</div>
             </a>
             <a href="{{ route('berita.index', ['kategori' => 'prestasi']) }}" class="stat-pill {{ request('kategori') === 'prestasi' ? 'active' : '' }}">
+                <div class="stat-icon" style="background:linear-gradient(135deg,#f6ad55,#e07020);"><i class="fas fa-trophy"></i></div>
                 <div class="sp-count">{{ $stats['prestasi'] }}</div>
-                <div class="sp-label"><span class="sp-dot" style="background:#d69e2e;"></span>Prestasi</div>
+                <div class="sp-label">Prestasi</div>
             </a>
             <a href="{{ route('berita.index', ['kategori' => 'kegiatan']) }}" class="stat-pill {{ request('kategori') === 'kegiatan' ? 'active' : '' }}">
+                <div class="stat-icon" style="background:linear-gradient(135deg,#48bb78,#38a169);"><i class="fas fa-calendar-check"></i></div>
                 <div class="sp-count">{{ $stats['kegiatan'] }}</div>
-                <div class="sp-label"><span class="sp-dot" style="background:#38a169;"></span>Kegiatan</div>
+                <div class="sp-label">Kegiatan</div>
             </a>
             <a href="{{ route('berita.index', ['kategori' => 'informasi']) }}" class="stat-pill {{ request('kategori') === 'informasi' ? 'active' : '' }}">
+                <div class="stat-icon" style="background:linear-gradient(135deg,#76e4f7,#0bc5ea);"><i class="fas fa-circle-info"></i></div>
                 <div class="sp-count">{{ $stats['informasi'] }}</div>
-                <div class="sp-label"><span class="sp-dot" style="background:#3182ce;"></span>Informasi</div>
+                <div class="sp-label">Informasi</div>
             </a>
         </div>
 

@@ -105,9 +105,9 @@
         }
 
         .digital-clock {
-            font-family: 'Orbitron', monospace;
-            font-size: 24px;
-            font-weight: 700;
+            font-family: 'Inter', sans-serif;
+            font-size: 22px;
+            font-weight: 800;
             color: #4c51bf;
             letter-spacing: 1.5px;
             background: #eef0ff;
@@ -136,17 +136,18 @@
         /* === KPI STATS BAR (BIG METRICS) === */
         .tv-stats-grid {
             display: grid;
-            grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
-            gap: 16px;
+            grid-template-columns: repeat(5, minmax(0, 1fr));
+            gap: 14px;
             margin-bottom: 24px;
         }
         .tv-stat-card {
             background: #ffffff;
             border-radius: 16px;
-            padding: 20px 22px;
+            padding: 18px 20px;
             position: relative;
             overflow: hidden;
             box-shadow: 0 2px 16px rgba(0,0,0,.06);
+            text-align: center;
         }
         .tv-stat-card.alert-card {
             background: #fff5f5;
@@ -157,26 +158,34 @@
             background: #f0fdf4;
             border: 1.5px solid #10b981;
         }
+        .stat-card-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            margin: 0 auto 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 18px;
+        }
         .stat-card-title {
             font-size: 12px;
             font-weight: 800;
             text-transform: uppercase;
-            letter-spacing: 1px;
-            color: #888;
-            margin-bottom: 6px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
+            letter-spacing: .7px;
+            color: #666;
+            margin: 0 0 5px;
         }
         .alert-card .stat-card-title { color: #b91c1c; }
         .success-card .stat-card-title { color: #15803d; }
 
         .stat-card-number {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 40px;
-            font-weight: 900;
+            font-family: 'Inter', sans-serif;
+            font-size: 46px;
+            font-weight: 800;
             line-height: 1;
-            margin-bottom: 4px;
+            margin-bottom: 6px;
             color: #333;
         }
         .alert-card .stat-card-number {
@@ -186,8 +195,9 @@
             color: #16a34a;
         }
         .stat-card-desc {
-            font-size: 11px;
+            font-size: 12px;
             color: #aab;
+            min-height: 17px;
         }
 
         /* === 2 COLUMNS: ACTIVE (BELUM KEMBALI) & HISTORY === */
@@ -195,6 +205,7 @@
             display: grid;
             grid-template-columns: 2.2fr 1fr;
             gap: 20px;
+            align-items: stretch;
         }
 
         /* Section Card */
@@ -203,6 +214,10 @@
             border-radius: 16px;
             padding: 22px;
             box-shadow: 0 2px 16px rgba(0,0,0,.06);
+        }
+        .tv-section--returned {
+            display: flex;
+            flex-direction: column;
         }
         .section-hdr {
             display: flex;
@@ -338,6 +353,7 @@
             max-height: 520px;
             overflow-y: auto;
         }
+        .tv-section--returned .feed-list { flex: 1; }
         .feed-item {
             background: #fafbff;
             border-radius: 12px;
@@ -350,8 +366,31 @@
         /* Empty State */
         .tv-empty {
             text-align: center;
-            padding: 48px 16px;
+            padding: 44px 16px;
             color: #aab;
+        }
+        .tv-empty-icon {
+            width: 54px;
+            height: 54px;
+            margin: 0 auto 12px;
+            border-radius: 50%;
+            background: #e6fff5;
+            color: #169c58;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+        .tv-empty-title { color: #1d7f4a; font-size: 17px; font-weight: 800; margin-bottom: 5px; }
+        .tv-empty-copy { color: #8290a6; font-size: 13px; }
+        .returned-empty { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:32px 16px; }
+        .returned-empty i { color:#a7b3c7; font-size:26px; display:block; margin-bottom:10px; }
+        .returned-empty strong { display:block; color:#55627a; font-size:14px; margin-bottom:4px; }
+        .returned-empty span { color:#9aa6b7; font-size:12px; }
+
+        @media (max-width: 1200px) {
+            .tv-stats-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+            .tv-main-grid { grid-template-columns: 1fr; }
         }
 
         /* Back button */
@@ -404,40 +443,41 @@
         <div class="tv-stats-grid">
             {{-- 1. BELUM KEMBALI (MAIN HIGHLIGHT) --}}
             <div class="tv-stat-card alert-card">
-                <div class="stat-card-title">
-                    <i class="fas fa-exclamation-triangle"></i> DI LUAR / BELUM KEMBALI
-                </div>
+                <div class="stat-card-icon" style="background:linear-gradient(135deg,#fc8181,#e53e3e);"><i class="fas fa-walking"></i></div>
                 <div class="stat-card-number" id="statBelumKembali">{{ $stats['total_belum_kembali'] }}</div>
+                <div class="stat-card-title">Di Luar Sekarang</div>
                 <div class="stat-card-desc">Taruna yang sedang aktif di luar asrama saat ini</div>
             </div>
 
             {{-- 2. SUDAH KEMBALI --}}
             <div class="tv-stat-card success-card">
-                <div class="stat-card-title">
-                    <i class="fas fa-check-circle"></i> SUDAH KEMBALI
-                </div>
+                <div class="stat-card-icon" style="background:linear-gradient(135deg,#48bb78,#38a169);"><i class="fas fa-check-circle"></i></div>
                 <div class="stat-card-number" id="statSudahKembali">{{ $stats['total_sudah_kembali'] }}</div>
+                <div class="stat-card-title">Sudah Kembali</div>
                 <div class="stat-card-desc">Taruna kembali hari ini</div>
             </div>
 
             {{-- 3. PERIZINAN --}}
             <div class="tv-stat-card">
-                <div class="stat-card-title"><i class="fas fa-notes-medical text-danger"></i> Perizinan</div>
-                <div class="stat-card-number text-danger" id="statPerizinan">{{ $stats['total_perizinan'] }}</div>
+                <div class="stat-card-icon" style="background:linear-gradient(135deg,#f6ad55,#e07020);"><i class="fas fa-notes-medical"></i></div>
+                <div class="stat-card-number" id="statPerizinan">{{ $stats['total_perizinan'] }}</div>
+                <div class="stat-card-title">Perizinan</div>
                 <div class="stat-card-desc">Kesehatan / Berduka</div>
             </div>
 
             {{-- 4. EKSTRAKURIKULER --}}
             <div class="tv-stat-card">
-                <div class="stat-card-title"><i class="fas fa-cogs text-primary"></i> Ekskul</div>
-                <div class="stat-card-number text-primary" id="statEkskul">{{ $stats['total_ekskul'] }}</div>
+                <div class="stat-card-icon" style="background:linear-gradient(135deg,#63b3ed,#3182ce);"><i class="fas fa-users"></i></div>
+                <div class="stat-card-number" id="statEkskul">{{ $stats['total_ekskul'] }}</div>
+                <div class="stat-card-title">Ekstrakurikuler</div>
                 <div class="stat-card-desc">Kegiatan Ekskul</div>
             </div>
 
             {{-- 5. OLAHRAGA --}}
             <div class="tv-stat-card">
-                <div class="stat-card-title"><i class="fas fa-running text-success"></i> Olahraga</div>
-                <div class="stat-card-number text-success" id="statOlahraga">{{ $stats['total_olahraga'] }}</div>
+                <div class="stat-card-icon" style="background:linear-gradient(135deg,#76e4f7,#0bc5ea);"><i class="fas fa-running"></i></div>
+                <div class="stat-card-number" id="statOlahraga">{{ $stats['total_olahraga'] }}</div>
+                <div class="stat-card-title">Olahraga</div>
                 <div class="stat-card-desc">Mandiri / Terpimpin</div>
             </div>
         </div>
@@ -520,9 +560,9 @@
                             @empty
                             <tr id="rowEmptyActive">
                                 <td colspan="6" class="tv-empty">
-                                    <i class="fas fa-check-circle fs-1 text-success mb-2 d-block"></i>
-                                    <div class="fw-bold text-light">Semua Taruna Berada di Dalam Asrama</div>
-                                    <div class="small text-muted">Tidak ada taruna yang sedang di luar saat ini.</div>
+                                    <div class="tv-empty-icon"><i class="fas fa-check"></i></div>
+                                    <div class="tv-empty-title">Semua Taruna Berada di Asrama</div>
+                                    <div class="tv-empty-copy">Tidak ada taruna yang sedang berada di luar saat ini.</div>
                                 </td>
                             </tr>
                             @endforelse
@@ -532,7 +572,7 @@
             </div>
 
             {{-- KOLOM KANAN: FEED TARUNA YANG BARU KEMBALI --}}
-            <div class="tv-section">
+            <div class="tv-section tv-section--returned">
                 <div class="section-hdr">
                     <h3>
                         <i class="fas fa-history text-success"></i> KEPULANGAN HARI INI
@@ -552,8 +592,10 @@
                         </div>
                     </div>
                     @empty
-                    <div class="text-center py-4 text-muted small">
-                        Belum ada data kepulangan tercatat hari ini.
+                    <div class="returned-empty">
+                        <i class="fas fa-clock-rotate-left"></i>
+                        <strong>Belum ada kepulangan hari ini</strong>
+                        <span>Kepulangan taruna akan tampil otomatis di sini.</span>
                     </div>
                     @endforelse
                 </div>
@@ -604,6 +646,7 @@
                     document.getElementById('statEkskul').textContent = json.stats.total_ekskul;
                     document.getElementById('statOlahraga').textContent = json.stats.total_olahraga;
                     document.getElementById('badgeActiveCount').textContent = json.stats.total_belum_kembali + ' TARUNA';
+                    document.getElementById('badgeReturnedCount').textContent = (json.returned_today || []).length;
 
                     // Update Active Table
                     const tbody = document.getElementById('activeLogsTableBody');
@@ -611,9 +654,9 @@
                         tbody.innerHTML = `
                             <tr>
                                 <td colspan="6" class="tv-empty">
-                                    <i class="fas fa-check-circle fs-1 text-success mb-2 d-block"></i>
-                                    <div class="fw-bold text-light">Semua Taruna Berada di Dalam Asrama</div>
-                                    <div class="small text-muted">Tidak ada taruna yang sedang di luar saat ini.</div>
+                                    <div class="tv-empty-icon"><i class="fas fa-check"></i></div>
+                                    <div class="tv-empty-title">Semua Taruna Berada di Asrama</div>
+                                    <div class="tv-empty-copy">Tidak ada taruna yang sedang berada di luar saat ini.</div>
                                 </td>
                             </tr>
                         `;
@@ -682,6 +725,14 @@
                             `;
                         });
                         feedContainer.innerHTML = feedHtml;
+                    } else {
+                        feedContainer.innerHTML = `
+                            <div class="returned-empty">
+                                <i class="fas fa-clock-rotate-left"></i>
+                                <strong>Belum ada kepulangan hari ini</strong>
+                                <span>Kepulangan taruna akan tampil otomatis di sini.</span>
+                            </div>
+                        `;
                     }
                 }
             } catch (err) {

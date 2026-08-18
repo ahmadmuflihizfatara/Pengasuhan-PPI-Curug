@@ -1,5 +1,6 @@
 <x-app-layout>
 <x-administration-table-style />
+<x-administration-stats-style />
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 * { box-sizing: border-box; }
@@ -84,7 +85,7 @@ tbody tr:hover { background: #fff8fb; }
         </div>
         @endif
 
-        <div class="stats-grid">
+        <div class="stats-grid admin-stats">
             <div class="stat-card">
                 <div class="stat-icon" style="background:linear-gradient(135deg,#a78bfa,#6d28d9);"><i class="fas fa-door-open"></i></div>
                 <div class="stat-count">{{ $stats['total'] }}</div>

@@ -160,7 +160,7 @@
         </div>
 
         @if(!$selectedStudent)
-        <div class="card-panel admin-list-table">
+        <div class="card-panel">
             <div class="empty-state">
                 <i class="fas fa-user-graduate"></i>
                 <h4>Akun Taruna Tidak Terhubung ke Database Mahasiswa</h4>

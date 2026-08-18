@@ -1,5 +1,6 @@
 <x-app-layout>
 <x-administration-table-style />
+<x-administration-stats-style />
 <style>
 * { box-sizing: border-box; }
 body { font-family: 'Inter', sans-serif; background: #f0f2f5; }
@@ -188,7 +189,7 @@ tbody tr:hover { background:#fafbff; }
         </div>
 
         {{-- ── STATS ── --}}
-        <div class="stats-grid">
+        <div class="stats-grid admin-stats">
             <div class="stat-card">
                 <div class="stat-icon" style="background:linear-gradient(135deg,#667eea,#764ba2);">
                     <i class="fas fa-list-alt"></i>

@@ -1,5 +1,6 @@
 <x-app-layout>
 <x-administration-table-style />
+<x-administration-stats-style />
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 * { box-sizing: border-box; }
@@ -128,14 +129,16 @@ tbody tr:hover { background:#fafbff; }
         <x-prodi-tingkat-chart :chart-data="$chartData" />
 
         {{-- Stat cards per prodi --}}
-        <div class="stats-row">
+        <div class="stats-row admin-stats">
             <div class="stat-card active-tab" data-prodi="all" onclick="setProdi('all', this)">
+                <div class="stat-icon" style="background:linear-gradient(135deg,#667eea,#764ba2);"><i class="fas fa-users"></i></div>
                 <div class="count">{{ $totalSemua }}</div>
                 <div class="label">Semua Prodi</div>
                 <div class="sub">D-4 &amp; D-3</div>
             </div>
             @foreach($prodiList as $kode => $info)
             <div class="stat-card" data-prodi="{{ $kode }}" onclick="setProdi('{{ $kode }}', this)">
+                <div class="stat-icon" style="background:linear-gradient(135deg,#63b3ed,#3182ce);"><i class="fas fa-graduation-cap"></i></div>
                 <div class="count">{{ ($mahasiswaData[$kode] ?? collect())->count() }}</div>
                 <div class="label">{{ $kode }}</div>
                 <div class="sub">{{ $info['jenjang'] }} · {{ $info['nama'] }}</div>
