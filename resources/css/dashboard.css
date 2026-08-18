@@ -1,127 +1,62 @@
 /* ============================================================
-   DASHBOARD CUSTOM STYLES
+   DESIGN SYSTEM — PPI Curug Aviation Theme
+   Palette: Navy #12283a | Gold #fdbb11 | Light #eef3f9
    ============================================================ */
-
-/* Card Styles */
-.card-border-shadow-primary {
-    border-left: 4px solid #696cff;
-    box-shadow: 0 2px 6px rgba(105, 108, 255, 0.1);
+:root {
+  --navy: #12283a;
+  --navy-dark: #0c1c2b;
+  --gold: #fdbb11;
+  --gold-hover: #e5a800;
+  --light: #eef3f9;
+  --light-alt: #f5f7fa;
+  --white: #ffffff;
+  --dark-text: #12283a;
+  --muted: #6b7c93;
+  --border: #d4dbe5;
+  --danger: #dc2626;
+  --success: #16a34a;
 }
 
-.card-border-shadow-success {
-    border-left: 4px solid #71dd5a;
-    box-shadow: 0 2px 6px rgba(113, 221, 90, 0.1);
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Inter', sans-serif;
+  background: var(--light);
+  color: var(--dark-text);
+  -webkit-font-smoothing: antialiased;
 }
 
-.card-border-shadow-warning {
-    border-left: 4px solid #ffc107;
-    box-shadow: 0 2px 6px rgba(255, 193, 7, 0.1);
-}
+#app { padding: 0; margin: 0; }
 
-.card-border-shadow-danger {
-    border-left: 4px solid #ff3e1d;
-    box-shadow: 0 2px 6px rgba(255, 62, 29, 0.1);
-}
+h1, h2, h3, h4, h5, h6 { color: var(--dark-text); font-weight: 700; }
 
-/* Dashboard Stats Cards */
-.dashboard-stats-card {
-    transition: all 0.3s ease;
-}
+.card-border-shadow-primary { border-left: 4px solid var(--gold); }
+.card-border-shadow-success { border-left: 4px solid var(--success); }
+.card-border-shadow-warning { border-left: 4px solid var(--gold); }
+.card-border-shadow-danger  { border-left: 4px solid var(--danger); }
 
-.dashboard-stats-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.12);
-}
+.dashboard-stats-card { transition: all 0.2s ease; }
+.dashboard-stats-card:hover { transform: translateY(-2px); }
 
-/* Table Styles */
-.table-hover tbody tr:hover {
-    background-color: #f8f9fa;
-}
+.table-hover tbody tr:hover { background-color: var(--light-alt); }
 
-/* Avatar Styles */
-.avatar-sm {
-    width: 2rem;
-    height: 2rem;
-}
+.avatar-sm { width: 2rem; height: 2rem; }
+.avatar-initial { font-size: 0.625rem; font-weight: 500; }
 
-.avatar-initial {
-    font-size: 0.625rem;
-    font-weight: 500;
-}
+.badge { padding: 0.35rem 0.65rem; font-size: 0.75rem; font-weight: 500; }
 
-/* Badge Styles */
-.badge {
-    padding: 0.35rem 0.65rem;
-    font-size: 0.75rem;
-    font-weight: 500;
-}
+#callVolumeChart { width: 100%; }
 
-/* Chart Container */
-#callVolumeChart {
-    width: 100%;
-}
+.dropdown-menu { border-radius: 8px; box-shadow: 0 4px 16px rgba(0,0,0,.1); border: 1px solid var(--border); }
+.dropdown-item { padding: 0.5rem 1rem; font-size: 0.875rem; }
+.dropdown-item:hover { background-color: var(--light); color: var(--navy); }
 
-/* Dropdown Menu */
-.dropdown-menu {
-    border-radius: 0.375rem;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-}
+#greeting { font-weight: 700; color: var(--navy); }
 
-.dropdown-item {
-    padding: 0.5rem 1rem;
-    font-size: 0.875rem;
-}
-
-.dropdown-item:hover {
-    background-color: #f8f9fa;
-    color: #696cff;
-}
-
-/* Header Greeting */
-#greeting {
-    font-weight: 500;
-    color: #696cff;
-}
-
-/* Responsive Adjustments */
 @media (max-width: 768px) {
-    .dashboard-stats-card {
-        margin-bottom: 1rem;
-    }
-
-    .table {
-        font-size: 0.875rem;
-    }
-
-    .btn-sm {
-        padding: 0.25rem 0.5rem;
-        font-size: 0.75rem;
-    }
-}
-
-/* Dark Mode Support */
-@media (prefers-color-scheme: dark) {
-    .card-border-shadow-primary {
-        box-shadow: 0 2px 6px rgba(105, 108, 255, 0.2);
-    }
-
-    .card-border-shadow-success {
-        box-shadow: 0 2px 6px rgba(113, 221, 90, 0.2);
-    }
-
-    .card-border-shadow-warning {
-        box-shadow: 0 2px 6px rgba(255, 193, 7, 0.2);
-    }
-
-    .card-border-shadow-danger {
-        box-shadow: 0 2px 6px rgba(255, 62, 29, 0.2);
-    }
-
-    .table-hover tbody tr:hover {
-        background-color: rgba(255, 255, 255, 0.05);
-    }
-
-    .dropdown-item:hover {
-        background-color: rgba(105, 108, 255, 0.1);
-    }
+  .dashboard-stats-card { margin-bottom: 1rem; }
+  .table { font-size: 0.875rem; }
+  .btn-sm { padding: 0.25rem 0.5rem; font-size: 0.75rem; }
 }

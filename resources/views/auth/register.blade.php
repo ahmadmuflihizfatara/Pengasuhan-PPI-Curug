@@ -1,85 +1,85 @@
 <x-guest-layout>
-    <div class="flex flex-col md:flex-row w-full max-w-5xl rounded-3xl overflow-hidden shadow-2xl">
-        
-        <div class="w-full md:w-5/12 glass-panel p-10 md:p-12 hidden md:flex flex-col justify-center text-white relative">
-            <div class="relative z-10">
-                <div class="flex items-center gap-3 mb-10">
-                    <div class="w-12 h-12 bg-white rounded-full flex items-center justify-center text-slate-900 font-bold text-xl shadow-lg">
-                        ✈️
-                    </div>
-                    <span class="font-bold tracking-widest uppercase text-sm leading-tight text-yellow-500">
-                        Global Aviation<br><span class="text-white">Academy</span>
-                    </span>
-                </div>
+    {{-- Left: Visual --}}
+    <div style="flex:0 0 42%;background:url('{{ asset('images/cockpit-bg.jpg') }}') center/cover no-repeat;position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:3rem;overflow:hidden;">
+        <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(18,40,58,.85) 0%,rgba(12,28,43,.95) 100%);"></div>
+        <div style="position:relative;z-index:2;text-align:center;">
+            <img src="{{ asset('images/logo.png') }}" alt="Logo PPI Curug" style="width:80px;height:80px;border-radius:50%;object-fit:cover;border:3px solid rgba(253,187,17,.4);box-shadow:0 0 40px rgba(253,187,17,.15);margin-bottom:1.5rem;">
+            <h2 style="font-size:1.1rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;margin-bottom:.5rem;color:#fff;"><span style="color:#fdbb11;">PPI</span> Curug</h2>
+            <p style="font-size:.8rem;color:rgba(255,255,255,.4);line-height:1.6;max-width:280px;margin:0 auto;">Bergabunglah dengan ribuan kadet penerbangan Indonesia.</p>
+        </div>
+        <div style="position:absolute;bottom:40px;right:-20px;opacity:.06;transform:rotate(-15deg);pointer-events:none;">
+            <svg width="300" height="200" viewBox="0 0 300 200" fill="none">
+                <ellipse cx="180" cy="100" rx="90" ry="15" fill="white"/>
+                <path d="M150 100 L95 45 L115 40 L195 93Z" fill="rgba(253,187,17,.3)"/>
+                <path d="M150 100 L95 155 L115 160 L195 107Z" fill="rgba(253,187,17,.25)"/>
+                <path d="M85 100 L55 68 L72 66 L95 93Z" fill="white"/>
+                <path d="M85 100 L55 132 L72 134 L95 107Z" fill="rgba(255,255,255,.7)"/>
+            </svg>
+        </div>
+    </div>
 
-                <h1 class="text-3xl font-bold leading-tight mb-4">
-                    BERGABUNGLAH DENGAN SKUADRON KAMI.
-                </h1>
-                <p class="text-slate-300 text-sm leading-relaxed">
-                    Daftarkan diri Anda dan bersiaplah untuk memulai pendidikan penerbangan kelas dunia.
-                </p>
+    {{-- Right: Form --}}
+    <div style="flex:1;background:#eef3f9;padding:2.5rem 3rem;display:flex;flex-direction:column;justify-content:center;">
+        <h1 style="font-size:1.5rem;font-weight:800;color:#12283a;margin-bottom:.3rem;">Daftar Akun Baru</h1>
+        <p style="font-size:.85rem;color:#6b7c93;margin-bottom:1.5rem;">Isi data diri Anda untuk membuat akun.</p>
+
+        @if ($errors->any())
+            <div style="background:#fef2f2;border:1px solid #fecaca;color:#dc2626;padding:.6rem 1rem;border-radius:10px;font-size:.8rem;margin-bottom:1rem;">
+                <i class="fas fa-exclamation-circle"></i> {{ $errors->first() }}
             </div>
-        </div>
+        @endif
 
-        <div class="w-full md:w-7/12 form-panel p-8 md:p-12 flex flex-col justify-center">
-            <h2 class="text-2xl font-bold text-slate-800 mb-6 md:hidden">Daftar Kadet Baru</h2>
-            
-            <form method="POST" action="{{ route('register') }}" novalidate>
-                @csrf
-
-                <div class="mb-5">
-                    <label for="name" class="block text-xs font-semibold text-slate-600 mb-2 uppercase tracking-wide">Nama Lengkap</label>
-                    <div class="input-group">
-                        <svg class="input-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
-                        </svg>
-                        <input id="name" type="text" name="name" value="{{ old('name') }}" required autofocus class="aviation-input" placeholder="Nama sesuai KTP/Paspor" />
-                    </div>
-                    @error('name') <span class="text-red-500 text-xs mt-1 block">{{ $message }}</span> @enderror
+        <form method="POST" action="{{ route('register') }}">
+            @csrf
+            <div style="margin-bottom:1rem;">
+                <label style="display:block;font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#6b7c93;margin-bottom:.4rem;">Nama Lengkap</label>
+                <div style="position:relative;display:flex;align-items:center;">
+                    <i class="fas fa-user" style="position:absolute;left:14px;color:#6b7c93;font-size:14px;pointer-events:none;"></i>
+                    <input type="text" name="name" value="{{ old('name') }}" required autofocus placeholder="Nama sesuai KTP/Paspor"
+                        style="width:100%;padding:.8rem 1rem .8rem 2.8rem;border:1.5px solid #d4dbe5;border-radius:12px;font-size:.875rem;font-family:'Inter',sans-serif;color:#12283a;background:#fff;outline:none;">
                 </div>
+                @error('name') <span style="color:#dc2626;font-size:.75rem;margin-top:.2rem;display:block;">{{ $message }}</span> @enderror
+            </div>
 
-                <div class="mb-5">
-                    <label for="email" class="block text-xs font-semibold text-slate-600 mb-2 uppercase tracking-wide">Email</label>
-                    <div class="input-group">
-                        <svg class="input-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25H4.5a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5H4.5a2.25 2.25 0 00-2.25 2.25m19.5 0l-9.75 6.75L2.25 6.75" />
-                        </svg>
-                        <input id="email" type="email" name="email" value="{{ old('email') }}" required class="aviation-input" placeholder="contoh@aviation.ac.id" />
-                    </div>
-                    @error('email') <span class="text-red-500 text-xs mt-1 block">{{ $message }}</span> @enderror
+            <div style="margin-bottom:1rem;">
+                <label style="display:block;font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#6b7c93;margin-bottom:.4rem;">Email</label>
+                <div style="position:relative;display:flex;align-items:center;">
+                    <i class="fas fa-envelope" style="position:absolute;left:14px;color:#6b7c93;font-size:14px;pointer-events:none;"></i>
+                    <input type="email" name="email" value="{{ old('email') }}" required placeholder="contoh@ppicurug.ac.id"
+                        style="width:100%;padding:.8rem 1rem .8rem 2.8rem;border:1.5px solid #d4dbe5;border-radius:12px;font-size:.875rem;font-family:'Inter',sans-serif;color:#12283a;background:#fff;outline:none;">
                 </div>
+                @error('email') <span style="color:#dc2626;font-size:.75rem;margin-top:.2rem;display:block;">{{ $message }}</span> @enderror
+            </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-8">
-                    <div>
-                        <label for="password" class="block text-xs font-semibold text-slate-600 mb-2 uppercase tracking-wide">Kata Sandi</label>
-                        <div class="input-group">
-                            <svg class="input-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
-                            </svg>
-                            <input id="password" type="password" name="password" required class="aviation-input" placeholder="Min. 8 Karakter" />
-                        </div>
-                        @error('password') <span class="text-red-500 text-xs mt-1 block">{{ $message }}</span> @enderror
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.2rem;">
+                <div>
+                    <label style="display:block;font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#6b7c93;margin-bottom:.4rem;">Kata Sandi</label>
+                    <div style="position:relative;display:flex;align-items:center;">
+                        <i class="fas fa-lock" style="position:absolute;left:14px;color:#6b7c93;font-size:14px;pointer-events:none;"></i>
+                        <input type="password" name="password" required placeholder="Min. 8 karakter"
+                            style="width:100%;padding:.8rem 1rem .8rem 2.8rem;border:1.5px solid #d4dbe5;border-radius:12px;font-size:.875rem;font-family:'Inter',sans-serif;color:#12283a;background:#fff;outline:none;">
                     </div>
-
-                    <div>
-                        <label for="password_confirmation" class="block text-xs font-semibold text-slate-600 mb-2 uppercase tracking-wide">Ulangi Sandi</label>
-                        <div class="input-group">
-                            <svg class="input-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" />
-                            </svg>
-                            <input id="password_confirmation" type="password" name="password_confirmation" required class="aviation-input" placeholder="Ulangi Sandi" />
-                        </div>
+                    @error('password') <span style="color:#dc2626;font-size:.75rem;margin-top:.2rem;display:block;">{{ $message }}</span> @enderror
+                </div>
+                <div>
+                    <label style="display:block;font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#6b7c93;margin-bottom:.4rem;">Ulangi Sandi</label>
+                    <div style="position:relative;display:flex;align-items:center;">
+                        <i class="fas fa-shield-alt" style="position:absolute;left:14px;color:#6b7c93;font-size:14px;pointer-events:none;"></i>
+                        <input type="password" name="password_confirmation" required placeholder="Ulangi sandi"
+                            style="width:100%;padding:.8rem 1rem .8rem 2.8rem;border:1.5px solid #d4dbe5;border-radius:12px;font-size:.875rem;font-family:'Inter',sans-serif;color:#12283a;background:#fff;outline:none;">
                     </div>
                 </div>
+            </div>
 
-                <button type="submit" class="w-full btn-primary flex items-center justify-center gap-2 py-3.5 rounded-lg font-bold tracking-widest shadow-lg">
-                    DAFTARKAN SAYA
-                </button>
+            <button type="submit" style="width:100%;padding:.85rem;border:none;border-radius:9999px;background:#12283a;color:#fff;font-size:.85rem;font-weight:700;font-family:'Inter',sans-serif;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;transition:all .2s;"
+                onmouseover="this.style.background='#fdbb11';this.style.color='#0c1c2b'"
+                onmouseout="this.style.background='#12283a';this.style.color='#fff'">
+                Daftar Sekarang
+            </button>
+        </form>
 
-                <p class="text-center mt-6 text-sm text-slate-600 font-medium">
-                    SUDAH PUNYA AKUN? <a href="{{ route('login') }}" class="font-bold text-slate-800 hover:text-yellow-600 hover:underline">MASUK</a>
-                </p>
-            </form>
-        </div>
+        <p style="text-align:center;margin-top:1.2rem;font-size:.8rem;color:#6b7c93;">
+            Sudah punya akun? <a href="{{ route('login') }}" style="font-weight:700;color:#12283a;text-decoration:none;">Masuk</a>
+        </p>
     </div>
 </x-guest-layout>

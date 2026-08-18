@@ -2,7 +2,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 * { box-sizing: border-box; }
-body { font-family: 'Inter', sans-serif; background: #f0f2f5; }
+body { font-family: 'Inter', sans-serif; background: #eef3f9; }
 .app-layout { display: flex; min-height: 100vh; }
 .main-content { flex: 1; padding: 28px 28px 28px 24px; min-width: 0; }
 .profile-title { font-size: 22px; font-weight: 800; color: #333; margin: 0 0 4px 0; }
@@ -13,7 +13,7 @@ body { font-family: 'Inter', sans-serif; background: #f0f2f5; }
     <x-sidebar active="profile" />
 
     <div class="main-content">
-        <h1 class="profile-title"><i class="fas fa-user-circle" style="color:#764ba2; margin-right:10px;"></i>{{ __('Profile') }}</h1>
+        <h1 class="profile-title"><i class="fas fa-user-circle" style="color:#12283a; margin-right:10px;"></i>{{ __('Profile') }}</h1>
         <p class="profile-subtitle">Update your account's profile information and email address.</p>
 
         <div class="space-y-6">

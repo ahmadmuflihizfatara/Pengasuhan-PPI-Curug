@@ -1,14 +1,14 @@
 <x-app-layout>
 <style>
     * { box-sizing: border-box; }
-    body { font-family: 'Inter', sans-serif; background: #f0f2f5; }
+    body { font-family: 'Inter', sans-serif; background: #eef3f9; }
 
     .app-layout { display: flex; min-height: 100vh; }
     .main-content { flex: 1; padding: 24px 28px; min-width: 0; }
 
     /* === HEADER BANNER === */
     .tablet-banner {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background: #12283a;
         border-radius: 18px;
         padding: 24px 30px;
         color: white;
@@ -18,7 +18,6 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
-        box-shadow: 0 8px 20px -6px rgba(102, 126, 234, 0.35);
     }
     .tablet-banner::after {
         content: ''; position: absolute; right: -40px; top: -40px; width: 180px; height: 180px;
@@ -44,7 +43,7 @@
     /* === TAB SWITCHER (START vs KEMBALI) === */
     .mode-switcher {
         display: flex;
-        background: #edf0f7;
+        background: #eef3f9;
         border-radius: 14px;
         padding: 4px;
         margin-bottom: 24px;
@@ -70,8 +69,8 @@
     .mode-tab:hover { color: #333; }
     .mode-tab.active {
         background: white;
-        color: #667eea;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+        color: #12283a;
+        border: 1px solid #d4dbe5;
     }
     .tab-badge {
         background: #ef4444;
@@ -95,7 +94,7 @@
     }
     .cat-card {
         background: white;
-        border: 2px solid #edf0f7;
+        border: 2px solid #d4dbe5;
         border-radius: 16px;
         padding: 20px;
         cursor: pointer;
@@ -104,14 +103,12 @@
         overflow: hidden;
     }
     .cat-card:hover {
-        border-color: #a5b0f0;
+        border-color: #6b7c93;
         transform: translateY(-2px);
-        box-shadow: 0 8px 20px rgba(102, 126, 234, 0.1);
     }
     .cat-card.active {
-        border-color: #667eea;
-        background: #f8f9ff;
-        box-shadow: 0 8px 24px rgba(102, 126, 234, 0.15);
+        border-color: #12283a;
+        background: #eef3f9;
     }
     .cat-card.active::after {
         content: '\f00c';
@@ -122,7 +119,7 @@
         right: 14px;
         width: 24px;
         height: 24px;
-        background: #667eea;
+        background: #12283a;
         color: white;
         border-radius: 50%;
         font-size: 11px;
@@ -147,11 +144,11 @@
         background: white;
         border-radius: 16px;
         padding: 28px;
-        box-shadow: 0 2px 16px rgba(0,0,0,.06);
+        border: 1px solid #d4dbe5;
     }
     .form-section-title {
         font-size: 16px; font-weight: 800; color: #333; margin-bottom: 18px;
-        padding-bottom: 10px; border-bottom: 1px solid #f0f2f7;
+        padding-bottom: 10px;         border-bottom: 1px solid #d4dbe5;
         display: flex; align-items: center; justify-content: space-between;
     }
     .form-group { margin-bottom: 18px; }
@@ -159,16 +156,16 @@
     .form-label .req { color: #ef4444; }
     .form-control, .form-select {
         border-radius: 10px;
-        border: 2px solid #edf0f7;
+        border: 2px solid #d4dbe5;
         padding: 11px 14px;
         font-size: 13px;
         color: #333;
-        background: #fafbff;
+        background: #eef3f9;
         width: 100%;
         transition: border .15s;
     }
     .form-control:focus, .form-select:focus {
-        border-color: #667eea;
+        border-color: #fdbb11;
         background: white;
         box-shadow: none;
         outline: none;
@@ -178,12 +175,12 @@
     .subcat-pills { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; }
     .subcat-pill {
         padding: 8px 16px; border-radius: 20px; font-size: 13px; font-weight: 700;
-        border: 1.5px solid #edf0f7; background: white; color: #555; cursor: pointer;
+        border: 1.5px solid #d4dbe5; background: white; color: #555; cursor: pointer;
         transition: all 0.15s;
     }
-    .subcat-pill:hover { border-color: #aab; background: #fafbff; }
+    .subcat-pill:hover { border-color: #6b7c93; background: #eef3f9; }
     .subcat-pill.active {
-        background: #667eea; border-color: #667eea; color: white;
+        background: #12283a; border-color: #12283a; color: white;
     }
 
     /* Status Awal Box */
@@ -217,7 +214,7 @@
     }
 
     .btn-submit-log {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background: #12283a;
         color: white;
         border: none;
         border-radius: 25px;
@@ -226,7 +223,7 @@
         font-weight: 700;
         width: 100%;
         cursor: pointer;
-        transition: transform 0.2s, box-shadow 0.2s;
+        transition: transform 0.2s;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -234,7 +231,6 @@
     }
     .btn-submit-log:hover {
         transform: translateY(-2px);
-        box-shadow: 0 6px 20px rgba(102, 126, 234, .4);
     }
 
     /* === MODE 2: KEPULANGAN / TARUNA KEMBALI === */
@@ -246,7 +242,7 @@
         width: 100%;
         padding: 14px 18px 14px 46px;
         border-radius: 14px;
-        border: 2px solid #edf0f7;
+        border: 2px solid #d4dbe5;
         font-size: 15px;
         font-weight: 600;
         background: white;
@@ -256,7 +252,7 @@
         left: 18px;
         top: 50%;
         transform: translateY(-50%);
-        color: #aab;
+        color: #6b7c93;
         font-size: 17px;
     }
 
@@ -269,8 +265,7 @@
         background: white;
         border-radius: 16px;
         padding: 18px 20px;
-        border: 1.5px solid #edf0f7;
-        box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+        border: 1.5px solid #d4dbe5;
         display: flex;
         flex-direction: column;
         justify-content: space-between;
@@ -278,8 +273,7 @@
     }
     .return-card:hover {
         transform: translateY(-2px);
-        border-color: #edf0f7;
-        box-shadow: 0 6px 16px rgba(0,0,0,0.06);
+        border-color: #6b7c93;
     }
     .return-header {
         display: flex;
@@ -305,7 +299,7 @@
         width: 7px; height: 7px; background: #dc2626; border-radius: 50%; display: inline-block;
     }
     .return-detail {
-        background: #fafbff;
+        background: #eef3f9;
         border-radius: 10px;
         padding: 10px 14px;
         font-size: 12.5px;

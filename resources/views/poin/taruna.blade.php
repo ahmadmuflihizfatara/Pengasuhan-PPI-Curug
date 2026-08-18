@@ -2,13 +2,13 @@
 <x-administration-table-style />
 <style>
     * { box-sizing: border-box; }
-    body { font-family: 'Inter', sans-serif; background: #f0f2f5; }
+    body { font-family: 'Inter', sans-serif; background: #eef3f9; }
 
     .poin-layout { display: flex; min-height: 100vh; }
     .main-content { flex: 1; padding: 28px 30px; min-width: 0; }
 
     .page-header {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background: linear-gradient(135deg, #12283a 0%, #12283a 100%);
         border-radius: 18px;
         padding: 24px 30px;
         color: white;
@@ -38,7 +38,7 @@
         border-radius: 16px;
         padding: 20px;
         background: white;
-        border: 1.5px solid #edf0f7;
+        border: 1.5px solid #d4dbe5;
         box-shadow: 0 2px 16px rgba(0,0,0,.06);
     }
     .summary-card.card-pelanggaran {
@@ -72,10 +72,10 @@
         border-radius: 14px;
         padding: 18px 20px;
         margin-bottom: 24px;
-        border: 1px solid #edf0f7;
+        border: 1px solid #d4dbe5;
     }
     .threshold-bar {
-        height: 12px; border-radius: 20px; background: #edf0f7; display: flex; overflow: hidden; margin-top: 8px;
+        height: 12px; border-radius: 20px; background: #d4dbe5; display: flex; overflow: hidden; margin-top: 8px;
     }
     .t-step { height: 100%; }
     .t-aman  { width: 50%; background: #22c55e; }
@@ -93,8 +93,8 @@
     }
     .card-panel-header {
         padding: 16px 20px;
-        background: #fafbff;
-        border-bottom: 1px solid #edf0f7;
+        background: #f9fafb;
+        border-bottom: 1px solid #d4dbe5;
         display: flex;
         align-items: center;
         justify-content: space-between;
@@ -108,12 +108,12 @@
         background: #f0f2f7;
         color: #888;
     }
-    .riwayat-pills .nav-link:hover { background: #edf0f7; }
+    .riwayat-pills .nav-link:hover { background: #d4dbe5; }
     .riwayat-pills .nav-link { font-weight: 700; font-size: 12px; }
     .riwayat-pills .nav-link.active.text-danger { background: #fff0f0; color: #e53e3e !important; }
     .riwayat-pills .nav-link.active.text-success { background: #e6fff5; color: #38a169 !important; }
 
-    .table-custom thead tr { background: linear-gradient(135deg, #667eea, #764ba2); }
+    .table-custom thead tr { background: linear-gradient(135deg, #12283a, #12283a); }
     .table-custom th {
         background: transparent; font-size: 11px; font-weight: 700; text-transform: uppercase;
         letter-spacing: .06em; color: white; padding: 14px 18px; border-bottom: none;
@@ -122,7 +122,7 @@
         padding: 12px 14px; font-size: 13px; color: #444; vertical-align: middle;
         border-top: 1px solid #f0f2f7;
     }
-    .table-custom tbody tr:hover td { background: #f8f9ff; }
+    .table-custom tbody tr:hover td { background: #f5f7fa; }
 
     /* === SAMAKAN GAYA DENGAN TAB LAIN === */
     .page-header::before {

@@ -3,14 +3,14 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 * { box-sizing: border-box; }
-body { font-family: 'Inter', sans-serif; background: #f0f2f5; }
+body { font-family: 'Inter', sans-serif; background: #eef3f9; }
 
 .app-layout { display: flex; min-height: 100vh; }
 .main-content { flex: 1; padding: 28px 30px; min-width: 0; }
 
 /* ── Page Header ── */
 .page-header {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: #12283a;
     border-radius: 18px; padding: 28px 32px; color: white;
     margin-bottom: 24px; position: relative; overflow: hidden;
     display: flex; align-items: center; justify-content: space-between;
@@ -36,59 +36,59 @@ body { font-family: 'Inter', sans-serif; background: #f0f2f5; }
     display:flex; align-items:center; gap:5px;
     transition:all .2s; color:rgba(255,255,255,.75); background:transparent;
 }
-.toggle-btn.active { background:white; color:#667eea; box-shadow:0 2px 8px rgba(0,0,0,.15); }
+.toggle-btn.active { background:white; color:#12283a; box-shadow:0 2px 8px rgba(0,0,0,.15); }
 .toggle-btn:hover:not(.active) { color:white; background:rgba(255,255,255,.12); }
 
 .btn-add {
-    background:white; color:#667eea; padding:11px 22px; border-radius:25px;
+    background:white; color:#12283a; padding:11px 22px; border-radius:25px;
     text-decoration:none; font-size:13px; font-weight:800;
     display:flex; align-items:center; gap:7px; white-space:nowrap;
     box-shadow:0 4px 15px rgba(0,0,0,.15); transition:transform .15s, box-shadow .15s;
 }
-.btn-add:hover { transform:translateY(-2px); box-shadow:0 6px 20px rgba(0,0,0,.2); color:#667eea; }
+.btn-add:hover { transform:translateY(-2px); box-shadow:0 6px 20px rgba(0,0,0,.2); color:#12283a; }
 
 .alert-success {
-    background:linear-gradient(135deg,#43e97b,#38f9d7); color:white;
+    background:linear-gradient(135deg,#16a34a,#38f9d7); color:white;
     padding:14px 20px; border-radius:12px; margin-bottom:20px;
     display:flex; align-items:center; gap:10px; font-weight:600; font-size:14px;
 }
 
 /* ── Table View ── */
-.card { background:white; border-radius:16px; overflow:hidden; box-shadow:0 2px 16px rgba(0,0,0,.06); }
+.card { background:white; border-radius:16px; overflow:hidden; border:1px solid #d4dbe5; }
 .empty-state { text-align:center; padding:60px 20px; }
-.empty-state i  { font-size:56px; color:#e2e5ee; margin-bottom:16px; display:block; }
+.empty-state i  { font-size:56px; color:#d4dbe5; margin-bottom:16px; display:block; }
 .empty-state h4 { color:#aab; margin:0 0 8px; font-size:16px; }
 .empty-state p  { color:#ccc; margin:0 0 20px; font-size:14px; }
 .btn-primary-pill {
-    background:linear-gradient(135deg,#667eea,#764ba2); color:white;
+    background:#12283a; color:white;
     padding:11px 28px; border-radius:25px; text-decoration:none; font-size:13px;
     font-weight:700; display:inline-flex; align-items:center; gap:7px;
-    box-shadow:0 4px 15px rgba(102,126,234,.4);
+    border:1px solid #d4dbe5;
 }
 
 table { width:100%; border-collapse:collapse; }
-thead tr { background:linear-gradient(135deg,#667eea,#764ba2); }
+thead tr { background:#12283a; }
 th { padding:14px 18px; text-align:left; color:white; font-size:11px; font-weight:700; letter-spacing:.06em; }
-td { padding:14px 18px; font-size:13px; color:#444; border-top:1px solid #f0f2f7; }
+td { padding:14px 18px; font-size:13px; color:#12283a; border-top:1px solid #d4dbe5; }
 tbody tr { transition:background .1s; }
-tbody tr:hover { background:#f8f9ff; }
+tbody tr:hover { background:#f5f7fa; }
 
-.icon-box  { width:38px; height:38px; border-radius:10px; background:linear-gradient(135deg,#667eea,#764ba2); display:flex; align-items:center; justify-content:center; flex-shrink:0; }
-.time-badge { background:#eef0ff; color:#667eea; padding:4px 12px; border-radius:20px; font-size:11px; font-weight:700; }
-.btn-edit   { background:#eef0ff; color:#667eea; border:none; padding:6px 14px; border-radius:20px; font-size:11px; font-weight:700; text-decoration:none; cursor:pointer; display:inline-flex; align-items:center; gap:5px; transition:background .1s; }
-.btn-edit:hover { background:#dde2ff; }
+.icon-box  { width:38px; height:38px; border-radius:10px; background:#12283a; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+.time-badge { background:#eef3f9; color:#12283a; padding:4px 12px; border-radius:20px; font-size:11px; font-weight:700; }
+.btn-edit   { background:#eef3f9; color:#12283a; border:none; padding:6px 14px; border-radius:20px; font-size:11px; font-weight:700; text-decoration:none; cursor:pointer; display:inline-flex; align-items:center; gap:5px; transition:background .1s; }
+.btn-edit:hover { background:#d4dbe5; }
 .btn-delete { background:#fff0f0; color:#e53e3e; border:none; padding:6px 14px; border-radius:20px; font-size:11px; font-weight:700; cursor:pointer; display:inline-flex; align-items:center; gap:5px; transition:background .1s; }
 .btn-delete:hover { background:#ffe0e0; }
 
 /* ── Calendar View ── */
 #calendarView { display:none; }
 
-.calendar-wrapper { background:white; border-radius:16px; box-shadow:0 2px 16px rgba(0,0,0,.06); overflow:hidden; }
+.calendar-wrapper { background:white; border-radius:16px; border:1px solid #d4dbe5; overflow:hidden; }
 
 .calendar-nav {
     display:flex; align-items:center; justify-content:space-between;
-    padding:20px 24px; border-bottom:1px solid #f0f2f7;
-    background:linear-gradient(135deg,#667eea 0%,#764ba2 100%); color:white;
+    padding:20px 24px; border-bottom:1px solid #d4dbe5;
+    background:#12283a; color:white;
 }
 .calendar-nav h2 { font-size:18px; font-weight:800; margin:0; }
 .cal-nav-btn {
@@ -101,20 +101,20 @@ tbody tr:hover { background:#f8f9ff; }
 .calendar-grid { display:grid; grid-template-columns:repeat(7,1fr); }
 .cal-day-header {
     padding:10px 8px; text-align:center; font-size:11px; font-weight:800;
-    letter-spacing:.06em; color:#667eea; background:#f8f9ff; border-bottom:1px solid #f0f2f7;
+    letter-spacing:.06em; color:#12283a; background:#eef3f9; border-bottom:1px solid #d4dbe5;
 }
 .cal-day-header:first-child, .cal-day-header:last-child { color:#e53e3e; }
 
 .cal-cell {
-    min-height:100px; padding:8px; border-right:1px solid #f0f2f7;
-    border-bottom:1px solid #f0f2f7; position:relative; cursor:default; transition:background .1s;
+    min-height:100px; padding:8px; border-right:1px solid #d4dbe5;
+    border-bottom:1px solid #d4dbe5; position:relative; cursor:default; transition:background .1s;
 }
 .cal-cell:nth-child(7n) { border-right:none; }
-.cal-cell.other-month   { background:#fafbff; }
+.cal-cell.other-month   { background:#eef3f9; }
 .cal-cell.other-month .cal-date { color:#ccc; }
-.cal-cell.today { background:#f0f2ff; }
+.cal-cell.today { background:#eef3f9; }
 .cal-cell.today .cal-date {
-    background:linear-gradient(135deg,#667eea,#764ba2); color:white;
+    background:#12283a; color:white;
     width:26px; height:26px; border-radius:50%;
     display:flex; align-items:center; justify-content:center; font-weight:800;
 }
@@ -129,34 +129,34 @@ tbody tr:hover { background:#f8f9ff; }
 .cal-cell:nth-child(7n)   .cal-date { color:#e53e3e; }
 
 .cal-event {
-    background:linear-gradient(135deg,#667eea,#764ba2); color:white; border-radius:6px;
+    background:#12283a; color:white; border-radius:6px;
     padding:3px 7px; font-size:10px; font-weight:700; margin-bottom:3px;
     display:flex; align-items:center; gap:4px;
     overflow:hidden; white-space:nowrap; text-overflow:ellipsis;
     cursor:pointer; transition:opacity .15s; line-height:1.4;
 }
 .cal-event:hover { opacity:.85; }
-.cal-event-apel { background:linear-gradient(135deg,#1baf7a,#2a78d6); }
-.cal-event-more { font-size:10px; font-weight:700; color:#667eea; text-align:center; padding:2px; }
+.cal-event-apel { background:#12283a; }
+.cal-event-more { font-size:10px; font-weight:700; color:#fdbb11; text-align:center; padding:2px; }
 
 /* ── Popover ── */
 .cal-popover {
     display:none; position:fixed; background:white; border-radius:14px;
-    box-shadow:0 8px 32px rgba(0,0,0,.18); padding:16px;
+    border:1px solid #d4dbe5; padding:16px;
     min-width:220px; max-width:280px; z-index:9000;
 }
 .cal-popover.show { display:block; }
-.cal-popover h4 { margin:0 0 8px; font-size:14px; font-weight:800; color:#333; }
-.cal-popover-row { display:flex; align-items:center; gap:7px; font-size:12px; color:#666; margin-bottom:5px; }
-.cal-popover-row i { color:#667eea; width:14px; text-align:center; }
-.cal-popover-desc { font-size:12px; color:#888; margin-top:8px; padding-top:8px; border-top:1px solid #f0f2f7; line-height:1.5; }
-.cal-popover-actions { display:flex; gap:8px; margin-top:12px; padding-top:10px; border-top:1px solid #f0f2f7; }
+.cal-popover h4 { margin:0 0 8px; font-size:14px; font-weight:800; color:#12283a; }
+.cal-popover-row { display:flex; align-items:center; gap:7px; font-size:12px; color:#6b7c93; margin-bottom:5px; }
+.cal-popover-row i { color:#fdbb11; width:14px; text-align:center; }
+.cal-popover-desc { font-size:12px; color:#6b7c93; margin-top:8px; padding-top:8px; border-top:1px solid #d4dbe5; line-height:1.5; }
+.cal-popover-actions { display:flex; gap:8px; margin-top:12px; padding-top:10px; border-top:1px solid #d4dbe5; }
 .pop-btn-edit {
-    flex:1; background:#eef0ff; color:#667eea; border:none; padding:7px 10px;
+    flex:1; background:#eef3f9; color:#12283a; border:none; padding:7px 10px;
     border-radius:20px; font-size:11px; font-weight:700; cursor:pointer;
     text-decoration:none; text-align:center; display:flex; align-items:center; justify-content:center; gap:4px;
 }
-.pop-btn-edit:hover { background:#dde2ff; color:#667eea; }
+.pop-btn-edit:hover { background:#d4dbe5; color:#12283a; }
 .pop-btn-del {
     flex:1; background:#fff0f0; color:#e53e3e; border:none; padding:7px 10px;
     border-radius:20px; font-size:11px; font-weight:700; cursor:pointer;
@@ -166,10 +166,10 @@ tbody tr:hover { background:#f8f9ff; }
 
 /* ── Legend ── */
 .calendar-legend {
-    padding:14px 24px; border-top:1px solid #f0f2f7;
+    padding:14px 24px; border-top:1px solid #d4dbe5;
     display:flex; align-items:center; gap:20px; flex-wrap:wrap;
 }
-.legend-item { display:flex; align-items:center; gap:6px; font-size:12px; color:#666; }
+.legend-item { display:flex; align-items:center; gap:6px; font-size:12px; color:#6b7c93; }
 .legend-dot  { width:10px; height:10px; border-radius:50%; }
 
 /* ── Read-only badge for taruna ── */
@@ -283,7 +283,7 @@ tbody tr:hover { background:#f8f9ff; }
                                 </div>
                             </td>
                             <td>
-                                <i class="fas fa-calendar" style="color:#667eea; margin-right:6px;"></i>
+                                <i class="fas fa-calendar" style="color:#fdbb11; margin-right:6px;"></i>
                                 {{ \Carbon\Carbon::parse($a->tanggal)->locale('id')->isoFormat('dddd, D MMMM Y') }}
                             </td>
                             <td>
@@ -352,15 +352,15 @@ tbody tr:hover { background:#f8f9ff; }
 
                 <div class="calendar-legend">
                     <div class="legend-item">
-                        <div class="legend-dot" style="background:linear-gradient(135deg,#667eea,#764ba2);"></div>
+                        <div class="legend-dot" style="background:#12283a;"></div>
                         <span>Acara terjadwal</span>
                     </div>
                     <div class="legend-item">
-                        <div class="legend-dot" style="background:linear-gradient(135deg,#1baf7a,#2a78d6);"></div>
+                        <div class="legend-dot" style="background:#12283a;"></div>
                         <span>Apel</span>
                     </div>
                     <div class="legend-item">
-                        <div class="legend-dot" style="background:#eef0ff; border:2px solid #667eea;"></div>
+                        <div class="legend-dot" style="background:#eef3f9; border:2px solid #fdbb11;"></div>
                         <span>Hari ini</span>
                     </div>
                 </div>

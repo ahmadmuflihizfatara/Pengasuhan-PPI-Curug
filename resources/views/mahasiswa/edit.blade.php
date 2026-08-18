@@ -3,7 +3,7 @@
 
     <style>
         * { box-sizing: border-box; }
-        body { font-family: 'Inter', sans-serif; background: #f0f2f5; }
+        body { font-family: 'Inter', sans-serif; background: #eef3f9; }
 
         .db-layout {
             display: flex;
@@ -35,7 +35,7 @@
         }
 
         .edit-card-header {
-            background: linear-gradient(135deg, #5a67d8, #9f7aea);
+            background: linear-gradient(135deg, #5a67d8, #fdbb11);
             padding: 28px 32px;
             color: white;
             display: flex;
@@ -91,7 +91,7 @@
             color: #333;
             outline: none;
             transition: border .15s;
-            background: #fafbff;
+            background: #f9fafb;
         }
         .form-control:focus { border-color: #5a67d8; background: white; }
         .form-control[readonly] { background: #f5f6fa; color: #888; cursor: not-allowed; }
@@ -102,7 +102,7 @@
             border: 2px solid #e8ebf5;
             border-radius: 10px;
             overflow: hidden;
-            background: #fafbff;
+            background: #f9fafb;
             transition: border .15s;
         }
         .input-prefix-wrapper:focus-within { border-color: #5a67d8; background: white; }
@@ -143,7 +143,7 @@
             border-top: 1px solid #f0f2f7;
         }
         .btn-primary {
-            background: linear-gradient(135deg, #5a67d8, #9f7aea);
+            background: linear-gradient(135deg, #5a67d8, #fdbb11);
             color: white;
             border: none;
             padding: 11px 24px;
@@ -199,7 +199,7 @@
             font-size: 13px;
         }
         .class-pill {
-            background: #eef0ff;
+            background: rgba(18,40,58,0.06);
             color: #5a67d8;
             padding: 3px 12px;
             border-radius: 50px;

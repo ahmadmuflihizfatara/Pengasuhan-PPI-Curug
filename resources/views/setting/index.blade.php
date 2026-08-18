@@ -2,14 +2,14 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 * { box-sizing: border-box; }
-body { font-family: 'Inter', sans-serif; background: #f0f2f5; }
+body { font-family: 'Inter', sans-serif; background: #eef3f9; }
 .app-layout { display: flex; min-height: 100vh; }
 
 /* MAIN */
 .main-content { flex: 1; padding: 28px 28px 28px 24px; min-width: 0; max-width: 800px; }
 
 .page-header {
-    background: linear-gradient(135deg, #3182ce 0%, #5a67d8 100%);
+    background: linear-gradient(135deg, #12283a 0%, #5a67d8 100%);
     border-radius: 18px; padding: 28px 32px; color: white;
     margin-bottom: 24px; position: relative; overflow: hidden;
     display: flex; align-items: center; gap: 20px;
@@ -27,7 +27,7 @@ body { font-family: 'Inter', sans-serif; background: #f0f2f5; }
 .page-header-text h1 { margin: 0 0 4px 0; font-size: 20px; font-weight: 800; }
 .page-header-text p { margin: 0; opacity: .85; font-size: 13px; }
 
-.alert-success { background: linear-gradient(135deg,#43e97b,#38f9d7); color: white; padding: 13px 18px; border-radius: 12px; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; font-weight: 600; font-size: 13px; }
+.alert-success { background: linear-gradient(135deg,#16a34a,#38f9d7); color: white; padding: 13px 18px; border-radius: 12px; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; font-weight: 600; font-size: 13px; }
 .alert-error { background: #fff0f0; border: 1px solid #fc8181; padding: 13px 18px; border-radius: 12px; margin-bottom: 20px; font-size: 13px; color: #e53e3e; }
 
 /* Cards */
@@ -41,8 +41,8 @@ body { font-family: 'Inter', sans-serif; background: #f0f2f5; }
 .form-group { }
 .form-group.full { grid-column: span 2; }
 .form-label { display: block; font-size: 11px; font-weight: 700; color: #888; text-transform: uppercase; letter-spacing: .05em; margin-bottom: 7px; }
-.form-control { width: 100%; padding: 11px 14px; border: 2px solid #edf0f7; border-radius: 10px; font-size: 13px; font-family: 'Inter', sans-serif; color: #333; background: #fafbff; outline: none; transition: border .15s; }
-.form-control:focus { border-color: #667eea; background: white; }
+.form-control { width: 100%; padding: 11px 14px; border: 2px solid #d4dbe5; border-radius: 10px; font-size: 13px; font-family: 'Inter', sans-serif; color: #333; background: #f9fafb; outline: none; transition: border .15s; }
+.form-control:focus { border-color: #12283a; background: white; }
 select.form-control { cursor: pointer; }
 
 /* Foto upload */
@@ -53,21 +53,21 @@ select.form-control { cursor: pointer; }
     text-align: center;
     cursor: pointer;
     transition: all .15s;
-    background: #fafbff;
+    background: #f9fafb;
     position: relative;
 }
-.foto-upload-area:hover { border-color: #667eea; background: #f0f0ff; }
+.foto-upload-area:hover { border-color: #12283a; background: rgba(18,40,58,0.06); }
 .foto-upload-area input[type="file"] { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
 .foto-preview-wrap { display: flex; align-items: center; gap: 20px; }
-.foto-preview { width: 80px; height: 80px; border-radius: 50%; object-fit: cover; border: 3px solid #edf0f7; background: #edf0f7; flex-shrink: 0; }
-.foto-preview-placeholder { width: 80px; height: 80px; border-radius: 50%; background: linear-gradient(135deg, #667eea, #764ba2); display: flex; align-items: center; justify-content: center; font-size: 28px; font-weight: 800; color: white; flex-shrink: 0; }
+.foto-preview { width: 80px; height: 80px; border-radius: 50%; object-fit: cover; border: 3px solid #d4dbe5; background: #d4dbe5; flex-shrink: 0; }
+.foto-preview-placeholder { width: 80px; height: 80px; border-radius: 50%; background: linear-gradient(135deg, #12283a, #12283a); display: flex; align-items: center; justify-content: center; font-size: 28px; font-weight: 800; color: white; flex-shrink: 0; }
 .foto-upload-info { text-align: left; }
 .foto-upload-info strong { display: block; font-size: 13px; font-weight: 700; color: #333; margin-bottom: 3px; }
 .foto-upload-info span { font-size: 12px; color: #999; }
 .foto-upload-hint { margin-top: 12px; font-size: 11px; color: #bbb; }
 
 /* Password section */
-.pwd-toggle { font-size: 12px; font-weight: 600; color: #667eea; cursor: pointer; display: inline-flex; align-items: center; gap: 5px; margin-bottom: 16px; background: #eef0ff; padding: 6px 14px; border-radius: 8px; border: none; }
+.pwd-toggle { font-size: 12px; font-weight: 600; color: #12283a; cursor: pointer; display: inline-flex; align-items: center; gap: 5px; margin-bottom: 16px; background: rgba(18,40,58,0.06); padding: 6px 14px; border-radius: 8px; border: none; }
 .pwd-section { display: none; }
 .pwd-section.open { display: block; }
 
@@ -77,24 +77,24 @@ select.form-control { cursor: pointer; }
 .jabatan-option input { position: absolute; opacity: 0; width: 0; }
 .jabatan-label {
     display: flex; align-items: center; gap: 10px;
-    padding: 12px 14px; border: 2px solid #edf0f7;
+    padding: 12px 14px; border: 2px solid #d4dbe5;
     border-radius: 10px; cursor: pointer; font-size: 13px;
     font-weight: 500; color: #555; transition: all .12s;
-    background: #fafbff;
+    background: #f9fafb;
 }
-.jabatan-label:hover { border-color: #667eea; background: #f0f0ff; }
+.jabatan-label:hover { border-color: #12283a; background: rgba(18,40,58,0.06); }
 .jabatan-option input:checked + .jabatan-label {
-    border-color: #667eea;
-    background: linear-gradient(135deg, #eef0ff, #f0f0ff);
+    border-color: #12283a;
+    background: linear-gradient(135deg, rgba(18,40,58,0.06), rgba(18,40,58,0.06));
     color: #5a67d8;
     font-weight: 700;
 }
 .jabatan-dot { width: 10px; height: 10px; border-radius: 50%; background: #ddd; flex-shrink: 0; transition: background .12s; }
-.jabatan-option input:checked + .jabatan-label .jabatan-dot { background: #667eea; }
+.jabatan-option input:checked + .jabatan-label .jabatan-dot { background: #12283a; }
 
 /* Buttons */
 .btn-row { display: flex; gap: 12px; justify-content: flex-end; margin-top: 4px; }
-.btn-save { background: linear-gradient(135deg, #667eea, #764ba2); color: white; border: none; padding: 12px 30px; border-radius: 25px; font-size: 13px; font-weight: 800; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 4px 15px rgba(102,126,234,.4); transition: opacity .15s; }
+.btn-save { background: linear-gradient(135deg, #12283a, #12283a); color: white; border: none; padding: 12px 30px; border-radius: 25px; font-size: 13px; font-weight: 800; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 4px 15px rgba(102,126,234,.4); transition: opacity .15s; }
 .btn-save:hover { opacity: .9; }
 </style>
 
@@ -142,7 +142,7 @@ select.form-control { cursor: pointer; }
             <!-- PROFIL DASAR -->
             <div class="section-card">
                 <div class="section-card-header">
-                    <div class="section-card-icon" style="background:linear-gradient(135deg,#667eea,#764ba2);">
+                    <div class="section-card-icon" style="background:linear-gradient(135deg,#12283a,#12283a);">
                         <i class="fas fa-user"></i>
                     </div>
                     <h3>Informasi Profil</h3>
@@ -202,7 +202,7 @@ select.form-control { cursor: pointer; }
                                 <strong>Klik untuk upload foto</strong>
                                 <span>atau drag & drop gambar ke sini</span>
                                 <div style="margin-top:8px;">
-                                    <span style="background:#eef0ff; color:#667eea; font-size:11px; font-weight:700; padding:3px 10px; border-radius:20px; display:inline-block;">
+                                    <span style="background:rgba(18,40,58,0.06); color:#12283a; font-size:11px; font-weight:700; padding:3px 10px; border-radius:20px; display:inline-block;">
                                         <i class="fas fa-image"></i> JPG, PNG, WEBP maks. 2MB
                                     </span>
                                 </div>

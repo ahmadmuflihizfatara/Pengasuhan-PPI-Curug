@@ -2,7 +2,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 * { box-sizing: border-box; }
-body { font-family: 'Inter', sans-serif; background: #f0f2f5; }
+body { font-family: 'Inter', sans-serif; background: #eef3f9; }
 .app-layout { display: flex; min-height: 100vh; }
 .main-content { flex: 1; padding: 28px; display: flex; align-items: center; justify-content: center; }
 .form-card { background: white; border-radius: 20px; padding: 36px; box-shadow: 0 4px 24px rgba(0,0,0,.08); width: 100%; max-width: 520px; }
@@ -11,21 +11,21 @@ body { font-family: 'Inter', sans-serif; background: #f0f2f5; }
 .form-group { margin-bottom: 18px; }
 .form-label { display: block; font-size: 12px; font-weight: 700; color: #555; margin-bottom: 6px; text-transform: uppercase; letter-spacing: .05em; }
 .form-control { width: 100%; padding: 11px 14px; border: 1.5px solid #e8eaf0; border-radius: 10px; font-size: 13px; font-family: 'Inter', sans-serif; color: #333; outline: none; transition: border-color .15s; }
-.form-control:focus { border-color: #667eea; }
+.form-control:focus { border-color: #12283a; }
 .form-control.is-invalid { border-color: #e05252; }
 .invalid-feedback { font-size: 11px; color: #e05252; margin-top: 4px; }
 .role-select select { appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23888' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; background-size: 16px; padding-right: 36px; cursor: pointer; }
 .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
 .btn-group { display: flex; gap: 12px; margin-top: 24px; }
-.btn-primary { background: linear-gradient(135deg, #667eea, #764ba2); color: white; border: none; padding: 12px 24px; border-radius: 10px; font-size: 13px; font-weight: 700; cursor: pointer; transition: all .15s; flex: 1; }
+.btn-primary { background: linear-gradient(135deg, #12283a, #12283a); color: white; border: none; padding: 12px 24px; border-radius: 10px; font-size: 13px; font-weight: 700; cursor: pointer; transition: all .15s; flex: 1; }
 .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(102,126,234,.35); }
-.btn-secondary { background: #f0f2f5; color: #555; border: none; padding: 12px 24px; border-radius: 10px; font-size: 13px; font-weight: 600; cursor: pointer; text-decoration: none; display: flex; align-items: center; justify-content: center; transition: all .15s; }
+.btn-secondary { background: #eef3f9; color: #555; border: none; padding: 12px 24px; border-radius: 10px; font-size: 13px; font-weight: 600; cursor: pointer; text-decoration: none; display: flex; align-items: center; justify-content: center; transition: all .15s; }
 .btn-secondary:hover { background: #e2e5ee; color: #333; }
 .hint-text { font-size: 11px; color: #aab; margin-top: 4px; }
 .role-desc { font-size: 11px; color: #666; padding: 10px 14px; border-radius: 8px; margin-top: 8px; line-height: 1.5; display: none; }
 .role-taruna { background: #f0fff4; border-left: 4px solid #38a169; }
-.role-pengasuh { background: #ebf4ff; border-left: 4px solid #3182ce; }
-.role-admin { background: #f3eeff; border-left: 4px solid #764ba2; }
+.role-pengasuh { background: #ebf4ff; border-left: 4px solid #12283a; }
+.role-admin { background: rgba(18,40,58,0.06); border-left: 4px solid #12283a; }
 </style>
 
 <div class="app-layout">
@@ -33,7 +33,7 @@ body { font-family: 'Inter', sans-serif; background: #f0f2f5; }
 
     <div class="main-content">
         <div class="form-card">
-            <h1 class="form-title"><i class="fas fa-user-edit" style="color:#764ba2; margin-right:10px;"></i>Edit Akun</h1>
+            <h1 class="form-title"><i class="fas fa-user-edit" style="color:#12283a; margin-right:10px;"></i>Edit Akun</h1>
             <p class="form-subtitle">Ubah data akun <strong>{{ $user->name }}</strong></p>
 
             <form action="{{ route('users.update', $user) }}" method="POST">

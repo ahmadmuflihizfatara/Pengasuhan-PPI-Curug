@@ -3,13 +3,13 @@
 <x-administration-stats-style />
 <style>
 * { box-sizing: border-box; }
-body { font-family: 'Inter', sans-serif; background: #f0f2f5; }
+body { font-family: 'Inter', sans-serif; background: #eef3f9; }
 .app-layout { display: flex; min-height: 100vh; }
 .main-content { flex: 1; padding: 28px 28px 28px 24px; min-width: 0; }
 
 /* ── Page Header ── */
 .page-header {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: #12283a;
     border-radius: 18px; padding: 28px 32px;
     color: white; margin-bottom: 24px;
     display: flex; align-items: center; justify-content: space-between;
@@ -31,15 +31,14 @@ body { font-family: 'Inter', sans-serif; background: #f0f2f5; }
 .stat-pill {
     background: white; border-radius: 12px;
     padding: 14px 16px; text-align: center;
-    box-shadow: 0 2px 10px rgba(0,0,0,.05);
-    cursor: pointer; transition: transform .15s, box-shadow .15s;
+    border: 1px solid #d4dbe5;
+    cursor: pointer; transition: transform .15s, border-color .15s;
     text-decoration: none; display: block;
-    border: 2px solid transparent;
 }
-.stat-pill:hover          { transform: translateY(-2px); box-shadow: 0 5px 18px rgba(0,0,0,.1); }
-.stat-pill.active         { border-color: #667eea; }
+.stat-pill:hover          { transform: translateY(-2px); border-color: #fdbb11; }
+.stat-pill.active         { border-color: #fdbb11; }
 .stat-pill .sp-count      { font-size: 20px; font-weight: 800; color: #333; }
-.stat-pill .sp-label      { font-size: 11px; color: #888; font-weight: 500; margin-top: 2px; }
+.stat-pill .sp-label      { font-size: 11px; color: #6b7c93; font-weight: 500; margin-top: 2px; }
 .stat-pill .sp-dot        { width: 8px; height: 8px; border-radius: 50%; display: inline-block; margin-right: 5px; }
 
 /* ── Filter & Search Bar ── */
@@ -47,32 +46,32 @@ body { font-family: 'Inter', sans-serif; background: #f0f2f5; }
     background: white; border-radius: 14px;
     padding: 14px 18px; margin-bottom: 22px;
     display: flex; gap: 10px; align-items: center;
-    flex-wrap: wrap; box-shadow: 0 2px 10px rgba(0,0,0,.05);
+    flex-wrap: wrap; border: 1px solid #d4dbe5;
 }
 .filter-bar .search-wrap { position: relative; flex: 1; min-width: 200px; }
-.filter-bar .search-wrap .fa-search { position:absolute; left:11px; top:50%; transform:translateY(-50%); color:#bbb; font-size:12px; }
+.filter-bar .search-wrap .fa-search { position:absolute; left:11px; top:50%; transform:translateY(-50%); color:#6b7c93; font-size:12px; }
 .filter-bar input[type=text] {
     width:100%; padding:9px 12px 9px 32px;
-    border:1.5px solid #edf0f7; border-radius:9px;
+    border:1.5px solid #d4dbe5; border-radius:9px;
     font-size:13px; font-family:'Inter',sans-serif;
     outline:none; color:#444; transition:border-color .15s;
 }
-.filter-bar input:focus { border-color:#667eea; }
+.filter-bar input:focus { border-color:#fdbb11; }
 .filter-bar select {
-    padding:9px 32px 9px 12px; border:1.5px solid #edf0f7;
+    padding:9px 32px 9px 12px; border:1.5px solid #d4dbe5;
     border-radius:9px; font-size:13px; color:#444;
     font-family:'Inter',sans-serif; appearance:none;
     background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%23999' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E") no-repeat right 10px center;
     outline:none; cursor:pointer;
 }
-.filter-bar select:focus { border-color:#667eea; }
+.filter-bar select:focus { border-color:#fdbb11; }
 .filter-btn {
     padding:9px 18px; border-radius:9px; font-size:13px;
     font-weight:600; border:none; cursor:pointer;
     transition:background .15s;
 }
-.filter-btn.primary { background:linear-gradient(135deg,#667eea,#764ba2); color:white; }
-.filter-btn.secondary { background:#f0f1fb; color:#667eea; }
+.filter-btn.primary { background:#12283a; color:white; }
+.filter-btn.secondary { background:#eef3f9; color:#fdbb11; }
 
 /* ── Pinned Banner ── */
 .pinned-section { margin-bottom: 24px; }
@@ -104,12 +103,12 @@ body { font-family: 'Inter', sans-serif; background: #f0f2f5; }
 /* ── Card ── */
 .berita-card {
     background: white; border-radius: 16px;
-    box-shadow: 0 2px 14px rgba(0,0,0,.06);
+    border: 1px solid #d4dbe5;
     overflow: hidden; display: flex; flex-direction: row;
-    transition: transform .2s, box-shadow .2s;
+    transition: transform .2s, border-color .2s;
     text-decoration: none; color: inherit;
 }
-.berita-card:hover { transform: translateY(-4px); box-shadow: 0 8px 28px rgba(0,0,0,.12); }
+.berita-card:hover { transform: translateY(-4px); border-color: #fdbb11; }
 .berita-card.pinned-card { border: 2px solid #f6ad55; }
 
 .bc-img {
@@ -134,17 +133,17 @@ body { font-family: 'Inter', sans-serif; background: #f0f2f5; }
     display:inline-flex; align-items:center; gap:5px;
     padding:3px 10px; border-radius:20px; font-size:10px; font-weight:700;
 }
-.bc-date  { font-size:11px; color:#aab; display:flex; align-items:center; gap:4px; }
+.bc-date  { font-size:11px; color:#6b7c93; display:flex; align-items:center; gap:4px; }
 .bc-title { font-size:14px; font-weight:700; color:#2d3748; line-height:1.45; margin:0 0 8px; }
 .bc-desc  { font-size:12px; color:#718096; line-height:1.6; flex:1; }
 .bc-footer {
-    margin-top:14px; padding-top:12px; border-top:1px solid #f0f2f7;
+    margin-top:14px; padding-top:12px; border-top:1px solid #d4dbe5;
     display:flex; align-items:center; justify-content:space-between;
 }
 .bc-author { display:flex; align-items:center; gap:7px; }
-.bc-ava  { width:24px; height:24px; border-radius:50%; background:linear-gradient(135deg,#667eea,#764ba2); color:white; font-size:9px; font-weight:800; display:flex; align-items:center; justify-content:center; }
-.bc-author-name { font-size:11px; color:#888; }
-.bc-read-more   { font-size:11px; color:#667eea; font-weight:700; display:flex; align-items:center; gap:4px; }
+.bc-ava  { width:24px; height:24px; border-radius:50%; background:#12283a; color:white; font-size:9px; font-weight:800; display:flex; align-items:center; justify-content:center; }
+.bc-author-name { font-size:11px; color:#6b7c93; }
+.bc-read-more   { font-size:11px; color:#fdbb11; font-weight:700; display:flex; align-items:center; gap:4px; }
 
 /* ── Staff Actions ── */
 .bc-staff-actions { display:flex; gap:6px; margin-top:8px; }
@@ -154,15 +153,15 @@ body { font-family: 'Inter', sans-serif; background: #f0f2f5; }
     text-decoration:none; transition:opacity .15s;
 }
 .bc-action-btn:hover { opacity:.85; }
-.bc-action-btn.edit  { background:#eef0ff; color:#667eea; }
+.bc-action-btn.edit  { background:#eef3f9; color:#fdbb11; }
 .bc-action-btn.del   { background:#fff0f0; color:#e53e3e; }
 .bc-action-btn.pin   { background:#fff7e6; color:#e07020; }
 
 /* ── Empty State ── */
 .empty-state { text-align:center; padding:60px 20px; background:white; border-radius:16px; }
 .empty-state i   { font-size:48px; color:#e2e5ee; display:block; margin-bottom:14px; }
-.empty-state h3  { font-size:16px; color:#aab; font-weight:600; margin:0 0 6px; }
-.empty-state p   { font-size:13px; color:#bbb; margin:0; }
+.empty-state h3  { font-size:16px; color:#6b7c93; font-weight:600; margin:0 0 6px; }
+.empty-state p   { font-size:13px; color:#6b7c93; margin:0; }
 
 @media (max-width: 768px) {
     .berita-card { flex-direction: column; }
@@ -224,7 +223,7 @@ body { font-family: 'Inter', sans-serif; background: #f0f2f5; }
         {{-- Stats Row --}}
         <div class="stats-row admin-stats">
             <a href="{{ route('berita.index') }}" class="stat-pill {{ !request('kategori') || request('kategori') === 'semua' ? 'active' : '' }}">
-                <div class="stat-icon" style="background:linear-gradient(135deg,#667eea,#764ba2);"><i class="fas fa-newspaper"></i></div>
+                <div class="stat-icon" style="background:#12283a;"><i class="fas fa-newspaper"></i></div>
                 <div class="sp-count">{{ $stats['total'] }}</div>
                 <div class="sp-label">Semua</div>
             </a>
@@ -244,7 +243,7 @@ body { font-family: 'Inter', sans-serif; background: #f0f2f5; }
                 <div class="sp-label">Kegiatan</div>
             </a>
             <a href="{{ route('berita.index', ['kategori' => 'informasi']) }}" class="stat-pill {{ request('kategori') === 'informasi' ? 'active' : '' }}">
-                <div class="stat-icon" style="background:linear-gradient(135deg,#76e4f7,#0bc5ea);"><i class="fas fa-circle-info"></i></div>
+                <div class="stat-icon" style="background:linear-gradient(135deg,#76e4f7,#0d9488);"><i class="fas fa-circle-info"></i></div>
                 <div class="sp-count">{{ $stats['informasi'] }}</div>
                 <div class="sp-label">Informasi</div>
             </a>
@@ -343,7 +342,7 @@ body { font-family: 'Inter', sans-serif; background: #f0f2f5; }
                 @endif
             </p>
             @if(!Auth::user()->isTaruna())
-            <a href="{{ route('berita.create') }}" style="display:inline-flex;align-items:center;gap:8px;margin-top:16px;background:linear-gradient(135deg,#667eea,#764ba2);color:white;padding:10px 22px;border-radius:10px;text-decoration:none;font-weight:700;font-size:13px;">
+            <a href="{{ route('berita.create') }}" style="display:inline-flex;align-items:center;gap:8px;margin-top:16px;background:#12283a;color:white;padding:10px 22px;border-radius:10px;text-decoration:none;font-weight:700;font-size:13px;">
                 <i class="fas fa-plus"></i> Tulis Berita Pertama
             </a>
             @endif
@@ -351,13 +350,13 @@ body { font-family: 'Inter', sans-serif; background: #f0f2f5; }
         @elseif($berita->isNotEmpty())
         <div class="section-header" style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
             <h3 style="font-size:15px;font-weight:700;color:#333;margin:0;">
-                <i class="fas fa-list" style="color:#667eea;margin-right:8px;"></i>
+                <i class="fas fa-list" style="color:#fdbb11;margin-right:8px;"></i>
                 Semua Berita
                 @if(request('search'))
                 <span style="font-size:12px;color:#888;font-weight:400;"> — hasil pencarian "{{ request('search') }}"</span>
                 @endif
             </h3>
-            <span style="font-size:12px;color:#aab;">{{ $berita->total() }} artikel</span>
+            <span style="font-size:12px;color:#6b7c93;">{{ $berita->total() }} artikel</span>
         </div>
         <div class="berita-grid">
             @foreach($berita as $item)

@@ -3,12 +3,12 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 * { box-sizing: border-box; }
-body { font-family: 'Inter', sans-serif; background: #f0f2f5; }
+body { font-family: 'Inter', sans-serif; background: #eef3f9; }
 .app-layout { display: flex; min-height: 100vh; }
 .main-content { flex: 1; padding: 28px 30px; min-width: 0; }
 
 .page-header {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: #12283a;
     border-radius: 18px; padding: 28px 32px; color: white;
     margin-bottom: 24px; position: relative; overflow: hidden;
     display: flex; align-items: center; justify-content: space-between;
@@ -20,43 +20,43 @@ body { font-family: 'Inter', sans-serif; background: #f0f2f5; }
 .page-header p  { margin:0; opacity:.85; font-size:13px; }
 .btn-add {
     position:relative; z-index:1;
-    background:white; color:#667eea;
+    background:white; color:#12283a;
     padding:11px 22px; border-radius:25px;
     text-decoration:none; font-size:13px; font-weight:800;
     display:flex; align-items:center; gap:7px;
-    white-space:nowrap; box-shadow:0 4px 15px rgba(0,0,0,.15);
-    transition:transform .15s, box-shadow .15s;
+    white-space:nowrap; border:1px solid #d4dbe5;
+    transition:transform .15s;
 }
-.btn-add:hover { transform:translateY(-2px); box-shadow:0 6px 20px rgba(0,0,0,.2); color:#667eea; }
+.btn-add:hover { transform:translateY(-2px); color:#fdbb11; }
 
-.alert-success { background:linear-gradient(135deg,#43e97b,#38f9d7); color:white; padding:14px 20px; border-radius:12px; margin-bottom:20px; display:flex; align-items:center; gap:10px; font-weight:600; font-size:14px; }
+.alert-success { background:linear-gradient(135deg,#16a34a,#38f9d7); color:white; padding:14px 20px; border-radius:12px; margin-bottom:20px; display:flex; align-items:center; gap:10px; font-weight:600; font-size:14px; }
 
-.card { background:white; border-radius:16px; overflow:hidden; box-shadow:0 2px 16px rgba(0,0,0,.06); }
+.card { background:white; border-radius:16px; overflow:hidden; border: 1px solid #d4dbe5; }
 .empty-state { text-align:center; padding:60px 20px; }
 .empty-state i  { font-size:56px; color:#e2e5ee; margin-bottom:16px; display:block; }
 .empty-state h4 { color:#aab; margin:0 0 8px; font-size:16px; }
 .empty-state p  { color:#ccc; margin:0 0 20px; font-size:14px; }
 .btn-primary-pill {
-    background:linear-gradient(135deg,#667eea,#764ba2); color:white;
+    background:#12283a; color:white;
     padding:11px 28px; border-radius:25px; text-decoration:none;
     font-size:13px; font-weight:700; display:inline-flex; align-items:center; gap:7px;
 }
 
 table { width:100%; border-collapse:collapse; }
-thead tr { background:linear-gradient(135deg,#667eea,#764ba2); }
+thead tr { background:#12283a; }
 th { padding:14px 18px; text-align:left; color:white; font-size:11px; font-weight:700; letter-spacing:.06em; }
 td { padding:14px 18px; font-size:13px; color:#444; border-top:1px solid #f0f2f7; }
 tbody tr { transition:background .1s; }
-tbody tr:hover { background:#f8f9ff; }
+tbody tr:hover { background:#f5f7fa; }
 
 .status-badge { display:inline-flex; align-items:center; padding:4px 12px; border-radius:20px; font-size:11px; font-weight:700; white-space:nowrap; gap:5px; }
 .badge-diproses  { background:#fff4e6; color:#e07020; }
 .badge-disetujui { background:#e6fff5; color:#38a169; }
 .badge-ditolak   { background:#fff0f0; color:#e53e3e; }
-.badge-selesai   { background:#eef0ff; color:#667eea; }
+.badge-selesai   { background:#eef3f9; color:#12283a; }
 
-.btn-view { background:#eef0ff; color:#667eea; border:none; padding:6px 14px; border-radius:20px; font-size:11px; font-weight:700; text-decoration:none; cursor:pointer; display:inline-flex; align-items:center; gap:5px; }
-.btn-view:hover { background:#dde2ff; }
+.btn-view { background:#eef3f9; color:#12283a; border:none; padding:6px 14px; border-radius:20px; font-size:11px; font-weight:700; text-decoration:none; cursor:pointer; display:inline-flex; align-items:center; gap:5px; }
+.btn-view:hover { background:#dde8f0; }
 
 /* Notif badge */
 .notif-dot { width:8px; height:8px; background:#e53e3e; border-radius:50%; display:inline-block; margin-left:4px; animation:pulse 1.5s infinite; }
@@ -64,7 +64,7 @@ tbody tr:hover { background:#f8f9ff; }
 
 /* Toast notification */
 .toast-container { position:fixed; bottom:24px; right:24px; z-index:9999; display:flex; flex-direction:column; gap:10px; }
-.toast { background:white; border-radius:14px; padding:16px 20px; box-shadow:0 8px 30px rgba(0,0,0,.15); display:flex; align-items:flex-start; gap:12px; min-width:320px; max-width:400px; animation:slideIn .3s ease; border-left:4px solid #667eea; }
+.toast { background:white; border-radius:14px; padding:16px 20px; border:1px solid #d4dbe5; display:flex; align-items:flex-start; gap:12px; min-width:320px; max-width:400px; animation:slideIn .3s ease; border-left:4px solid #12283a; }
 .toast.toast-disetujui { border-left-color:#38a169; }
 .toast.toast-ditolak   { border-left-color:#e53e3e; }
 @keyframes slideIn { from{transform:translateX(120%);opacity:0} to{transform:translateX(0);opacity:1} }
@@ -125,7 +125,7 @@ tbody tr:hover { background:#f8f9ff; }
                     <tr>
                         <td style="color:#bbb; font-weight:600;">{{ $i + 1 }}</td>
                         <td>
-                            <span style="background:#eef0ff; color:#667eea; padding:3px 10px; border-radius:20px; font-size:11px; font-weight:700;">
+                            <span style="background:#eef3f9; color:#12283a; padding:3px 10px; border-radius:20px; font-size:11px; font-weight:700;">
                                 {{ $s->jenis_surat }}
                             </span>
                         </td>
@@ -136,7 +136,7 @@ tbody tr:hover { background:#f8f9ff; }
                             @endif
                         </td>
                         <td style="font-size:12px; color:#666; white-space:nowrap;">
-                            <i class="fas fa-calendar" style="color:#667eea; margin-right:5px;"></i>
+                            <i class="fas fa-calendar" style="color:#fdbb11; margin-right:5px;"></i>
                             {{ $s->tanggal_surat->locale('id')->isoFormat('D MMM Y') }}
                         </td>
                         <td style="text-align:center;">
@@ -204,7 +204,7 @@ function showToast(perihal, status, suratId) {
         <div class="toast-body">
             <div class="toast-title">${isApproved ? '✅ Surat Disetujui' : '❌ Surat Ditolak'}</div>
             <div class="toast-msg">${msg}</div>
-            <div style="font-size:11px; color:#667eea; margin-top:4px; font-weight:600;">${perihal}</div>
+            <div style="font-size:11px; color:#fdbb11; margin-top:4px; font-weight:600;">${perihal}</div>
         </div>
         <button class="toast-close" onclick="document.getElementById('${toastId}').remove()">×</button>
     `;

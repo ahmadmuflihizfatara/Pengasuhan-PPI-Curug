@@ -1,73 +1,7 @@
-/* =============================================
-   Global Aviation Academy — Auth Pages
-   ============================================= */
-
-body, html {
-    font-family: 'Inter', sans-serif;
-}
-
-/* Panel Kiri: Efek Kaca (Glassmorphism) */
-.glass-panel {
-    background: rgba(30, 41, 59, 0.65); /* Warna slate gelap transparan */
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    border-right: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-/* Panel Kanan: Form Putih/Terang */
-.form-panel {
-    background-color: #f1f5f9; /* Slate-100 */
-}
-
-/* Kustomisasi Input Form */
-.input-group {
-    position: relative;
-    background-color: #e2e8f0;
-    border: 1px solid #cbd5e1;
-    border-radius: 0.5rem;
-    transition: all 0.2s ease;
-    display: flex;
-    align-items: center;
-}
+/* PPI Curug — Auth Page Overrides */
+body, html { font-family: 'Inter', sans-serif; }
 
 .input-group:focus-within {
-    border-color: #1e3a8a; /* Warna biru gelap maskapai */
-    box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.15);
-    background-color: #ffffff;
-}
-
-.aviation-input {
-    width: 100%;
-    background-color: transparent;
-    border: none;
-    outline: none;
-    padding: 0.875rem 1rem 0.875rem 2.75rem;
-    color: #1e293b;
-    font-size: 0.875rem;
-}
-
-.input-icon {
-    position: absolute;
-    left: 0.875rem;
-    color: #475569;
-    width: 1.25rem;
-    height: 1.25rem;
-}
-
-/* Tombol Masuk Kokpit */
-.btn-primary {
-    background-color: #1e293b; 
-    color: white;
-    transition: all 0.2s ease;
-    border-bottom: 3px solid #eab308; /* Garis aksen kuning/emas */
-}
-
-.btn-primary:hover {
-    background-color: #0f172a;
-    transform: translateY(-2px);
-    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
-}
-
-.btn-primary:active {
-    transform: translateY(0);
+    border-color: #12283a;
+    box-shadow: 0 0 0 3px rgba(18, 40, 58, 0.12);
 }

@@ -9,7 +9,7 @@
 .admin-stats .stat-label, .admin-stats .sp-label, .admin-stats .lbl, .admin-stats .label { margin-top:4px !important; font-size:11px !important; font-weight:600 !important; line-height:1.35; color:#999 !important; text-transform:none !important; letter-spacing:0 !important; }
 .admin-stats .sub { margin-top:2px; font-size:10px; color:#aab; }
 .admin-stats .sp-dot { display:none !important; }
-.admin-stats .active, .admin-stats .active-tab { box-shadow:inset 0 0 0 2px #667eea,0 2px 10px rgba(0,0,0,.05) !important; }
+.admin-stats .active, .admin-stats .active-tab { box-shadow:inset 0 0 0 2px #12283a,0 2px 10px rgba(0,0,0,.05) !important; }
 @media (max-width:1100px) { .admin-stats { grid-template-columns:repeat(3,minmax(0,1fr)) !important; } .admin-stats.admin-stats--four { grid-template-columns:repeat(2,minmax(0,1fr)) !important; } }
 @media (max-width:640px) { .admin-stats, .admin-stats.admin-stats--four { grid-template-columns:repeat(2,minmax(0,1fr)) !important; } }
 </style>

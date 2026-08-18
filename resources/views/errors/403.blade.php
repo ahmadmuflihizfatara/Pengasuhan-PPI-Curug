@@ -10,7 +10,7 @@
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
             font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #12283a 0%, #12283a 100%);
             min-height: 100vh;
             display: flex;
             align-items: center;
@@ -45,14 +45,14 @@
             box-shadow: 0 12px 30px rgba(238,90,36,.35);
         }
         .code { font-size: 72px; font-weight: 900; line-height: 1;
-            background: linear-gradient(135deg, #667eea, #764ba2);
+            background: linear-gradient(135deg, #12283a, #12283a);
             -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 8px; }
         .title { font-size: 22px; font-weight: 800; color: #333; margin-bottom: 10px; }
         .desc { font-size: 14px; color: #888; line-height: 1.7; margin-bottom: 28px; }
         .desc strong { color: #555; }
 
         .role-info {
-            background: #f8f9ff;
+            background: #f5f7fa;
             border-radius: 12px;
             padding: 14px 18px;
             margin-bottom: 28px;
@@ -62,7 +62,7 @@
         .role-badge { display: inline-block; padding: 4px 14px; border-radius: 20px; font-size: 12px; font-weight: 700; }
 
         .btn-back {
-            background: linear-gradient(135deg, #667eea, #764ba2);
+            background: linear-gradient(135deg, #12283a, #12283a);
             color: white;
             border: none;
             padding: 14px 32px;
@@ -94,7 +94,7 @@
         <div class="role-info">
             <div class="role-info-label">Role Anda saat ini</div>
             @php
-                $roleColors = ['taruna' => ['#f0fff4','#38a169'], 'pengasuh' => ['#ebf4ff','#3182ce'], 'admin' => ['#f3eeff','#764ba2']];
+                $roleColors = ['taruna' => ['#f0fff4','#38a169'], 'pengasuh' => ['#ebf4ff','#12283a'], 'admin' => ['rgba(18,40,58,0.06)','#12283a']];
                 $role = auth()->user()->role;
                 $rc = $roleColors[$role] ?? ['#f8f8f8','#888'];
             @endphp

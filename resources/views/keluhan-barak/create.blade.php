@@ -2,7 +2,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 * { box-sizing: border-box; }
-body { font-family: 'Inter', sans-serif; background: #f0f2f5; }
+body { font-family: 'Inter', sans-serif; background: #eef3f9; }
 .app-layout { display: flex; min-height: 100vh; }
 .main-content { flex: 1; padding: 28px 30px; min-width: 0; max-width: 820px; }
 
@@ -10,7 +10,7 @@ body { font-family: 'Inter', sans-serif; background: #f0f2f5; }
 .back-link:hover { text-decoration:underline; }
 
 .page-header {
-    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    background: linear-gradient(135deg, #fdbb11 0%, #dc2626 100%);
     border-radius: 18px; padding: 28px 32px; color: white;
     margin-bottom: 24px; position: relative; overflow: hidden;
 }
@@ -31,17 +31,17 @@ body { font-family: 'Inter', sans-serif; background: #f0f2f5; }
 .form-label { display:block; font-size:12px; font-weight:700; color:#555; margin-bottom:7px; text-transform:uppercase; letter-spacing:.04em; }
 .req { color:#e53e3e; }
 .opt { color:#aab; font-weight:400; text-transform:none; letter-spacing:0; }
-.form-control { width:100%; padding:11px 14px; border:2px solid #edf0f7; border-radius:10px; font-size:13px; font-family:'Inter',sans-serif; color:#333; background:#fafbff; outline:none; transition:border .15s; }
+.form-control { width:100%; padding:11px 14px; border:2px solid #d4dbe5; border-radius:10px; font-size:13px; font-family:'Inter',sans-serif; color:#333; background:#f9fafb; outline:none; transition:border .15s; }
 .form-control:focus { border-color:#d63384; background:white; }
 .form-control[readonly] { background:#f3f4f6; color:#4b5563; cursor:not-allowed; }
 select.form-control { cursor:pointer; }
 textarea.form-control { resize:vertical; min-height:110px; }
-.file-input { width:100%; padding:10px 14px; border:2px dashed #c5c8e0; border-radius:10px; font-size:13px; font-family:'Inter',sans-serif; background:#fafbff; cursor:pointer; outline:none; }
+.file-input { width:100%; padding:10px 14px; border:2px dashed #c5c8e0; border-radius:10px; font-size:13px; font-family:'Inter',sans-serif; background:#f9fafb; cursor:pointer; outline:none; }
 
 .btn-row { display:flex; gap:12px; justify-content:flex-end; margin-top:28px; padding-top:20px; border-top:1px solid #f0f2f7; }
-.btn-submit { background:linear-gradient(135deg,#f093fb,#f5576c); color:white; border:none; padding:12px 32px; border-radius:25px; font-size:13px; font-weight:800; cursor:pointer; display:inline-flex; align-items:center; gap:8px; box-shadow:0 4px 15px rgba(245,87,108,.4); transition:opacity .15s; }
+.btn-submit { background:linear-gradient(135deg,#fdbb11,#dc2626); color:white; border:none; padding:12px 32px; border-radius:25px; font-size:13px; font-weight:800; cursor:pointer; display:inline-flex; align-items:center; gap:8px; box-shadow:0 4px 15px rgba(245,87,108,.4); transition:opacity .15s; }
 .btn-submit:hover { opacity:.9; }
-.btn-cancel { background:#f4f5f9; color:#666; padding:12px 24px; border-radius:25px; text-decoration:none; font-size:13px; font-weight:700; display:inline-flex; align-items:center; gap:8px; border:2px solid #edf0f7; transition:border .15s; }
+.btn-cancel { background:#f4f5f9; color:#666; padding:12px 24px; border-radius:25px; text-decoration:none; font-size:13px; font-weight:700; display:inline-flex; align-items:center; gap:8px; border:2px solid #d4dbe5; transition:border .15s; }
 .btn-cancel:hover { border-color:#d63384; color:#d63384; }
 
 .error-box { background:#fff0f0; border:1px solid #fc8181; border-radius:10px; padding:14px 18px; margin-bottom:22px; }

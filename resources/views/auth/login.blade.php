@@ -1,71 +1,72 @@
 <x-guest-layout>
-    <div class="flex flex-col md:flex-row w-full max-w-5xl rounded-3xl overflow-hidden shadow-2xl">
-        
-        <div class="w-full md:w-5/12 glass-panel p-10 md:p-12 flex flex-col justify-center text-white relative">
-            <div class="relative z-10">
-                <div class="flex items-center gap-4 mb-10">
-                    <img src="{{ asset('images/logo.png') }}" alt="Logo" class="w-20 h-20 rounded-full shadow-lg object-cover">
-                    <span class="font-bold tracking-widest uppercase text-sm leading-tight text-yellow-500">
-                        POLITEKNIK PENERBANGAN INDONESIA<br><span class="text-white">CURUG</span>
-                    </span>
-                </div>
+    {{-- Left: Visual --}}
+    <div style="flex:0 0 42%;background:url('{{ asset('images/cockpit-bg.jpg') }}') center/cover no-repeat;position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:3rem;overflow:hidden;">
+        <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(18,40,58,.85) 0%,rgba(12,28,43,.95) 100%);"></div>
+        <div style="position:relative;z-index:2;text-align:center;">
+            <img src="{{ asset('images/logo.png') }}" alt="Logo PPI Curug" style="width:80px;height:80px;border-radius:50%;object-fit:cover;border:3px solid rgba(253,187,17,.4);box-shadow:0 0 40px rgba(253,187,17,.15);margin-bottom:1.5rem;">
+            <h2 style="font-size:1.1rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;margin-bottom:.5rem;color:#fff;"><span style="color:#fdbb11;">PPI</span> Curug</h2>
+            <p style="font-size:.8rem;color:rgba(255,255,255,.4);line-height:1.6;max-width:280px;margin:0 auto;">Politeknik Penerbangan Indonesia Curug — mencetak pilot profesional kelas dunia.</p>
+        </div>
+        <div style="position:absolute;bottom:40px;right:-20px;opacity:.06;transform:rotate(-15deg);pointer-events:none;">
+            <svg width="300" height="200" viewBox="0 0 300 200" fill="none">
+                <ellipse cx="180" cy="100" rx="90" ry="15" fill="white"/>
+                <path d="M150 100 L95 45 L115 40 L195 93Z" fill="rgba(253,187,17,.3)"/>
+                <path d="M150 100 L95 155 L115 160 L195 107Z" fill="rgba(253,187,17,.25)"/>
+                <path d="M85 100 L55 68 L72 66 L95 93Z" fill="white"/>
+                <path d="M85 100 L55 132 L72 134 L95 107Z" fill="rgba(255,255,255,.7)"/>
+            </svg>
+        </div>
+    </div>
 
-                <h1 class="text-3xl md:text-4xl font-bold leading-tight mb-4">
-                    SELAMAT DATANG DI PANEL KONTROL KARIR IMPIAN ANDA.
-                </h1>
-                <p class="text-slate-300 text-sm leading-relaxed">
-                    Mulailah perjalanan Anda sebagai pilot profesional sekarang.
-                </p>
+    {{-- Right: Form --}}
+    <div style="flex:1;background:#eef3f9;padding:3rem;display:flex;flex-direction:column;justify-content:center;">
+        <h1 style="font-size:1.5rem;font-weight:800;color:#12283a;margin-bottom:.3rem;">Masuk ke Sistem</h1>
+        <p style="font-size:.85rem;color:#6b7c93;margin-bottom:2rem;">Gunakan akun Anda untuk mengakses dashboard.</p>
+
+        @if ($errors->any())
+            <div style="background:#fef2f2;border:1px solid #fecaca;color:#dc2626;padding:.6rem 1rem;border-radius:10px;font-size:.8rem;margin-bottom:1rem;">
+                <i class="fas fa-exclamation-circle"></i> {{ $errors->first() }}
             </div>
-        </div>
+        @endif
 
-        <div class="w-full md:w-7/12 form-panel p-10 md:p-14 flex flex-col justify-center">
-            <form method="POST" action="{{ route('login') }}" novalidate>
-                @csrf
-
-                <div class="mb-6">
-                    <label for="email" class="block text-xs font-semibold text-slate-600 mb-2 uppercase tracking-wide">Email atau Username</label>
-                    <div class="input-group">
-                        <svg class="input-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 9h3.75M15 12h3.75M15 15h3.75M4.5 19.5h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5zm6-10.125a1.875 1.875 0 11-3.75 0 1.875 1.875 0 013.75 0zm1.294 6.336a6.721 6.721 0 01-3.17.789 6.721 6.721 0 01-3.168-.789 3.376 3.376 0 016.338 0z" />
-                        </svg>
-                        <input id="email" type="email" name="email" value="{{ old('email') }}" required autofocus class="aviation-input" placeholder="contoh@aviation.ac.id" />
-                    </div>
-                    @error('email') <span class="text-red-500 text-xs mt-1 block">{{ $message }}</span> @enderror
+        <form method="POST" action="{{ route('login') }}">
+            @csrf
+            <div style="margin-bottom:1.2rem;">
+                <label style="display:block;font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#6b7c93;margin-bottom:.4rem;">Email atau Username</label>
+                <div style="position:relative;display:flex;align-items:center;">
+                    <i class="fas fa-envelope" style="position:absolute;left:14px;color:#6b7c93;font-size:14px;pointer-events:none;"></i>
+                    <input type="text" name="email" value="{{ old('email') }}" required autofocus placeholder="contoh@ppicurug.ac.id"
+                        style="width:100%;padding:.8rem 1rem .8rem 2.8rem;border:1.5px solid #d4dbe5;border-radius:12px;font-size:.875rem;font-family:'Inter',sans-serif;color:#12283a;background:#fff;outline:none;transition:border-color .2s;">
                 </div>
+            </div>
 
-                <div class="mb-6">
-                    <label for="password" class="block text-xs font-semibold text-slate-600 mb-2 uppercase tracking-wide">Kata Sandi</label>
-                    <div class="input-group">
-                        <svg class="input-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
-                        </svg>
-                        <input id="password" type="password" name="password" required class="aviation-input" placeholder="••••••••" />
-                    </div>
-                    @error('password') <span class="text-red-500 text-xs mt-1 block">{{ $message }}</span> @enderror
+            <div style="margin-bottom:1.2rem;">
+                <label style="display:block;font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#6b7c93;margin-bottom:.4rem;">Kata Sandi</label>
+                <div style="position:relative;display:flex;align-items:center;">
+                    <i class="fas fa-lock" style="position:absolute;left:14px;color:#6b7c93;font-size:14px;pointer-events:none;"></i>
+                    <input type="password" name="password" required placeholder="Masukkan kata sandi"
+                        style="width:100%;padding:.8rem 1rem .8rem 2.8rem;border:1.5px solid #d4dbe5;border-radius:12px;font-size:.875rem;font-family:'Inter',sans-serif;color:#12283a;background:#fff;outline:none;transition:border-color .2s;">
                 </div>
+            </div>
 
-                <div class="flex items-center justify-between mb-8">
-                    <label class="flex items-center gap-2 cursor-pointer">
-                        <input type="checkbox" name="remember" class="w-4 h-4 rounded border-slate-300 text-slate-800 focus:ring-slate-800" {{ old('remember') ? 'checked' : '' }}>
-                        <span class="text-sm text-slate-600 font-medium">Ingat Saya</span>
-                    </label>
-                    @if (Route::has('password.request'))
-                        <a href="{{ route('password.request') }}" class="text-sm font-bold text-slate-800 hover:text-yellow-600 hover:underline">LUPA KATA SANDI?</a>
-                    @endif
-                </div>
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;">
+                <label style="display:flex;align-items:center;gap:.4rem;font-size:.8rem;color:#6b7c93;cursor:pointer;">
+                    <input type="checkbox" name="remember" {{ old('remember') ? 'checked' : '' }}> Ingat saya
+                </label>
+                @if (Route::has('password.request'))
+                    <a href="{{ route('password.request') }}" style="font-size:.8rem;font-weight:700;color:#12283a;text-decoration:none;">Lupa kata sandi?</a>
+                @endif
+            </div>
 
-                <button type="submit" class="w-full btn-primary flex items-center justify-center gap-2 py-3.5 rounded-lg font-bold tracking-widest shadow-lg">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-5 h-5 text-yellow-500">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5" />
-                    </svg>
-                    MASUK KE KOKPIT
-                </button>
+            <button type="submit" style="width:100%;padding:.85rem;border:none;border-radius:9999px;background:#12283a;color:#fff;font-size:.85rem;font-weight:700;font-family:'Inter',sans-serif;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:.5rem;"
+                onmouseover="this.style.background='#fdbb11';this.style.color='#0c1c2b'"
+                onmouseout="this.style.background='#12283a';this.style.color='#fff'">
+                <i class="fas fa-plane" style="color:#fdbb11;"></i> Masuk
+            </button>
+        </form>
 
-                <p class="text-center mt-8 text-sm text-slate-600 font-medium">
-                    BELUM PUNYA AKUN? <a href="{{ route('register') }}" class="font-bold text-slate-800 hover:text-yellow-600 hover:underline">DAFTAR</a>
-                </p>
-            </form>
-        </div>
+        <p style="text-align:center;margin-top:1.5rem;font-size:.8rem;color:#6b7c93;">
+            Belum punya akun? <a href="{{ route('register') }}" style="font-weight:700;color:#12283a;text-decoration:none;">Daftar Sekarang</a>
+        </p>
     </div>
 </x-guest-layout>

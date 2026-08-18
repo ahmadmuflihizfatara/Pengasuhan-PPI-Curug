@@ -2,15 +2,15 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 * { box-sizing: border-box; }
-body { font-family: 'Inter', sans-serif; background: #f0f2f5; }
+body { font-family: 'Inter', sans-serif; background: #eef3f9; }
 .app-layout { display: flex; min-height: 100vh; }
 .main-content { flex: 1; padding: 28px 30px; min-width: 0; max-width: 820px; }
 
-.back-link { display:inline-flex; align-items:center; gap:7px; color:#b45309; text-decoration:none; font-size:13px; font-weight:600; margin-bottom:20px; }
+.back-link { display:inline-flex; align-items:center; gap:7px; color:#fdbb11; text-decoration:none; font-size:13px; font-weight:600; margin-bottom:20px; }
 .back-link:hover { text-decoration:underline; }
 
 .page-header {
-    background: linear-gradient(135deg, #f7b733 0%, #fc4a1a 100%);
+    background: #12283a;
     border-radius: 18px; padding: 28px 32px; color: white;
     margin-bottom: 24px; position: relative; overflow: hidden;
 }
@@ -18,43 +18,43 @@ body { font-family: 'Inter', sans-serif; background: #f0f2f5; }
 .page-header h1 { margin:0 0 4px; font-size:22px; font-weight:800; position:relative; z-index:1; }
 .page-header p  { margin:0; opacity:.85; font-size:13px; position:relative; z-index:1; }
 
-.card { background:white; border-radius:16px; padding:32px; box-shadow:0 2px 16px rgba(0,0,0,.06); }
+.card { background:white; border-radius:16px; padding:32px; border:1px solid #d4dbe5; }
 
-.info-banner { background:linear-gradient(135deg,#fffaf0,#fff7ed); border:1.5px solid #fbd38d; border-radius:12px; padding:16px 20px; margin-bottom:24px; display:flex; align-items:flex-start; gap:12px; }
-.info-banner i { color:#b45309; font-size:18px; margin-top:2px; flex-shrink:0; }
-.info-banner-text .title { font-weight:700; color:#92400e; font-size:13px; margin-bottom:4px; }
-.info-banner-text p { font-size:12px; color:#4a5568; margin:0; line-height:1.6; }
+.info-banner { background:#eef3f9; border:1.5px solid #d4dbe5; border-radius:12px; padding:16px 20px; margin-bottom:24px; display:flex; align-items:flex-start; gap:12px; }
+.info-banner i { color:#fdbb11; font-size:18px; margin-top:2px; flex-shrink:0; }
+.info-banner-text .title { font-weight:700; color:#12283a; font-size:13px; margin-bottom:4px; }
+.info-banner-text p { font-size:12px; color:#6b7c93; margin:0; line-height:1.6; }
 
-.section-divider { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.08em; color:#aab; padding-bottom:10px; border-bottom:1px solid #f0f2f7; margin:0 0 20px; }
+.section-divider { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.08em; color:#6b7c93; padding-bottom:10px; border-bottom:1px solid #d4dbe5; margin:0 0 20px; }
 
 .form-group { margin-bottom:20px; }
 .form-label { display:block; font-size:12px; font-weight:700; color:#555; margin-bottom:7px; text-transform:uppercase; letter-spacing:.04em; }
 .req { color:#e53e3e; }
-.opt { color:#aab; font-weight:400; text-transform:none; letter-spacing:0; }
-.form-control { width:100%; padding:11px 14px; border:2px solid #edf0f7; border-radius:10px; font-size:13px; font-family:'Inter',sans-serif; color:#333; background:#fafbff; outline:none; transition:border .15s; }
-.form-control:focus { border-color:#f5b301; background:white; }
+.opt { color:#6b7c93; font-weight:400; text-transform:none; letter-spacing:0; }
+.form-control { width:100%; padding:11px 14px; border:2px solid #d4dbe5; border-radius:10px; font-size:13px; font-family:'Inter',sans-serif; color:#333; background:#eef3f9; outline:none; transition:border .15s; }
+.form-control:focus { border-color:#fdbb11; background:white; }
 .form-control[readonly] { background:#f3f4f6; color:#4b5563; cursor:not-allowed; }
 select.form-control { cursor:pointer; }
 textarea.form-control { resize:vertical; min-height:110px; }
-.file-input { width:100%; padding:10px 14px; border:2px dashed #c5c8e0; border-radius:10px; font-size:13px; font-family:'Inter',sans-serif; background:#fafbff; cursor:pointer; outline:none; }
+.file-input { width:100%; padding:10px 14px; border:2px dashed #d4dbe5; border-radius:10px; font-size:13px; font-family:'Inter',sans-serif; background:#eef3f9; cursor:pointer; outline:none; }
 
 /* Toggle jenis pengajuan */
 .jenis-toggle { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
 .jenis-toggle input { position:absolute; opacity:0; pointer-events:none; }
 .jenis-toggle label {
     display:flex; flex-direction:column; align-items:center; gap:5px;
-    padding:16px 10px; border:2px solid #e8ebf5; border-radius:12px;
-    background:#fafbff; cursor:pointer; transition:all .15s; text-align:center;
-    font-size:12.5px; font-weight:700; color:#666;
+    padding:16px 10px; border:2px solid #d4dbe5; border-radius:12px;
+    background:#eef3f9; cursor:pointer; transition:all .15s; text-align:center;
+    font-size:12.5px; font-weight:700; color:#6b7c93;
 }
 .jenis-toggle label i { font-size:18px; }
-.jenis-toggle input:checked + label { border-color:#f5b301; background:#fffaf0; color:#b45309; }
+.jenis-toggle input:checked + label { border-color:#fdbb11; background:#eef3f9; color:#12283a; }
 
-.btn-row { display:flex; gap:12px; justify-content:flex-end; margin-top:28px; padding-top:20px; border-top:1px solid #f0f2f7; }
-.btn-submit { background:linear-gradient(135deg,#f7b733,#fc4a1a); color:white; border:none; padding:12px 32px; border-radius:25px; font-size:13px; font-weight:800; cursor:pointer; display:inline-flex; align-items:center; gap:8px; box-shadow:0 4px 15px rgba(252,74,26,.35); transition:opacity .15s; }
+.btn-row { display:flex; gap:12px; justify-content:flex-end; margin-top:28px; padding-top:20px; border-top:1px solid #d4dbe5; }
+.btn-submit { background:#12283a; color:white; border:none; padding:12px 32px; border-radius:25px; font-size:13px; font-weight:800; cursor:pointer; display:inline-flex; align-items:center; gap:8px; transition:opacity .15s; }
 .btn-submit:hover { opacity:.9; }
-.btn-cancel { background:#f4f5f9; color:#666; padding:12px 24px; border-radius:25px; text-decoration:none; font-size:13px; font-weight:700; display:inline-flex; align-items:center; gap:8px; border:2px solid #edf0f7; transition:border .15s; }
-.btn-cancel:hover { border-color:#f5b301; color:#b45309; }
+.btn-cancel { background:#eef3f9; color:#6b7c93; padding:12px 24px; border-radius:25px; text-decoration:none; font-size:13px; font-weight:700; display:inline-flex; align-items:center; gap:8px; border:2px solid #d4dbe5; transition:border .15s; }
+.btn-cancel:hover { border-color:#fdbb11; color:#12283a; }
 
 .error-box { background:#fff0f0; border:1px solid #fc8181; border-radius:10px; padding:14px 18px; margin-bottom:22px; }
 .error-box p  { margin:0 0 8px; color:#e53e3e; font-weight:700; font-size:13px; }
@@ -141,7 +141,7 @@ textarea.form-control { resize:vertical; min-height:110px; }
                     <label class="form-label">Jumlah Anggota Kelompok <span class="req">*</span></label>
                     <input type="number" name="jumlah_anggota" class="form-control" min="2" max="200"
                            placeholder="Contoh: 5" value="{{ old('jumlah_anggota') }}">
-                    <span style="font-size:11px; color:#a8afbd;">Termasuk Anda sebagai pengaju.</span>
+                    <span style="font-size:11px; color:#6b7c93;">Termasuk Anda sebagai pengaju.</span>
                     @error('jumlah_anggota')<div style="color:#e53e3e; font-size:11px; margin-top:5px;">{{ $message }}</div>@enderror
                 </div>
 

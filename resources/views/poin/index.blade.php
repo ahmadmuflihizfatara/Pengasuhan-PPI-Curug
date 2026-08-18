@@ -2,14 +2,14 @@
 <x-administration-table-style />
 <style>
     * { box-sizing: border-box; }
-    body { font-family: 'Inter', sans-serif; background: #f0f2f5; }
+    body { font-family: 'Inter', sans-serif; background: #eef3f9; }
 
     .app-layout { display: flex; min-height: 100vh; }
     .main-content { flex: 1; padding: 28px 30px; min-width: 0; }
 
     /* === HEADER === */
     .poin-header-banner {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background: #12283a;
         border-radius: 18px;
         padding: 24px 30px;
         color: white;
@@ -19,7 +19,7 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
-        box-shadow: 0 8px 20px -6px rgba(102, 126, 234, 0.28);
+        border: 1px solid #d4dbe5;
     }
     .poin-header-banner::after {
         content: ''; position: absolute; right: -40px; top: -40px; width: 180px; height: 180px;
@@ -34,7 +34,7 @@
         border-radius: 14px;
         padding: 14px 20px;
         margin-bottom: 24px;
-        border: 1px solid #edf0f7;
+        border: 1px solid #d4dbe5;
         display: flex;
         align-items: center;
         justify-content: space-between;
@@ -46,12 +46,12 @@
     }
     .flow-step { display: flex; align-items: center; gap: 8px; }
     .flow-num {
-        width: 22px; height: 22px; border-radius: 50%; background: #eef0f7; color: #888;
+        width: 22px; height: 22px; border-radius: 50%; background: #d4dbe5; color: #6b7c93;
         display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700;
     }
-    .flow-step.active .flow-num { background: #667eea; color: white; }
+    .flow-step.active .flow-num { background: #12283a; color: white; }
     .flow-step.active { color: #555; }
-    .flow-arrow { color: #edf0f7; font-size: 14px; }
+    .flow-arrow { color: #d4dbe5; font-size: 14px; }
 
     /* === LAYOUT GRID === */
     .poin-grid {
@@ -65,19 +65,19 @@
     .card-panel {
         background: white;
         border-radius: 16px;
-        box-shadow: 0 2px 16px rgba(0,0,0,.06);
+        border: 1px solid #d4dbe5;
         margin-bottom: 24px;
         overflow: hidden;
     }
     .card-panel-header {
         padding: 16px 20px;
-        background: #fafbff;
-        border-bottom: 1px solid #edf0f7;
+        background: #eef3f9;
+        border-bottom: 1px solid #d4dbe5;
         display: flex;
         align-items: center;
         justify-content: space-between;
     }
-    .card-panel-title { font-size: 15px; font-weight: 700; color: #333; margin: 0; display: flex; align-items: center; gap: 8px; }
+    .card-panel-title { font-size: 15px; font-weight: 700; color: #12283a; margin: 0; display: flex; align-items: center; gap: 8px; }
     .card-panel-body { padding: 20px; }
 
     /* Student Search & List */
@@ -89,7 +89,7 @@
         width: 100%;
         padding: 10px 14px 10px 38px;
         border-radius: 10px;
-        border: 1.5px solid #edf0f7;
+        border: 1.5px solid #d4dbe5;
         font-size: 13px;
     }
     .mhs-search-box i {
@@ -98,7 +98,7 @@
     .mhs-list-dropdown {
         max-height: 280px;
         overflow-y: auto;
-        border: 1px solid #edf0f7;
+        border: 1px solid #d4dbe5;
         border-radius: 10px;
     }
     .mhs-item-opt {
@@ -107,34 +107,34 @@
         align-items: center;
         gap: 8px;
         cursor: pointer;
-        border-bottom: 1px solid #f0f2f7;
+        border-bottom: 1px solid #d4dbe5;
         transition: background 0.15s;
     }
-    .mhs-item-opt:hover { background: #fafbff; }
-    .mhs-item-opt.selected { background: #eef0ff; border-left: 3px solid #667eea; }
+    .mhs-item-opt:hover { background: #eef3f9; }
+    .mhs-item-opt.selected { background: #eef3f9; border-left: 3px solid #fdbb11; }
     .mhs-opt-ava {
-        width: 26px; height: 26px; border-radius: 7px; background: linear-gradient(135deg, #667eea, #764ba2); color: white;
+        width: 26px; height: 26px; border-radius: 7px; background: #12283a; color: white;
         display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 600; flex-shrink: 0;
     }
     .mhs-opt-name { font-size: 12.5px; font-weight: 600; color: #444; }
-    .mhs-opt-meta { font-size: 11px; color: #aab; }
+    .mhs-opt-meta { font-size: 11px; color: #6b7c93; }
 
     /* Selected Student Info Card */
     .student-profile-box {
         text-align: center;
         padding: 18px;
-        background: #fafbff;
+        background: #eef3f9;
         border-radius: 14px;
         margin-bottom: 18px;
-        border: 1px solid #edf0f7;
+        border: 1px solid #d4dbe5;
     }
     .student-profile-ava {
-        width: 56px; height: 56px; border-radius: 50%; background: linear-gradient(135deg, #667eea, #764ba2); color: white;
+        width: 56px; height: 56px; border-radius: 50%; background: #12283a; color: white;
         display: flex; align-items: center; justify-content: center; font-size: 20px; font-weight: 600;
         margin: 0 auto 10px;
     }
-    .student-profile-name { font-size: 16px; font-weight: 600; color: #444; margin-bottom: 2px; }
-    .student-profile-meta { font-size: 12px; color: #aab; font-weight: 500; }
+    .student-profile-name { font-size: 16px; font-weight: 600; color: #12283a; margin-bottom: 2px; }
+    .student-profile-meta { font-size: 12px; color: #6b7c93; font-weight: 500; }
 
     /* === SANKSI & POIN DUAL SCORE BOX === */
     .dual-score-grid {
@@ -163,7 +163,7 @@
     .score-card-val { font-size: 26px; font-weight: 700; line-height: 1; margin-bottom: 4px; }
     .pelanggaran-card .score-card-val { color: #c05656; }
     .penghargaan-card .score-card-val { color: #3f9663; }
-    .score-card-sub { font-size: 11px; color: #aab; }
+    .score-card-sub { font-size: 11px; color: #6b7c93; }
 
     /* Sanksi Status Alert Box */
     .sanksi-status-alert {
@@ -182,7 +182,7 @@
     /* Progress threshold */
     .threshold-bar-wrapper { margin-top: 8px; margin-bottom: 24px; }
     .threshold-bar {
-        height: 10px; border-radius: 20px; background: #edf0f7; display: flex; overflow: hidden;
+        height: 10px; border-radius: 20px; background: #d4dbe5; display: flex; overflow: hidden;
     }
     .t-step { height: 100%; }
     .t-aman  { width: 50%; background: #22c55e; }
@@ -193,7 +193,7 @@
     /* === FORM USULAN DUAL TOGGLE (A vs B) === */
     .usulan-toggle {
         display: flex;
-        background: #f0f2f7;
+        background: #d4dbe5;
         border-radius: 12px;
         padding: 4px;
         margin-bottom: 20px;
@@ -212,7 +212,7 @@
         align-items: center;
         justify-content: center;
         gap: 8px;
-        color: #aab;
+        color: #6b7c93;
         background: transparent;
     }
     .toggle-btn.active-penghargaan {
@@ -236,7 +236,7 @@
         text-align: center;
         cursor: pointer;
         transition: all 0.2s;
-        background: #edf0f7;
+        background: #d4dbe5;
         opacity: .55;
     }
     .tingkat-card:hover { opacity: .8; }
@@ -261,23 +261,23 @@
         border: none;
         border-radius: 10px 10px 0 0;
         padding: 12px 18px;
-        background: #f0f2f7;
+        background: #d4dbe5;
         color: #888;
     }
-    .riwayat-tabs .nav-link:hover { background: #edf0f7; }
+    .riwayat-tabs .nav-link:hover { background: #d4dbe5; }
     .riwayat-tabs .nav-link { font-weight: 600; }
     .riwayat-tabs .nav-link.active.text-danger { background: #fdf0f0; color: #c53030 !important; box-shadow: inset 0 -2.5px 0 #e08a8a; }
     .riwayat-tabs .nav-link.active.text-success { background: #eafaf0; color: #2f855a !important; box-shadow: inset 0 -2.5px 0 #85c9a0; }
 
     /* Kotak Judul Riwayat — gaya header Acara (gradient + toggle pill) */
     .riwayat-title-box {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background: #12283a;
         border-radius: 18px;
         padding: 22px 26px;
         margin-bottom: 10px;
         position: relative;
         overflow: hidden;
-        box-shadow: 0 8px 18px -8px rgba(102,126,234,.35);
+        border: 1px solid #d4dbe5;
     }
     .riwayat-title-box::before {
         content: ''; position: absolute; right: -40px; top: -40px; width: 160px; height: 160px;
@@ -315,24 +315,24 @@
 
     /* Tables */
     .table-custom th {
-        background: #fafbff; font-size: 11px; font-weight: 600; text-transform: uppercase;
-        letter-spacing: .03em; color: #aab; padding: 10px 14px; border-bottom: 1px solid #edf0f7;
+        background: #eef3f9; font-size: 11px; font-weight: 600; text-transform: uppercase;
+        letter-spacing: .03em; color: #6b7c93; padding: 10px 14px; border-bottom: 1px solid #d4dbe5;
     }
     .table-custom td {
-        padding: 12px 14px; font-size: 13px; color: #444; vertical-align: middle;
-        border-top: 1px solid #f0f2f7;
+        padding: 12px 14px; font-size: 13px; color: #12283a; vertical-align: middle;
+        border-top: 1px solid #d4dbe5;
     }
-    .table-custom tbody tr:hover td { background: #f8f9ff; }
+    .table-custom tbody tr:hover td { background: #eef3f9; }
 
     /* Tabel Riwayat Poin — gaya samakan seperti tabel Acara */
-    .table-riwayat thead tr { background: linear-gradient(135deg, #667eea, #764ba2); }
+    .table-riwayat thead tr { background: #12283a; }
     .table-riwayat th {
         background: transparent; color: white; font-weight: 700; text-transform: uppercase;
         letter-spacing: .06em; border-bottom: none; padding: 14px 18px;
     }
     .table-riwayat td { padding: 14px 18px; }
-    .riwayat-row-num { color: #bbb; font-weight: 600; }
-    .riwayat-date-icon { color: #764ba2; margin-right: 6px; }
+    .riwayat-row-num { color: #6b7c93; font-weight: 600; }
+    .riwayat-date-icon { color: #fdbb11; margin-right: 6px; }
     .riwayat-icon-box {
         width: 36px; height: 36px; border-radius: 10px; flex-shrink: 0;
         display: flex; align-items: center; justify-content: center; color: white; font-size: 14px;
@@ -369,30 +369,30 @@
 
     /* Empty state — standar aplikasi */
     .empty-state   { text-align: center; padding: 60px 20px; }
-    .empty-state i { font-size: 54px; color: #e2e5ee; display: block; margin-bottom: 14px; }
-    .empty-state h4 { color: #aab; margin: 0 0 6px; font-size: 15px; }
-    .empty-state p  { color: #ccc; margin: 0; font-size: 13px; }
+    .empty-state i { font-size: 54px; color: #d4dbe5; display: block; margin-bottom: 14px; }
+    .empty-state h4 { color: #6b7c93; margin: 0 0 6px; font-size: 15px; }
+    .empty-state p  { color: #d4dbe5; margin: 0; font-size: 13px; }
     .main-content .form-select,
     .main-content .form-control {
-        width: 100%; padding: 11px 14px; border: 2px solid #edf0f7; border-radius: 10px;
-        font-size: 13px; color: #333; background: #fafbff; outline: none; transition: border .15s;
+        width: 100%; padding: 11px 14px; border: 2px solid #d4dbe5; border-radius: 10px;
+        font-size: 13px; color: #12283a; background: #eef3f9; outline: none; transition: border .15s;
     }
     .main-content input[type="file"].form-control {
         padding: 6px 10px; font-size: 12.5px; color: #888;
     }
     .main-content input[type="file"].form-control::file-selector-button {
         margin-right: 10px; padding: 6px 12px; font-size: 12px; font-weight: 600;
-        color: #4a5068; background: #eef0ff; border: none; border-radius: 8px;
+        color: #12283a; background: #eef3f9; border: none; border-radius: 8px;
         cursor: pointer; transition: background .15s;
     }
-    .main-content input[type="file"].form-control::file-selector-button:hover { background: #e2e4f5; }
+    .main-content input[type="file"].form-control::file-selector-button:hover { background: #d4dbe5; }
     .main-content .form-select:focus,
     .main-content .form-control:focus {
-        border-color: #667eea; background: white; box-shadow: none;
+        border-color: #fdbb11; background: white; box-shadow: none;
     }
     .main-content .btn-primary {
-        background: linear-gradient(135deg, #667eea, #764ba2); border: none;
-        border-radius: 25px !important; box-shadow: 0 4px 15px rgba(102,126,234,.4);
+        background: #12283a; border: none;
+        border-radius: 25px !important; border: 1px solid #d4dbe5;
         padding: 11px 28px; font-size: 13px; font-weight: 700;
     }
     .main-content .btn-primary:hover { opacity: .92; }
@@ -867,7 +867,7 @@
                                             @empty
                                             <tr>
                                                 <td colspan="7" class="text-center py-4 text-muted">
-                                                    <i class="fas fa-shield-alt mb-2 d-block" style="font-size:38px; color:#e2e5ee;"></i>
+                                                    <i class="fas fa-shield-alt mb-2 d-block" style="font-size:38px; color:#d4dbe5;"></i>
                                                     Tidak ada catatan pelanggaran tervalidasi. Status Disiplin: <strong>Aman</strong>.
                                                 </td>
                                             </tr>
@@ -934,7 +934,7 @@
                                             @empty
                                             <tr>
                                                 <td colspan="7" class="text-center py-4 text-muted">
-                                                    <i class="fas fa-award mb-2 d-block" style="font-size:38px; color:#e2e5ee;"></i>
+                                                    <i class="fas fa-award mb-2 d-block" style="font-size:38px; color:#d4dbe5;"></i>
                                                     Belum ada catatan penghargaan/prestasi tervalidasi.
                                                 </td>
                                             </tr>

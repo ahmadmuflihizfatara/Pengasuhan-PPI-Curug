@@ -2,13 +2,13 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 * { box-sizing: border-box; }
-body { font-family: 'Inter', sans-serif; background: #f0f2f5; }
+body { font-family: 'Inter', sans-serif; background: #eef3f9; }
 
 .app-layout { display: flex; min-height: 100vh; }
 .main-content { flex: 1; padding: 28px 30px; min-width: 0; }
 
 .page-header {
-    background: linear-gradient(135deg, #764ba2 0%, #4a3aa7 100%);
+    background: linear-gradient(135deg, #12283a 0%, #4a3aa7 100%);
     border-radius: 18px; padding: 28px 32px; color: white; margin-bottom: 22px;
     position: relative; overflow: hidden;
 }

@@ -1,24 +1,19 @@
 {{--
-    Komponen Sidebar Reusable
-    Penggunaan: <x-sidebar active="dashboard" />
-    Nilai $active: 'dashboard' | 'berita' | 'surat' | 'acara' | 'poin' | 'mahasiswa' | 'activity-log' | 'profile' | 'users' | 'setting'
+    Komponen Sidebar Reusable — PPI Curug Navy/Gold Theme
+    Palette: Navy #12283a | Gold #fdbb11 | Light #eef3f9
 --}}
 @php
     $user         = Auth::user();
-    $avatarColors = ['#667eea','#764ba2','#f093fb','#f5576c','#38a169','#e07020','#3182ce','#d53f8c'];
+    $avatarColors = ['#12283a','#1a3550','#244263','#fdbb11','#e5a800','#3b5998','#4a6fa5','#2d5986'];
 @endphp
 
 <style>
-/* ============================================================
-   SIDEBAR — reset semua konflik Bootstrap & py-4
-   ============================================================ */
 .sidebar {
-    width: 240px;
-    min-width: 240px;
-    background: #fff;
-    border-right: 1px solid #edf0f7;
+    width: 260px;
+    min-width: 260px;
+    background: #12283a;
     min-height: 100vh;
-    padding: 24px 14px 32px;
+    padding: 28px 16px 32px;
     flex-shrink: 0;
     position: sticky;
     top: 0;
@@ -26,93 +21,117 @@
     max-height: 100vh;
     overflow-y: auto;
     overflow-x: hidden;
+    border-right: 1px solid rgba(255,255,255,.06);
 }
 .sidebar::-webkit-scrollbar       { width: 3px; }
-.sidebar::-webkit-scrollbar-thumb { background: #c5c8e0; border-radius: 4px; }
+.sidebar::-webkit-scrollbar-thumb { background: rgba(253,187,17,.3); border-radius: 4px; }
 
 /* Logo */
 .sb-logo {
-    font-size: 17px; font-weight: 700; color: #5a67d8;
+    font-size: 17px; font-weight: 700; color: #fff;
     text-decoration: none; display: flex; align-items: center;
-    gap: 9px; margin-bottom: 28px; padding: 0 4px;
+    gap: 12px; margin-bottom: 32px; padding: 0 6px;
 }
 .sb-logo-icon {
-    width: 32px; height: 32px; border-radius: 9px;
-    background: linear-gradient(135deg,#667eea,#764ba2);
+    width: 38px; height: 38px; border-radius: 12px;
+    background: #fdbb11;
     display: flex; align-items: center; justify-content: center;
-    color: white; font-size: 14px; flex-shrink: 0;
+    color: #12283a; font-size: 16px; flex-shrink: 0;
+    font-weight: 800;
 }
+.sb-logo span { color: #fdbb11; }
 
 /* Section label */
 .sb-label {
     font-size: 9px; font-weight: 800; text-transform: uppercase;
-    letter-spacing: .1em; color: #b0b4c8;
-    margin: 0 0 6px 4px; display: block;
+    letter-spacing: .12em; color: rgba(255,255,255,.3);
+    margin: 0 0 8px 8px; display: block;
 }
 
 /* Nav */
-.sb-nav { list-style: none; padding: 0; margin: 0 0 4px 0; }
-.sb-nav li { margin-bottom: 1px; }
+.sb-nav { list-style: none; padding: 0; margin: 0 0 6px 0; }
+.sb-nav li { margin-bottom: 2px; }
 .sb-nav a {
-    display: flex; align-items: center; gap: 9px;
-    padding: 9px 11px; border-radius: 9px;
+    display: flex; align-items: center; gap: 11px;
+    padding: 10px 13px; border-radius: 10px;
     text-decoration: none; font-size: 13px; font-weight: 500;
-    color: #4a5068; transition: background .12s, color .12s;
+    color: rgba(255,255,255,.55); transition: all .15s;
     white-space: nowrap;
 }
 .sb-nav a .nav-icon {
     width: 18px; text-align: center; font-size: 13px;
-    color: #9aa0bc; flex-shrink: 0; transition: color .12s;
+    color: rgba(255,255,255,.3); flex-shrink: 0; transition: color .15s;
 }
-.sb-nav a:hover              { background: #f0f1fb; color: #5a67d8; }
-.sb-nav a:hover .nav-icon    { color: #5a67d8; }
-.sb-nav a.active             { background: linear-gradient(135deg,#667eea,#764ba2); color: #fff; font-weight: 600; }
-.sb-nav a.active .nav-icon   { color: #fff; }
+.sb-nav a:hover              { background: rgba(253,187,17,.08); color: rgba(255,255,255,.85); }
+.sb-nav a:hover .nav-icon    { color: #fdbb11; }
+.sb-nav a.active             { background: #fdbb11; color: #12283a; font-weight: 700; }
+.sb-nav a.active .nav-icon   { color: #12283a; }
 
 /* Divider */
-.sb-divider { border: none; border-top: 1px solid #edf0f7; margin: 12px 0; }
+.sb-divider { border: none; border-top: 1px solid rgba(255,255,255,.07); margin: 14px 0; }
+
+/* Notification badge */
+.sb-badge {
+    background: #dc2626; color: white; border-radius: 10px;
+    padding: 2px 7px; font-size: 10px; font-weight: 800;
+    margin-left: auto; display: inline-flex; align-items: center;
+    justify-content: center; min-width: 18px; height: 18px;
+}
+
+/* Live badge */
+.sb-badge-live {
+    background: rgba(16,185,129,.2); color: #34d399; border-radius: 6px;
+    padding: 1px 6px; font-size: 9px; font-weight: 800;
+    margin-left: auto; letter-spacing: .5px;
+}
+
+/* TV Monitoring */
+.sb-nav a.tv-link             { color: #38bdf8; }
+.sb-nav a.tv-link:hover       { background: rgba(56,189,248,.1); }
+.sb-nav a.tv-link .nav-icon   { color: #38bdf8; }
 
 /* Logout */
-.sb-nav a.logout-link             { color: #e05252; }
-.sb-nav a.logout-link .nav-icon   { color: #e05252; }
-.sb-nav a.logout-link:hover       { background: #fff0f0; color: #c53030; }
+.sb-nav a.logout-link             { color: rgba(255,255,255,.35); }
+.sb-nav a.logout-link .nav-icon   { color: rgba(255,255,255,.35); }
+.sb-nav a.logout-link:hover       { background: rgba(220,38,38,.1); color: #f87171; }
 
 /* Mahasiswa quick-list */
-.mhs-search            { position: relative; margin-bottom: 8px; }
-.mhs-search .fa-search { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: #bbb; font-size: 11px; pointer-events: none; }
+.mhs-search            { position: relative; margin-bottom: 10px; }
+.mhs-search .fa-search { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: rgba(255,255,255,.25); font-size: 11px; pointer-events: none; }
 .mhs-search input {
-    width: 100%; padding: 7px 10px 7px 28px;
-    border: 1.5px solid #edf0f7; border-radius: 8px;
+    width: 100%; padding: 8px 12px 8px 32px;
+    border: 1px solid rgba(255,255,255,.1); border-radius: 8px;
     font-size: 12px; font-family: 'Inter',sans-serif;
-    outline: none; color: #444; background: #fafbff;
+    outline: none; color: #fff; background: rgba(255,255,255,.05);
     transition: border-color .15s;
 }
-.mhs-search input:focus { border-color: #667eea; }
+.mhs-search input::placeholder { color: rgba(255,255,255,.25); }
+.mhs-search input:focus { border-color: #fdbb11; }
 
 .mhs-list { list-style: none; padding: 0; margin: 0; max-height: 200px; overflow-y: auto; }
 .mhs-list::-webkit-scrollbar       { width: 3px; }
-.mhs-list::-webkit-scrollbar-thumb { background: #c5c8e0; border-radius: 4px; }
+.mhs-list::-webkit-scrollbar-thumb { background: rgba(253,187,17,.3); border-radius: 4px; }
 
 .mhs-item {
-    display: flex; align-items: center; gap: 8px;
-    padding: 5px 4px; border-radius: 8px;
+    display: flex; align-items: center; gap: 10px;
+    padding: 6px 6px; border-radius: 8px;
     cursor: pointer; transition: background .1s;
     text-decoration: none;
 }
-.mhs-item:hover { background: #f4f5fb; }
+.mhs-item:hover { background: rgba(255,255,255,.06); }
 
 .mhs-avatar {
     width: 28px; height: 28px; border-radius: 50%;
     display: flex; align-items: center; justify-content: center;
     flex-shrink: 0; color: white; font-size: 10px; font-weight: 700;
 }
-.mhs-name  { font-weight: 600; color: #333; font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.mhs-kelas { font-size: 10px; color: #9aa0bc; }
+.mhs-name  { font-weight: 600; color: rgba(255,255,255,.85); font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.mhs-kelas { font-size: 10px; color: rgba(255,255,255,.3); }
 
 .view-all-link {
     display: block; text-align: center;
-    font-size: 11px; color: #667eea; font-weight: 600;
-    text-decoration: none; margin-top: 8px; padding: 4px;
+    font-size: 11px; color: #fdbb11; font-weight: 600;
+    text-decoration: none; margin-top: 10px; padding: 4px;
 }
 .view-all-link:hover { text-decoration: underline; }
 </style>
@@ -122,7 +141,7 @@
     {{-- Logo --}}
     <a href="{{ route('dashboard') }}" class="sb-logo">
         <div class="sb-logo-icon"><i class="fas fa-graduation-cap"></i></div>
-        Pengasuhan
+        PPI <span>Curug</span>
     </a>
 
     {{-- ── MENU ── --}}
@@ -133,8 +152,6 @@
                 <i class="fas fa-th-large nav-icon"></i> Dashboard
             </a>
         </li>
-
-        {{-- Berita Taruna — semua role bisa akses --}}
         <li>
             <a href="{{ route('berita.index') }}" class="{{ $active==='berita'?'active':'' }}">
                 <i class="fas fa-newspaper nav-icon"></i> Berita Taruna
@@ -177,7 +194,7 @@
                             ->count();
                     @endphp
                     @if($unreadSurat > 0)
-                    <span style="background:#e53e3e; color:white; border-radius:50%; width:17px; height:17px; font-size:10px; font-weight:800; display:inline-flex; align-items:center; justify-content:center; margin-left:auto;">{{ $unreadSurat }}</span>
+                    <span class="sb-badge">{{ $unreadSurat }}</span>
                     @endif
                 </a>
             </li>
@@ -191,7 +208,7 @@
                             ->count();
                     @endphp
                     @if($unreadKeluhan > 0)
-                    <span style="background:#e53e3e; color:white; border-radius:50%; width:17px; height:17px; font-size:10px; font-weight:800; display:inline-flex; align-items:center; justify-content:center; margin-left:auto;">{{ $unreadKeluhan }}</span>
+                    <span class="sb-badge">{{ $unreadKeluhan }}</span>
                     @endif
                 </a>
             </li>
@@ -205,12 +222,11 @@
                             ->count();
                     @endphp
                     @if($unreadReward > 0)
-                    <span style="background:#e53e3e; color:white; border-radius:50%; width:17px; height:17px; font-size:10px; font-weight:800; display:inline-flex; align-items:center; justify-content:center; margin-left:auto;">{{ $unreadReward }}</span>
+                    <span class="sb-badge">{{ $unreadReward }}</span>
                     @endif
                 </a>
             </li>
         @else
-            {{-- Log Pergerakan untuk Pengasuh & Admin --}}
             <li>
                 <a href="{{ route('log-pergerakan.index') }}" class="{{ $active==='log-pergerakan'?'active':'' }}">
                     <i class="fas fa-walking nav-icon"></i> Log Pergerakan
@@ -218,14 +234,14 @@
                         $activeCount = \App\Models\LogPergerakan::where('status', 'berangkat')->count();
                     @endphp
                     @if($activeCount > 0)
-                    <span style="background:#dc2626; color:white; border-radius:10px; padding:2px 7px; font-size:10px; font-weight:800; margin-left:auto;">{{ $activeCount }}</span>
+                    <span class="sb-badge">{{ $activeCount }}</span>
                     @endif
                 </a>
             </li>
             <li>
-                <a href="{{ route('log-pergerakan.tv') }}" target="_blank" style="color: #38bdf8;">
-                    <i class="fas fa-tv nav-icon" style="color: #38bdf8;"></i> TV Monitoring Jaga
-                    <span style="background:#10b981; color:white; border-radius:6px; padding:1px 5px; font-size:9px; font-weight:800; margin-left:auto; letter-spacing:0.5px;">LIVE</span>
+                <a href="{{ route('log-pergerakan.tv') }}" target="_blank" class="tv-link">
+                    <i class="fas fa-tv nav-icon"></i> TV Monitoring
+                    <span class="sb-badge-live">LIVE</span>
                 </a>
             </li>
             <li>
@@ -280,7 +296,7 @@
         @endif
     </ul>
 
-    {{-- ── ADMIN (Log Aktivitas) — hanya muncul jika canManageSystem ── --}}
+    {{-- ── ADMIN ── --}}
     @if($user->canManageSystem())
     <hr class="sb-divider">
     <span class="sb-label">Admin</span>
@@ -298,7 +314,7 @@
     </ul>
     @endif
 
-    {{-- ── MAHASISWA QUICK LIST — hanya pengasuh & admin ── --}}
+    {{-- ── MAHASISWA QUICK LIST ── --}}
     @if(!$user->isTaruna())
     <hr class="sb-divider">
     <span class="sb-label">Mahasiswa</span>
@@ -326,7 +342,7 @@
         @endforeach
     </ul>
     <a href="{{ route('mahasiswa.index') }}" class="view-all-link">
-        Lihat semua {{ count($flatMhs) }} mahasiswa →
+        Lihat semua {{ count($flatMhs) }} mahasiswa &rarr;
     </a>
     @endif
 

@@ -4,12 +4,12 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 * { box-sizing: border-box; }
-body { font-family: 'Inter', sans-serif; background: #f0f2f5; }
+body { font-family: 'Inter', sans-serif; background: #eef3f9; }
 .app-layout { display: flex; min-height: 100vh; }
 .main-content { flex: 1; padding: 28px 30px; min-width: 0; }
 
 .page-header {
-    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    background: linear-gradient(135deg, #fdbb11 0%, #dc2626 100%);
     border-radius: 18px; padding: 28px 32px; color: white;
     margin-bottom: 24px; position: relative; overflow: hidden;
 }
@@ -19,7 +19,7 @@ body { font-family: 'Inter', sans-serif; background: #f0f2f5; }
 .page-header h1 { margin:0 0 4px; font-size:22px; font-weight:800; }
 .page-header p  { margin:0; opacity:.85; font-size:13px; }
 
-.alert-success { background:linear-gradient(135deg,#43e97b,#38f9d7); color:white; padding:14px 20px; border-radius:12px; margin-bottom:20px; display:flex; align-items:center; gap:10px; font-weight:600; font-size:14px; }
+.alert-success { background:linear-gradient(135deg,#16a34a,#38f9d7); color:white; padding:14px 20px; border-radius:12px; margin-bottom:20px; display:flex; align-items:center; gap:10px; font-weight:600; font-size:14px; }
 .alert-error   { background:linear-gradient(135deg,#fc5c7d,#e53e3e); color:white; padding:14px 20px; border-radius:12px; margin-bottom:20px; display:flex; align-items:center; gap:10px; font-weight:600; font-size:14px; }
 
 .stats-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin-bottom: 20px; }
@@ -31,10 +31,10 @@ body { font-family: 'Inter', sans-serif; background: #f0f2f5; }
 .filter-bar { background: white; border-radius: 14px; padding: 16px 20px; box-shadow: 0 2px 10px rgba(0,0,0,.05); margin-bottom: 18px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
 .search-wrap { position: relative; flex: 1; min-width: 200px; }
 .search-wrap .fa-search { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: #bbb; font-size: 12px; pointer-events: none; }
-.search-input { width: 100%; padding: 9px 14px 9px 34px; border: 1.5px solid #edf0f7; border-radius: 10px; font-size: 13px; font-family: 'Inter', sans-serif; color: #444; outline: none; background: #fafbff; }
+.search-input { width: 100%; padding: 9px 14px 9px 34px; border: 1.5px solid #d4dbe5; border-radius: 10px; font-size: 13px; font-family: 'Inter', sans-serif; color: #444; outline: none; background: #f9fafb; }
 .search-input:focus { border-color: #d63384; }
-.filter-select { padding: 9px 14px; border: 1.5px solid #edf0f7; border-radius: 10px; font-size: 13px; font-family: 'Inter', sans-serif; color: #444; outline: none; background: #fafbff; cursor: pointer; }
-.btn-filter { background: linear-gradient(135deg,#f093fb,#f5576c); color: white; border: none; padding: 9px 20px; border-radius: 10px; font-size: 13px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 6px; }
+.filter-select { padding: 9px 14px; border: 1.5px solid #d4dbe5; border-radius: 10px; font-size: 13px; font-family: 'Inter', sans-serif; color: #444; outline: none; background: #f9fafb; cursor: pointer; }
+.btn-filter { background: linear-gradient(135deg,#fdbb11,#dc2626); color: white; border: none; padding: 9px 20px; border-radius: 10px; font-size: 13px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 6px; }
 .btn-reset { color: #d63384; text-decoration: none; font-size: 12px; font-weight: 700; display: inline-flex; align-items: center; gap: 5px; }
 
 .card { background: white; border-radius: 16px; overflow: hidden; box-shadow: 0 2px 16px rgba(0,0,0,.06); }
@@ -44,7 +44,7 @@ body { font-family: 'Inter', sans-serif; background: #f0f2f5; }
 .empty-state p  { color:#ccc; margin:0; font-size:14px; }
 
 table { width: 100%; border-collapse: collapse; }
-thead tr { background: linear-gradient(135deg,#f093fb,#f5576c); }
+thead tr { background: linear-gradient(135deg,#fdbb11,#dc2626); }
 th { padding: 14px 18px; text-align: left; color: white; font-size: 11px; font-weight: 700; letter-spacing: .06em; }
 td { padding: 14px 18px; font-size: 13px; color: #444; border-top: 1px solid #f0f2f7; }
 tbody tr { transition: background .1s; }
@@ -59,7 +59,7 @@ tbody tr:hover { background: #fff8fb; }
 .pagination-links { display: flex; gap: 6px; }
 .page-btn { padding: 7px 14px; border-radius: 8px; font-size: 12px; font-weight: 700; text-decoration: none; }
 .page-btn.normal { background: #f4f5f9; color: #666; }
-.page-btn.active-pg { background: linear-gradient(135deg,#f093fb,#f5576c); color: white; }
+.page-btn.active-pg { background: linear-gradient(135deg,#fdbb11,#dc2626); color: white; }
 .page-btn.disabled { background: #f4f5f9; color: #ccc; pointer-events: none; }
 </style>
 
@@ -97,7 +97,7 @@ tbody tr:hover { background: #fff8fb; }
                 <div class="stat-label">Diajukan</div>
             </div>
             <div class="stat-card">
-                <div class="stat-icon" style="background:linear-gradient(135deg,#63b3ed,#3182ce);"><i class="fas fa-spinner"></i></div>
+                <div class="stat-icon" style="background:linear-gradient(135deg,#63b3ed,#12283a);"><i class="fas fa-spinner"></i></div>
                 <div class="stat-count">{{ $stats['diproses'] }}</div>
                 <div class="stat-label">Diproses</div>
             </div>

@@ -2,7 +2,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 * { box-sizing: border-box; }
-body { font-family: 'Inter', sans-serif; background: #f0f2f5; }
+body { font-family: 'Inter', sans-serif; background: #eef3f9; }
 
 .app-layout { display: flex; min-height: 100vh; }
 .main-content { flex: 1; padding: 28px 30px; min-width: 0; }
@@ -62,7 +62,7 @@ body { font-family: 'Inter', sans-serif; background: #f0f2f5; }
 .roster-card { background:white; border-radius:16px; padding:18px 22px; box-shadow:0 2px 12px rgba(0,0,0,.05); margin-bottom:22px; }
 .roster-title { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.06em; color:#8a93b0; margin-bottom:12px; }
 .roster-row { display:flex; gap:10px; flex-wrap:wrap; }
-.roster-chip { display:flex; align-items:center; gap:8px; background:#fafbff; border:1px solid #eef0f7; border-radius:11px; padding:8px 12px; }
+.roster-chip { display:flex; align-items:center; gap:8px; background:#f9fafb; border:1px solid #eef0f7; border-radius:11px; padding:8px 12px; }
 .roster-chip .day { font-size:10px; font-weight:800; color:#4a3aa7; text-transform:uppercase; }
 .roster-chip .nm  { font-size:12px; font-weight:600; color:#333; }
 
@@ -132,7 +132,7 @@ body { font-family: 'Inter', sans-serif; background: #f0f2f5; }
 .modal-box label { font-size:11.5px; font-weight:700; color:#555; display:block; margin-bottom:6px; }
 .modal-box select, .modal-box textarea {
     width:100%; padding:10px 12px; border:2px solid #e8ebf5; border-radius:10px;
-    font-size:13px; font-family:'Inter',sans-serif; color:#333; outline:none; margin-bottom:14px; background:#fafbff;
+    font-size:13px; font-family:'Inter',sans-serif; color:#333; outline:none; margin-bottom:14px; background:#f9fafb;
 }
 .modal-box select:focus, .modal-box textarea:focus { border-color:#4a3aa7; background:white; }
 .modal-box textarea { resize:vertical; min-height:64px; }

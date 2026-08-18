@@ -3,12 +3,12 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 * { box-sizing: border-box; }
-body { font-family: 'Inter', sans-serif; background: #f0f2f5; }
+body { font-family: 'Inter', sans-serif; background: #eef3f9; }
 .app-layout { display: flex; min-height: 100vh; }
 .main-content { flex: 1; padding: 28px 30px; min-width: 0; }
 
 .page-header {
-    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    background: linear-gradient(135deg, #fdbb11 0%, #dc2626 100%);
     border-radius: 18px; padding: 28px 32px; color: white;
     margin-bottom: 24px; position: relative; overflow: hidden;
     display: flex; align-items: center; justify-content: space-between;
@@ -29,7 +29,7 @@ body { font-family: 'Inter', sans-serif; background: #f0f2f5; }
 }
 .btn-add:hover { transform:translateY(-2px); box-shadow:0 6px 20px rgba(0,0,0,.2); color:#d63384; }
 
-.alert-success { background:linear-gradient(135deg,#43e97b,#38f9d7); color:white; padding:14px 20px; border-radius:12px; margin-bottom:20px; display:flex; align-items:center; gap:10px; font-weight:600; font-size:14px; }
+.alert-success { background:linear-gradient(135deg,#16a34a,#38f9d7); color:white; padding:14px 20px; border-radius:12px; margin-bottom:20px; display:flex; align-items:center; gap:10px; font-weight:600; font-size:14px; }
 
 .card { background:white; border-radius:16px; overflow:hidden; box-shadow:0 2px 16px rgba(0,0,0,.06); }
 .empty-state { text-align:center; padding:60px 20px; }
@@ -37,13 +37,13 @@ body { font-family: 'Inter', sans-serif; background: #f0f2f5; }
 .empty-state h4 { color:#aab; margin:0 0 8px; font-size:16px; }
 .empty-state p  { color:#ccc; margin:0 0 20px; font-size:14px; }
 .btn-primary-pill {
-    background:linear-gradient(135deg,#f093fb,#f5576c); color:white;
+    background:linear-gradient(135deg,#fdbb11,#dc2626); color:white;
     padding:11px 28px; border-radius:25px; text-decoration:none;
     font-size:13px; font-weight:700; display:inline-flex; align-items:center; gap:7px;
 }
 
 table { width:100%; border-collapse:collapse; }
-thead tr { background:linear-gradient(135deg,#f093fb,#f5576c); }
+thead tr { background:linear-gradient(135deg,#fdbb11,#dc2626); }
 th { padding:14px 18px; text-align:left; color:white; font-size:11px; font-weight:700; letter-spacing:.06em; }
 td { padding:14px 18px; font-size:13px; color:#444; border-top:1px solid #f0f2f7; }
 tbody tr { transition:background .1s; }
@@ -163,7 +163,7 @@ knownStatuses[{{ $k->id }}] = "{{ $k->status }}";
 function showToast(keluhan) {
     const container = document.getElementById('toastContainer');
     const icon = keluhan.status === 'Ditolak' ? 'fa-times' : keluhan.status === 'Selesai' ? 'fa-check' : 'fa-spinner';
-    const iconBg = keluhan.status === 'Ditolak' ? 'linear-gradient(135deg,#e53e3e,#fc5c7d)' : keluhan.status === 'Selesai' ? 'linear-gradient(135deg,#38a169,#48bb78)' : 'linear-gradient(135deg,#3182ce,#0bc5ea)';
+    const iconBg = keluhan.status === 'Ditolak' ? 'linear-gradient(135deg,#e53e3e,#fc5c7d)' : keluhan.status === 'Selesai' ? 'linear-gradient(135deg,#38a169,#48bb78)' : 'linear-gradient(135deg,#12283a,#0d9488)';
 
     const toastId = 'toast-' + Date.now();
     const toast = document.createElement('div');

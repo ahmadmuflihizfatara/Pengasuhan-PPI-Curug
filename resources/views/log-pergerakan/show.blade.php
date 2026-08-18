@@ -1,7 +1,7 @@
 <x-app-layout>
 <style>
     * { box-sizing: border-box; }
-    body { font-family: 'Inter', sans-serif; background: #f0f2f5; }
+    body { font-family: 'Inter', sans-serif; background: #eef3f9; }
 
     .app-layout { display: flex; min-height: 100vh; }
     .main-content { flex: 1; padding: 24px 28px; min-width: 0; }
@@ -10,7 +10,7 @@
         background: white;
         border-radius: 16px;
         padding: 28px;
-        box-shadow: 0 2px 16px rgba(0,0,0,.06);
+        border: 1px solid #d4dbe5;
     }
     .detail-header {
         display: flex;
@@ -18,7 +18,7 @@
         justify-content: space-between;
         margin-bottom: 24px;
         padding-bottom: 18px;
-        border-bottom: 1px solid #f0f2f7;
+        border-bottom: 1px solid #d4dbe5;
         flex-wrap: wrap;
         gap: 14px;
     }
@@ -31,19 +31,19 @@
         margin-bottom: 24px;
     }
     .info-item {
-        background: #fafbff;
+        background: #eef3f9;
         border-radius: 12px;
         padding: 14px 18px;
-        border: 1px solid #edf0f7;
+        border: 1px solid #d4dbe5;
     }
-    .info-item .lbl { font-size: 11.5px; font-weight: 700; color: #888; text-transform: uppercase; margin-bottom: 4px; }
+    .info-item .lbl { font-size: 11.5px; font-weight: 700; color: #6b7c93; text-transform: uppercase; margin-bottom: 4px; }
     .info-item .val { font-size: 15px; font-weight: 700; color: #333; }
 
     .doc-img {
         max-width: 100%;
         max-height: 320px;
         border-radius: 12px;
-        border: 1px solid #edf0f7;
+        border: 1px solid #d4dbe5;
         object-fit: cover;
         box-shadow: 0 4px 12px rgba(0,0,0,0.08);
     }

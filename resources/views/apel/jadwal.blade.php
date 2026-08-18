@@ -2,14 +2,14 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 * { box-sizing: border-box; }
-body { font-family: 'Inter', sans-serif; background: #f0f2f5; }
+body { font-family: 'Inter', sans-serif; background: #eef3f9; }
 
 .app-layout { display: flex; min-height: 100vh; }
 .main-content { flex: 1; padding: 28px 30px; min-width: 0; }
 
 /* Header */
 .page-header {
-    background: linear-gradient(135deg, #1baf7a 0%, #2a78d6 100%);
+    background: #12283a;
     border-radius: 18px; padding: 30px 34px;
     color: white; margin-bottom: 24px;
     position: relative; overflow: hidden;
@@ -20,28 +20,28 @@ body { font-family: 'Inter', sans-serif; background: #f0f2f5; }
 .page-header p  { margin:0; opacity:.88; font-size:13px; position:relative; z-index:1; }
 
 /* Selector */
-.selector-card { background:white; border-radius:16px; padding:20px 22px; box-shadow:0 2px 12px rgba(0,0,0,.05); margin-bottom:20px; }
-.selector-label { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.06em; color:#8a93b0; margin-bottom:8px; display:block; }
+.selector-card { background:white; border-radius:16px; padding:20px 22px; border:1px solid #d4dbe5; margin-bottom:20px; }
+.selector-label { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.06em; color:#6b7c93; margin-bottom:8px; display:block; }
 .selector-row { display:flex; gap:12px; flex-wrap:wrap; align-items:center; }
 .select-wrap { position:relative; flex:1; min-width:260px; }
 .select-wrap select {
     width:100%; appearance:none; padding:12px 40px 12px 15px;
-    border:2px solid #e8ebf5; border-radius:11px; background:#fafbff;
+    border:2px solid #d4dbe5; border-radius:11px; background:#eef3f9;
     font-size:14px; font-family:'Inter',sans-serif; color:#333; font-weight:600;
     cursor:pointer; outline:none; transition:border-color .15s;
 }
-.select-wrap select:focus { border-color:#1baf7a; background:white; }
+.select-wrap select:focus { border-color:#fdbb11; background:white; }
 .select-wrap i { position:absolute; right:15px; top:50%; transform:translateY(-50%); color:#98a0b3; pointer-events:none; font-size:13px; }
 .filter-chips { display:flex; gap:7px; flex-wrap:wrap; }
 .chip {
     padding:7px 14px; border-radius:50px; font-size:12px; font-weight:600;
-    cursor:pointer; border:2px solid #e2e5ee; background:white; color:#666; transition:all .15s;
+    cursor:pointer; border:2px solid #d4dbe5; background:white; color:#6b7c93; transition:all .15s;
 }
-.chip:hover { border-color:#1baf7a; color:#1baf7a; }
-.chip.active { background:#1baf7a; color:white; border-color:#1baf7a; }
+.chip:hover { border-color:#fdbb11; color:#fdbb11; }
+.chip.active { background:#12283a; color:white; border-color:#12283a; }
 
 /* Detail */
-.detail-card { background:white; border-radius:16px; box-shadow:0 2px 12px rgba(0,0,0,.05); overflow:hidden; }
+.detail-card { background:white; border-radius:16px; border:1px solid #d4dbe5; overflow:hidden; }
 .detail-head { padding:22px 26px; color:white; display:flex; align-items:center; gap:16px; flex-wrap:wrap; }
 .detail-head .ikon { width:52px; height:52px; border-radius:14px; background:rgba(255,255,255,.22); display:flex; align-items:center; justify-content:center; font-size:21px; flex-shrink:0; }
 .detail-head h2 { margin:0 0 3px; font-size:19px; font-weight:800; }
@@ -49,15 +49,15 @@ body { font-family: 'Inter', sans-serif; background: #f0f2f5; }
 
 .detail-body { padding:24px 26px; }
 .info-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:16px; }
-.info-item { background:#fafbff; border:1px solid #eef0f7; border-radius:12px; padding:14px 16px; }
-.info-item .label { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.06em; color:#8a93b0; margin-bottom:5px; display:flex; align-items:center; gap:6px; }
-.info-item .value { font-size:14px; font-weight:700; color:#2b2b33; }
-.info-item .value small { display:block; font-size:11px; font-weight:500; color:#98a0b3; margin-top:2px; }
+.info-item { background:#eef3f9; border:1px solid #d4dbe5; border-radius:12px; padding:14px 16px; }
+.info-item .label { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.06em; color:#6b7c93; margin-bottom:5px; display:flex; align-items:center; gap:6px; }
+.info-item .value { font-size:14px; font-weight:700; color:#12283a; }
+.info-item .value small { display:block; font-size:11px; font-weight:500; color:#6b7c93; margin-top:2px; }
 
 /* Empty */
-.empty-state { background:white; border-radius:16px; box-shadow:0 2px 12px rgba(0,0,0,.05); text-align:center; padding:60px 24px; }
-.empty-state i { font-size:46px; color:#e2e5ee; display:block; margin-bottom:14px; }
-.empty-state p { font-size:14px; color:#98a0b3; margin:0; font-weight:600; }
+.empty-state { background:white; border-radius:16px; border:1px solid #d4dbe5; text-align:center; padding:60px 24px; }
+.empty-state i { font-size:46px; color:#d4dbe5; display:block; margin-bottom:14px; }
+.empty-state p { font-size:14px; color:#6b7c93; margin:0; font-weight:600; }
 </style>
 
 <div class="app-layout">
@@ -105,7 +105,7 @@ body { font-family: 'Inter', sans-serif; background: #f0f2f5; }
         {{-- Detail apel terpilih — hanya jadwal, pembina, lokasi --}}
         @if($terpilih)
         <div class="detail-card">
-            <div class="detail-head" style="background:linear-gradient(135deg,{{ $terpilih->warna }},#2a78d6);">
+            <div class="detail-head" style="background:{{ $terpilih->warna }};">
                 <div class="ikon"><i class="fas {{ $terpilih->ikon }}"></i></div>
                 <div>
                     <h2>{{ $terpilih->judul }}</h2>

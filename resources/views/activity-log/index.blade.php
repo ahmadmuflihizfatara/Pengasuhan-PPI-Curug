@@ -3,7 +3,7 @@
 <x-administration-stats-style />
 <style>
 * { box-sizing: border-box; }
-body { font-family: 'Inter', sans-serif; background: #f0f2f5; }
+body { font-family: 'Inter', sans-serif; background: #eef3f9; }
 
 .app-layout {
     display: flex;
@@ -15,7 +15,7 @@ body { font-family: 'Inter', sans-serif; background: #f0f2f5; }
 
 /* Header Banner */
 .page-header {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #12283a 0%, #12283a 100%);
     border-radius: 18px; padding: 28px 32px;
     color: white; margin-bottom: 24px;
     position: relative; overflow: hidden;
@@ -56,17 +56,17 @@ body { font-family: 'Inter', sans-serif; background: #f0f2f5; }
 .filter-label { font-size:11px; font-weight:700; color:#888; text-transform:uppercase; letter-spacing:.05em; display:block; margin-bottom:5px; }
 .filter-input, .filter-select {
     width:100%; padding:9px 12px;
-    border:1.5px solid #edf0f7; border-radius:9px;
+    border:1.5px solid #d4dbe5; border-radius:9px;
     font-size:13px; font-family:'Inter',sans-serif;
-    outline:none; color:#444; background:#fafbff;
+    outline:none; color:#444; background:#f9fafb;
     transition:border-color .15s;
 }
-.filter-input:focus, .filter-select:focus { border-color:#667eea; }
+.filter-input:focus, .filter-select:focus { border-color:#12283a; }
 .filter-search { position:relative; }
 .filter-search .fa-search { position:absolute; left:11px; top:50%; transform:translateY(-50%); color:#bbb; font-size:12px; pointer-events:none; }
 .filter-search .filter-input { padding-left:32px; }
 .btn-filter {
-    background:linear-gradient(135deg,#667eea,#764ba2);
+    background:linear-gradient(135deg,#12283a,#12283a);
     color:white; border:none; border-radius:9px;
     padding:9px 20px; font-size:13px; font-family:'Inter',sans-serif;
     font-weight:700; cursor:pointer; white-space:nowrap;
@@ -89,11 +89,11 @@ body { font-family: 'Inter', sans-serif; background: #f0f2f5; }
 .log-card-count { font-size:12px; color:#9aa0bc; }
 
 table { width:100%; border-collapse:collapse; }
-thead tr { background:linear-gradient(135deg,#667eea,#764ba2); }
+thead tr { background:linear-gradient(135deg,#12283a,#12283a); }
 th { padding:12px 16px; text-align:left; font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.07em; color:white; white-space:nowrap; }
 td { padding:13px 16px; font-size:13px; color:#444; border-top:1px solid #f0f2f7; vertical-align:middle; }
 tbody tr { transition:background .1s; }
-tbody tr:hover { background:#fafbff; }
+tbody tr:hover { background:#f9fafb; }
 
 /* Badge */
 .badge-pill {
@@ -106,7 +106,7 @@ tbody tr:hover { background:#fafbff; }
 .pelaku-wrap { display:flex; align-items:center; gap:9px; }
 .pelaku-ava  {
     width:32px; height:32px; border-radius:50%;
-    background:linear-gradient(135deg,#667eea,#764ba2);
+    background:linear-gradient(135deg,#12283a,#12283a);
     color:white; font-size:12px; font-weight:800;
     display:flex; align-items:center; justify-content:center; flex-shrink:0;
 }
@@ -115,7 +115,7 @@ tbody tr:hover { background:#fafbff; }
 
 /* Detail button */
 .btn-detail {
-    background:#eef0ff; color:#667eea; border:none;
+    background:rgba(18,40,58,0.06); color:#12283a; border:none;
     border-radius:20px; padding:5px 14px; font-size:11px;
     font-family:'Inter',sans-serif; font-weight:700; cursor:pointer;
     display:inline-flex; align-items:center; gap:5px; transition:background .1s;
@@ -123,13 +123,13 @@ tbody tr:hover { background:#fafbff; }
 .btn-detail:hover { background:#dde2ff; }
 
 /* Detail expanded row */
-.detail-row { background:#fafbff !important; }
+.detail-row { background:#f9fafb !important; }
 .detail-inner {
     border-radius:10px; padding:14px 18px;
-    border-left:4px solid #667eea;
+    border-left:4px solid #12283a;
     background:#f4f6ff; margin:4px 0;
 }
-.detail-label { font-size:11px; font-weight:700; color:#667eea; text-transform:uppercase; letter-spacing:.05em; margin-bottom:10px; }
+.detail-label { font-size:11px; font-weight:700; color:#12283a; text-transform:uppercase; letter-spacing:.05em; margin-bottom:10px; }
 .detail-grid  { display:flex; flex-wrap:wrap; gap:8px; }
 .detail-chip  { background:white; border:1px solid #e5e7eb; border-radius:8px; padding:7px 12px; min-width:120px; }
 .detail-chip-key   { font-size:10px; color:#9aa0bc; font-weight:700; text-transform:uppercase; letter-spacing:.04em; margin-bottom:2px; }
@@ -148,13 +148,13 @@ tbody tr:hover { background:#fafbff; }
 
 /* Pagination */
 .pagination { display:flex; gap:4px; list-style:none; padding:0; margin:0; }
-.pagination .page-item .page-link { border-radius:8px !important; border:1.5px solid #e5e7eb; color:#667eea; font-size:13px; font-weight:600; padding:6px 12px; font-family:'Inter',sans-serif; }
-.pagination .page-item.active .page-link { background:linear-gradient(135deg,#667eea,#764ba2); border-color:transparent; color:white; }
+.pagination .page-item .page-link { border-radius:8px !important; border:1.5px solid #e5e7eb; color:#12283a; font-size:13px; font-weight:600; padding:6px 12px; font-family:'Inter',sans-serif; }
+.pagination .page-item.active .page-link { background:linear-gradient(135deg,#12283a,#12283a); border-color:transparent; color:white; }
 .pagination .page-item.disabled .page-link { color:#ccc; }
 
 /* Alert success */
 .alert-success-bar {
-    background:linear-gradient(135deg,#43e97b,#38f9d7);
+    background:linear-gradient(135deg,#16a34a,#38f9d7);
     color:white; padding:14px 20px; border-radius:12px;
     margin-bottom:20px; display:flex; align-items:center; gap:10px;
     font-weight:600; font-size:14px;
@@ -191,7 +191,7 @@ tbody tr:hover { background:#fafbff; }
         {{-- ── STATS ── --}}
         <div class="stats-grid admin-stats">
             <div class="stat-card">
-                <div class="stat-icon" style="background:linear-gradient(135deg,#667eea,#764ba2);">
+                <div class="stat-icon" style="background:linear-gradient(135deg,#12283a,#12283a);">
                     <i class="fas fa-list-alt"></i>
                 </div>
                 <div>
@@ -200,7 +200,7 @@ tbody tr:hover { background:#fafbff; }
                 </div>
             </div>
             <div class="stat-card">
-                <div class="stat-icon" style="background:linear-gradient(135deg,#9f7aea,#764ba2);">
+                <div class="stat-icon" style="background:linear-gradient(135deg,#fdbb11,#12283a);">
                     <i class="fas fa-star"></i>
                 </div>
                 <div>
@@ -209,7 +209,7 @@ tbody tr:hover { background:#fafbff; }
                 </div>
             </div>
             <div class="stat-card">
-                <div class="stat-icon" style="background:linear-gradient(135deg,#43e97b,#38a169);">
+                <div class="stat-icon" style="background:linear-gradient(135deg,#16a34a,#38a169);">
                     <i class="fas fa-calendar-alt"></i>
                 </div>
                 <div>
@@ -218,7 +218,7 @@ tbody tr:hover { background:#fafbff; }
                 </div>
             </div>
             <div class="stat-card">
-                <div class="stat-icon" style="background:linear-gradient(135deg,#f093fb,#f5576c);">
+                <div class="stat-icon" style="background:linear-gradient(135deg,#fdbb11,#dc2626);">
                     <i class="fas fa-envelope"></i>
                 </div>
                 <div>
@@ -227,7 +227,7 @@ tbody tr:hover { background:#fafbff; }
                 </div>
             </div>
             <div class="stat-card">
-                <div class="stat-icon" style="background:linear-gradient(135deg,#63b3ed,#3182ce);">
+                <div class="stat-icon" style="background:linear-gradient(135deg,#63b3ed,#12283a);">
                     <i class="fas fa-newspaper"></i>
                 </div>
                 <div>
@@ -299,7 +299,7 @@ tbody tr:hover { background:#fafbff; }
         <div class="log-card admin-list-table">
             <div class="log-card-header">
                 <div class="log-card-title">
-                    <i class="fas fa-history" style="color:#667eea;"></i>
+                    <i class="fas fa-history" style="color:#12283a;"></i>
                     Riwayat Aktivitas
                 </div>
                 <div class="log-card-count">{{ $logs->total() }} entri ditemukan</div>
@@ -415,7 +415,7 @@ tbody tr:hover { background:#fafbff; }
                 <p>
                     @if(request()->hasAny(['search','modul','aksi','dari','sampai']))
                         Tidak ada hasil yang cocok dengan filter.
-                        <a href="{{ route('activity-log.index') }}" style="color:#667eea;font-weight:600;">Reset filter</a>
+                        <a href="{{ route('activity-log.index') }}" style="color:#12283a;font-weight:600;">Reset filter</a>
                     @else
                         Log akan muncul otomatis saat ada aktivitas pada sistem.
                     @endif

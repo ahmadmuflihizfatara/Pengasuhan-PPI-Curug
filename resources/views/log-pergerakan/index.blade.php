@@ -3,13 +3,13 @@
 <x-administration-stats-style />
 <style>
     * { box-sizing: border-box; }
-    body { font-family: 'Inter', sans-serif; background: #f0f2f5; }
+    body { font-family: 'Inter', sans-serif; background: #eef3f9; }
 
     .app-layout { display: flex; min-height: 100vh; }
     .main-content { flex: 1; padding: 28px 30px; min-width: 0; }
 
     .page-header {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background: #12283a;
         border-radius: 18px;
         padding: 28px 32px;
         color: white;
@@ -40,10 +40,10 @@
         background: white;
         border-radius: 16px;
         padding: 16px 20px;
-        box-shadow: 0 2px 16px rgba(0,0,0,.06);
+        border: 1px solid #d4dbe5;
     }
     .stat-card-custom .num { font-size: 26px; font-weight: 800; line-height: 1; margin-bottom: 4px; }
-    .stat-card-custom .lbl { font-size: 11px; font-weight: 700; color: #888; text-transform: uppercase; letter-spacing: .06em; }
+    .stat-card-custom .lbl { font-size: 11px; font-weight: 700; color: #6b7c93; text-transform: uppercase; letter-spacing: .06em; }
 
     /* Filter Bar */
     .filter-card {
@@ -51,7 +51,7 @@
         border-radius: 16px;
         padding: 16px 20px;
         margin-bottom: 20px;
-        box-shadow: 0 2px 16px rgba(0,0,0,.06);
+        border: 1px solid #d4dbe5;
     }
 
     /* Table */
@@ -59,11 +59,11 @@
         background: white;
         border-radius: 16px;
         padding: 20px;
-        box-shadow: 0 2px 16px rgba(0,0,0,.06);
+        border: 1px solid #d4dbe5;
     }
     .table-responsive { overflow-x: auto; }
     .table-pergerakan { width: 100%; border-collapse: collapse; }
-    .table-pergerakan thead tr { background: linear-gradient(135deg, #667eea, #764ba2); }
+    .table-pergerakan thead tr { background: #12283a; }
     .table-pergerakan th {
         background: transparent;
         padding: 14px 18px;
@@ -79,10 +79,10 @@
         padding: 14px 18px;
         font-size: 13px;
         color: #444;
-        border-top: 1px solid #f0f2f7;
+        border-top: 1px solid #d4dbe5;
         vertical-align: middle;
     }
-    .table-pergerakan tbody tr:hover td { background: #f8f9ff; }
+    .table-pergerakan tbody tr:hover td { background: #eef3f9; }
 
     /* Badges */
     .badge-status-belum {
@@ -107,11 +107,10 @@
 
     /* Tombol aksi di dalam banner — gaya pill putih seperti tab Acara */
     .btn-brand {
-        background: white; color: #667eea; border: none;
-        box-shadow: 0 4px 15px rgba(0,0,0,.15);
-        transition: transform .15s, box-shadow .15s;
+        background: #fdbb11; color: #12283a; border: none;
+        transition: transform .15s;
     }
-    .btn-brand:hover { color: #667eea; transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,.2); }
+    .btn-brand:hover { color: #12283a; transform: translateY(-2px); }
     .btn-tv-monitor {
         background: rgba(255,255,255,.18); color: white; border: 1px solid rgba(255,255,255,.3);
         backdrop-filter: blur(4px); transition: background .15s;
@@ -121,11 +120,11 @@
     /* Form filter — standar aplikasi */
     .filter-card .form-control,
     .filter-card .form-select {
-        padding: 11px 14px; border: 2px solid #edf0f7; border-radius: 10px;
-        font-size: 13px; color: #333; background: #fafbff; outline: none; transition: border .15s;
+        padding: 11px 14px; border: 2px solid #d4dbe5; border-radius: 10px;
+        font-size: 13px; color: #333; background: #eef3f9; outline: none; transition: border .15s;
     }
     .filter-card .form-control:focus,
-    .filter-card .form-select:focus { border-color: #667eea; background: white; box-shadow: none; }
+    .filter-card .form-select:focus { border-color: #fdbb11; background: white; box-shadow: none; }
 
     @media (max-width: 992px) {
         .stats-row { grid-template-columns: repeat(2, 1fr); }
@@ -175,12 +174,12 @@
                 <div class="lbl">Sudah Kembali Hari Ini</div>
             </div>
             <div class="stat-card-custom">
-                <div class="stat-icon" style="background:linear-gradient(135deg,#63b3ed,#3182ce);"><i class="fas fa-list-alt"></i></div>
+                <div class="stat-icon" style="background:linear-gradient(135deg,#63b3ed,#12283a);"><i class="fas fa-list-alt"></i></div>
                 <div class="num">{{ $stats['total_today'] }}</div>
                 <div class="lbl">Total Log Hari Ini</div>
             </div>
             <div class="stat-card-custom">
-                <div class="stat-icon" style="background:linear-gradient(135deg,#76e4f7,#0bc5ea);"><i class="fas fa-flag-checkered"></i></div>
+                <div class="stat-icon" style="background:linear-gradient(135deg,#76e4f7,#0d9488);"><i class="fas fa-flag-checkered"></i></div>
                 <div class="num">{{ $stats['ekskul'] + $stats['olahraga'] }}</div>
                 <div class="lbl">Ekskul & Olahraga Hari Ini</div>
             </div>

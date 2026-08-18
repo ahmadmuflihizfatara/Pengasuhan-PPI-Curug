@@ -15,7 +15,7 @@
         body {
             margin: 0;
             padding: 0;
-            background-color: #f0f2f5;
+            background-color: #eef3f9;
             color: #333;
             font-family: 'Inter', sans-serif;
             overflow-x: hidden;
@@ -29,7 +29,7 @@
         /* === TV HEADER === */
         .tv-header {
             background: #ffffff;
-            border-bottom: 1px solid #edf0f7;
+            border-bottom: 1px solid #d4dbe5;
             padding: 16px 28px;
             display: flex;
             align-items: center;
@@ -37,7 +37,6 @@
             position: sticky;
             top: 0;
             z-index: 100;
-            box-shadow: 0 2px 12px rgba(0,0,0,.04);
         }
         .tv-brand {
             display: flex;
@@ -47,14 +46,13 @@
         .tv-logo-badge {
             width: 48px;
             height: 48px;
-            background: linear-gradient(135deg, #667eea, #764ba2);
+            background: #12283a;
             border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 22px;
             color: white;
-            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.35);
         }
         .tv-title {
             font-size: 20px;
@@ -96,7 +94,6 @@
             background: #10b981;
             border-radius: 50%;
             display: inline-block;
-            box-shadow: 0 0 8px #10b981;
             animation: pulseGreen 1.5s infinite;
         }
         @keyframes pulseGreen {
@@ -108,16 +105,16 @@
             font-family: 'Inter', sans-serif;
             font-size: 22px;
             font-weight: 800;
-            color: #4c51bf;
+            color: #12283a;
             letter-spacing: 1.5px;
-            background: #eef0ff;
+            background: #eef3f9;
             padding: 6px 16px;
             border-radius: 10px;
-            border: 1px solid #edf0f7;
+            border: 1px solid #d4dbe5;
         }
         .btn-fullscreen {
-            background: #eef0ff;
-            color: #667eea;
+            background: #eef3f9;
+            color: #12283a;
             border: none;
             border-radius: 20px;
             padding: 8px 16px;
@@ -126,7 +123,7 @@
             cursor: pointer;
             transition: all 0.2s;
         }
-        .btn-fullscreen:hover { background: #dde2ff; color: #667eea; }
+        .btn-fullscreen:hover { background: #d4dbe5; color: #12283a; }
 
         /* === TV BODY CONTAINER === */
         .tv-container {
@@ -146,7 +143,7 @@
             padding: 18px 20px;
             position: relative;
             overflow: hidden;
-            box-shadow: 0 2px 16px rgba(0,0,0,.06);
+            border: 1px solid #d4dbe5;
             text-align: center;
         }
         .tv-stat-card.alert-card {
@@ -174,7 +171,7 @@
             font-weight: 800;
             text-transform: uppercase;
             letter-spacing: .7px;
-            color: #666;
+            color: #6b7c93;
             margin: 0 0 5px;
         }
         .alert-card .stat-card-title { color: #b91c1c; }
@@ -196,7 +193,7 @@
         }
         .stat-card-desc {
             font-size: 12px;
-            color: #aab;
+            color: #6b7c93;
             min-height: 17px;
         }
 
@@ -213,7 +210,7 @@
             background: #ffffff;
             border-radius: 16px;
             padding: 22px;
-            box-shadow: 0 2px 16px rgba(0,0,0,.06);
+            border: 1px solid #d4dbe5;
         }
         .tv-section--returned {
             display: flex;
@@ -225,7 +222,7 @@
             justify-content: space-between;
             margin-bottom: 18px;
             padding-bottom: 12px;
-            border-bottom: 1px solid #edf0f7;
+            border-bottom: 1px solid #d4dbe5;
         }
         .section-hdr h3 {
             font-size: 16px;
@@ -254,7 +251,7 @@
             border-collapse: separate;
             border-spacing: 0 8px;
         }
-        .active-table thead tr { background: linear-gradient(135deg, #667eea, #764ba2); }
+        .active-table thead tr { background: #12283a; }
         .active-table th {
             font-size: 11px;
             font-weight: 700;
@@ -268,12 +265,12 @@
         .active-table th:first-child { border-top-left-radius: 10px; border-bottom-left-radius: 10px; }
         .active-table th:last-child  { border-top-right-radius: 10px; border-bottom-right-radius: 10px; }
         .active-table tbody tr {
-            background: #fafbff;
+            background: #eef3f9;
             transition: transform 0.2s, background 0.2s;
             border-radius: 12px;
         }
         .active-table tbody tr:hover {
-            background: #f8f9ff;
+            background: #d4dbe5;
             transform: scale(1.005);
         }
         .active-table td {
@@ -294,7 +291,7 @@
             width: 38px;
             height: 38px;
             border-radius: 10px;
-            background: linear-gradient(135deg, #667eea, #764ba2);
+            background: #12283a;
             color: #ffffff;
             display: flex;
             align-items: center;
@@ -303,7 +300,7 @@
             font-size: 14px;
         }
         .taruna-name { font-weight: 700; color: #333; margin-bottom: 2px; }
-        .taruna-npm { font-size: 11px; color: #888; }
+        .taruna-npm { font-size: 11px; color: #6b7c93; }
 
         /* Status Badge TV */
         .tv-badge-belum {
@@ -355,19 +352,19 @@
         }
         .tv-section--returned .feed-list { flex: 1; }
         .feed-item {
-            background: #fafbff;
+            background: #eef3f9;
             border-radius: 12px;
             padding: 12px 14px;
             border-left: 4px solid #10b981;
         }
         .feed-title { font-size: 13px; font-weight: 700; color: #333; }
-        .feed-sub   { font-size: 11px; color: #888; margin-top: 2px; }
+        .feed-sub   { font-size: 11px; color: #6b7c93; margin-top: 2px; }
 
         /* Empty State */
         .tv-empty {
             text-align: center;
             padding: 44px 16px;
-            color: #aab;
+            color: #6b7c93;
         }
         .tv-empty-icon {
             width: 54px;
@@ -382,11 +379,11 @@
             font-size: 24px;
         }
         .tv-empty-title { color: #1d7f4a; font-size: 17px; font-weight: 800; margin-bottom: 5px; }
-        .tv-empty-copy { color: #8290a6; font-size: 13px; }
+        .tv-empty-copy { color: #6b7c93; font-size: 13px; }
         .returned-empty { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:32px 16px; }
-        .returned-empty i { color:#a7b3c7; font-size:26px; display:block; margin-bottom:10px; }
-        .returned-empty strong { display:block; color:#55627a; font-size:14px; margin-bottom:4px; }
-        .returned-empty span { color:#9aa6b7; font-size:12px; }
+        .returned-empty i { color:#6b7c93; font-size:26px; display:block; margin-bottom:10px; }
+        .returned-empty strong { display:block; color:#12283a; font-size:14px; margin-bottom:4px; }
+        .returned-empty span { color:#6b7c93; font-size:12px; }
 
         @media (max-width: 1200px) {
             .tv-stats-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
@@ -395,7 +392,7 @@
 
         /* Back button */
         .btn-back-tablet {
-            background: linear-gradient(135deg, #667eea, #764ba2);
+            background: #12283a;
             color: white;
             text-decoration: none;
             padding: 8px 16px;
@@ -405,7 +402,6 @@
             display: inline-flex;
             align-items: center;
             gap: 6px;
-            box-shadow: 0 2px 8px rgba(102, 126, 234, 0.35);
         }
         .btn-back-tablet:hover { opacity: .9; color: white; }
     </style>
@@ -467,7 +463,7 @@
 
             {{-- 4. EKSTRAKURIKULER --}}
             <div class="tv-stat-card">
-                <div class="stat-card-icon" style="background:linear-gradient(135deg,#63b3ed,#3182ce);"><i class="fas fa-users"></i></div>
+                <div class="stat-card-icon" style="background:linear-gradient(135deg,#63b3ed,#12283a);"><i class="fas fa-users"></i></div>
                 <div class="stat-card-number" id="statEkskul">{{ $stats['total_ekskul'] }}</div>
                 <div class="stat-card-title">Ekstrakurikuler</div>
                 <div class="stat-card-desc">Kegiatan Ekskul</div>
@@ -475,7 +471,7 @@
 
             {{-- 5. OLAHRAGA --}}
             <div class="tv-stat-card">
-                <div class="stat-card-icon" style="background:linear-gradient(135deg,#76e4f7,#0bc5ea);"><i class="fas fa-running"></i></div>
+                <div class="stat-card-icon" style="background:linear-gradient(135deg,#76e4f7,#0d9488);"><i class="fas fa-running"></i></div>
                 <div class="stat-card-number" id="statOlahraga">{{ $stats['total_olahraga'] }}</div>
                 <div class="stat-card-title">Olahraga</div>
                 <div class="stat-card-desc">Mandiri / Terpimpin</div>

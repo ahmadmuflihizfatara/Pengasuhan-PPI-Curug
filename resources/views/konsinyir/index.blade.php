@@ -3,7 +3,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 * { box-sizing: border-box; }
-body { font-family: 'Inter', sans-serif; background: #f0f2f5; }
+body { font-family: 'Inter', sans-serif; background: #eef3f9; }
 
 .app-layout { display: flex; min-height: 100vh; }
 .main-content { flex: 1; padding: 28px 30px; min-width: 0; }
@@ -35,7 +35,7 @@ body { font-family: 'Inter', sans-serif; background: #f0f2f5; }
 label { font-size:11.5px; font-weight:700; color:#555; }
 .form-control {
     padding:11px 13px; border:2px solid #e8ebf5; border-radius:10px;
-    font-size:13px; font-family:'Inter',sans-serif; color:#333; outline:none; background:#fafbff; width:100%;
+    font-size:13px; font-family:'Inter',sans-serif; color:#333; outline:none; background:#f9fafb; width:100%;
 }
 .form-control:focus { border-color:#e34948; background:white; }
 .form-control.cocok { border-color:#9ae6b4; background:#f6fffb; }
@@ -45,7 +45,7 @@ textarea.form-control { resize:vertical; min-height:70px; }
 .hint { font-size:11px; color:#a8afbd; margin-top:2px; }
 
 .info-taruna { display:flex; gap:10px; align-items:center; margin-top:2px; }
-.info-taruna .pill { background:#eef0ff; color:#5a67d8; padding:3px 10px; border-radius:20px; font-size:11.5px; font-weight:700; }
+.info-taruna .pill { background:rgba(18,40,58,0.06); color:#5a67d8; padding:3px 10px; border-radius:20px; font-size:11.5px; font-weight:700; }
 .info-taruna .pill-tingkat { background:#f0fff4; color:#38a169; }
 
 .btn-simpan {
@@ -63,12 +63,12 @@ table { width:100%; border-collapse:collapse; }
 thead tr { background:linear-gradient(135deg,#e34948,#eb6834); }
 th { padding:12px 16px; text-align:left; font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.06em; color:white; }
 td { padding:12px 16px; font-size:13px; color:#444; border-top:1px solid #f0f2f7; vertical-align:middle; }
-tbody tr:hover { background:#fafbff; }
+tbody tr:hover { background:#f9fafb; }
 
 .k-avatar { width:34px; height:34px; border-radius:50%; background:linear-gradient(135deg,#e34948,#eb6834); color:white; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:800; flex-shrink:0; }
 .k-name { font-weight:700; color:#2b2b33; }
 .npm-badge { font-family:monospace; font-size:12px; color:#777; }
-.pill { background:#eef0ff; color:#5a67d8; padding:3px 10px; border-radius:20px; font-size:11.5px; font-weight:700; }
+.pill { background:rgba(18,40,58,0.06); color:#5a67d8; padding:3px 10px; border-radius:20px; font-size:11.5px; font-weight:700; }
 .pill-tingkat { background:#f0fff4; color:#38a169; }
 .status-badge { font-size:10.5px; font-weight:800; padding:4px 12px; border-radius:20px; white-space:nowrap; }
 .status-badge.aktif { background:#fff0f0; color:#c53030; }

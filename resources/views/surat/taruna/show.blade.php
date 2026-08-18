@@ -2,25 +2,25 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 * { box-sizing: border-box; }
-body { font-family: 'Inter', sans-serif; background: #f0f2f5; }
+body { font-family: 'Inter', sans-serif; background: #eef3f9; }
 .app-layout { display: flex; min-height: 100vh; }
 .main-content { flex: 1; padding: 28px 30px; min-width: 0; max-width: 820px; }
 
-.back-link { display:inline-flex; align-items:center; gap:7px; color:#667eea; text-decoration:none; font-size:13px; font-weight:600; margin-bottom:20px; }
+.back-link { display:inline-flex; align-items:center; gap:7px; color:#fdbb11; text-decoration:none; font-size:13px; font-weight:600; margin-bottom:20px; }
 .back-link:hover { text-decoration:underline; }
 
 .status-banner { border-radius:18px; padding:28px 32px; color:white; margin-bottom:24px; position:relative; overflow:hidden; }
 .status-banner.diproses  { background:linear-gradient(135deg,#ed8936,#dd6b20); }
 .status-banner.disetujui { background:linear-gradient(135deg,#48bb78,#38a169); }
 .status-banner.ditolak   { background:linear-gradient(135deg,#fc5c7d,#e53e3e); }
-.status-banner.selesai   { background:linear-gradient(135deg,#667eea,#764ba2); }
+.status-banner.selesai   { background:#12283a; }
 .status-banner::before { content:''; position:absolute; right:-50px; top:-50px; width:180px; height:180px; background:rgba(255,255,255,.08); border-radius:50%; }
 .status-banner::after  { content:''; position:absolute; right:80px; bottom:-60px; width:140px; height:140px; background:rgba(255,255,255,.06); border-radius:50%; }
 .status-banner h1 { margin:0 0 4px; font-size:22px; font-weight:800; position:relative; z-index:1; }
 .status-banner p  { margin:0; opacity:.85; font-size:13px; position:relative; z-index:1; }
 
 /* Info sections */
-.card { background:white; border-radius:16px; padding:28px; box-shadow:0 2px 16px rgba(0,0,0,.06); margin-bottom:20px; }
+.card { background:white; border-radius:16px; padding:28px; border: 1px solid #d4dbe5; margin-bottom:20px; }
 .card-title { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.07em; color:#aab; margin-bottom:18px; padding-bottom:10px; border-bottom:1px solid #f0f2f7; }
 
 .info-grid { display:grid; grid-template-columns:1fr 1fr; gap:20px; }
@@ -34,7 +34,7 @@ body { font-family: 'Inter', sans-serif; background: #f0f2f5; }
 .badge-diproses  { background:#fff4e6; color:#e07020; }
 .badge-disetujui { background:#e6fff5; color:#38a169; }
 .badge-ditolak   { background:#fff0f0; color:#e53e3e; }
-.badge-selesai   { background:#eef0ff; color:#667eea; }
+.badge-selesai   { background:#eef3f9; color:#12283a; }
 
 /* Catatan box */
 .catatan-box { border-radius:12px; padding:18px 20px; margin-top:4px; }
@@ -50,8 +50,8 @@ body { font-family: 'Inter', sans-serif; background: #f0f2f5; }
 .catatan-box.rejected p { color:#742a2a; }
 .catatan-box.pending  p { color:#7b341e; }
 
-.file-link { display:inline-flex; align-items:center; gap:8px; background:#eef0ff; color:#667eea; padding:10px 20px; border-radius:25px; text-decoration:none; font-size:13px; font-weight:700; }
-.file-link:hover { background:#dde2ff; }
+.file-link { display:inline-flex; align-items:center; gap:8px; background:#eef3f9; color:#12283a; padding:10px 20px; border-radius:25px; text-decoration:none; font-size:13px; font-weight:700; }
+.file-link:hover { background:#dde8f0; }
 </style>
 
 <div class="app-layout">
@@ -93,7 +93,7 @@ body { font-family: 'Inter', sans-serif; background: #f0f2f5; }
             <div class="info-grid">
                 <div class="info-item">
                     <label>Jenis Surat</label>
-                    <span><span style="background:#eef0ff; color:#667eea; padding:3px 12px; border-radius:20px; font-size:12px; font-weight:700;">{{ $surat->jenis_surat }}</span></span>
+                    <span><span style="background:#eef3f9; color:#12283a; padding:3px 12px; border-radius:20px; font-size:12px; font-weight:700;">{{ $surat->jenis_surat }}</span></span>
                 </div>
                 <div class="info-item">
                     <label>Tanggal Pengajuan</label>

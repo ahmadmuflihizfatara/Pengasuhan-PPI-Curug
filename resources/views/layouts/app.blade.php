@@ -31,7 +31,7 @@
             margin: 0;
             padding: 0;
             font-family: 'Inter', sans-serif;
-            background: #f0f2f5;
+            background: #eef3f9;
         }
 
         /* Hilangkan padding Bootstrap bawaan pada #app */

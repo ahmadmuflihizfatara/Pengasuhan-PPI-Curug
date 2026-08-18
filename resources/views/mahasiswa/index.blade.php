@@ -4,7 +4,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 * { box-sizing: border-box; }
-body { font-family: 'Inter', sans-serif; background: #f0f2f5; }
+body { font-family: 'Inter', sans-serif; background: #eef3f9; }
 
 .app-layout {
     display: flex;
@@ -16,7 +16,7 @@ body { font-family: 'Inter', sans-serif; background: #f0f2f5; }
 
 /* Header */
 .page-header {
-    background: linear-gradient(135deg, #5a67d8 0%, #9f7aea 100%);
+    background: linear-gradient(135deg, #5a67d8 0%, #fdbb11 100%);
     border-radius: 18px; padding: 32px 36px;
     color: white; margin-bottom: 28px;
     position: relative; overflow: hidden;
@@ -62,34 +62,34 @@ body { font-family: 'Inter', sans-serif; background: #f0f2f5; }
 
 /* Table */
 .table-container { background:white; border-radius:14px; overflow:hidden; box-shadow:0 2px 12px rgba(0,0,0,.05); }
-.table-head { padding:16px 20px; border-bottom:1px solid #edf0f7; display:flex; justify-content:space-between; align-items:center; }
+.table-head { padding:16px 20px; border-bottom:1px solid #d4dbe5; display:flex; justify-content:space-between; align-items:center; }
 .table-head h2 { font-size:15px; font-weight:700; color:#333; margin:0; }
-.badge-count { background:#eef0ff; color:#5a67d8; font-size:12px; font-weight:700; padding:3px 10px; border-radius:50px; }
+.badge-count { background:rgba(18,40,58,0.06); color:#5a67d8; font-size:12px; font-weight:700; padding:3px 10px; border-radius:50px; }
 
 table { width:100%; border-collapse:collapse; }
-thead tr { background:linear-gradient(135deg,#5a67d8,#9f7aea); }
+thead tr { background:linear-gradient(135deg,#5a67d8,#fdbb11); }
 th { padding:12px 14px; text-align:left; font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.06em; color:white; }
 td { padding:12px 14px; font-size:13px; color:#444; border-top:1px solid #f0f2f7; }
 tbody tr { transition:background .1s; }
-tbody tr:hover { background:#fafbff; }
+tbody tr:hover { background:#f9fafb; }
 
 .student-name   { font-weight:600; color:#222; }
 .npm-badge      { font-family:monospace; font-size:12px; color:#777; }
-.nickname-badge { background:#eef0ff; color:#5a67d8; padding:3px 10px; border-radius:50px; font-size:12px; font-weight:600; }
+.nickname-badge { background:rgba(18,40,58,0.06); color:#5a67d8; padding:3px 10px; border-radius:50px; font-size:12px; font-weight:600; }
 .tingkat-badge  { background:#f0fff4; color:#38a169; padding:3px 10px; border-radius:50px; font-size:12px; font-weight:700; }
 .jk-badge       { font-size:11px; font-weight:700; padding:2px 8px; border-radius:50px; }
-.jk-L { background:#ebf4ff; color:#3182ce; }
+.jk-L { background:#ebf4ff; color:#12283a; }
 .jk-P { background:#fff0f6; color:#d53f8c; }
 
 .btn-edit {
-    background:linear-gradient(135deg,#5a67d8,#9f7aea);
+    background:linear-gradient(135deg,#5a67d8,#fdbb11);
     color:white; border:none; padding:6px 14px; border-radius:8px;
     font-size:12px; font-weight:600; cursor:pointer;
     text-decoration:none; display:inline-flex; align-items:center; gap:5px; transition:opacity .15s;
 }
 .btn-edit:hover { opacity:.85; color:white; }
 
-.prodi-header-row { background:linear-gradient(135deg,#5a67d8,#9f7aea); }
+.prodi-header-row { background:linear-gradient(135deg,#5a67d8,#fdbb11); }
 .prodi-header-row td { color:white; font-weight:700; padding:10px 14px; font-size:13px; border-top:none; }
 .jenjang-pill { background:rgba(255,255,255,.25); padding:2px 9px; border-radius:50px; font-size:11px; font-weight:700; margin-left:6px; }
 
@@ -131,14 +131,14 @@ tbody tr:hover { background:#fafbff; }
         {{-- Stat cards per prodi --}}
         <div class="stats-row admin-stats">
             <div class="stat-card active-tab" data-prodi="all" onclick="setProdi('all', this)">
-                <div class="stat-icon" style="background:linear-gradient(135deg,#667eea,#764ba2);"><i class="fas fa-users"></i></div>
+                <div class="stat-icon" style="background:linear-gradient(135deg,#12283a,#12283a);"><i class="fas fa-users"></i></div>
                 <div class="count">{{ $totalSemua }}</div>
                 <div class="label">Semua Prodi</div>
                 <div class="sub">D-4 &amp; D-3</div>
             </div>
             @foreach($prodiList as $kode => $info)
             <div class="stat-card" data-prodi="{{ $kode }}" onclick="setProdi('{{ $kode }}', this)">
-                <div class="stat-icon" style="background:linear-gradient(135deg,#63b3ed,#3182ce);"><i class="fas fa-graduation-cap"></i></div>
+                <div class="stat-icon" style="background:linear-gradient(135deg,#63b3ed,#12283a);"><i class="fas fa-graduation-cap"></i></div>
                 <div class="count">{{ ($mahasiswaData[$kode] ?? collect())->count() }}</div>
                 <div class="label">{{ $kode }}</div>
                 <div class="sub">{{ $info['jenjang'] }} · {{ $info['nama'] }}</div>

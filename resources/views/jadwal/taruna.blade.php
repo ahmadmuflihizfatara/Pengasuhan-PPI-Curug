@@ -3,7 +3,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 * { box-sizing: border-box; }
-body { font-family: 'Inter', sans-serif; background: #f0f2f5; }
+body { font-family: 'Inter', sans-serif; background: #eef3f9; }
 
 .app-layout { display: flex; min-height: 100vh; }
 .main-content { flex: 1; padding: 28px 30px; min-width: 0; }
@@ -44,11 +44,11 @@ table { width:100%; border-collapse:collapse; }
 thead tr { background:linear-gradient(135deg,#4a3aa7,#2a78d6); }
 th { padding:12px 16px; text-align:left; font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.06em; color:white; }
 td { padding:12px 16px; font-size:13px; color:#444; border-top:1px solid #f0f2f7; }
-tbody tr:hover { background:#fafbff; }
+tbody tr:hover { background:#f9fafb; }
 .duty-avatar { width:34px; height:34px; border-radius:50%; background:linear-gradient(135deg,#1baf7a,#2a78d6); color:white; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:800; flex-shrink:0; }
 .duty-name { font-weight:700; color:#2b2b33; }
 .npm-badge { font-family:monospace; font-size:12px; color:#777; }
-.pill { background:#eef0ff; color:#5a67d8; padding:3px 10px; border-radius:20px; font-size:11.5px; font-weight:700; }
+.pill { background:rgba(18,40,58,0.06); color:#5a67d8; padding:3px 10px; border-radius:20px; font-size:11.5px; font-weight:700; }
 .pill-tingkat { background:#f0fff4; color:#38a169; }
 .saya-badge { background:#fff0f6; color:#d53f8c; padding:2px 9px; border-radius:20px; font-size:10.5px; font-weight:800; margin-left:6px; }
 

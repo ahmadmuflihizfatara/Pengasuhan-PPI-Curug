@@ -1,17 +1,17 @@
 <x-app-layout>
 <style>
 * { box-sizing: border-box; }
-body { font-family: 'Inter', sans-serif; background: #f0f2f5; }
+body { font-family: 'Inter', sans-serif; background: #eef3f9; }
 .app-layout   { display: flex; min-height: 100vh; }
 .main-content { flex: 1; padding: 28px 28px 28px 24px; min-width: 0; }
 
 .breadcrumb { display:flex; align-items:center; gap:7px; margin-bottom:20px; font-size:12px; color:#888; }
-.breadcrumb a { color:#667eea; text-decoration:none; font-weight:600; }
+.breadcrumb a { color:#fdbb11; text-decoration:none; font-weight:600; }
 .breadcrumb a:hover { text-decoration:underline; }
 .breadcrumb i { font-size:10px; }
 
 .page-header {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: #12283a;
     border-radius: 18px; padding: 24px 28px; color: white; margin-bottom: 24px;
     display:flex; align-items:center; gap:14px; position:relative; overflow:hidden;
 }
@@ -23,22 +23,22 @@ body { font-family: 'Inter', sans-serif; background: #f0f2f5; }
 
 .form-grid { display:grid; grid-template-columns:1fr 320px; gap:22px; align-items:start; }
 
-.form-card { background:white; border-radius:16px; box-shadow:0 2px 14px rgba(0,0,0,.06); overflow:hidden; }
-.form-card-header { padding:16px 22px; border-bottom:1px solid #f0f2f7; display:flex; align-items:center; gap:9px; }
+.form-card { background:white; border-radius:16px; border:1px solid #d4dbe5; overflow:hidden; }
+.form-card-header { padding:16px 22px; border-bottom:1px solid #d4dbe5; display:flex; align-items:center; gap:9px; }
 .form-card-header h3 { font-size:14px; font-weight:700; color:#333; margin:0; }
-.form-card-header i  { color:#667eea; font-size:14px; }
+.form-card-header i  { color:#fdbb11; font-size:14px; }
 .form-card-body { padding:22px; }
 
 .form-group { margin-bottom:18px; }
 .form-label { display:block; font-size:12px; font-weight:700; color:#555; margin-bottom:6px; text-transform:uppercase; letter-spacing:.04em; }
 .form-label .req { color:#e53e3e; margin-left:2px; }
 .form-control {
-    width:100%; padding:10px 14px; border:1.5px solid #e2e8f0;
+    width:100%; padding:10px 14px; border:1.5px solid #d4dbe5;
     border-radius:10px; font-size:13px; font-family:'Inter',sans-serif;
     color:#333; outline:none; transition:border-color .15s, box-shadow .15s;
-    background:#fafbff;
+    background:#f9fafb;
 }
-.form-control:focus { border-color:#667eea; box-shadow:0 0 0 3px rgba(102,126,234,.12); }
+.form-control:focus { border-color:#fdbb11; box-shadow:0 0 0 3px rgba(253,187,17,.12); }
 .form-control.is-invalid { border-color:#e53e3e; }
 textarea.form-control { resize:vertical; min-height:320px; line-height:1.7; }
 textarea.summary-area { min-height:80px; }
@@ -46,36 +46,36 @@ select.form-control { appearance:none; background-image:url("data:image/svg+xml,
 .invalid-feedback { font-size:11px; color:#e53e3e; margin-top:4px; font-weight:600; }
 .form-hint { font-size:11px; color:#aab; margin-top:4px; }
 
-.toggle-wrap { display:flex; align-items:center; gap:10px; padding:13px 14px; border:1.5px solid #e2e8f0; border-radius:10px; cursor:pointer; background:#fafbff; transition:border-color .15s; margin-bottom:12px; }
-.toggle-wrap:hover { border-color:#667eea; }
+.toggle-wrap { display:flex; align-items:center; gap:10px; padding:13px 14px; border:1.5px solid #d4dbe5; border-radius:10px; cursor:pointer; background:#f9fafb; transition:border-color .15s; margin-bottom:12px; }
+.toggle-wrap:hover { border-color:#fdbb11; }
 .toggle-wrap input[type=checkbox] { display:none; }
-.toggle-slider { width:38px; height:20px; background:#e2e8f0; border-radius:20px; position:relative; flex-shrink:0; transition:background .2s; }
+.toggle-slider { width:38px; height:20px; background:#d4dbe5; border-radius:20px; position:relative; flex-shrink:0; transition:background .2s; }
 .toggle-slider::after { content:''; position:absolute; left:3px; top:50%; transform:translateY(-50%); width:14px; height:14px; background:white; border-radius:50%; transition:left .2s; box-shadow:0 1px 3px rgba(0,0,0,.2); }
-.toggle-wrap.on .toggle-slider { background:linear-gradient(135deg,#667eea,#764ba2); }
+.toggle-wrap.on .toggle-slider { background:#12283a; }
 .toggle-wrap.on .toggle-slider::after { left:21px; }
 .toggle-label { font-size:13px; font-weight:600; color:#333; }
 .toggle-sub   { font-size:11px; color:#aab; }
 
-.img-upload-area { border:2px dashed #c5cae0; border-radius:12px; padding:20px; text-align:center; cursor:pointer; transition:border-color .15s, background .15s; position:relative; }
-.img-upload-area:hover { border-color:#667eea; background:#f8f9ff; }
+.img-upload-area { border:2px dashed #d4dbe5; border-radius:12px; padding:20px; text-align:center; cursor:pointer; transition:border-color .15s, background .15s; position:relative; }
+.img-upload-area:hover { border-color:#fdbb11; background:#f5f7fa; }
 .img-upload-area input { position:absolute; inset:0; opacity:0; cursor:pointer; width:100%; height:100%; }
-.img-upload-area i { font-size:22px; color:#c5cae0; margin-bottom:6px; display:block; }
-.img-upload-area p { font-size:12px; color:#aab; margin:0; }
+.img-upload-area i { font-size:22px; color:#d4dbe5; margin-bottom:6px; display:block; }
+.img-upload-area p { font-size:12px; color:#6b7c93; margin:0; }
 
 .current-img { border-radius:10px; margin-bottom:12px; overflow:hidden; }
 .current-img img { width:100%; max-height:150px; object-fit:cover; border-radius:10px; }
-.current-img-label { font-size:11px; color:#888; display:flex; align-items:center; gap:5px; margin-bottom:6px; font-weight:600; }
+.current-img-label { font-size:11px; color:#6b7c93; display:flex; align-items:center; gap:5px; margin-bottom:6px; font-weight:600; }
 
 .kat-pills { display:flex; flex-wrap:wrap; gap:8px; }
-.kat-pill  { padding:6px 14px; border-radius:20px; font-size:12px; font-weight:600; border:1.5px solid #e2e8f0; cursor:pointer; transition:all .15s; display:inline-flex; align-items:center; gap:5px; background:#fff; }
-.kat-pill:hover    { border-color:#667eea; color:#667eea; }
+.kat-pill  { padding:6px 14px; border-radius:20px; font-size:12px; font-weight:600; border:1.5px solid #d4dbe5; cursor:pointer; transition:all .15s; display:inline-flex; align-items:center; gap:5px; background:#fff; }
+.kat-pill:hover    { border-color:#fdbb11; color:#fdbb11; }
 .kat-pill.selected { border-color:transparent; color:white; }
 .kat-pill input    { display:none; }
 
 .btn { padding:11px 22px; border-radius:10px; font-size:13px; font-weight:700; border:none; cursor:pointer; display:inline-flex; align-items:center; gap:8px; text-decoration:none; transition:opacity .15s, transform .1s; }
 .btn:hover     { opacity:.9; transform:translateY(-1px); }
-.btn-primary   { background:linear-gradient(135deg,#667eea,#764ba2); color:white; }
-.btn-secondary { background:#f0f1fb; color:#667eea; }
+.btn-primary   { background:#12283a; color:white; }
+.btn-secondary { background:#eef3f9; color:#fdbb11; }
 .btn-group     { display:flex; gap:10px; flex-wrap:wrap; }
 
 .alert { padding:12px 18px; border-radius:10px; margin-bottom:18px; font-size:13px; font-weight:600; display:flex; align-items:center; gap:9px; }
@@ -167,8 +167,8 @@ select.form-control { appearance:none; background-image:url("data:image/svg+xml,
                                         'pengumuman' => ['label'=>'Pengumuman', 'icon'=>'fa-bullhorn',    'bg'=>'#e53e3e'],
                                         'prestasi'   => ['label'=>'Prestasi',   'icon'=>'fa-trophy',      'bg'=>'#d69e2e'],
                                         'kegiatan'   => ['label'=>'Kegiatan',   'icon'=>'fa-flag',        'bg'=>'#38a169'],
-                                        'informasi'  => ['label'=>'Informasi',  'icon'=>'fa-info-circle', 'bg'=>'#3182ce'],
-                                        'lainnya'    => ['label'=>'Lainnya',    'icon'=>'fa-newspaper',   'bg'=>'#667eea'],
+                                        'informasi'  => ['label'=>'Informasi',  'icon'=>'fa-info-circle', 'bg'=>'#12283a'],
+                                        'lainnya'    => ['label'=>'Lainnya',    'icon'=>'fa-newspaper',   'bg'=>'#12283a'],
                                     ];
                                     $selectedKat = old('kategori', $beritum->kategori);
                                 @endphp
