@@ -5,18 +5,70 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Laravel') }} - Dashboard</title>
-
-    @vite(['resources/js/app.js'])
+    <title>{{ config('app.name', 'Pengasuhan PPI Curug') }} - Dashboard</title>
 
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-    @vite(['resources/css/app.css'])
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+            background: transparent !important;
+            color: #0f172a;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        #global-cockpit-bg-layer {
+            position: fixed;
+            top: -20px;
+            left: -20px;
+            right: -20px;
+            bottom: -20px;
+            background-image: url('{{ asset('images/BG.png') }}');
+            background-size: cover;
+            background-position: center center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            filter: blur(4px) brightness(0.92);
+            transform: scale(1.04);
+            z-index: -10;
+            pointer-events: none;
+        }
+
+        #global-cockpit-overlay-layer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at center, rgba(15, 23, 42, 0.1) 0%, rgba(15, 23, 42, 0.35) 100%);
+            z-index: -9;
+            pointer-events: none;
+        }
+
+        #app {
+            padding: 0;
+            margin: 0;
+            min-height: 100vh;
+            position: relative;
+            z-index: 1;
+        }
+    </style>
 </head>
 <body>
+    {{-- Global Blurred Cockpit Background Layer --}}
+    <div id="global-cockpit-bg-layer"></div>
+    <div id="global-cockpit-overlay-layer"></div>
+
     <div id="app">
         {{ $slot }}
     </div>
@@ -48,5 +100,7 @@
         form.submit();
     });
     </script>
+
+    @stack('scripts')
 </body>
 </html>

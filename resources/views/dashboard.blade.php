@@ -1,421 +1,403 @@
 <x-app-layout>
-<style>
-* { box-sizing: border-box; }
-body { font-family: 'Inter', sans-serif; background: #f0f2f5; }
 
-.app-layout {
-    display: flex;
-    min-height: 100vh;
-    /* Margin negatif tidak lagi dibutuhkan karena navbar sudah dihapus dari app.blade.php */
-}
+{{-- Top Floating Island Capsule Navbar --}}
+<x-island-navbar />
 
-/* === MAIN === */
-.main-content { flex: 1; padding: 28px 28px 28px 24px; min-width: 0; }
+{{-- Master Floating Spatial Workspace Canvas Window (rounded-3xl, backdrop-blur-2xl) --}}
+<main class="max-w-7xl mx-auto px-4 sm:px-6 pb-12 pt-2">
+    <div class="spatial-workspace-window rounded-3xl bg-white/30 backdrop-blur-2xl border border-white/50 shadow-2xl p-4 sm:p-7 relative overflow-hidden">
+        
 
-/* === GREETING BANNER === */
-.greeting-banner {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    border-radius: 20px;
-    padding: 32px 36px;
-    color: white;
-    margin-bottom: 24px;
-    position: relative;
-    overflow: hidden;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-}
-.greeting-banner::before { content: ''; position: absolute; right: -60px; top: -60px; width: 220px; height: 220px; background: rgba(255,255,255,.08); border-radius: 50%; }
-.greeting-banner::after  { content: ''; position: absolute; right: 100px; bottom: -80px; width: 180px; height: 180px; background: rgba(255,255,255,.06); border-radius: 50%; }
-.greeting-text { position: relative; z-index: 1; }
-.greeting-text .greeting { font-size: 13px; opacity: .8; margin-bottom: 4px; }
-.greeting-text h1 { font-size: 24px; font-weight: 800; margin: 0 0 6px 0; }
-.greeting-text p  { font-size: 13px; opacity: .85; margin: 0; }
-.greeting-badge {
-    position: relative; z-index: 1;
-    background: rgba(255,255,255,.18);
-    border-radius: 16px; padding: 16px 22px;
-    text-align: center; backdrop-filter: blur(4px);
-    border: 1px solid rgba(255,255,255,.25);
-}
-.greeting-badge .ava { width: 52px; height: 52px; border-radius: 50%; background: rgba(255,255,255,.25); display: flex; align-items: center; justify-content: center; font-size: 20px; font-weight: 800; margin: 0 auto 8px; }
-.greeting-badge .username { font-size: 13px; font-weight: 700; }
-.greeting-badge .role     { font-size: 11px; opacity: .8; }
-
-/* === STAT CARDS === */
-.stats-grid {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 14px;
-    margin-bottom: 24px;
-}
-.stat-card {
-    background: white; border-radius: 14px; padding: 18px;
-    box-shadow: 0 2px 12px rgba(0,0,0,.05);
-    text-decoration: none; display: block;
-    transition: transform .2s, box-shadow .2s; cursor: pointer;
-    color: inherit;
-}
-.stat-card:hover { transform: translateY(-3px); box-shadow: 0 6px 20px rgba(0,0,0,.1); color: inherit; }
-.stat-icon  { width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 12px; font-size: 18px; color: white; }
-.stat-count { font-size: 26px; font-weight: 800; color: #333; line-height: 1; margin-bottom: 4px; }
-.stat-label { font-size: 12px; color: #888; font-weight: 500; }
-.stat-change { font-size: 11px; margin-top: 6px; font-weight: 600; }
-.stat-change.up      { color: #38a169; }
-.stat-change.neutral { color: #aab; }
-
-/* === TWO COLUMN === */
-.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 24px; }
-
-/* === SECTION HEADER === */
-.section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
-.section-title  { font-size: 15px; font-weight: 700; color: #333; margin: 0; }
-.section-link   { font-size: 12px; color: #667eea; font-weight: 600; text-decoration: none; }
-.section-link:hover { text-decoration: underline; }
-
-/* === CARD === */
-.card      { background: white; border-radius: 16px; box-shadow: 0 2px 12px rgba(0,0,0,.05); }
-.card-body { padding: 20px; }
-
-/* === ACARA CARDS === */
-.acara-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 24px; }
-.acara-card { background: white; border-radius: 14px; overflow: hidden; box-shadow: 0 2px 12px rgba(0,0,0,.06); transition: transform .2s; }
-.acara-card:hover { transform: translateY(-4px); }
-.acara-card-img  { height: 100px; display: flex; align-items: center; justify-content: center; position: relative; }
-.acara-card-img .acara-time { position: absolute; bottom: 0; left: 0; right: 0; background: rgba(0,0,0,.2); padding: 5px 12px; font-size: 11px; color: white; font-weight: 600; display: flex; align-items: center; gap: 5px; }
-.acara-card-body  { padding: 14px; }
-.acara-date       { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; margin-bottom: 5px; }
-.acara-card-title { font-size: 13px; font-weight: 700; color: #333; line-height: 1.4; margin-bottom: 4px; }
-.acara-card-desc  { font-size: 11px; color: #aab; line-height: 1.4; }
-
-/* === TABLES === */
-.surat-table table, .acara-table table { width: 100%; border-collapse: collapse; }
-.surat-table th, .acara-table th { padding: 12px 16px; text-align: left; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: #8a93b0; background: #f8f9ff; }
-.surat-table td, .acara-table td { padding: 12px 16px; font-size: 13px; color: #444; border-top: 1px solid #f0f2f7; }
-.surat-table tr:hover td, .acara-table tr:hover td { background: #fafbff; }
-.status-badge { display: inline-flex; align-items: center; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; }
-.time-badge   { background: #eef0ff; color: #667eea; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; }
-
-/* === EMPTY === */
-.empty-mini { text-align: center; padding: 28px 16px; color: #bbb; }
-.empty-mini i { font-size: 28px; display: block; margin-bottom: 8px; }
-.empty-mini p { font-size: 13px; margin: 0; }
-</style>
-
-<div class="app-layout">
-
-    {{-- ── SIDEBAR ── --}}
-    <x-sidebar active="dashboard" />
-
-    <!-- MAIN CONTENT -->
-    <div class="main-content">
-
-        <!-- Greeting Banner -->
-        <div class="greeting-banner">
-            <div class="greeting-text">
+                
+                {{-- ── 1. GREETING BANNER GLASS COCKPIT ── --}}
                 @php
                     $hour     = (int) now()->setTimezone('Asia/Jakarta')->format('H');
                     $greeting = $hour < 12 ? 'Selamat Pagi' : ($hour < 15 ? 'Selamat Siang' : ($hour < 18 ? 'Selamat Sore' : 'Selamat Malam'));
                 @endphp
-                <div class="greeting">{{ $greeting }},</div>
-                <h1>{{ Auth::user()->name }} 👋</h1>
-                <p>Selamat datang di Dashboard Pengasuhan — semua data tersaji dengan rapi.</p>
-            </div>
-            <div class="greeting-badge">
-                <div class="ava">{{ strtoupper(substr(Auth::user()->name, 0, 1)) }}</div>
-                <div class="username">{{ Auth::user()->name }}</div>
-                <div class="role">{{ Auth::user()->role_label }}</div>
-            </div>
-        </div>
-
-        <!-- ── STAT CARDS ── -->
-        @if(Auth::user()->isTaruna())
-        <div class="stats-grid" style="grid-template-columns:repeat(2,1fr);">
-            <div class="stat-card" style="cursor:default;">
-                <div class="stat-icon" style="background:linear-gradient(135deg,#667eea,#764ba2);">
-                    <i class="fas fa-user-graduate"></i>
-                </div>
-                <div class="stat-count" style="font-size:18px;">{{ Auth::user()->name }}</div>
-                <div class="stat-label">Akun Taruna</div>
-                <div class="stat-change neutral"><i class="fas fa-id-badge"></i> {{ Auth::user()->jabatan ?? 'Taruna' }}</div>
-            </div>
-            <a href="{{ route('poin.index') }}" class="stat-card">
-                <div class="stat-icon" style="background:linear-gradient(135deg,#f093fb,#f5576c);">
-                    <i class="fas fa-star"></i>
-                </div>
-                <div class="stat-count" id="taruna-total-poin">{{ $totalPoin >= 0 ? '+' : '' }}{{ $totalPoin }}</div>
-                <div class="stat-label">Raport Poin Saya</div>
-                <div class="stat-change up"><i class="fas fa-arrow-right"></i> Klik untuk buka</div>
-            </a>
-        </div>
-
-        <x-prodi-tingkat-chart :chart-data="$chartData" />
-
-        @else
-        <div class="stats-grid">
-            <div class="stat-card" style="cursor:default;">
-                <div class="stat-icon" style="background:linear-gradient(135deg,#667eea,#764ba2);">
-                    <i class="fas fa-user-graduate"></i>
-                </div>
-                <div class="stat-count">{{ $totalMahasiswa }}</div>
-                <div class="stat-label">Total Mahasiswa</div>
-                <div class="stat-change neutral"><i class="fas fa-graduation-cap"></i> Semua kelas</div>
-            </div>
-            <a href="{{ route('acara.index') }}" class="stat-card">
-                <div class="stat-icon" style="background:linear-gradient(135deg,#43e97b,#38a169);">
-                    <i class="fas fa-calendar-alt"></i>
-                </div>
-                <div class="stat-count">{{ $semuaAcara->count() }}</div>
-                <div class="stat-label">Total Acara</div>
-                <div class="stat-change {{ $acaraMendatang->count() > 0 ? 'up' : 'neutral' }}">
-                    <i class="fas fa-calendar-day"></i> {{ $acaraMendatang->count() }} mendatang
-                </div>
-            </a>
-            <a href="{{ route('surat.index') }}" class="stat-card">
-                <div class="stat-icon" style="background:linear-gradient(135deg,#f093fb,#f5576c);">
-                    <i class="fas fa-envelope"></i>
-                </div>
-                <div class="stat-count">{{ $suratStats['total'] }}</div>
-                <div class="stat-label">Total Surat</div>
-                <div class="stat-change neutral">
-                    <i class="fas fa-spinner"></i> {{ $suratStats['diproses'] }} diproses
-                </div>
-            </a>
-            <a href="{{ route('surat.index') }}" class="stat-card">
-                <div class="stat-icon" style="background:linear-gradient(135deg,#0bc5ea,#3182ce);">
-                    <i class="fas fa-check-double"></i>
-                </div>
-                <div class="stat-count">{{ $suratStats['selesai'] }}</div>
-                <div class="stat-label">Surat Selesai</div>
-                <div class="stat-change up"><i class="fas fa-check-circle"></i> disetujui &amp; selesai</div>
-            </a>
-            <a href="{{ route('keluhan-barak.kelola') }}" class="stat-card">
-                <div class="stat-icon" style="background:linear-gradient(135deg,#f093fb,#f5576c);">
-                    <i class="fas fa-door-open"></i>
-                </div>
-                <div class="stat-count">{{ $keluhanStats['total'] }}</div>
-                <div class="stat-label">Keluhan Barak</div>
-                <div class="stat-change {{ $keluhanStats['diajukan'] > 0 ? 'up' : 'neutral' }}">
-                    <i class="fas fa-hourglass-half"></i> {{ $keluhanStats['diajukan'] }} diajukan
-                </div>
-            </a>
-        </div>
-        @endif
-
-        {{-- ── WIDGET MONITORING PERGERAKAN TARUNA ── --}}
-        @php
-            $activePergerakan = \App\Models\LogPergerakan::where('status', 'berangkat')->count();
-            $kembaliHariIni   = \App\Models\LogPergerakan::whereDate('waktu_berangkat', \Carbon\Carbon::today())->where('status', 'kembali')->count();
-        @endphp
-        <div style="background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); border: 1px solid #334155; border-radius: 16px; padding: 20px 24px; margin-bottom: 24px; color: white; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.15);">
-            <div style="display: flex; align-items: center; gap: 16px;">
-                <div style="width: 50px; height: 50px; border-radius: 14px; background: rgba(59, 130, 246, 0.2); border: 1px solid #3b82f6; display: flex; align-items: center; justify-content: center; font-size: 22px; color: #60a5fa;">
-                    <i class="fas fa-walking"></i>
-                </div>
-                <div>
-                    <div style="font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: #94a3b8;">Log Pergerakan Taruna (Sistem Pos Jaga)</div>
-                    <div style="font-size: 18px; font-weight: 800; color: white; margin-top: 2px;">
-                        <span style="color: #f87171; font-weight: 900;">🔴 {{ $activePergerakan }} Taruna</span> sedang di luar asrama
-                        <span style="font-size: 13px; color: #94a3b8; font-weight: 500; margin-left: 8px;">(🟢 {{ $kembaliHariIni }} kembali hari ini)</span>
+                <div class="greeting-banner rounded-2xl bg-gradient-to-r from-blue-900/90 via-indigo-900/85 to-slate-900/90 backdrop-blur-xl border border-white/30 p-6 sm:p-8 text-white mb-6 shadow-xl relative overflow-hidden flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                    <div class="relative z-10 max-w-xl">
+                        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/15 backdrop-blur-md border border-white/20 text-[10px] font-bold tracking-widest uppercase text-sky-200 mb-2">
+                            <span>✦</span>
+                            <span>{{ $greeting }}, {{ Auth::user()->role_label ?? 'User' }}</span>
+                        </div>
+                        <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight text-white mb-1.5 flex items-center gap-2">
+                            <span>{{ Auth::user()->name }}</span>
+                            <span class="text-xl">👋</span>
+                        </h1>
+                        <p class="text-xs sm:text-sm text-sky-100/80 leading-relaxed">
+                            Pusat Komando Pengasuhan & Karakter Taruna PPI Curug — Semua data disiplin, apel, dan perizinan tersaji secara presisi.
+                        </p>
                     </div>
-                </div>
-            </div>
-            <div style="display: flex; gap: 10px;">
-                <a href="{{ route('log-pergerakan.tablet') }}" style="background: #2563eb; color: white; border-radius: 10px; padding: 10px 18px; font-size: 13px; font-weight: 700; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; transition: background 0.2s;">
-                    <i class="fas fa-tablet-alt"></i> Mode Tablet Pos Jaga
-                </a>
-                <a href="{{ route('log-pergerakan.tv') }}" target="_blank" style="background: rgba(16, 185, 129, 0.2); color: #34d399; border: 1px solid #10b981; border-radius: 10px; padding: 10px 18px; font-size: 13px; font-weight: 700; text-decoration: none; display: inline-flex; align-items: center; gap: 8px;">
-                    <i class="fas fa-tv"></i> Buka TV Monitoring
-                </a>
-            </div>
-        </div>
 
-        <!-- ── ACARA MENDATANG ── -->
-        @if(!Auth::user()->isTaruna())
-        <div class="section-header">
-            <h3 class="section-title">
-                <i class="fas fa-calendar-star" style="color:#667eea;margin-right:8px;"></i>
-                Acara Pengasuhan Mendatang
-            </h3>
-            <a href="{{ route('acara.index') }}" class="section-link">Kelola Acara →</a>
-        </div>
-
-        @if($acaraMendatang->isEmpty())
-        <div class="card" style="margin-bottom:24px;">
-            <div class="card-body">
-                <div class="empty-mini">
-                    <i class="fas fa-calendar-times" style="color:#e2e5ee;"></i>
-                    <p>Belum ada acara dijadwalkan.
-                        <a href="{{ route('acara.create') }}" style="color:#667eea;font-weight:600;">+ Tambah Acara</a>
-                    </p>
-                </div>
-            </div>
-        </div>
-        @else
-        <div class="acara-grid" style="margin-bottom:24px;">
-            @php
-                $acara_colors = [
-                    ['#667eea','#764ba2'],['#f093fb','#f5576c'],
-                    ['#43e97b','#38a169'],['#0bc5ea','#3182ce'],
-                ];
-                $ci = 0;
-            @endphp
-            @foreach($acaraMendatang as $event)
-            @php $col = $acara_colors[$ci % count($acara_colors)]; $ci++; @endphp
-            <div class="acara-card">
-                <div class="acara-card-img" style="background:linear-gradient(135deg,{{ $col[0] }},{{ $col[1] }});">
-                    <i class="fas fa-calendar-check" style="font-size:32px;color:rgba(255,255,255,.6);"></i>
-                    <div class="acara-time">
-                        <i class="fas fa-clock"></i>
-                        {{ \Carbon\Carbon::parse($event->jam)->format('H:i') }} WIB
-                    </div>
-                </div>
-                <div class="acara-card-body">
-                    <div class="acara-date" style="color:{{ $col[0] }};">
-                        <i class="fas fa-calendar-day" style="margin-right:4px;"></i>
-                        {{ \Carbon\Carbon::parse($event->tanggal)->locale('id')->isoFormat('D MMMM Y') }}
-                    </div>
-                    <div class="acara-card-title">{{ $event->nama_acara }}</div>
-                    @if($event->keterangan)
-                    <div class="acara-card-desc">{{ Str::limit($event->keterangan, 60) }}</div>
-                    @endif
-                </div>
-            </div>
-            @endforeach
-        </div>
-        @endif
-
-        <!-- ── SURAT TERBARU + JADWAL ACARA ── -->
-        <div class="two-col">
-            <!-- Surat Terbaru -->
-            <div>
-                <div class="section-header">
-                    <h3 class="section-title">
-                        <i class="fas fa-envelope-open-text" style="color:#f5576c;margin-right:8px;"></i>Surat Terbaru
-                    </h3>
-                    <a href="{{ route('surat.index') }}" class="section-link">Lihat Semua →</a>
-                </div>
-                <div class="card surat-table">
-                    @if($suratTerbaru->isEmpty())
-                    <div class="card-body">
-                        <div class="empty-mini">
-                            <i class="fas fa-inbox" style="color:#e2e5ee;"></i>
-                            <p>Belum ada surat.
-                                <a href="{{ route('surat.create') }}" style="color:#667eea;font-weight:600;">+ Tambah</a>
-                            </p>
+                    <div class="relative z-10 flex-shrink-0 flex items-center gap-3 bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-3 sm:px-5 sm:py-3.5 shadow-inner">
+                        <div class="w-12 h-12 rounded-xl bg-gradient-to-tr from-amber-400 to-amber-600 text-slate-950 flex items-center justify-center font-black text-lg shadow-md">
+                            {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
+                        </div>
+                        <div>
+                            <div class="text-xs font-bold text-white max-w-[140px] truncate">{{ Auth::user()->name }}</div>
+                            <div class="text-[10px] font-semibold text-amber-300">{{ Auth::user()->role_label }}</div>
+                            <div class="text-[9px] text-slate-300 font-mono mt-0.5">ID: #{{ Auth::user()->id }}</div>
                         </div>
                     </div>
-                    @else
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>PERIHAL</th>
-                                <th>JENIS</th>
-                                <th>STATUS</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach($suratTerbaru as $s)
-                            <tr onclick="window.location='{{ route('surat.show', $s->id) }}'" style="cursor:pointer;">
-                                <td>
-                                    <div style="font-weight:600;color:#333;font-size:12px;">{{ Str::limit($s->perihal, 30) }}</div>
-                                    <div style="font-size:11px;color:#aab;">{{ $s->pengirim }}</div>
-                                </td>
-                                <td>
-                                    <span style="background:#eef0ff;color:#667eea;padding:2px 8px;border-radius:20px;font-size:10px;font-weight:700;white-space:nowrap;">
-                                        {{ Str::limit($s->jenis_surat, 15) }}
-                                    </span>
-                                </td>
-                                <td>
-                                    <span class="status-badge" style="background:{{ $s->status_bg_color }};color:{{ $s->status_badge_color }};">
-                                        {{ $s->status }}
-                                    </span>
-                                </td>
-                            </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                    @endif
-                </div>
-            </div>
 
-            <!-- Jadwal Acara -->
-            <div>
-                <div class="section-header">
-                    <h3 class="section-title">
-                        <i class="fas fa-calendar-alt" style="color:#667eea;margin-right:8px;"></i>Jadwal Acara
-                    </h3>
-                    <a href="{{ route('acara.create') }}" class="section-link">+ Tambah</a>
+                    {{-- Ambient circular light overlays --}}
+                    <div class="absolute -right-16 -top-16 w-56 h-56 bg-indigo-500/20 rounded-full blur-3xl pointer-events-none"></div>
+                    <div class="absolute right-32 -bottom-20 w-48 h-48 bg-sky-500/20 rounded-full blur-3xl pointer-events-none"></div>
                 </div>
-                <div class="card acara-table">
-                    @if($semuaAcara->isEmpty())
-                    <div class="card-body">
-                        <div class="empty-mini">
-                            <i class="fas fa-calendar-times" style="color:#e2e5ee;"></i>
-                            <p>Belum ada jadwal.</p>
+
+                {{-- ── 2. STAT KPI CARDS ── --}}
+                @if(Auth::user()->isTaruna())
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
+                        <div class="rounded-2xl bg-white/60 backdrop-blur-xl border border-white/70 p-5 shadow-lg flex items-center gap-4">
+                            <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 text-white flex items-center justify-center text-xl shadow-md flex-shrink-0">
+                                <i class="fa-solid fa-user-graduate"></i>
+                            </div>
+                            <div class="min-w-0">
+                                <div class="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Akun Taruna</div>
+                                <div class="text-lg font-black text-slate-900 truncate">{{ Auth::user()->name }}</div>
+                                <div class="text-xs text-indigo-700 font-bold mt-0.5"><i class="fa-solid fa-id-badge mr-1"></i> {{ Auth::user()->jabatan ?? 'Taruna PPI Curug' }}</div>
+                            </div>
                         </div>
-                    </div>
-                    @else
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>NAMA ACARA</th>
-                                <th>TANGGAL</th>
-                                <th>JAM</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach($semuaAcara->take(5) as $a)
-                            <tr>
-                                <td>
-                                    <div style="display:flex;align-items:center;gap:8px;">
-                                        <div style="width:28px;height:28px;border-radius:8px;background:linear-gradient(135deg,#667eea,#764ba2);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-                                            <i class="fas fa-calendar-check" style="color:white;font-size:11px;"></i>
-                                        </div>
-                                        <span style="font-weight:600;color:#333;font-size:12px;">{{ Str::limit($a->nama_acara, 25) }}</span>
+
+                        <a href="{{ route('poin.index') }}" class="rounded-2xl bg-white/60 hover:bg-white/80 backdrop-blur-xl border border-white/70 p-5 shadow-lg transition-all duration-300 hover:-translate-y-1 flex items-center justify-between gap-4 group no-underline">
+                            <div class="flex items-center gap-4 min-w-0">
+                                <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-amber-500 to-rose-500 text-white flex items-center justify-center text-xl shadow-md flex-shrink-0 group-hover:scale-105 transition-transform">
+                                    <i class="fa-solid fa-star"></i>
+                                </div>
+                                <div>
+                                    <div class="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Raport Poin Saya</div>
+                                    <div class="text-2xl font-black text-slate-900 font-mono tracking-tight" id="taruna-total-poin">
+                                        {{ $totalPoin >= 0 ? '+' : '' }}{{ $totalPoin }}
                                     </div>
-                                </td>
-                                <td style="font-size:12px;color:#666;white-space:nowrap;">
-                                    {{ \Carbon\Carbon::parse($a->tanggal)->locale('id')->isoFormat('D MMM Y') }}
-                                </td>
-                                <td><span class="time-badge">{{ \Carbon\Carbon::parse($a->jam)->format('H:i') }}</span></td>
-                            </tr>
+                                    <div class="text-xs text-emerald-600 font-bold mt-0.5">Buka Rincian Poin &rarr;</div>
+                                </div>
+                            </div>
+                            <i class="fa-solid fa-chevron-right text-slate-400 group-hover:text-slate-700 transition"></i>
+                        </a>
+                    </div>
+
+                    <div class="mb-6">
+                        <x-prodi-tingkat-chart :chart-data="$chartData" />
+                    </div>
+
+                @else
+                    {{-- Pengasuh & Admin KPI Grid --}}
+                    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3.5 mb-6">
+                        
+                        <x-stat-card 
+                            title="Total Taruna"
+                            :value="$totalMahasiswa"
+                            icon="fa-solid fa-user-graduate"
+                            gradient="from-blue-600 to-indigo-600"
+                            badge="Aktif"
+                            badgeType="info"
+                            description="Semua angkatan" />
+
+                        <x-stat-card 
+                            title="Total Acara"
+                            :value="$semuaAcara->count()"
+                            icon="fa-solid fa-calendar-days"
+                            gradient="from-emerald-500 to-teal-600"
+                            :badge="$acaraMendatang->count() . ' Mendatang'"
+                            badgeType="success"
+                            :href="route('acara.index')"
+                            description="Agenda pengasuhan" />
+
+                        <x-stat-card 
+                            title="Total Surat"
+                            :value="$suratStats['total']"
+                            icon="fa-solid fa-envelope-open-text"
+                            gradient="from-purple-500 to-indigo-600"
+                            :badge="$suratStats['diproses'] . ' Diproses'"
+                            badgeType="warning"
+                            :href="route('surat.index')"
+                            description="Pengajuan izin" />
+
+                        <x-stat-card 
+                            title="Surat Selesai"
+                            :value="$suratStats['selesai']"
+                            icon="fa-solid fa-circle-check"
+                            gradient="from-sky-500 to-blue-600"
+                            badge="Disetujui"
+                            badgeType="success"
+                            :href="route('surat.index')"
+                            description="Surat disetujui" />
+
+                        <x-stat-card 
+                            title="Keluhan Barak"
+                            :value="$keluhanStats['total']"
+                            icon="fa-solid fa-door-open"
+                            gradient="from-rose-500 to-pink-600"
+                            :badge="$keluhanStats['diajukan'] . ' Baru'"
+                            badgeType="danger"
+                            :href="route('keluhan-barak.kelola')"
+                            description="Fasilitas barak" />
+
+                    </div>
+                @endif
+
+                {{-- ── 3. WIDGET MONITORING POS JAGA (FLOW STATUS NODE) ── --}}
+                @php
+                    $activePergerakan = \App\Models\LogPergerakan::where('status', 'berangkat')->count();
+                    $kembaliHariIni   = \App\Models\LogPergerakan::whereDate('waktu_berangkat', \Carbon\Carbon::today())->where('status', 'kembali')->count();
+                @endphp
+                <div class="rounded-2xl bg-gradient-to-r from-slate-900/85 via-slate-800/85 to-indigo-950/85 backdrop-blur-xl border border-white/30 p-5 text-white mb-6 shadow-xl flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 rounded-xl bg-blue-500/20 border border-blue-400/40 flex items-center justify-center text-xl text-blue-400 flex-shrink-0 shadow-inner">
+                            <i class="fa-solid fa-person-walking"></i>
+                        </div>
+                        <div>
+                            <div class="text-[10px] font-extrabold uppercase tracking-widest text-slate-400">Sistem Monitoring Pos Jaga Gerbang</div>
+                            <div class="text-base sm:text-lg font-black text-white mt-0.5 flex flex-wrap items-center gap-2">
+                                <span class="text-rose-400 font-extrabold flex items-center gap-1.5">
+                                    <span class="w-2.5 h-2.5 rounded-full bg-rose-500 animate-ping"></span>
+                                    <span>{{ $activePergerakan }} Taruna</span>
+                                </span>
+                                <span class="text-xs font-semibold text-slate-300">di luar asrama</span>
+                                <span class="text-xs font-bold text-emerald-400 bg-emerald-950/80 px-2.5 py-0.5 rounded-full border border-emerald-500/30">
+                                    🟢 {{ $kembaliHariIni }} kembali hari ini
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-wrap items-center gap-2.5 w-full md:w-auto">
+                        <a href="{{ route('log-pergerakan.tablet') }}" class="flex-1 md:flex-initial px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs shadow-md transition flex items-center justify-center gap-2 no-underline">
+                            <i class="fa-solid fa-tablet-screen-button"></i>
+                            <span>Mode Tablet Pos Jaga</span>
+                        </a>
+                        <a href="{{ route('log-pergerakan.tv') }}" target="_blank" class="flex-1 md:flex-initial px-4 py-2 rounded-xl bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-400/40 text-emerald-300 font-bold text-xs backdrop-blur-md transition flex items-center justify-center gap-2 no-underline">
+                            <i class="fa-solid fa-tv"></i>
+                            <span>TV Monitoring Jaga</span>
+                        </a>
+                    </div>
+                </div>
+
+                {{-- ── 4. ACARA PENGASUHAN MENDATANG ── --}}
+                @if(!Auth::user()->isTaruna())
+                <div class="mb-6">
+                    <div class="flex items-center justify-between mb-3.5">
+                        <h3 class="text-xs font-bold uppercase tracking-wider text-slate-800 flex items-center gap-2">
+                            <i class="fa-solid fa-calendar-star text-indigo-600"></i>
+                            <span>Acara Pengasuhan Mendatang</span>
+                        </h3>
+                        <a href="{{ route('acara.index') }}" class="text-xs font-bold text-indigo-700 hover:underline">Kelola Acara &rarr;</a>
+                    </div>
+
+                    @if($acaraMendatang->isEmpty())
+                        <div class="rounded-2xl bg-white/40 backdrop-blur-md border border-white/50 p-6 text-center shadow-sm">
+                            <i class="fa-solid fa-calendar-xmark text-3xl text-slate-400 mb-2"></i>
+                            <p class="text-xs font-semibold text-slate-600 mb-2">Belum ada agenda acara pengasuhan mendatang.</p>
+                            <a href="{{ route('acara.create') }}" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-indigo-600 text-white text-xs font-bold shadow-sm hover:bg-indigo-700 transition">
+                                <i class="fa-solid fa-plus text-[10px]"></i>
+                                <span>Tambah Acara Baru</span>
+                            </a>
+                        </div>
+                    @else
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                            @php
+                                $acara_colors = [
+                                    ['from-indigo-600 to-purple-600', 'text-indigo-600'],
+                                    ['from-rose-500 to-pink-600', 'text-rose-600'],
+                                    ['from-emerald-500 to-teal-600', 'text-emerald-600'],
+                                    ['from-sky-500 to-blue-600', 'text-sky-600'],
+                                ];
+                                $ci = 0;
+                            @endphp
+                            @foreach($acaraMendatang as $event)
+                            @php 
+                                $col = $acara_colors[$ci % count($acara_colors)]; 
+                                $ci++; 
+                            @endphp
+                            <div class="rounded-2xl bg-white/55 hover:bg-white/75 backdrop-blur-xl border border-white/60 overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1 flex flex-col">
+                                <div class="h-20 bg-gradient-to-r {{ $col[0] }} p-3.5 relative flex items-center justify-between text-white">
+                                    <i class="fa-solid fa-calendar-check text-2xl opacity-60"></i>
+                                    <span class="px-2.5 py-0.5 rounded-full bg-black/30 backdrop-blur-md text-[10px] font-bold tracking-wider">
+                                        <i class="fa-solid fa-clock text-[9px] mr-1"></i>
+                                        {{ \Carbon\Carbon::parse($event->jam)->format('H:i') }} WIB
+                                    </span>
+                                </div>
+                                <div class="p-4 flex-1 flex flex-col justify-between">
+                                    <div>
+                                        <div class="text-[10px] font-bold uppercase tracking-wider {{ $col[1] }} mb-1">
+                                            {{ \Carbon\Carbon::parse($event->tanggal)->locale('id')->isoFormat('D MMMM Y') }}
+                                        </div>
+                                        <h4 class="text-xs font-bold text-slate-900 leading-snug mb-1">{{ $event->nama_acara }}</h4>
+                                        @if($event->keterangan)
+                                            <p class="text-[11px] text-slate-600 line-clamp-2">{{ $event->keterangan }}</p>
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
                             @endforeach
-                        </tbody>
-                    </table>
+                        </div>
                     @endif
                 </div>
-            </div>
-        </div>
+                @endif
 
-        <!-- ── QUICK ACTIONS ── -->
-        <div class="section-header">
-            <h3 class="section-title">
-                <i class="fas fa-bolt" style="color:#e07020;margin-right:8px;"></i>Aksi Cepat
-            </h3>
-        </div>
-        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:28px;">
-            <a href="{{ route('surat.create') }}" style="background:linear-gradient(135deg,#f093fb,#f5576c);border-radius:14px;padding:18px;color:white;text-decoration:none;display:flex;align-items:center;gap:12px;font-weight:700;font-size:13px;transition:transform .15s;box-shadow:0 4px 15px rgba(245,87,108,.3);" onmouseover="this.style.transform='translateY(-3px)'" onmouseout="this.style.transform=''">
-                <i class="fas fa-file-alt" style="font-size:20px;opacity:.9;"></i>
-                <div><div style="font-size:11px;opacity:.8;font-weight:400;">Buat</div>Surat Baru</div>
-            </a>
-            <a href="{{ route('acara.create') }}" style="background:linear-gradient(135deg,#667eea,#764ba2);border-radius:14px;padding:18px;color:white;text-decoration:none;display:flex;align-items:center;gap:12px;font-weight:700;font-size:13px;transition:transform .15s;box-shadow:0 4px 15px rgba(102,126,234,.3);" onmouseover="this.style.transform='translateY(-3px)'" onmouseout="this.style.transform=''">
-                <i class="fas fa-calendar-plus" style="font-size:20px;opacity:.9;"></i>
-                <div><div style="font-size:11px;opacity:.8;font-weight:400;">Tambah</div>Acara</div>
-            </a>
-            <a href="{{ route('poin.index') }}" style="background:linear-gradient(135deg,#43e97b,#38a169);border-radius:14px;padding:18px;color:white;text-decoration:none;display:flex;align-items:center;gap:12px;font-weight:700;font-size:13px;transition:transform .15s;box-shadow:0 4px 15px rgba(56,161,105,.3);" onmouseover="this.style.transform='translateY(-3px)'" onmouseout="this.style.transform=''">
-                <i class="fas fa-star" style="font-size:20px;opacity:.9;"></i>
-                <div><div style="font-size:11px;opacity:.8;font-weight:400;">Kelola</div>Poin Mahasiswa</div>
-            </a>
-            <a href="{{ route('mahasiswa.index') }}" style="background:linear-gradient(135deg,#0bc5ea,#3182ce);border-radius:14px;padding:18px;color:white;text-decoration:none;display:flex;align-items:center;gap:12px;font-weight:700;font-size:13px;transition:transform .15s;box-shadow:0 4px 15px rgba(49,130,206,.3);" onmouseover="this.style.transform='translateY(-3px)'" onmouseout="this.style.transform=''">
-                <i class="fas fa-users" style="font-size:20px;opacity:.9;"></i>
-                <div><div style="font-size:11px;opacity:.8;font-weight:400;">Lihat</div>Database Mahasiswa</div>
-            </a>
-        </div>
-        @endif
+                {{-- ── 5. TWO COLUMN GLASS TABLES: SURAT TERBARU & JADWAL ── --}}
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 mb-6">
+                    
+                    {{-- Surat Terbaru Table --}}
+                    <div class="rounded-2xl bg-white/45 backdrop-blur-xl border border-white/60 p-4 sm:p-5 shadow-lg">
+                        <div class="flex items-center justify-between pb-3 mb-3 border-b border-white/30">
+                            <h3 class="text-xs font-bold uppercase tracking-wider text-slate-800 flex items-center gap-2">
+                                <i class="fa-solid fa-envelope-open-text text-rose-500"></i>
+                                <span>Surat Izin Terbaru</span>
+                            </h3>
+                            <a href="{{ route('surat.index') }}" class="text-xs font-bold text-indigo-700 hover:underline">Semua &rarr;</a>
+                        </div>
 
-    </div>{{-- end main-content --}}
-</div>{{-- end app-layout --}}
+                        @if($suratTerbaru->isEmpty())
+                            <div class="text-center py-8 text-slate-400">
+                                <i class="fa-solid fa-inbox text-2xl mb-1.5"></i>
+                                <p class="text-xs font-medium">Belum ada riwayat surat diajukan.</p>
+                            </div>
+                        @else
+                            <div class="overflow-x-auto">
+                                <table class="w-full text-left border-collapse text-xs">
+                                    <thead>
+                                        <tr class="text-[10px] font-bold uppercase tracking-wider text-slate-500 border-b border-white/30">
+                                            <th class="pb-2">Perihal</th>
+                                            <th class="pb-2">Jenis</th>
+                                            <th class="pb-2 text-right">Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="divide-y divide-white/30">
+                                        @foreach($suratTerbaru as $s)
+                                        <tr onclick="window.location='{{ route('surat.show', $s->id) }}'" class="hover:bg-white/60 cursor-pointer transition">
+                                            <td class="py-2.5">
+                                                <div class="font-bold text-slate-900 truncate max-w-[160px]">{{ $s->perihal }}</div>
+                                                <div class="text-[10px] text-slate-500 truncate">{{ $s->pengirim }}</div>
+                                            </td>
+                                            <td class="py-2.5">
+                                                <span class="px-2 py-0.5 rounded-full bg-indigo-50 text-indigo-700 font-bold text-[10px] border border-indigo-100">
+                                                    {{ Str::limit($s->jenis_surat, 14) }}
+                                                </span>
+                                            </td>
+                                            <td class="py-2.5 text-right">
+                                                <span class="px-2 py-0.5 rounded-full font-bold text-[10px]" style="background:{{ $s->status_bg_color }};color:{{ $s->status_badge_color }};">
+                                                    {{ $s->status }}
+                                                </span>
+                                            </td>
+                                        </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        @endif
+                    </div>
+
+                    {{-- Jadwal Acara Table --}}
+                    <div class="rounded-2xl bg-white/45 backdrop-blur-xl border border-white/60 p-4 sm:p-5 shadow-lg">
+                        <div class="flex items-center justify-between pb-3 mb-3 border-b border-white/30">
+                            <h3 class="text-xs font-bold uppercase tracking-wider text-slate-800 flex items-center gap-2">
+                                <i class="fa-solid fa-calendar-days text-indigo-600"></i>
+                                <span>Jadwal Pengasuhan</span>
+                            </h3>
+                            <a href="{{ route('acara.create') }}" class="text-xs font-bold text-indigo-700 hover:underline">+ Tambah</a>
+                        </div>
+
+                        @if($semuaAcara->isEmpty())
+                            <div class="text-center py-8 text-slate-400">
+                                <i class="fa-solid fa-calendar-xmark text-2xl mb-1.5"></i>
+                                <p class="text-xs font-medium">Belum ada agenda jadwal.</p>
+                            </div>
+                        @else
+                            <div class="overflow-x-auto">
+                                <table class="w-full text-left border-collapse text-xs">
+                                    <thead>
+                                        <tr class="text-[10px] font-bold uppercase tracking-wider text-slate-500 border-b border-white/30">
+                                            <th class="pb-2">Nama Acara</th>
+                                            <th class="pb-2">Tanggal</th>
+                                            <th class="pb-2 text-right">Waktu</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="divide-y divide-white/30">
+                                        @foreach($semuaAcara->take(5) as $a)
+                                        <tr class="hover:bg-white/60 transition">
+                                            <td class="py-2.5">
+                                                <div class="flex items-center gap-2">
+                                                    <div class="w-6 h-6 rounded-lg bg-indigo-100 text-indigo-700 flex items-center justify-center font-bold text-[10px] flex-shrink-0">
+                                                        <i class="fa-solid fa-calendar-check"></i>
+                                                    </div>
+                                                    <span class="font-bold text-slate-900 truncate max-w-[150px]">{{ $a->nama_acara }}</span>
+                                                </div>
+                                            </td>
+                                            <td class="py-2.5 text-slate-600 whitespace-nowrap text-[11px]">
+                                                {{ \Carbon\Carbon::parse($a->tanggal)->locale('id')->isoFormat('D MMM Y') }}
+                                            </td>
+                                            <td class="py-2.5 text-right">
+                                                <span class="px-2 py-0.5 rounded-full bg-slate-100 text-slate-800 font-mono font-bold text-[10px]">
+                                                    {{ \Carbon\Carbon::parse($a->jam)->format('H:i') }}
+                                                </span>
+                                            </td>
+                                        </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        @endif
+                    </div>
+
+                </div>
+
+                {{-- ── 6. QUICK ACTION TILES ── --}}
+                @if(!Auth::user()->isTaruna())
+                <div>
+                    <h3 class="text-xs font-bold uppercase tracking-wider text-slate-800 mb-3 flex items-center gap-2">
+                        <i class="fa-solid fa-bolt text-amber-500"></i>
+                        <span>Aksi Cepat Pengasuhan</span>
+                    </h3>
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3.5">
+                        
+                        <a href="{{ route('surat.create') }}" class="rounded-2xl bg-gradient-to-br from-rose-500 to-pink-600 p-4 text-white shadow-lg transition-all duration-200 hover:-translate-y-1 hover:shadow-xl flex items-center gap-3 no-underline">
+                            <div class="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center text-lg flex-shrink-0">
+                                <i class="fa-solid fa-file-circle-plus"></i>
+                            </div>
+                            <div>
+                                <div class="text-[9px] uppercase tracking-wider opacity-80">Buat</div>
+                                <div class="text-xs font-bold">Surat Baru</div>
+                            </div>
+                        </a>
+
+                        <a href="{{ route('acara.create') }}" class="rounded-2xl bg-gradient-to-br from-indigo-600 to-purple-600 p-4 text-white shadow-lg transition-all duration-200 hover:-translate-y-1 hover:shadow-xl flex items-center gap-3 no-underline">
+                            <div class="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center text-lg flex-shrink-0">
+                                <i class="fa-solid fa-calendar-plus"></i>
+                            </div>
+                            <div>
+                                <div class="text-[9px] uppercase tracking-wider opacity-80">Tambah</div>
+                                <div class="text-xs font-bold">Agenda Acara</div>
+                            </div>
+                        </a>
+
+                        <a href="{{ route('poin.index') }}" class="rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-600 p-4 text-white shadow-lg transition-all duration-200 hover:-translate-y-1 hover:shadow-xl flex items-center gap-3 no-underline">
+                            <div class="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center text-lg flex-shrink-0">
+                                <i class="fa-solid fa-star"></i>
+                            </div>
+                            <div>
+                                <div class="text-[9px] uppercase tracking-wider opacity-80">Kelola</div>
+                                <div class="text-xs font-bold">Poin Taruna</div>
+                            </div>
+                        </a>
+
+                        <a href="{{ route('mahasiswa.index') }}" class="rounded-2xl bg-gradient-to-br from-sky-500 to-blue-600 p-4 text-white shadow-lg transition-all duration-200 hover:-translate-y-1 hover:shadow-xl flex items-center gap-3 no-underline">
+                            <div class="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center text-lg flex-shrink-0">
+                                <i class="fa-solid fa-users"></i>
+                            </div>
+                            <div>
+                                <div class="text-[9px] uppercase tracking-wider opacity-80">Database</div>
+                                <div class="text-xs font-bold">Taruna</div>
+                            </div>
+                        </a>
+
+                    </div>
+                </div>
+                @endif
+
+
+    </div>
+</main>
 
 @if(Auth::user()->isTaruna())
 <script>

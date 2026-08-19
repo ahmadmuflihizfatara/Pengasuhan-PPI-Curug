@@ -1,245 +1,199 @@
 <x-app-layout>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-<style>
-* { box-sizing: border-box; }
-body { font-family: 'Inter', sans-serif; background: #f0f2f5; }
 
-.app-layout { display: flex; min-height: 100vh; }
-.main-content { flex: 1; padding: 28px 30px; min-width: 0; }
+{{-- Top Floating Island Capsule Navbar --}}
+<x-island-navbar />
 
-/* Header */
-.page-header {
-    background: linear-gradient(135deg, #1baf7a 0%, #2a78d6 100%);
-    border-radius: 18px; padding: 30px 34px;
-    color: white; margin-bottom: 24px;
-    position: relative; overflow: hidden;
-    display: flex; align-items: center; justify-content: space-between; gap: 20px; flex-wrap: wrap;
-}
-.page-header::before { content:''; position:absolute; right:-60px; top:-60px; width:220px; height:220px; background:rgba(255,255,255,.1); border-radius:50%; }
-.page-header::after  { content:''; position:absolute; right:70px; bottom:-80px; width:180px; height:180px; background:rgba(255,255,255,.07); border-radius:50%; }
-.page-header h1 { margin:0 0 4px; font-size:23px; font-weight:800; position:relative; z-index:1; }
-.page-header p  { margin:0; opacity:.88; font-size:13px; position:relative; z-index:1; }
+<main class="max-w-7xl mx-auto px-4 sm:px-6 pb-12 pt-2">
+    <div class="spatial-workspace-window rounded-3xl bg-white/30 backdrop-blur-2xl border border-white/50 shadow-2xl p-4 sm:p-7 relative overflow-hidden">
+        
 
-.btn-primary {
-    background:white; color:#1baf7a; border:none;
-    padding:11px 20px; border-radius:11px; font-size:13px; font-weight:700;
-    cursor:pointer; text-decoration:none; display:inline-flex; align-items:center; gap:8px;
-    position:relative; z-index:1; transition:transform .15s, box-shadow .15s;
-    box-shadow:0 4px 14px rgba(0,0,0,.12);
-}
-.btn-primary:hover { transform:translateY(-2px); box-shadow:0 8px 22px rgba(0,0,0,.18); color:#1baf7a; }
+                
+                {{-- Page Header --}}
+                <div class="rounded-2xl bg-gradient-to-r from-emerald-900/90 via-teal-900/85 to-slate-900/90 backdrop-blur-xl border border-white/30 p-6 text-white mb-6 shadow-xl relative overflow-hidden flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                    <div class="relative z-10">
+                        <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/15 backdrop-blur-md border border-white/20 text-[10px] font-bold tracking-widest uppercase text-emerald-300 mb-2">
+                            <span>✦</span>
+                            <span>Presensi &amp; Agenda Taruna</span>
+                        </div>
+                        <h1 class="text-xl sm:text-2xl font-extrabold tracking-tight text-white mb-1 flex items-center gap-2">
+                            <i class="fa-solid fa-flag text-emerald-400"></i>
+                            <span>Apel &amp; Presensi Taruna</span>
+                        </h1>
+                        <p class="text-xs text-emerald-100/80">Pilih apel berdasarkan tanggal dan sesi untuk melihat pembina, informasi instruksi, dan lokasi</p>
+                    </div>
 
-.flash-success { background:#f0fff4; border:1px solid #c6f6d5; color:#276749; padding:12px 18px; border-radius:12px; margin-bottom:20px; font-size:13px; font-weight:600; display:flex; align-items:center; gap:8px; }
-.flash-error { background:#fff5f5; border:1px solid #feb2b2; color:#c53030; padding:12px 18px; border-radius:12px; margin-bottom:20px; font-size:13px; font-weight:600; display:flex; align-items:center; gap:8px; }
-.flash-locked { background:#fff8ec; border:1px solid #fbd38d; color:#a06a0a; padding:12px 18px; border-radius:12px; margin-bottom:20px; font-size:13px; font-weight:600; display:flex; align-items:center; gap:8px; }
+                    @if($bolehIsi)
+                    <div class="relative z-10">
+                        <a href="{{ route('apel.create') }}" class="px-4 py-2 rounded-xl bg-white hover:bg-slate-50 text-slate-900 font-extrabold text-xs shadow-md transition flex items-center gap-2 no-underline">
+                            <i class="fa-solid fa-plus text-emerald-600"></i>
+                            <span>Isi Data Apel Baru</span>
+                        </a>
+                    </div>
+                    @endif
 
-/* Selector */
-.selector-card { background:white; border-radius:16px; padding:20px 22px; box-shadow:0 2px 12px rgba(0,0,0,.05); margin-bottom:20px; }
-.selector-label { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.06em; color:#8a93b0; margin-bottom:8px; display:block; }
-.selector-row { display:flex; gap:12px; flex-wrap:wrap; align-items:center; }
-.select-wrap { position:relative; flex:1; min-width:260px; }
-.select-wrap select {
-    width:100%; appearance:none; padding:12px 40px 12px 15px;
-    border:2px solid #e8ebf5; border-radius:11px; background:#fafbff;
-    font-size:14px; font-family:'Inter',sans-serif; color:#333; font-weight:600;
-    cursor:pointer; outline:none; transition:border-color .15s;
-}
-.select-wrap select:focus { border-color:#1baf7a; background:white; }
-.select-wrap i { position:absolute; right:15px; top:50%; transform:translateY(-50%); color:#98a0b3; pointer-events:none; font-size:13px; }
-.filter-chips { display:flex; gap:7px; flex-wrap:wrap; }
-.chip {
-    padding:7px 14px; border-radius:50px; font-size:12px; font-weight:600;
-    cursor:pointer; border:2px solid #e2e5ee; background:white; color:#666; transition:all .15s;
-}
-.chip:hover { border-color:#1baf7a; color:#1baf7a; }
-.chip.active { background:#1baf7a; color:white; border-color:#1baf7a; }
-
-/* Detail */
-.detail-card { background:white; border-radius:16px; box-shadow:0 2px 12px rgba(0,0,0,.05); overflow:hidden; }
-.detail-head { padding:22px 26px; color:white; display:flex; align-items:center; gap:16px; flex-wrap:wrap; }
-.detail-head .ikon { width:52px; height:52px; border-radius:14px; background:rgba(255,255,255,.22); display:flex; align-items:center; justify-content:center; font-size:21px; flex-shrink:0; }
-.detail-head h2 { margin:0 0 3px; font-size:19px; font-weight:800; }
-.detail-head .meta { font-size:13px; opacity:.9; display:flex; gap:14px; flex-wrap:wrap; }
-.detail-actions { margin-left:auto; display:flex; gap:9px; }
-.btn-ghost {
-    background:rgba(255,255,255,.2); color:white; border:none;
-    padding:8px 15px; border-radius:9px; font-size:12px; font-weight:700;
-    cursor:pointer; text-decoration:none; display:inline-flex; align-items:center; gap:6px;
-    transition:background .15s; font-family:'Inter',sans-serif;
-}
-.btn-ghost:hover { background:rgba(255,255,255,.33); color:white; }
-
-.detail-body { padding:24px 26px; }
-.info-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:16px; margin-bottom:22px; }
-.info-item { background:#fafbff; border:1px solid #eef0f7; border-radius:12px; padding:14px 16px; }
-.info-item .label { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.06em; color:#8a93b0; margin-bottom:5px; display:flex; align-items:center; gap:6px; }
-.info-item .value { font-size:14px; font-weight:700; color:#2b2b33; }
-.info-item .value small { display:block; font-size:11px; font-weight:500; color:#98a0b3; margin-top:2px; }
-
-.text-block { margin-bottom:18px; }
-.text-block h3 { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.06em; color:#8a93b0; margin:0 0 7px; display:flex; align-items:center; gap:6px; }
-.text-block .isi { font-size:13.5px; color:#444; line-height:1.65; white-space:pre-line; background:#fafbff; border-left:3px solid #1baf7a; border-radius:0 10px 10px 0; padding:13px 16px; }
-.text-block .isi.kosong { color:#b9bfcc; font-style:italic; border-left-color:#e2e5ee; }
-
-.detail-foot { border-top:1px solid #f0f2f7; padding:14px 26px; font-size:11.5px; color:#a0a6b6; display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px; }
-
-/* Empty */
-.empty-state { background:white; border-radius:16px; box-shadow:0 2px 12px rgba(0,0,0,.05); text-align:center; padding:60px 24px; }
-.empty-state i { font-size:46px; color:#e2e5ee; display:block; margin-bottom:14px; }
-.empty-state p { font-size:14px; color:#98a0b3; margin:0 0 18px; font-weight:600; }
-.btn-solid {
-    background:linear-gradient(135deg,#1baf7a,#2a78d6); color:white; border:none;
-    padding:11px 22px; border-radius:11px; font-size:13px; font-weight:700;
-    cursor:pointer; text-decoration:none; display:inline-flex; align-items:center; gap:8px;
-}
-.btn-solid:hover { opacity:.9; color:white; }
-</style>
-
-<div class="app-layout">
-    <x-sidebar active="apel" />
-
-    <div class="main-content">
-
-        <div class="page-header">
-            <div>
-                <h1><i class="fas fa-flag" style="margin-right:10px;"></i>Apel</h1>
-                <p>Pilih apel berdasarkan tanggal dan sesi untuk melihat pembina, informasi, dan lokasi</p>
-            </div>
-            @if($bolehIsi)
-            <a href="{{ route('apel.create') }}" class="btn-primary">
-                <i class="fas fa-plus"></i> Isi Data Apel
-            </a>
-            @endif
-        </div>
-
-        @if(session('success'))
-        <div class="flash-success"><i class="fas fa-check-circle"></i> {{ session('success') }}</div>
-        @endif
-        @if(session('error'))
-        <div class="flash-error"><i class="fas fa-exclamation-circle"></i> {{ session('error') }}</div>
-        @endif
-
-        @unless($bolehIsi)
-        <div class="flash-locked">
-            <i class="fas fa-lock"></i>
-            Akses pengisian data apel sedang ditutup admin — data tetap dapat dilihat, tetapi tidak dapat diubah.
-        </div>
-        @endunless
-
-        @if($daftarApel->isEmpty())
-        <div class="empty-state">
-            <i class="fas fa-flag"></i>
-            <p>Belum ada data apel yang tercatat.</p>
-            @if($bolehIsi)
-            <a href="{{ route('apel.create') }}" class="btn-solid">
-                <i class="fas fa-plus"></i> Isi Data Apel Pertama
-            </a>
-            @endif
-        </div>
-        @else
-
-        {{-- Dropdown pemilih apel --}}
-        <div class="selector-card">
-            <label class="selector-label" for="apelSelect">Pilih Apel</label>
-            <div class="selector-row">
-                <div class="select-wrap">
-                    <select id="apelSelect" onchange="bukaApel(this.value)">
-                        @foreach($daftarApel as $item)
-                        <option value="{{ $item->id }}"
-                                data-sesi="{{ $item->sesi }}"
-                                @selected($terpilih && $terpilih->id === $item->id)>
-                            {{ $item->label_dropdown }}@if($item->jam) · {{ \Carbon\Carbon::parse($item->jam)->format('H:i') }}@endif
-                        </option>
-                        @endforeach
-                    </select>
-                    <i class="fas fa-chevron-down"></i>
+                    <div class="absolute -right-10 -top-10 w-40 h-40 bg-emerald-500/20 rounded-full blur-3xl pointer-events-none"></div>
                 </div>
-                <div class="filter-chips">
-                    <div class="chip active" data-filter="all" onclick="filterSesi('all', this)">Semua</div>
-                    <div class="chip" data-filter="pagi" onclick="filterSesi('pagi', this)">Pagi</div>
-                    <div class="chip" data-filter="malam" onclick="filterSesi('malam', this)">Malam</div>
-                    <div class="chip" data-filter="khusus" onclick="filterSesi('khusus', this)">Khusus</div>
-                </div>
-            </div>
-        </div>
 
-        {{-- Detail apel terpilih --}}
-        @if($terpilih)
-        <div class="detail-card">
-            <div class="detail-head" style="background:linear-gradient(135deg,{{ $terpilih->warna }},#2a78d6);">
-                <div class="ikon"><i class="fas {{ $terpilih->ikon }}"></i></div>
-                <div>
-                    <h2>{{ $terpilih->judul }}</h2>
-                    <div class="meta">
-                        <span><i class="fas fa-calendar-day"></i>
-                            {{ $terpilih->tanggal->locale('id')->isoFormat('dddd, D MMMM Y') }}</span>
-                        @if($terpilih->jam)
-                        <span><i class="fas fa-clock"></i> {{ \Carbon\Carbon::parse($terpilih->jam)->format('H:i') }} WIB</span>
+                {{-- Alerts --}}
+                @if(session('success'))
+                <div class="rounded-2xl bg-emerald-100/90 border border-emerald-300 p-4 text-emerald-800 text-xs font-bold mb-5 flex items-center gap-2 shadow-sm backdrop-blur-md">
+                    <i class="fa-solid fa-circle-check text-emerald-600 text-base"></i>
+                    <span>{{ session('success') }}</span>
+                </div>
+                @endif
+                @if(session('error'))
+                <div class="rounded-2xl bg-rose-100/90 border border-rose-300 p-4 text-rose-800 text-xs font-bold mb-5 flex items-center gap-2 shadow-sm backdrop-blur-md">
+                    <i class="fa-solid fa-circle-exclamation text-rose-600 text-base"></i>
+                    <span>{{ session('error') }}</span>
+                </div>
+                @endif
+
+                @unless($bolehIsi)
+                <div class="rounded-2xl bg-amber-50/90 border border-amber-200 p-4 text-amber-900 text-xs font-semibold mb-5 flex items-center gap-2 shadow-sm backdrop-blur-md">
+                    <i class="fa-solid fa-lock text-amber-600"></i>
+                    <span>Akses pengisian data apel sedang ditutup admin — data tetap dapat dilihat, tetapi tidak dapat diubah.</span>
+                </div>
+                @endunless
+
+                @if($daftarApel->isEmpty())
+                <div class="rounded-2xl bg-white/50 backdrop-blur-xl border border-white/60 p-10 text-center shadow-lg">
+                    <i class="fa-solid fa-flag text-4xl text-slate-300 mb-3 block"></i>
+                    <p class="text-xs font-bold text-slate-600 mb-3">Belum ada data apel yang tercatat di sistem.</p>
+                    @if($bolehIsi)
+                    <a href="{{ route('apel.create') }}" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold shadow-md transition no-underline">
+                        <i class="fa-solid fa-plus text-xs"></i>
+                        <span>Isi Data Apel Pertama</span>
+                    </a>
+                    @endif
+                </div>
+                @else
+
+                {{-- Selector Card --}}
+                <div class="rounded-2xl bg-white/45 backdrop-blur-xl border border-white/60 p-4 sm:p-5 mb-5 shadow-sm">
+                    <label class="text-[10px] font-bold uppercase tracking-wider text-slate-500 mb-2 block" for="apelSelect">Pilih Sesi Apel</label>
+                    <div class="flex flex-col sm:flex-row gap-3 items-center">
+                        <div class="relative flex-1 w-full">
+                            <select id="apelSelect" onchange="bukaApel(this.value)" class="w-full px-4 py-2.5 rounded-xl bg-white/70 focus:bg-white border border-white/80 text-xs font-bold text-slate-800 outline-none cursor-pointer">
+                                @foreach($daftarApel as $item)
+                                <option value="{{ $item->id }}"
+                                        data-sesi="{{ $item->sesi }}"
+                                        @selected($terpilih && $terpilih->id === $item->id)>
+                                    {{ $item->label_dropdown }}@if($item->jam) · {{ \Carbon\Carbon::parse($item->jam)->format('H:i') }}@endif
+                                </option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="flex items-center gap-1.5 w-full sm:w-auto overflow-x-auto pb-1 sm:pb-0">
+                            <button type="button" class="px-3 py-1.5 rounded-full text-xs font-bold bg-emerald-600 text-white shadow-sm border border-emerald-600 transition chip active" data-filter="all" onclick="filterSesi('all', this)">Semua</button>
+                            <button type="button" class="px-3 py-1.5 rounded-full text-xs font-bold bg-white/60 hover:bg-white text-slate-700 border border-white transition chip" data-filter="pagi" onclick="filterSesi('pagi', this)">Pagi</button>
+                            <button type="button" class="px-3 py-1.5 rounded-full text-xs font-bold bg-white/60 hover:bg-white text-slate-700 border border-white transition chip" data-filter="malam" onclick="filterSesi('malam', this)">Malam</button>
+                            <button type="button" class="px-3 py-1.5 rounded-full text-xs font-bold bg-white/60 hover:bg-white text-slate-700 border border-white transition chip" data-filter="khusus" onclick="filterSesi('khusus', this)">Khusus</button>
+                        </div>
+                    </div>
+                </div>
+
+                {{-- Detail Apel Terpilih --}}
+                @if($terpilih)
+                <div class="rounded-2xl bg-white/50 backdrop-blur-xl border border-white/60 overflow-hidden shadow-lg">
+                    <div class="p-5 sm:p-6 text-white flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4" style="background:linear-gradient(135deg,{{ $terpilih->warna ?? '#059669' }},#1e3a8a);">
+                        <div class="flex items-center gap-3.5">
+                            <div class="w-12 h-12 rounded-xl bg-white/20 flex items-center justify-center text-xl flex-shrink-0 shadow-inner">
+                                <i class="fa-solid {{ $terpilih->ikon ?? 'fa-flag' }}"></i>
+                            </div>
+                            <div>
+                                <h2 class="text-base sm:text-lg font-extrabold text-white mb-0.5">{{ $terpilih->judul }}</h2>
+                                <div class="text-[11px] text-white/90 flex flex-wrap items-center gap-3 font-medium">
+                                    <span><i class="fa-solid fa-calendar-day mr-1"></i> {{ $terpilih->tanggal->locale('id')->isoFormat('dddd, D MMMM Y') }}</span>
+                                    @if($terpilih->jam)
+                                    <span><i class="fa-solid fa-clock mr-1"></i> {{ \Carbon\Carbon::parse($terpilih->jam)->format('H:i') }} WIB</span>
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
+
+                        @if($bolehIsi)
+                        <div class="flex items-center gap-2">
+                            <a href="{{ route('apel.edit', $terpilih) }}" class="px-3 py-1.5 rounded-xl bg-white/20 hover:bg-white/30 text-white font-bold text-xs backdrop-blur-md transition flex items-center gap-1.5 no-underline">
+                                <i class="fa-solid fa-pen text-[10px]"></i>
+                                <span>Ubah</span>
+                            </a>
+                            <button type="button" class="px-3 py-1.5 rounded-xl bg-rose-500/20 hover:bg-rose-500/30 text-rose-200 border border-rose-400/40 font-bold text-xs backdrop-blur-md transition flex items-center gap-1.5" onclick="konfirmasiHapus()">
+                                <i class="fa-solid fa-trash text-[10px]"></i>
+                                <span>Hapus</span>
+                            </button>
+                        </div>
                         @endif
                     </div>
-                </div>
-                @if($bolehIsi)
-                <div class="detail-actions">
-                    <a href="{{ route('apel.edit', $terpilih) }}" class="btn-ghost">
-                        <i class="fas fa-pen"></i> Ubah
-                    </a>
-                    <button type="button" class="btn-ghost" onclick="konfirmasiHapus()">
-                        <i class="fas fa-trash"></i> Hapus
-                    </button>
-                </div>
-                @endif
-            </div>
 
-            <div class="detail-body">
-                <div class="info-grid">
-                    <div class="info-item">
-                        <div class="label"><i class="fas fa-user-tie"></i> Pembina Apel</div>
-                        <div class="value">
-                            {{ $terpilih->pembina }}
-                            @if($terpilih->pembinaUser?->jabatan)
-                            <small>{{ $terpilih->pembinaUser->jabatan }}</small>
-                            @endif
+                    <div class="p-5 sm:p-6">
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3.5 mb-5">
+                            <div class="rounded-xl bg-white/60 border border-white/80 p-3.5 shadow-sm">
+                                <div class="text-[10px] font-bold uppercase tracking-wider text-slate-500 mb-1 flex items-center gap-1.5">
+                                    <i class="fa-solid fa-user-tie text-indigo-600"></i>
+                                    <span>Pembina Apel</span>
+                                </div>
+                                <div class="text-xs font-black text-slate-900">{{ $terpilih->pembina }}</div>
+                                @if($terpilih->pembinaUser?->jabatan)
+                                <div class="text-[10px] text-slate-500 font-medium mt-0.5">{{ $terpilih->pembinaUser->jabatan }}</div>
+                                @endif
+                            </div>
+
+                            <div class="rounded-xl bg-white/60 border border-white/80 p-3.5 shadow-sm">
+                                <div class="text-[10px] font-bold uppercase tracking-wider text-slate-500 mb-1 flex items-center gap-1.5">
+                                    <i class="fa-solid fa-location-dot text-rose-500"></i>
+                                    <span>Lokasi Apel</span>
+                                </div>
+                                <div class="text-xs font-black text-slate-900">{{ $terpilih->lokasi }}</div>
+                            </div>
+
+                            <div class="rounded-xl bg-white/60 border border-white/80 p-3.5 shadow-sm">
+                                <div class="text-[10px] font-bold uppercase tracking-wider text-slate-500 mb-1 flex items-center gap-1.5">
+                                    <i class="fa-solid fa-flag text-emerald-600"></i>
+                                    <span>Sesi Apel</span>
+                                </div>
+                                <div class="text-xs font-black text-slate-900">{{ $terpilih->judul }}</div>
+                                <div class="text-[10px] text-slate-500 font-medium mt-0.5">{{ ucfirst($terpilih->sesi) }}</div>
+                            </div>
                         </div>
-                    </div>
-                    <div class="info-item">
-                        <div class="label"><i class="fas fa-location-dot"></i> Lokasi Apel</div>
-                        <div class="value">{{ $terpilih->lokasi }}</div>
-                    </div>
-                    <div class="info-item">
-                        <div class="label"><i class="fas fa-flag"></i> Sesi</div>
-                        <div class="value">{{ $terpilih->judul }}
-                            <small>{{ ucfirst($terpilih->sesi) }}</small>
+
+                        <div class="mb-4">
+                            <h3 class="text-[11px] font-bold uppercase tracking-wider text-slate-700 mb-1.5 flex items-center gap-1.5">
+                                <i class="fa-solid fa-circle-info text-indigo-600"></i>
+                                <span>Informasi Apel</span>
+                            </h3>
+                            <div class="p-3.5 rounded-xl bg-white/60 border-l-4 border-emerald-500 text-xs text-slate-800 leading-relaxed whitespace-pre-line shadow-sm">
+                                {{ $terpilih->informasi ?: 'Belum ada informasi instruksi apel yang dicantumkan.' }}
+                            </div>
                         </div>
+
+                        @if($terpilih->keterangan)
+                        <div class="mb-4">
+                            <h3 class="text-[11px] font-bold uppercase tracking-wider text-slate-700 mb-1.5 flex items-center gap-1.5">
+                                <i class="fa-solid fa-note-sticky text-amber-500"></i>
+                                <span>Keterangan Tambahan</span>
+                            </h3>
+                            <div class="p-3.5 rounded-xl bg-white/60 border-l-4 border-amber-400 text-xs text-slate-800 leading-relaxed shadow-sm">
+                                {{ $terpilih->keterangan }}
+                            </div>
+                        </div>
+                        @endif
+                    </div>
+
+                    <div class="px-6 py-3 bg-white/30 border-t border-white/40 text-[11px] text-slate-500 flex flex-wrap justify-between items-center gap-2">
+                        <span><i class="fa-solid fa-user-pen mr-1"></i> Diisi oleh: {{ $terpilih->pembuat?->name ?? '—' }}</span>
+                        <span>Terakhir diperbarui: {{ $terpilih->updated_at->locale('id')->isoFormat('D MMM Y, HH:mm') }}</span>
                     </div>
                 </div>
 
-                <div class="text-block">
-                    <h3><i class="fas fa-circle-info"></i> Informasi Apel</h3>
-                    <div class="isi {{ $terpilih->informasi ? '' : 'kosong' }}">{{ $terpilih->informasi ?: 'Belum ada informasi apel yang diisi.' }}</div>
-                </div>
-
-                @if($terpilih->keterangan)
-                <div class="text-block">
-                    <h3><i class="fas fa-note-sticky"></i> Keterangan Tambahan</h3>
-                    <div class="isi">{{ $terpilih->keterangan }}</div>
-                </div>
+                <form id="formHapus" method="POST" action="{{ route('apel.destroy', $terpilih) }}" style="display:none;">
+                    @csrf @method('DELETE')
+                </form>
                 @endif
-            </div>
 
-            <div class="detail-foot">
-                <span><i class="fas fa-user-pen"></i> Diisi oleh: {{ $terpilih->pembuat?->name ?? '—' }}</span>
-                <span>Terakhir diperbarui {{ $terpilih->updated_at->locale('id')->isoFormat('D MMM Y, HH:mm') }}</span>
-            </div>
-        </div>
+                @endif
 
-        <form id="formHapus" method="POST" action="{{ route('apel.destroy', $terpilih) }}" style="display:none;">
-            @csrf @method('DELETE')
-        </form>
-        @endif
-
-        @endif
     </div>
-</div>
+</main>
 
 <script>
 function bukaApel(id) {
@@ -247,7 +201,12 @@ function bukaApel(id) {
 }
 
 function filterSesi(sesi, chipEl) {
-    document.querySelectorAll('.chip').forEach(c => c.classList.toggle('active', c === chipEl));
+    document.querySelectorAll('.chip').forEach(c => {
+        c.classList.remove('bg-emerald-600', 'text-white');
+        c.classList.add('bg-white/60', 'text-slate-700');
+    });
+    chipEl.classList.remove('bg-white/60', 'text-slate-700');
+    chipEl.classList.add('bg-emerald-600', 'text-white');
 
     const select = document.getElementById('apelSelect');
     let pertamaCocok = null;
@@ -258,7 +217,6 @@ function filterSesi(sesi, chipEl) {
         if (cocok && pertamaCocok === null) pertamaCocok = opt;
     });
 
-    // Kalau pilihan aktif tersembunyi oleh filter, lompat ke apel pertama yang cocok
     if (pertamaCocok && select.selectedOptions[0].hidden) {
         bukaApel(pertamaCocok.value);
     }
@@ -270,4 +228,5 @@ function konfirmasiHapus() {
     }
 }
 </script>
+
 </x-app-layout>

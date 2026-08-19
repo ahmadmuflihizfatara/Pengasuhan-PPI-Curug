@@ -2,7 +2,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 * { box-sizing: border-box; }
-body { font-family: 'Inter', sans-serif; background: #f0f2f5; }
+body { font-family: 'Inter', sans-serif; background: transparent; }
 
 .app-layout { display: flex; min-height: 100vh; }
 .main-content { flex: 1; padding: 28px 30px; min-width: 0; }
@@ -51,10 +51,11 @@ body { font-family: 'Inter', sans-serif; background: #f0f2f5; }
 .btn-buka  { background:linear-gradient(135deg,#1baf7a,#2a78d6); color:white; }
 </style>
 
-<div class="app-layout">
-    <x-sidebar active="akses" />
+{{-- Top Floating Island Capsule Navbar --}}
+<x-island-navbar />
 
-    <div class="main-content">
+<main class="max-w-7xl mx-auto px-4 sm:px-6 pb-12 pt-2">
+    <div class="spatial-workspace-window rounded-3xl bg-white/30 backdrop-blur-2xl border border-white/50 shadow-2xl p-4 sm:p-7 relative overflow-hidden">
 
         <div class="page-header">
             <h1><i class="fas fa-shield-alt" style="margin-right:10px;"></i>Akses Fitur Pengasuh</h1>
@@ -110,5 +111,5 @@ body { font-family: 'Inter', sans-serif; background: #f0f2f5; }
         </div>
 
     </div>
-</div>
+</main>
 </x-app-layout>

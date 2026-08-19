@@ -1,592 +1,258 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>PPI Curug — Politeknik Penerbangan Indonesia</title>
+    <title>PPI Curug — Sistem Pengasuhan & Karakter Taruna</title>
 
-        @auth
-        {{-- Redirect langsung ke dashboard jika sudah login --}}
-        <meta http-equiv="refresh" content="0;url={{ url('/dashboard') }}">
-        @endauth
+    @auth
+    {{-- Redirect langsung ke dashboard jika sudah login --}}
+    <meta http-equiv="refresh" content="0;url={{ url('/dashboard') }}">
+    @endauth
 
-        <!-- Fonts -->
-        <link rel="preconnect" href="https://fonts.bunny.net">
-        <link href="https://fonts.bunny.net/css?family=figtree:400,500,600,700,800&display=swap" rel="stylesheet" />
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-        <style>
-            *, ::before, ::after { box-sizing: border-box; margin: 0; padding: 0; }
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-            html, body {
-                width: 100%;
-                height: 100%;
-                overflow-x: hidden;
-            }
+    <!-- Vite Assets -->
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
 
-            body {
-                font-family: 'Figtree', sans-serif;
-                min-height: 100vh;
-                background: #0f172a;
-                color: #fff;
-                -webkit-font-smoothing: antialiased;
-                display: block;
-            }
+    <style>
+        *, *::before, *::after { box-sizing: border-box; }
+        html, body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', 'Plus Jakarta Sans', sans-serif;
+            background: transparent !important;
+            color: #0f172a;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
 
-            /* ── Background ── */
-            .bg-scene {
-                position: fixed;
-                inset: 0;
-                background:
-                    radial-gradient(ellipse 80% 60% at 50% 0%, rgba(30, 58, 138, 0.55) 0%, transparent 70%),
-                    radial-gradient(ellipse 50% 40% at 80% 80%, rgba(234, 179, 8, 0.08) 0%, transparent 60%),
-                    #0f172a;
-                z-index: 0;
-                pointer-events: none;
-            }
+        /* Fixed blurred cockpit background container */
+        #global-cockpit-bg-layer {
+            position: fixed;
+            top: -20px;
+            left: -20px;
+            right: -20px;
+            bottom: -20px;
+            background-image: url('{{ asset('images/BG.png') }}');
+            background-size: cover;
+            background-position: center center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            filter: blur(4px) brightness(0.92);
+            transform: scale(1.04);
+            z-index: -10;
+            pointer-events: none;
+        }
 
-            /* subtle dot grid */
-            .bg-scene::after {
-                content: '';
-                position: absolute;
-                inset: 0;
-                background-image: radial-gradient(rgba(255,255,255,0.04) 1px, transparent 1px);
-                background-size: 28px 28px;
-            }
+        #global-cockpit-overlay-layer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 50% 30%, rgba(15, 23, 42, 0.12) 0%, rgba(15, 23, 42, 0.45) 100%);
+            z-index: -9;
+            pointer-events: none;
+        }
 
-            /* ── Layout ── */
-            .page-wrapper {
-                position: relative;
-                z-index: 1;
-                min-height: 100vh;
-                display: flex;
-                flex-direction: column;
-                width: 100%;
-            }
+        .hero-title-serif {
+            font-family: 'Instrument Serif', 'Playfair Display', serif;
+            letter-spacing: -0.02em;
+        }
+    </style>
+</head>
+<body class="antialiased min-h-screen relative flex flex-col justify-between">
 
-            /* ── Navbar ── */
-            .welcome-nav {
-                display: flex;
-                align-items: center;
-                justify-content: space-between;
-                padding: 1.25rem 2rem;
-                border-bottom: 1px solid rgba(255,255,255,0.06);
-                backdrop-filter: blur(12px);
-                background: rgba(15, 23, 42, 0.5);
-                position: sticky;
-                top: 0;
-                z-index: 50;
-                width: 100%;
-            }
+    {{-- Global Background Cockpit --}}
+    <div id="global-cockpit-bg-layer"></div>
+    <div id="global-cockpit-overlay-layer"></div>
 
-            .nav-brand {
-                display: flex;
-                align-items: center;
-                gap: 0.75rem;
-            }
+    {{-- Top Floating Island Capsule Navbar --}}
+    <header class="w-full pt-5 pb-3 px-4 sm:px-8 sticky top-0 z-50 flex items-center justify-between pointer-events-auto">
+        <!-- Brand Logo Left -->
+        <a href="{{ url('/') }}" class="flex items-center gap-3 px-3.5 py-2 rounded-2xl bg-white/40 hover:bg-white/60 backdrop-blur-xl border border-white/50 transition-all duration-300 shadow-md group">
+            <div class="w-8 h-8 rounded-xl bg-gradient-to-tr from-blue-700 via-indigo-600 to-sky-500 flex items-center justify-center text-white font-black text-sm shadow-inner group-hover:scale-105 transition-transform">
+                <i class="fa-solid fa-plane-departure text-xs"></i>
+            </div>
+            <div class="text-left">
+                <div class="font-extrabold text-slate-900 tracking-tight text-xs uppercase leading-none">PPI CURUG</div>
+                <div class="text-[9px] font-semibold text-slate-600 tracking-widest uppercase">Pengasuhan</div>
+            </div>
+        </a>
 
-            .nav-logo {
-                width: 2.5rem;
-                height: 2.5rem;
-                border-radius: 50%;
-                object-fit: cover;
-                box-shadow: 0 0 0 2px rgba(234,179,8,0.4);
-            }
+        <!-- Center Floating Capsule Navigation Dock -->
+        <nav class="hidden md:flex items-center gap-2 px-4 py-2 rounded-full bg-slate-900/75 backdrop-blur-2xl border border-white/15 shadow-2xl">
+            <a href="#fitur" class="text-xs font-semibold text-white/80 hover:text-white px-3 py-1 rounded-full hover:bg-white/10 transition">Pilar Pengasuhan</a>
+            <a href="#stats" class="text-xs font-semibold text-white/80 hover:text-white px-3 py-1 rounded-full hover:bg-white/10 transition">Statistik</a>
+            <a href="#tentang" class="text-xs font-semibold text-white/80 hover:text-white px-3 py-1 rounded-full hover:bg-white/10 transition">Tentang</a>
+        </nav>
 
-            .nav-title {
-                font-size: 0.7rem;
-                font-weight: 700;
-                letter-spacing: 0.12em;
-                text-transform: uppercase;
-                line-height: 1.3;
-                color: #fbbf24;
-            }
+        <!-- Right Quick Action Pill / Auth Button -->
+        <div class="flex items-center gap-2">
+            @if (Route::has('login'))
+                <a href="{{ route('login') }}" class="px-5 py-2.5 rounded-full bg-white hover:bg-slate-50 text-slate-950 font-extrabold text-xs shadow-xl transition-all duration-200 active:scale-95 flex items-center gap-2">
+                    <span>Masuk ke Kokpit</span>
+                    <i class="fa-solid fa-arrow-right text-[10px]"></i>
+                </a>
+            @endif
+        </div>
+    </header>
 
-            .nav-title span { color: #fff; }
+    {{-- Hero Section with Editorial Display Typography & Omnibar --}}
+    <main class="flex-1 max-w-7xl mx-auto px-4 py-8 sm:py-12 w-full flex flex-col items-center justify-center">
+        
+        <div class="max-w-4xl text-center flex flex-col items-center mb-10">
+            <!-- Top Floating Pill Tag -->
+            <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/30 backdrop-blur-xl border border-white/40 shadow-sm text-xs font-bold text-slate-900 mb-5 animate-fade-in">
+                <span class="text-amber-500 font-black">✦</span>
+                <span>Sistem Informasi Pengasuhan & Karakter Taruna</span>
+            </div>
 
-            .nav-actions { display: flex; align-items: center; gap: 1rem; }
+            <!-- Large Editorial Serif Display Headline -->
+            <h1 class="hero-title-serif text-4xl sm:text-6xl md:text-7xl font-normal tracking-tight text-slate-900 drop-shadow-sm leading-[1.08] mb-4">
+                Keunggulan Disiplin untuk Pemimpin Masa Depan
+            </h1>
 
-            .btn-nav-secondary {
-                font-size: 0.8rem;
-                font-weight: 600;
-                letter-spacing: 0.08em;
-                text-transform: uppercase;
-                color: rgba(255,255,255,0.75);
-                text-decoration: none;
-                padding: 0.45rem 1rem;
-                border: 1px solid rgba(255,255,255,0.18);
-                border-radius: 0.5rem;
-                transition: all 0.2s;
-            }
+            <!-- Subtitle Sans-serif -->
+            <p class="text-xs sm:text-base text-slate-700 max-w-2xl mx-auto leading-relaxed mb-8 font-medium">
+                Platform terpadu Politeknik Penerbangan Indonesia Curug untuk manajemen kedisiplinan, pemantauan pos jaga real-time, raport poin, perizinan asrama, dan pembinaan karakter taruna kelas dunia.
+            </p>
 
-            .btn-nav-secondary:hover {
-                color: #fff;
-                border-color: rgba(255,255,255,0.4);
-                background: rgba(255,255,255,0.06);
-            }
-
-            .btn-nav-primary {
-                font-size: 0.8rem;
-                font-weight: 700;
-                letter-spacing: 0.1em;
-                text-transform: uppercase;
-                color: #0f172a;
-                text-decoration: none;
-                padding: 0.5rem 1.25rem;
-                border-radius: 0.5rem;
-                background: #fbbf24;
-                transition: all 0.2s;
-                display: flex;
-                align-items: center;
-                gap: 0.4rem;
-            }
-
-            .btn-nav-primary:hover { background: #f59e0b; transform: translateY(-1px); }
-
-            /* ── Hero ── */
-            .hero {
-                flex: 1;
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                justify-content: center;
-                text-align: center;
-                padding: 5rem 1.5rem 4rem;
-            }
-
-            .hero-badge {
-                display: inline-flex;
-                align-items: center;
-                gap: 0.5rem;
-                font-size: 0.72rem;
-                font-weight: 600;
-                letter-spacing: 0.15em;
-                text-transform: uppercase;
-                color: #fbbf24;
-                background: rgba(234,179,8,0.1);
-                border: 1px solid rgba(234,179,8,0.25);
-                padding: 0.4rem 1rem;
-                border-radius: 9999px;
-                margin-bottom: 2rem;
-            }
-
-            .hero h1 {
-                font-size: clamp(2rem, 6vw, 4.5rem);
-                font-weight: 800;
-                line-height: 1.1;
-                letter-spacing: -0.02em;
-                max-width: 850px;
-                margin-bottom: 1.5rem;
-            }
-
-            .hero h1 .accent { color: #fbbf24; }
-
-            .hero p {
-                font-size: 1.05rem;
-                line-height: 1.75;
-                color: rgba(255,255,255,0.6);
-                max-width: 560px;
-                margin-bottom: 2.5rem;
-            }
-
-            .hero-cta {
-                display: flex;
-                align-items: center;
-                gap: 1rem;
-                flex-wrap: wrap;
-                justify-content: center;
-            }
-
-            .btn-primary-lg {
-                display: inline-flex;
-                align-items: center;
-                gap: 0.6rem;
-                font-size: 0.9rem;
-                font-weight: 700;
-                letter-spacing: 0.1em;
-                text-transform: uppercase;
-                color: #0f172a;
-                text-decoration: none;
-                padding: 0.9rem 2rem;
-                border-radius: 0.65rem;
-                background: linear-gradient(135deg, #fbbf24, #f59e0b);
-                box-shadow: 0 8px 30px rgba(251,191,36,0.35);
-                transition: all 0.25s;
-            }
-
-            .btn-primary-lg:hover {
-                transform: translateY(-2px);
-                box-shadow: 0 12px 36px rgba(251,191,36,0.45);
-            }
-
-            .btn-ghost-lg {
-                display: inline-flex;
-                align-items: center;
-                gap: 0.6rem;
-                font-size: 0.9rem;
-                font-weight: 600;
-                letter-spacing: 0.06em;
-                color: rgba(255,255,255,0.8);
-                text-decoration: none;
-                padding: 0.9rem 1.75rem;
-                border-radius: 0.65rem;
-                border: 1px solid rgba(255,255,255,0.18);
-                transition: all 0.25s;
-            }
-
-            .btn-ghost-lg:hover {
-                color: #fff;
-                border-color: rgba(255,255,255,0.35);
-                background: rgba(255,255,255,0.06);
-            }
-
-            /* ── Stats Strip ── */
-            .stats-strip {
-                display: flex;
-                justify-content: center;
-                gap: 3rem;
-                flex-wrap: wrap;
-                margin-top: 3rem;
-                padding: 1.5rem 2rem;
-                border-top: 1px solid rgba(255,255,255,0.07);
-                border-bottom: 1px solid rgba(255,255,255,0.07);
-                width: 100%;
-                max-width: 700px;
-            }
-
-            .stat-item { text-align: center; }
-
-            .stat-value {
-                font-size: 1.75rem;
-                font-weight: 800;
-                color: #fbbf24;
-                line-height: 1;
-            }
-
-            .stat-label {
-                font-size: 0.72rem;
-                font-weight: 600;
-                letter-spacing: 0.1em;
-                text-transform: uppercase;
-                color: rgba(255,255,255,0.45);
-                margin-top: 0.3rem;
-            }
-
-            /* ── Features Section ── */
-            .features {
-                padding: 5rem 2rem;
-                max-width: 1100px;
-                margin: 0 auto;
-                width: 100%;
-            }
-
-            .section-label {
-                text-align: center;
-                font-size: 0.72rem;
-                font-weight: 700;
-                letter-spacing: 0.2em;
-                text-transform: uppercase;
-                color: #fbbf24;
-                margin-bottom: 1rem;
-            }
-
-            .section-title {
-                text-align: center;
-                font-size: clamp(1.5rem, 3vw, 2.25rem);
-                font-weight: 800;
-                margin-bottom: 3.5rem;
-                color: #fff;
-            }
-
-            .features-grid {
-                display: grid;
-                grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-                gap: 1.5rem;
-            }
-
-            .feature-card {
-                background: rgba(255,255,255,0.04);
-                border: 1px solid rgba(255,255,255,0.08);
-                border-radius: 1.25rem;
-                padding: 2rem;
-                transition: all 0.3s;
-            }
-
-            .feature-card:hover {
-                background: rgba(255,255,255,0.07);
-                border-color: rgba(251,191,36,0.2);
-                transform: translateY(-3px);
-            }
-
-            .feature-icon {
-                width: 3rem;
-                height: 3rem;
-                background: rgba(234,179,8,0.12);
-                border-radius: 0.75rem;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                margin-bottom: 1.25rem;
-                color: #fbbf24;
-            }
-
-            .feature-icon svg { width: 1.4rem; height: 1.4rem; }
-
-            .feature-card h3 {
-                font-size: 1rem;
-                font-weight: 700;
-                margin-bottom: 0.6rem;
-                color: #fff;
-            }
-
-            .feature-card p {
-                font-size: 0.875rem;
-                line-height: 1.65;
-                color: rgba(255,255,255,0.5);
-            }
-
-            /* ── CTA Banner ── */
-            .cta-banner {
-                max-width: 900px;
-                margin: 0 auto 5rem;
-                padding: 0 2rem;
-                width: 100%;
-            }
-
-            .cta-inner {
-                background: linear-gradient(135deg, rgba(30,58,138,0.6) 0%, rgba(15,23,42,0.8) 100%);
-                border: 1px solid rgba(251,191,36,0.2);
-                border-radius: 1.5rem;
-                padding: 3rem 2.5rem;
-                text-align: center;
-                backdrop-filter: blur(12px);
-            }
-
-            .cta-inner h2 {
-                font-size: clamp(1.4rem, 3vw, 2rem);
-                font-weight: 800;
-                margin-bottom: 0.75rem;
-            }
-
-            .cta-inner p {
-                color: rgba(255,255,255,0.55);
-                font-size: 0.95rem;
-                margin-bottom: 2rem;
-            }
-
-            .cta-buttons {
-                display: flex;
-                gap: 1rem;
-                justify-content: center;
-                flex-wrap: wrap;
-            }
-
-            /* ── Footer ── */
-            .welcome-footer {
-                text-align: center;
-                padding: 1.5rem;
-                font-size: 0.8rem;
-                color: rgba(255,255,255,0.25);
-                border-top: 1px solid rgba(255,255,255,0.06);
-                width: 100%;
-            }
-
-            /* ── Responsive ── */
-            @media (max-width: 640px) {
-                .welcome-nav { padding: 1rem; }
-                .nav-title { display: none; }
-                .hero { padding: 3rem 1.25rem 2.5rem; }
-                .stats-strip { gap: 2rem; }
-                .cta-banner { padding: 0 1rem; }
-                .cta-inner { padding: 2rem 1.5rem; }
-                .features { padding: 3rem 1.25rem; }
-            }
-        </style>
-    </head>
-    <body>
-
-        <div class="bg-scene"></div>
-
-        <div class="page-wrapper">
-
-            {{-- ── Navbar ── --}}
-            <nav class="welcome-nav">
-                <div class="nav-brand">
-                    <img src="{{ asset('images/logo.png') }}" alt="Logo PPI Curug" class="nav-logo">
-                    <div class="nav-title">
-                        Politeknik Penerbangan Indonesia<br>
-                        <span>Curug</span>
-                    </div>
+            <!-- Floating Omnibar Search Pill with Action Button (Inspired by design.mp4) -->
+            <div class="w-full max-w-xl relative group">
+                <div class="flex items-center bg-white/40 hover:bg-white/60 focus-within:bg-white/80 backdrop-blur-2xl border border-white/60 focus-within:border-indigo-400 rounded-full px-5 py-3 shadow-2xl transition-all duration-300">
+                    <i class="fa-solid fa-magnifying-glass text-slate-500 text-sm ml-1 mr-3"></i>
+                    <input type="text" 
+                           id="globalSearchInput"
+                           placeholder="Cek status perizinan, info kedisiplinan, pos jaga..." 
+                           class="w-full bg-transparent border-none outline-none text-xs sm:text-sm text-slate-900 placeholder-slate-500 font-semibold focus:ring-0">
+                    <a href="{{ route('login') }}" class="w-9 h-9 rounded-full bg-slate-950 hover:bg-slate-800 text-white flex items-center justify-center transition-transform duration-200 active:scale-95 shadow-md flex-shrink-0" title="Cari / Akses">
+                        <i class="fa-solid fa-arrow-right text-xs"></i>
+                    </a>
                 </div>
+            </div>
+        </div>
 
-                <div class="nav-actions">
-                    @if (Route::has('register'))
-                        <a href="{{ route('register') }}" class="btn-nav-secondary">Daftar</a>
-                    @endif
-                    @if (Route::has('login'))
-                        <a href="{{ route('login') }}" class="btn-nav-primary">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" style="width:1rem;height:1rem">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5" />
-                            </svg>
-                            Masuk ke Kokpit
-                        </a>
-                    @endif
+        {{-- Floating Spatial Master Workspace Canvas Preview (rounded-3xl) --}}
+        <div id="fitur" class="spatial-workspace-window w-full rounded-3xl p-6 sm:p-8 mt-4 shadow-2xl relative">
+            
+            <!-- Control Header Bar Inside Workspace -->
+            <div class="flex flex-wrap items-center justify-between gap-4 pb-6 mb-6 border-b border-white/30">
+                <div class="flex items-center gap-3">
+                    <div class="w-7 h-7 rounded-lg bg-indigo-600 text-white flex items-center justify-center text-xs font-bold shadow-sm">
+                        <i class="fa-solid fa-cubes"></i>
+                    </div>
+                    <span class="text-xs font-black uppercase tracking-wider text-slate-800">4 Pilar Utama Pengasuhan</span>
                 </div>
-            </nav>
-
-            {{-- ── Hero ── --}}
-            <section class="hero">
-                <div class="hero-badge">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" style="width:0.85rem;height:0.85rem">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5" />
-                    </svg>
-                    Sistem Informasi Karir Penerbangan
-                </div>
-
-                <h1>
-                    WUJUDKAN KARIR<br>
-                    <span class="accent">PILOT PROFESIONAL</span><br>
-                    ANDA BERSAMA KAMI
-                </h1>
-
-                <p>
-                    Platform resmi Politeknik Penerbangan Indonesia Curug untuk manajemen pendidikan,
-                    pemantauan progres kadet, dan informasi program penerbangan kelas dunia.
-                </p>
-
-                <div class="hero-cta">
-                    @if (Route::has('login'))
-                        <a href="{{ route('login') }}" class="btn-primary-lg">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" style="width:1.1rem;height:1.1rem">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5" />
-                            </svg>
-                            Masuk ke Kokpit
-                        </a>
-                    @endif
-
-                    @if (Route::has('register'))
-                        <a href="{{ route('register') }}" class="btn-ghost-lg">
-                            Daftar Sebagai Kadet
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" style="width:1rem;height:1rem">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
-                            </svg>
-                        </a>
-                    @endif
-                </div>
-
-                {{-- Stats Strip --}}
-                <div class="stats-strip">
-                    <div class="stat-item">
-                        <div class="stat-value">50+</div>
-                        <div class="stat-label">Tahun Berpengalaman</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-value">10K+</div>
-                        <div class="stat-label">Alumni Aktif</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-value">15+</div>
-                        <div class="stat-label">Program Studi</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-value">100%</div>
-                        <div class="stat-label">Terakreditasi</div>
-                    </div>
-                </div>
-            </section>
-
-            {{-- ── Features ── --}}
-            <section class="features">
-                <div class="section-label">Fitur Unggulan</div>
-                <h2 class="section-title">Semua yang Anda Butuhkan<br>dalam Satu Platform</h2>
-
-                <div class="features-grid">
-                    <div class="feature-card">
-                        <div class="feature-icon">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M15 9h3.75M15 12h3.75M15 15h3.75M4.5 19.5h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5zm6-10.125a1.875 1.875 0 11-3.75 0 1.875 1.875 0 013.75 0zm1.294 6.336a6.721 6.721 0 01-3.17.789 6.721 6.721 0 01-3.168-.789 3.376 3.376 0 016.338 0z" />
-                            </svg>
-                        </div>
-                        <h3>Manajemen Data Kadet</h3>
-                        <p>Kelola profil, dokumen, dan riwayat pendidikan setiap kadet secara terpusat dan aman.</p>
-                    </div>
-
-                    <div class="feature-card">
-                        <div class="feature-icon">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                            </svg>
-                        </div>
-                        <h3>Pemantauan Progres</h3>
-                        <p>Pantau kemajuan jam terbang, nilai akademik, dan pencapaian sertifikasi secara real-time.</p>
-                    </div>
-
-                    <div class="feature-card">
-                        <div class="feature-icon">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" />
-                            </svg>
-                        </div>
-                        <h3>Jadwal & Penugasan</h3>
-                        <p>Akses jadwal kuliah, jadwal terbang, dan penugasan instruktur dalam satu tampilan terpadu.</p>
-                    </div>
-
-                    <div class="feature-card">
-                        <div class="feature-icon">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z" />
-                            </svg>
-                        </div>
-                        <h3>Laporan & Analitik</h3>
-                        <p>Buat laporan kinerja kadet dan statistik program secara otomatis dengan visualisasi data.</p>
-                    </div>
-
-                    <div class="feature-card">
-                        <div class="feature-icon">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
-                            </svg>
-                        </div>
-                        <h3>Keamanan Data</h3>
-                        <p>Sistem autentikasi berlapis dan enkripsi data memastikan informasi kadet terlindungi sepenuhnya.</p>
-                    </div>
-
-                    <div class="feature-card">
-                        <div class="feature-icon">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 18v-5.25m0 0a6.01 6.01 0 001.5-.189m-1.5.189a6.01 6.01 0 01-1.5-.189m3.75 7.478a12.06 12.06 0 01-4.5 0m3.75 2.383a14.406 14.406 0 01-3 0M14.25 18v-.192c0-.983.658-1.823 1.508-2.316a7.5 7.5 0 10-7.517 0c.85.493 1.509 1.333 1.509 2.316V18" />
-                            </svg>
-                        </div>
-                        <h3>Informasi Program</h3>
-                        <p>Temukan informasi lengkap mengenai program studi, persyaratan, biaya, dan jadwal pendaftaran.</p>
-                    </div>
-                </div>
-            </section>
-
-            {{-- ── CTA Banner ── --}}
-            <div class="cta-banner">
-                <div class="cta-inner">
-                    <h2>Siap Memulai Perjalanan Anda?</h2>
-                    <p>Bergabunglah dengan ribuan kadet yang telah mempercayakan pendidikan penerbangan mereka bersama PPI Curug.</p>
-                    <div class="cta-buttons">
-                        @if (Route::has('register'))
-                            <a href="{{ route('register') }}" class="btn-primary-lg">
-                                Daftar Sekarang — Gratis
-                            </a>
-                        @endif
-                        @if (Route::has('login'))
-                            <a href="{{ route('login') }}" class="btn-ghost-lg">Sudah punya akun? Masuk</a>
-                        @endif
-                    </div>
+                <div class="flex items-center gap-2">
+                    <span class="px-3 py-1 rounded-full bg-emerald-100/90 text-emerald-800 font-bold text-[11px] border border-emerald-200 flex items-center gap-1.5 shadow-sm">
+                        <span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
+                        <span>Sistem Aktif & Terintegrasi</span>
+                    </span>
                 </div>
             </div>
 
-            {{-- ── Footer ── --}}
-            <footer class="welcome-footer">
-                &copy; {{ date('Y') }} Politeknik Penerbangan Indonesia Curug. Hak cipta dilindungi.
-            </footer>
+            <!-- 4 Pillar Glass Cards Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
+                
+                <!-- Pillar 1: Raport Poin & Kedisiplinan -->
+                <div class="rounded-2xl bg-white/55 hover:bg-white/75 backdrop-blur-xl border border-white/70 p-5 shadow-lg transition-all duration-300 hover:-translate-y-1 group">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 text-white flex items-center justify-center text-base mb-4 shadow-md group-hover:scale-105 transition-transform">
+                        <i class="fa-solid fa-shield-halved"></i>
+                    </div>
+                    <h3 class="text-sm font-bold text-slate-900 mb-1.5">Raport Poin Disiplin</h3>
+                    <p class="text-xs text-slate-600 leading-relaxed mb-4">
+                        Pencatatan transparan poin pelanggaran dan penghargaan taruna berbasis tingkatan sanksi resmi pengasuhan.
+                    </p>
+                    <div class="flex items-center text-[11px] font-bold text-indigo-700 group-hover:underline">
+                        <span>Pelajari Disiplin</span>
+                        <i class="fa-solid fa-arrow-right text-[9px] ml-1.5"></i>
+                    </div>
+                </div>
+
+                <!-- Pillar 2: Pos Jaga & Log Pergerakan -->
+                <div class="rounded-2xl bg-white/55 hover:bg-white/75 backdrop-blur-xl border border-white/70 p-5 shadow-lg transition-all duration-300 hover:-translate-y-1 group">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-sky-500 to-blue-600 text-white flex items-center justify-center text-base mb-4 shadow-md group-hover:scale-105 transition-transform">
+                        <i class="fa-solid fa-compass"></i>
+                    </div>
+                    <h3 class="text-sm font-bold text-slate-900 mb-1.5">Pos Jaga & Log Pergerakan</h3>
+                    <p class="text-xs text-slate-600 leading-relaxed mb-4">
+                        Pemantauan arus keluar masuk taruna di gerbang utama secara real-time via tablet dan monitor TV live.
+                    </p>
+                    <div class="flex items-center text-[11px] font-bold text-sky-700 group-hover:underline">
+                        <span>Monitoring Gerbang</span>
+                        <i class="fa-solid fa-arrow-right text-[9px] ml-1.5"></i>
+                    </div>
+                </div>
+
+                <!-- Pillar 3: Apel & Presensi -->
+                <div class="rounded-2xl bg-white/55 hover:bg-white/75 backdrop-blur-xl border border-white/70 p-5 shadow-lg transition-all duration-300 hover:-translate-y-1 group">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-600 text-white flex items-center justify-center text-base mb-4 shadow-md group-hover:scale-105 transition-transform">
+                        <i class="fa-solid fa-clipboard-check"></i>
+                    </div>
+                    <h3 class="text-sm font-bold text-slate-900 mb-1.5">Apel & Presensi Harian</h3>
+                    <p class="text-xs text-slate-600 leading-relaxed mb-4">
+                        Perekaman kehadiran apel pagi, siang, dan malam per barak dengan rekap otomatis dan berita acara digital.
+                    </p>
+                    <div class="flex items-center text-[11px] font-bold text-emerald-700 group-hover:underline">
+                        <span>Jadwal & Presensi</span>
+                        <i class="fa-solid fa-arrow-right text-[9px] ml-1.5"></i>
+                    </div>
+                </div>
+
+                <!-- Pillar 4: Keluhan Barak & Perizinan -->
+                <div class="rounded-2xl bg-white/55 hover:bg-white/75 backdrop-blur-xl border border-white/70 p-5 shadow-lg transition-all duration-300 hover:-translate-y-1 group">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-500 to-orange-600 text-white flex items-center justify-center text-base mb-4 shadow-md group-hover:scale-105 transition-transform">
+                        <i class="fa-solid fa-envelope-open-text"></i>
+                    </div>
+                    <h3 class="text-sm font-bold text-slate-900 mb-1.5">Surat Izin & Barak</h3>
+                    <p class="text-xs text-slate-600 leading-relaxed mb-4">
+                        Pengajuan izin bermalam digital, pelaporan fasilitas keluhan barak, dan approval bertingkat pengasuh.
+                    </p>
+                    <div class="flex items-center text-[11px] font-bold text-amber-700 group-hover:underline">
+                        <span>Layanan Taruna</span>
+                        <i class="fa-solid fa-arrow-right text-[9px] ml-1.5"></i>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Stats Bar Inside Workspace -->
+            <div id="stats" class="mt-8 pt-6 border-t border-white/30 grid grid-cols-2 sm:grid-cols-4 gap-4 text-center">
+                <div class="p-3">
+                    <div class="text-2xl sm:text-3xl font-black text-slate-900 font-mono">50+</div>
+                    <div class="text-[11px] font-bold text-slate-600 uppercase tracking-wider mt-0.5">Tahun Pengalaman</div>
+                </div>
+                <div class="p-3">
+                    <div class="text-2xl sm:text-3xl font-black text-slate-900 font-mono">100%</div>
+                    <div class="text-[11px] font-bold text-slate-600 uppercase tracking-wider mt-0.5">Terakreditasi Unggul</div>
+                </div>
+                <div class="p-3">
+                    <div class="text-2xl sm:text-3xl font-black text-slate-900 font-mono">24/7</div>
+                    <div class="text-[11px] font-bold text-slate-600 uppercase tracking-wider mt-0.5">Pengawasan Pos Jaga</div>
+                </div>
+                <div class="p-3">
+                    <div class="text-2xl sm:text-3xl font-black text-slate-900 font-mono">Ribuan</div>
+                    <div class="text-[11px] font-bold text-slate-600 uppercase tracking-wider mt-0.5">Alumni Berprestasi</div>
+                </div>
+            </div>
 
         </div>
 
-    </body>
+    </main>
+
+    {{-- Footer --}}
+    <footer class="w-full py-6 px-4 text-center text-xs font-medium text-slate-600 border-t border-white/20 backdrop-blur-md">
+        <p>&copy; {{ date('Y') }} Politeknik Penerbangan Indonesia Curug. Hak cipta dilindungi undang-undang.</p>
+    </footer>
+
+</body>
 </html>

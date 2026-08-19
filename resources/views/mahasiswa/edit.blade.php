@@ -3,7 +3,7 @@
 
     <style>
         * { box-sizing: border-box; }
-        body { font-family: 'Inter', sans-serif; background: #f0f2f5; }
+        body { font-family: 'Inter', sans-serif; background: transparent; }
 
         .db-layout {
             display: flex;

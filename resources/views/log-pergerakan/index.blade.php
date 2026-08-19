@@ -1,317 +1,228 @@
 <x-app-layout>
-<style>
-    * { box-sizing: border-box; }
-    body { font-family: 'Inter', sans-serif; background: #f0f2f5; }
 
-    .app-layout { display: flex; min-height: 100vh; }
-    .main-content { flex: 1; padding: 28px 30px; min-width: 0; }
+{{-- Top Floating Island Capsule Navbar --}}
+<x-island-navbar />
 
-    .page-header {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        border-radius: 18px;
-        padding: 28px 32px;
-        color: white;
-        margin-bottom: 24px;
-        position: relative;
-        overflow: hidden;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        flex-wrap: wrap;
-        gap: 16px;
-    }
-    .page-header::before { content:''; position:absolute; right:-50px; top:-50px; width:180px; height:180px; background:rgba(255,255,255,.08); border-radius:50%; }
-    .page-header::after  { content:''; position:absolute; right:80px; bottom:-60px; width:140px; height:140px; background:rgba(255,255,255,.06); border-radius:50%; }
-    .page-header-text { position: relative; z-index: 1; }
-    .page-header-actions { position: relative; z-index: 1; display: flex; gap: 10px; }
-    .page-title { font-size: 22px; font-weight: 800; color: white; margin: 0 0 4px 0; }
-    .page-sub { font-size: 13px; color: rgba(255,255,255,.85); margin: 0; }
+<main class="max-w-7xl mx-auto px-4 sm:px-6 pb-12 pt-2">
+    <div class="spatial-workspace-window rounded-3xl bg-white/30 backdrop-blur-2xl border border-white/50 shadow-2xl p-4 sm:p-7 relative overflow-hidden">
+        
 
-    /* Stats Grid */
-    .stats-row {
-        display: grid;
-        grid-template-columns: repeat(4, 1fr);
-        gap: 14px;
-        margin-bottom: 24px;
-    }
-    .stat-card-custom {
-        background: white;
-        border-radius: 16px;
-        padding: 16px 20px;
-        box-shadow: 0 2px 16px rgba(0,0,0,.06);
-    }
-    .stat-card-custom .num { font-size: 26px; font-weight: 800; line-height: 1; margin-bottom: 4px; }
-    .stat-card-custom .lbl { font-size: 11px; font-weight: 700; color: #888; text-transform: uppercase; letter-spacing: .06em; }
-
-    /* Filter Bar */
-    .filter-card {
-        background: white;
-        border-radius: 16px;
-        padding: 16px 20px;
-        margin-bottom: 20px;
-        box-shadow: 0 2px 16px rgba(0,0,0,.06);
-    }
-
-    /* Table */
-    .custom-table-card {
-        background: white;
-        border-radius: 16px;
-        padding: 20px;
-        box-shadow: 0 2px 16px rgba(0,0,0,.06);
-    }
-    .table-responsive { overflow-x: auto; }
-    .table-pergerakan { width: 100%; border-collapse: collapse; }
-    .table-pergerakan thead tr { background: linear-gradient(135deg, #667eea, #764ba2); }
-    .table-pergerakan th {
-        background: transparent;
-        padding: 14px 18px;
-        font-size: 11px;
-        font-weight: 700;
-        text-align: left;
-        text-transform: uppercase;
-        letter-spacing: 0.06em;
-        color: white;
-        border-bottom: none;
-    }
-    .table-pergerakan td {
-        padding: 14px 18px;
-        font-size: 13px;
-        color: #444;
-        border-top: 1px solid #f0f2f7;
-        vertical-align: middle;
-    }
-    .table-pergerakan tbody tr:hover td { background: #f8f9ff; }
-
-    /* Badges */
-    .badge-status-belum {
-        background: #fee2e2; color: #b91c1c; border: 1px solid #fca5a5;
-        padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 800;
-        display: inline-flex; align-items: center; gap: 5px;
-    }
-    .badge-status-sudah {
-        background: #dcfce7; color: #15803d; border: 1px solid #86efac;
-        padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 800;
-        display: inline-flex; align-items: center; gap: 5px;
-    }
-    .pulse-dot {
-        width: 7px; height: 7px; background: #dc2626; border-radius: 50%; display: inline-block;
-        animation: blink 1.2s infinite;
-    }
-    @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
-
-    .badge-kat-perizinan { background: #fee2e2; color: #991b1b; padding: 4px 9px; border-radius: 8px; font-size: 11px; font-weight: 700; }
-    .badge-kat-ekskul    { background: #e0e7ff; color: #3730a3; padding: 4px 9px; border-radius: 8px; font-size: 11px; font-weight: 700; }
-    .badge-kat-olahraga  { background: #dcfce7; color: #166534; padding: 4px 9px; border-radius: 8px; font-size: 11px; font-weight: 700; }
-
-    /* Tombol aksi di dalam banner — gaya pill putih seperti tab Acara */
-    .btn-brand {
-        background: white; color: #667eea; border: none;
-        box-shadow: 0 4px 15px rgba(0,0,0,.15);
-        transition: transform .15s, box-shadow .15s;
-    }
-    .btn-brand:hover { color: #667eea; transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,.2); }
-    .btn-tv-monitor {
-        background: rgba(255,255,255,.18); color: white; border: 1px solid rgba(255,255,255,.3);
-        backdrop-filter: blur(4px); transition: background .15s;
-    }
-    .btn-tv-monitor:hover { color: white; background: rgba(255,255,255,.28); }
-
-    /* Form filter — standar aplikasi */
-    .filter-card .form-control,
-    .filter-card .form-select {
-        padding: 11px 14px; border: 2px solid #edf0f7; border-radius: 10px;
-        font-size: 13px; color: #333; background: #fafbff; outline: none; transition: border .15s;
-    }
-    .filter-card .form-control:focus,
-    .filter-card .form-select:focus { border-color: #667eea; background: white; box-shadow: none; }
-
-    @media (max-width: 992px) {
-        .stats-row { grid-template-columns: repeat(2, 1fr); }
-    }
-</style>
-
-<div class="app-layout">
-    <x-sidebar active="log-pergerakan" />
-
-    <main class="main-content">
-
-        {{-- Alerts --}}
-        @if(session('success'))
-        <div class="alert alert-success alert-dismissible fade show d-flex align-items-center mb-4" role="alert">
-            <i class="fas fa-check-circle fs-5 me-2"></i>
-            <div>{{ session('success') }}</div>
-            <button type="button" class="btn-close ms-auto" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-        @endif
-
-        {{-- Page Header --}}
-        <div class="page-header">
-            <div class="page-header-text">
-                <h1 class="page-title"><i class="fas fa-walking me-2"></i> Log Pergerakan Taruna</h1>
-                <p class="page-sub">Manajemen &amp; Rekapitulasi Data Keberangkatan, Perizinan, Ekstrakurikuler, dan Olahraga</p>
-            </div>
-            <div class="page-header-actions">
-                <a href="{{ route('log-pergerakan.tablet') }}" class="btn btn-brand fw-bold px-3 py-2 rounded-pill">
-                    <i class="fas fa-tablet-alt me-1"></i> Mode Tablet Pos Jaga
-                </a>
-                <a href="{{ route('log-pergerakan.tv') }}" target="_blank" class="btn btn-tv-monitor fw-bold px-3 py-2 rounded-pill">
-                    <i class="fas fa-tv me-1"></i> Buka TV Monitoring
-                </a>
-            </div>
-        </div>
-
-        {{-- Top Stats --}}
-        <div class="stats-row">
-            <div class="stat-card-custom border-danger border-start border-4">
-                <div class="num text-danger">{{ $stats['belum_kembali'] }}</div>
-                <div class="lbl">🔴 Belum Kembali (Di Luar)</div>
-            </div>
-            <div class="stat-card-custom border-success border-start border-4">
-                <div class="num text-success">{{ $stats['sudah_kembali'] }}</div>
-                <div class="lbl">🟢 Sudah Kembali Hari Ini</div>
-            </div>
-            <div class="stat-card-custom border-primary border-start border-4">
-                <div class="num text-primary">{{ $stats['total_today'] }}</div>
-                <div class="lbl">Total Log Hari Ini</div>
-            </div>
-            <div class="stat-card-custom border-info border-start border-4">
-                <div class="num text-info">{{ $stats['ekskul'] + $stats['olahraga'] }}</div>
-                <div class="lbl">Ekskul & Olahraga Hari Ini</div>
-            </div>
-        </div>
-
-        {{-- Filter Card --}}
-        <div class="filter-card">
-            <form action="{{ route('log-pergerakan.index') }}" method="GET" class="row g-2 align-items-center">
-                <div class="col-md-3">
-                    <input type="text" class="form-control" name="search" value="{{ request('search') }}" placeholder="Cari nama, NPM, rute...">
+                
+                {{-- Alerts --}}
+                @if(session('success'))
+                <div class="rounded-2xl bg-emerald-100/90 border border-emerald-300 p-4 text-emerald-800 text-xs font-bold mb-5 flex items-center justify-between shadow-sm backdrop-blur-md">
+                    <div class="flex items-center gap-2">
+                        <i class="fa-solid fa-circle-check text-base text-emerald-600"></i>
+                        <span>{{ session('success') }}</span>
+                    </div>
                 </div>
-                <div class="col-md-2">
-                    <select class="form-select" name="kategori">
-                        <option value="">-- Semua Kategori --</option>
-                        <option value="perizinan" {{ request('kategori')==='perizinan'?'selected':'' }}>Perizinan</option>
-                        <option value="ekstrakurikuler" {{ request('kategori')==='ekstrakurikuler'?'selected':'' }}>Ekstrakurikuler</option>
-                        <option value="olahraga" {{ request('kategori')==='olahraga'?'selected':'' }}>Olahraga</option>
-                    </select>
-                </div>
-                <div class="col-md-2">
-                    <select class="form-select" name="status">
-                        <option value="">-- Semua Status --</option>
-                        <option value="berangkat" {{ request('status')==='berangkat'?'selected':'' }}>🔴 Belum Kembali</option>
-                        <option value="kembali" {{ request('status')==='kembali'?'selected':'' }}>🟢 Sudah Kembali</option>
-                    </select>
-                </div>
-                <div class="col-md-3">
-                    <input type="date" class="form-control" name="tanggal" value="{{ request('tanggal') }}">
-                </div>
-                <div class="col-md-2 d-flex gap-1">
-                    <button type="submit" class="btn btn-outline-primary fw-bold w-100"><i class="fas fa-filter"></i> Filter</button>
-                    @if(request()->hasAny(['search', 'kategori', 'status', 'tanggal']))
-                    <a href="{{ route('log-pergerakan.index') }}" class="btn btn-light border text-muted"><i class="fas fa-times"></i></a>
-                    @endif
-                </div>
-            </form>
-        </div>
+                @endif
 
-        {{-- Main Table --}}
-        <div class="custom-table-card">
-            <div class="table-responsive">
-                <table class="table-pergerakan">
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>Taruna / Koordinator</th>
-                            <th>Kategori & Sub</th>
-                            <th>Detail Kegiatan</th>
-                            <th>Waktu Berangkat</th>
-                            <th>Waktu Kembali</th>
-                            <th>Status</th>
-                            <th class="text-center">Aksi</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @forelse($logs as $index => $item)
-                        <tr>
-                            <td class="text-muted fw-bold">{{ $logs->firstItem() + $index }}</td>
-                            <td>
-                                <div class="fw-bold text-dark">{{ $item->nama }}</div>
-                                <div class="small text-muted">{{ $item->npm ?? '-' }} &bull; {{ $item->prodi ?? 'PPI Curug' }}</div>
-                            </td>
-                            <td>
-                                {!! $item->getKategoriBadgeHtml() !!}
-                                <div class="small text-muted mt-1 font-monospace">{{ $item->subkategori }}</div>
-                            </td>
-                            <td>
-                                @if($item->kategori === 'perizinan')
-                                    <div>{{ Str::limit($item->keterangan_keluhan, 40) }}</div>
-                                @elseif($item->kategori === 'ekstrakurikuler')
-                                    <div class="fw-bold text-primary">{{ $item->nama_ekskul }} <span class="badge bg-secondary">{{ $item->jumlah_anggota }} org</span></div>
-                                    <div class="small text-muted">{{ $item->lokasi_kegiatan ?? '-' }}</div>
-                                @else
-                                    <div class="fw-bold text-success">{{ $item->rute ?? 'Olahraga' }}</div>
-                                    <div class="small text-muted">{{ $item->pengikut ? Str::limit($item->pengikut, 30) : '-' }}</div>
-                                @endif
-                            </td>
-                            <td>
-                                <div class="fw-bold text-dark">{{ $item->waktu_berangkat ? $item->waktu_berangkat->format('d/m/Y H:i') : '-' }}</div>
-                                @if($item->isBelumKembali())
-                                <div class="small text-danger fw-semibold">{{ $item->getDurasiFormatted() }} lalu</div>
-                                @endif
-                            </td>
-                            <td>
-                                @if($item->isSudahKembali())
-                                    <div class="fw-bold text-success">{{ $item->waktu_kembali ? $item->waktu_kembali->format('d/m/Y H:i') : '-' }}</div>
-                                    <div class="small text-muted">Durasi: {{ $item->getDurasiFormatted() }}</div>
-                                @else
-                                    <span class="text-muted small fst-italic">Masih di luar</span>
-                                @endif
-                            </td>
-                            <td>
-                                {!! $item->getStatusBadgeHtml() !!}
-                            </td>
-                            <td class="text-center">
-                                <div class="btn-group btn-group-sm">
-                                    <a href="{{ route('log-pergerakan.show', $item->id) }}" class="btn btn-outline-primary" title="Lihat Detail">
-                                        <i class="fas fa-eye"></i>
-                                    </a>
-                                    @if($item->isBelumKembali())
-                                    <form action="{{ route('log-pergerakan.kembali', $item->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Tandai {{ $item->nama }} SUDAH KEMBALI?')">
-                                        @csrf
-                                        @method('PATCH')
-                                        <button type="submit" class="btn btn-success" title="Tandai Kembali">
-                                            <i class="fas fa-check"></i>
-                                        </button>
-                                    </form>
-                                    @endif
-                                    @if(auth()->user()->canManageSystem() || auth()->user()->isPengasuh())
-                                    <form action="{{ route('log-pergerakan.destroy', $item->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Hapus data log ini?')">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-outline-danger" title="Hapus">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                    </form>
-                                    @endif
-                                </div>
-                            </td>
-                        </tr>
-                        @empty
-                        <tr>
-                            <td colspan="8" class="text-center py-5 text-muted">
-                                <i class="fas fa-inbox mb-2 d-block" style="font-size:38px; color:#e2e5ee;"></i>
-                                Belum ada catatan log pergerakan taruna yang sesuai.
-                            </td>
-                        </tr>
-                        @endforelse
-                    </tbody>
-                </table>
-            </div>
+                {{-- Page Header Glass Banner --}}
+                <div class="rounded-2xl bg-gradient-to-r from-blue-900/90 via-indigo-900/85 to-slate-900/90 backdrop-blur-xl border border-white/30 p-6 text-white mb-6 shadow-xl relative overflow-hidden flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                    <div class="relative z-10">
+                        <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/15 backdrop-blur-md border border-white/20 text-[10px] font-bold tracking-widest uppercase text-sky-200 mb-2">
+                            <span>✦</span>
+                            <span>Sistem Pos Jaga &amp; Pergerakan</span>
+                        </div>
+                        <h1 class="text-xl sm:text-2xl font-extrabold tracking-tight text-white mb-1 flex items-center gap-2">
+                            <i class="fa-solid fa-person-walking text-sky-400"></i>
+                            <span>Log Pergerakan Taruna</span>
+                        </h1>
+                        <p class="text-xs text-sky-100/80">Manajemen &amp; Rekapitulasi Data Keberangkatan, Perizinan, Ekstrakurikuler, dan Olahraga</p>
+                    </div>
 
-            <div class="mt-4">
-                {{ $logs->links() }}
-            </div>
-        </div>
+                    <div class="relative z-10 flex flex-wrap items-center gap-2">
+                        <a href="{{ route('log-pergerakan.tablet') }}" class="px-4 py-2 rounded-xl bg-white hover:bg-slate-50 text-slate-900 font-extrabold text-xs shadow-md transition flex items-center gap-2 no-underline">
+                            <i class="fa-solid fa-tablet-screen-button text-indigo-600"></i>
+                            <span>Mode Tablet Pos Jaga</span>
+                        </a>
+                        <a href="{{ route('log-pergerakan.tv') }}" target="_blank" class="px-4 py-2 rounded-xl bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-400/40 text-emerald-300 font-bold text-xs backdrop-blur-md transition flex items-center gap-2 no-underline">
+                            <i class="fa-solid fa-tv"></i>
+                            <span>TV Monitoring</span>
+                        </a>
+                    </div>
 
-    </main>
-</div>
+                    {{-- Ambient glow --}}
+                    <div class="absolute -right-10 -top-10 w-40 h-40 bg-sky-500/20 rounded-full blur-3xl pointer-events-none"></div>
+                </div>
+
+                {{-- Top Stats Row --}}
+                <div class="grid grid-cols-2 lg:grid-cols-4 gap-3.5 mb-5">
+                    
+                    <div class="rounded-2xl bg-rose-50/70 backdrop-blur-xl border border-rose-200/80 p-4 shadow-md">
+                        <div class="text-[10px] font-bold uppercase tracking-wider text-rose-800 flex items-center gap-1.5 mb-1">
+                            <span class="w-2 h-2 rounded-full bg-rose-500 animate-ping"></span>
+                            <span>Belum Kembali (Di Luar)</span>
+                        </div>
+                        <div class="text-2xl sm:text-3xl font-black text-rose-700 font-mono tracking-tight">{{ $stats['belum_kembali'] }}</div>
+                        <div class="text-[10px] text-rose-900/70 font-semibold mt-1">Taruna aktif di luar kampus</div>
+                    </div>
+
+                    <div class="rounded-2xl bg-emerald-50/70 backdrop-blur-xl border border-emerald-200/80 p-4 shadow-md">
+                        <div class="text-[10px] font-bold uppercase tracking-wider text-emerald-800 mb-1">
+                            <span>🟢 Sudah Kembali Hari Ini</span>
+                        </div>
+                        <div class="text-2xl sm:text-3xl font-black text-emerald-700 font-mono tracking-tight">{{ $stats['sudah_kembali'] }}</div>
+                        <div class="text-[10px] text-emerald-900/70 font-semibold mt-1">Check-in sukses di pos jaga</div>
+                    </div>
+
+                    <div class="rounded-2xl bg-indigo-50/70 backdrop-blur-xl border border-indigo-200/80 p-4 shadow-md">
+                        <div class="text-[10px] font-bold uppercase tracking-wider text-indigo-800 mb-1">
+                            <span>Total Log Hari Ini</span>
+                        </div>
+                        <div class="text-2xl sm:text-3xl font-black text-indigo-700 font-mono tracking-tight">{{ $stats['total_today'] }}</div>
+                        <div class="text-[10px] text-indigo-900/70 font-semibold mt-1">Aktivitas gerbang tercatat</div>
+                    </div>
+
+                    <div class="rounded-2xl bg-sky-50/70 backdrop-blur-xl border border-sky-200/80 p-4 shadow-md">
+                        <div class="text-[10px] font-bold uppercase tracking-wider text-sky-800 mb-1">
+                            <span>Ekskul &amp; Olahraga</span>
+                        </div>
+                        <div class="text-2xl sm:text-3xl font-black text-sky-700 font-mono tracking-tight">{{ $stats['ekskul'] + $stats['olahraga'] }}</div>
+                        <div class="text-[10px] text-sky-900/70 font-semibold mt-1">Kegiatan luar asrama</div>
+                    </div>
+
+                </div>
+
+                {{-- Filter Bar --}}
+                <div class="rounded-2xl bg-white/45 backdrop-blur-xl border border-white/60 p-4 mb-5 shadow-sm">
+                    <form action="{{ route('log-pergerakan.index') }}" method="GET" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-2.5 items-center">
+                        <div class="lg:col-span-4">
+                            <input type="text" class="w-full px-3.5 py-2 rounded-xl bg-white/70 focus:bg-white border border-white/80 text-xs font-medium text-slate-800 placeholder-slate-400 outline-none" name="search" value="{{ request('search') }}" placeholder="Cari nama, NPM, rute...">
+                        </div>
+                        <div class="lg:col-span-2">
+                            <select class="w-full px-3.5 py-2 rounded-xl bg-white/70 focus:bg-white border border-white/80 text-xs font-semibold text-slate-700 outline-none" name="kategori">
+                                <option value="">Semua Kategori</option>
+                                <option value="perizinan" {{ request('kategori')==='perizinan'?'selected':'' }}>Perizinan</option>
+                                <option value="ekstrakurikuler" {{ request('kategori')==='ekstrakurikuler'?'selected':'' }}>Ekstrakurikuler</option>
+                                <option value="olahraga" {{ request('kategori')==='olahraga'?'selected':'' }}>Olahraga</option>
+                            </select>
+                        </div>
+                        <div class="lg:col-span-2">
+                            <select class="w-full px-3.5 py-2 rounded-xl bg-white/70 focus:bg-white border border-white/80 text-xs font-semibold text-slate-700 outline-none" name="status">
+                                <option value="">Semua Status</option>
+                                <option value="berangkat" {{ request('status')==='berangkat'?'selected':'' }}>🔴 Belum Kembali</option>
+                                <option value="kembali" {{ request('status')==='kembali'?'selected':'' }}>🟢 Sudah Kembali</option>
+                            </select>
+                        </div>
+                        <div class="lg:col-span-2">
+                            <input type="date" class="w-full px-3 py-2 rounded-xl bg-white/70 focus:bg-white border border-white/80 text-xs font-medium text-slate-800 outline-none" name="tanggal" value="{{ request('tanggal') }}">
+                        </div>
+                        <div class="lg:col-span-2 flex gap-1.5">
+                            <button type="submit" class="flex-1 py-2 px-3 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs shadow-md transition flex items-center justify-center gap-1.5">
+                                <i class="fa-solid fa-filter text-[10px]"></i>
+                                <span>Filter</span>
+                            </button>
+                            @if(request()->hasAny(['search', 'kategori', 'status', 'tanggal']))
+                            <a href="{{ route('log-pergerakan.index') }}" class="py-2 px-3 rounded-xl bg-white/80 hover:bg-white text-slate-600 font-bold text-xs border border-white shadow-sm flex items-center justify-center transition">
+                                <i class="fa-solid fa-xmark"></i>
+                            </a>
+                            @endif
+                        </div>
+                    </form>
+                </div>
+
+                {{-- Main Data Table --}}
+                <div class="rounded-2xl bg-white/45 backdrop-blur-xl border border-white/60 p-4 sm:p-5 shadow-lg">
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse text-xs">
+                            <thead>
+                                <tr class="bg-white/60 backdrop-blur-md text-[10px] font-bold uppercase tracking-wider text-slate-700 border-b border-white/40">
+                                    <th class="py-3 px-3">#</th>
+                                    <th class="py-3 px-3">Taruna / Koordinator</th>
+                                    <th class="py-3 px-3">Kategori</th>
+                                    <th class="py-3 px-3">Detail Kegiatan</th>
+                                    <th class="py-3 px-3">Waktu Berangkat</th>
+                                    <th class="py-3 px-3">Waktu Kembali</th>
+                                    <th class="py-3 px-3">Status</th>
+                                    <th class="py-3 px-3 text-center">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-white/30">
+                                @forelse($logs as $index => $item)
+                                <tr class="hover:bg-white/60 transition">
+                                    <td class="py-3 px-3 text-slate-400 font-bold">{{ $logs->firstItem() + $index }}</td>
+                                    <td class="py-3 px-3">
+                                        <div class="font-bold text-slate-900">{{ $item->nama }}</div>
+                                        <div class="text-[10px] text-slate-500 font-mono">{{ $item->npm ?? '-' }} &bull; {{ $item->prodi ?? 'PPI Curug' }}</div>
+                                    </td>
+                                    <td class="py-3 px-3">
+                                        {!! $item->getKategoriBadgeHtml() !!}
+                                        <div class="text-[10px] text-slate-500 font-mono mt-0.5">{{ $item->subkategori }}</div>
+                                    </td>
+                                    <td class="py-3 px-3">
+                                        @if($item->kategori === 'perizinan')
+                                            <div class="text-slate-800 font-medium">{{ Str::limit($item->keterangan_keluhan, 35) }}</div>
+                                        @elseif($item->kategori === 'ekstrakurikuler')
+                                            <div class="font-bold text-indigo-700">{{ $item->nama_ekskul }} <span class="px-1.5 py-0.5 rounded bg-slate-200 text-slate-700 text-[9px] font-bold">{{ $item->jumlah_anggota }} org</span></div>
+                                            <div class="text-[10px] text-slate-500">{{ $item->lokasi_kegiatan ?? '-' }}</div>
+                                        @else
+                                            <div class="font-bold text-emerald-700">{{ $item->rute ?? 'Olahraga' }}</div>
+                                            <div class="text-[10px] text-slate-500">{{ $item->pengikut ? Str::limit($item->pengikut, 25) : '-' }}</div>
+                                        @endif
+                                    </td>
+                                    <td class="py-3 px-3">
+                                        <div class="font-bold text-slate-900 font-mono">{{ $item->waktu_berangkat ? $item->waktu_berangkat->format('d/m/Y H:i') : '-' }}</div>
+                                        @if($item->isBelumKembali())
+                                            <div class="text-[10px] text-rose-600 font-bold mt-0.5">{{ $item->getDurasiFormatted() }} lalu</div>
+                                        @endif
+                                    </td>
+                                    <td class="py-3 px-3">
+                                        @if($item->isSudahKembali())
+                                            <div class="font-bold text-emerald-700 font-mono">{{ $item->waktu_kembali ? $item->waktu_kembali->format('d/m/Y H:i') : '-' }}</div>
+                                            <div class="text-[10px] text-slate-500">Durasi: {{ $item->getDurasiFormatted() }}</div>
+                                        @else
+                                            <span class="text-[10px] text-slate-400 italic font-medium">Masih di luar</span>
+                                        @endif
+                                    </td>
+                                    <td class="py-3 px-3">
+                                        {!! $item->getStatusBadgeHtml() !!}
+                                    </td>
+                                    <td class="py-3 px-3 text-center">
+                                        <div class="inline-flex items-center gap-1">
+                                            <a href="{{ route('log-pergerakan.show', $item->id) }}" class="p-1.5 rounded-lg bg-white/80 hover:bg-white text-indigo-700 border border-white/90 shadow-sm transition" title="Lihat Detail">
+                                                <i class="fa-solid fa-eye text-xs"></i>
+                                            </a>
+                                            @if($item->isBelumKembali())
+                                            <form action="{{ route('log-pergerakan.kembali', $item->id) }}" method="POST" class="inline" onsubmit="return confirm('Tandai {{ $item->nama }} SUDAH KEMBALI?')">
+                                                @csrf
+                                                @method('PATCH')
+                                                <button type="submit" class="p-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm transition" title="Tandai Kembali">
+                                                    <i class="fa-solid fa-check text-xs"></i>
+                                                </button>
+                                            </form>
+                                            @endif
+                                            @if(auth()->user()->canManageSystem() || auth()->user()->isPengasuh())
+                                            <form action="{{ route('log-pergerakan.destroy', $item->id) }}" method="POST" class="inline" onsubmit="return confirm('Hapus data log ini?')">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="p-1.5 rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-600 border border-rose-200 shadow-sm transition" title="Hapus">
+                                                    <i class="fa-solid fa-trash text-xs"></i>
+                                                </button>
+                                            </form>
+                                            @endif
+                                        </div>
+                                    </td>
+                                </tr>
+                                @empty
+                                <tr>
+                                    <td colspan="8" class="text-center py-10 text-slate-400">
+                                        <i class="fa-solid fa-inbox text-3xl mb-2 block"></i>
+                                        <span class="font-semibold text-xs">Belum ada catatan log pergerakan taruna yang sesuai.</span>
+                                    </td>
+                                </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="mt-4">
+                        {{ $logs->links() }}
+                    </div>
+                </div>
+
+    </div>
+</main>
+
 </x-app-layout>

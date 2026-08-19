@@ -1,7 +1,7 @@
 <x-app-layout>
 <style>
 * { box-sizing: border-box; }
-body { font-family: 'Inter', sans-serif; background: #f0f2f5; }
+body { font-family: 'Inter', sans-serif; background: transparent; }
 
 .app-layout {
     display: flex;
@@ -159,13 +159,11 @@ tbody tr:hover { background:#fafbff; }
 }
 </style>
 
-<div class="app-layout">
+{{-- Top Floating Island Capsule Navbar --}}
+<x-island-navbar />
 
-    {{-- ── SIDEBAR ── --}}
-    <x-sidebar active="activity-log" />
-
-    <!-- Main Content -->
-    <div class="main-content">
+<main class="max-w-7xl mx-auto px-4 sm:px-6 pb-12 pt-2">
+    <div class="spatial-workspace-window rounded-3xl bg-white/30 backdrop-blur-2xl border border-white/50 shadow-2xl p-4 sm:p-7 relative overflow-hidden">
 
         {{-- Flash message --}}
         @if(session('success'))
@@ -423,8 +421,8 @@ tbody tr:hover { background:#fafbff; }
             @endif
         </div>
 
-    </div>{{-- end main-content --}}
-</div>{{-- end app-layout --}}
+    </div>
+</main>
 
 <script>
 function toggleDetail(id, btn) {

@@ -1,306 +1,240 @@
 <x-app-layout>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-<style>
-* { box-sizing: border-box; }
-body { font-family: 'Inter', sans-serif; background: #f0f2f5; }
 
-.app-layout {
-    display: flex;
-    min-height: 100vh;
-}
+{{-- Top Floating Island Capsule Navbar --}}
+<x-island-navbar />
 
-/* ===== MAIN ===== */
-.main-content { flex: 1; padding: 28px 28px 28px 24px; min-width: 0; }
+<main class="max-w-7xl mx-auto px-4 sm:px-6 pb-12 pt-2">
+    <div class="spatial-workspace-window rounded-3xl bg-white/30 backdrop-blur-2xl border border-white/50 shadow-2xl p-4 sm:p-7 relative overflow-hidden">
+        
 
-.page-header {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    border-radius: 18px; padding: 28px 32px; color: white;
-    margin-bottom: 24px; position: relative; overflow: hidden;
-    display: flex; align-items: center; justify-content: space-between;
-}
-.page-header::before { content: ''; position: absolute; right: -50px; top: -50px; width: 180px; height: 180px; background: rgba(255,255,255,.08); border-radius: 50%; }
-.page-header::after  { content: ''; position: absolute; right: 80px; bottom: -60px; width: 140px; height: 140px; background: rgba(255,255,255,.05); border-radius: 50%; }
-.page-header-text { position: relative; z-index: 1; }
-.page-header h1 { margin: 0 0 4px 0; font-size: 22px; font-weight: 800; }
-.page-header p  { margin: 0; opacity: .85; font-size: 13px; }
-.btn-add { position: relative; z-index: 1; background: white; color: #667eea; padding: 11px 22px; border-radius: 25px; text-decoration: none; font-size: 13px; font-weight: 800; display: flex; align-items: center; gap: 7px; white-space: nowrap; box-shadow: 0 4px 15px rgba(0,0,0,.15); transition: transform .15s; }
-.btn-add:hover { transform: translateY(-2px); color: #667eea; }
+                
+                {{-- Page Header Glass Banner --}}
+                <div class="rounded-2xl bg-gradient-to-r from-blue-900/90 via-indigo-900/85 to-slate-900/90 backdrop-blur-xl border border-white/30 p-6 text-white mb-6 shadow-xl relative overflow-hidden flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                    <div class="relative z-10">
+                        <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/15 backdrop-blur-md border border-white/20 text-[10px] font-bold tracking-widest uppercase text-sky-200 mb-2">
+                            <span>✦</span>
+                            <span>Administrasi &amp; Perizinan</span>
+                        </div>
+                        <h1 class="text-xl sm:text-2xl font-extrabold tracking-tight text-white mb-1 flex items-center gap-2">
+                            <i class="fa-solid fa-envelope-open-text text-sky-400"></i>
+                            <span>Administrasi Surat Pengasuhan</span>
+                        </h1>
+                        <p class="text-xs text-sky-100/80">Kelola dan pantau seluruh permohonan surat izin, surat keterangan, dan disposisi pengasuhan</p>
+                    </div>
 
-.alert-success { background: linear-gradient(135deg,#43e97b,#38f9d7); color: white; padding: 13px 18px; border-radius: 12px; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; font-weight: 600; font-size: 13px; }
+                    <div class="relative z-10">
+                        <a href="{{ route('surat.create') }}" class="px-4 py-2 rounded-xl bg-white hover:bg-slate-50 text-slate-900 font-extrabold text-xs shadow-md transition flex items-center gap-2 no-underline">
+                            <i class="fa-solid fa-plus text-indigo-600"></i>
+                            <span>Tambah Surat Baru</span>
+                        </a>
+                    </div>
 
-/* Stats */
-.stats-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin-bottom: 20px; }
-.stat-card  { background: white; border-radius: 14px; padding: 16px; box-shadow: 0 2px 10px rgba(0,0,0,.05); text-align: center; }
-.stat-icon  { width: 42px; height: 42px; border-radius: 12px; display: flex; align-items: center; justify-content: center; margin: 0 auto 10px; font-size: 17px; color: white; }
-.stat-count { font-size: 24px; font-weight: 800; color: #333; line-height: 1; }
-.stat-label { font-size: 11px; color: #999; font-weight: 600; margin-top: 4px; }
-
-/* Filter bar */
-.filter-bar { background: white; border-radius: 14px; padding: 16px 20px; box-shadow: 0 2px 10px rgba(0,0,0,.05); margin-bottom: 18px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
-.search-wrap  { flex: 1; min-width: 200px; position: relative; }
-.search-wrap i { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: #bbb; font-size: 12px; }
-.search-input  { width: 100%; padding: 9px 12px 9px 32px; border: 1.5px solid #edf0f7; border-radius: 10px; font-size: 13px; font-family: 'Inter', sans-serif; outline: none; color: #444; background: #fafbff; transition: border .15s; }
-.search-input:focus { border-color: #667eea; }
-.filter-select { padding: 9px 14px; border: 1.5px solid #edf0f7; border-radius: 10px; font-size: 13px; font-family: 'Inter', sans-serif; color: #444; outline: none; background: #fafbff; cursor: pointer; }
-.btn-filter { background: linear-gradient(135deg,#667eea,#764ba2); color: white; border: none; padding: 9px 20px; border-radius: 10px; font-size: 13px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 6px; }
-.btn-reset  { color: #999; font-size: 13px; text-decoration: none; font-weight: 600; display: flex; align-items: center; gap: 5px; }
-
-/* Table */
-.card { background: white; border-radius: 16px; overflow: hidden; box-shadow: 0 2px 16px rgba(0,0,0,.06); }
-.empty-state   { text-align: center; padding: 60px 20px; }
-.empty-state i { font-size: 54px; color: #e2e5ee; display: block; margin-bottom: 14px; }
-.empty-state h4 { color: #aab; margin: 0 0 6px; font-size: 15px; }
-.empty-state p  { color: #ccc; margin: 0 0 18px; font-size: 13px; }
-.btn-primary-pill { background: linear-gradient(135deg,#667eea,#764ba2); color: white; padding: 10px 26px; border-radius: 25px; text-decoration: none; font-size: 13px; font-weight: 700; display: inline-flex; align-items: center; gap: 6px; }
-
-table { width: 100%; border-collapse: collapse; }
-thead tr { background: linear-gradient(135deg,#667eea,#764ba2); }
-th { padding: 13px 14px; text-align: left; color: white; font-size: 10px; font-weight: 700; letter-spacing: .06em; }
-td { padding: 12px 14px; font-size: 13px; color: #444; border-top: 1px solid #f0f2f7; vertical-align: middle; }
-tbody tr { transition: background .1s; }
-tbody tr:hover { background: #f8f9ff; }
-
-.jenis-badge  { background: #eef0ff; color: #667eea; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; white-space: nowrap; }
-.status-badge { display: inline-flex; align-items: center; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; white-space: nowrap; }
-.btn-view   { background: #e0f7ff; color: #0bc5ea; border: none; padding: 5px 10px; border-radius: 8px; font-size: 11px; font-weight: 700; text-decoration: none; display: inline-flex; align-items: center; gap: 4px; cursor: pointer; }
-.btn-edit   { background: #eef0ff; color: #667eea; border: none; padding: 5px 10px; border-radius: 8px; font-size: 11px; font-weight: 700; text-decoration: none; display: inline-flex; align-items: center; gap: 4px; cursor: pointer; }
-.btn-delete { background: #fff0f0; color: #e53e3e; border: none; padding: 5px 10px; border-radius: 8px; font-size: 11px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; }
-.btn-view:hover   { background: #c0efff; }
-.btn-edit:hover   { background: #dde2ff; }
-.btn-delete:hover { background: #ffe0e0; }
-.btn-approve-ico { background: #e6fff5; color: #38a169; border: none; padding: 6px 9px; border-radius: 8px; font-size: 11px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; transition: background .1s; }
-.btn-approve-ico:hover { background: #c6f6d5; }
-.btn-reject-ico { background: #fff5f5; color: #e53e3e; border: none; padding: 6px 9px; border-radius: 8px; font-size: 11px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; transition: background .1s; }
-.btn-reject-ico:hover { background: #fed7d7; }
-
-/* Modal */
-.modal-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,.45); z-index:9999; align-items:center; justify-content:center; }
-.modal-overlay.open { display:flex; }
-.modal-box { background:white; border-radius:20px; padding:30px 28px; max-width:390px; width:90%; box-shadow:0 20px 60px rgba(0,0,0,.2); text-align:center; animation:modalIn .2s ease; }
-@keyframes modalIn { from{transform:scale(.93);opacity:0} to{transform:scale(1);opacity:1} }
-.modal-icon-wrap { width:56px; height:56px; border-radius:50%; background:#fff0f0; display:flex; align-items:center; justify-content:center; margin:0 auto 14px; }
-.modal-icon-wrap i { font-size:24px; color:#e53e3e; }
-.modal-box h3  { margin:0 0 6px; font-size:17px; font-weight:800; color:#333; }
-.modal-label   { font-weight:600; color:#333; margin:0 0 6px; font-size:13px; }
-.modal-sub     { color:#aab; font-size:12px; margin:0 0 22px; }
-.modal-actions { display:flex; gap:10px; justify-content:center; }
-.modal-cancel  { background:#f4f5f9; color:#666; border:none; padding:10px 24px; border-radius:25px; font-size:13px; font-weight:700; cursor:pointer; }
-.modal-cancel:hover  { background:#e8e9f0; }
-.modal-confirm { background:linear-gradient(135deg,#fc5c7d,#e53e3e); color:white; border:none; padding:10px 24px; border-radius:25px; font-size:13px; font-weight:700; cursor:pointer; }
-.modal-confirm:hover { opacity:.9; }
-
-/* Pagination */
-.pagination-bar   { padding: 14px 18px; border-top: 1px solid #f0f2f7; display: flex; align-items: center; justify-content: space-between; }
-.pagination-info  { font-size: 12px; color: #aab; }
-.pagination-links { display: flex; gap: 6px; }
-.page-btn           { padding: 6px 14px; border-radius: 8px; font-size: 12px; font-weight: 700; text-decoration: none; }
-.page-btn.active-pg { background: linear-gradient(135deg,#667eea,#764ba2); color: white; }
-.page-btn.disabled  { background: #f4f5f9; color: #ccc; pointer-events: none; }
-.page-btn.normal    { background: #eef0ff; color: #667eea; }
-</style>
-
-<div class="app-layout">
-
-    {{-- ── SIDEBAR ── --}}
-    <x-sidebar active="surat" />
-
-    <!-- MAIN -->
-    <div class="main-content">
-
-        <!-- Header -->
-        <div class="page-header">
-            <div class="page-header-text">
-                <h1><i class="fas fa-envelope-open-text" style="margin-right:10px;"></i>Administrasi Surat</h1>
-                <p>Kelola dan pantau semua surat persuratan pengasuhan</p>
-            </div>
-            <a href="{{ route('surat.create') }}" class="btn-add">
-                <i class="fas fa-plus"></i> Tambah Surat
-            </a>
-        </div>
-
-        @if(session('success'))
-        <div class="alert-success">
-            <i class="fas fa-check-circle" style="font-size:17px;"></i> {{ session('success') }}
-        </div>
-        @endif
-
-        <!-- Stats -->
-        <div class="stats-grid">
-            <div class="stat-card">
-                <div class="stat-icon" style="background:linear-gradient(135deg,#667eea,#764ba2);"><i class="fas fa-envelope"></i></div>
-                <div class="stat-count">{{ $stats['total'] }}</div>
-                <div class="stat-label">Total Surat</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-icon" style="background:linear-gradient(135deg,#f6ad55,#e07020);"><i class="fas fa-spinner"></i></div>
-                <div class="stat-count">{{ $stats['diproses'] }}</div>
-                <div class="stat-label">Diproses</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-icon" style="background:linear-gradient(135deg,#48bb78,#38a169);"><i class="fas fa-check-circle"></i></div>
-                <div class="stat-count">{{ $stats['disetujui'] }}</div>
-                <div class="stat-label">Disetujui</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-icon" style="background:linear-gradient(135deg,#fc8181,#e53e3e);"><i class="fas fa-times-circle"></i></div>
-                <div class="stat-count">{{ $stats['ditolak'] }}</div>
-                <div class="stat-label">Ditolak</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-icon" style="background:linear-gradient(135deg,#76e4f7,#0bc5ea);"><i class="fas fa-flag-checkered"></i></div>
-                <div class="stat-count">{{ $stats['selesai'] }}</div>
-                <div class="stat-label">Selesai</div>
-            </div>
-        </div>
-
-        <!-- Filter -->
-        <div class="filter-bar">
-            <form method="GET" action="{{ route('surat.index') }}" style="display:contents;">
-                <div class="search-wrap">
-                    <i class="fas fa-search"></i>
-                    <input type="text" name="search" value="{{ request('search') }}"
-                           placeholder="Cari perihal, pengirim, penerima..." class="search-input">
+                    <div class="absolute -right-10 -top-10 w-40 h-40 bg-indigo-500/20 rounded-full blur-3xl pointer-events-none"></div>
                 </div>
-                <select name="jenis" class="filter-select">
-                    <option value="">Semua Jenis</option>
-                    @foreach(\App\Models\Surat::jenisSuratList() as $j)
-                        <option value="{{ $j }}" {{ request('jenis') === $j ? 'selected' : '' }}>{{ $j }}</option>
-                    @endforeach
-                </select>
-                <select name="status" class="filter-select">
-                    <option value="">Semua Status</option>
-                    @foreach(\App\Models\Surat::statusList() as $s)
-                        <option value="{{ $s }}" {{ request('status') === $s ? 'selected' : '' }}>{{ $s }}</option>
-                    @endforeach
-                </select>
-                <button type="submit" class="btn-filter"><i class="fas fa-filter"></i> Filter</button>
-                @if(request()->hasAny(['search','jenis','status']))
-                <a href="{{ route('surat.index') }}" class="btn-reset"><i class="fas fa-times"></i> Reset</a>
+
+                {{-- Alerts --}}
+                @if(session('success'))
+                <div class="rounded-2xl bg-emerald-100/90 border border-emerald-300 p-4 text-emerald-800 text-xs font-bold mb-5 flex items-center gap-2 shadow-sm backdrop-blur-md">
+                    <i class="fa-solid fa-circle-check text-emerald-600 text-base"></i>
+                    <span>{{ session('success') }}</span>
+                </div>
                 @endif
-            </form>
-        </div>
 
-        <!-- Tabel / Empty -->
-        @if($surat->isEmpty())
-        <div class="card">
-            <div class="empty-state">
-                <i class="fas fa-inbox"></i>
-                <h4>Belum ada surat</h4>
-                <p>Klik "Tambah Surat" untuk menambahkan data surat baru.</p>
-                <a href="{{ route('surat.create') }}" class="btn-primary-pill">
-                    <i class="fas fa-plus"></i> Tambah Surat Pertama
-                </a>
-            </div>
-        </div>
-        @else
-        <div class="card">
-            <table>
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>NO. SURAT</th>
-                        <th>JENIS</th>
-                        <th>PERIHAL</th>
-                        <th>PENGIRIM / PENERIMA</th>
-                        <th>TANGGAL</th>
-                        <th style="text-align:center;">STATUS</th>
-                        <th style="text-align:center;">AKSI</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach($surat as $i => $s)
-                    <tr>
-                        <td style="color:#bbb; font-weight:600; width:36px;">{{ ($surat->currentPage()-1)*$surat->perPage()+$i+1 }}</td>
-                        <td style="color:#667eea; font-weight:700; font-size:12px; white-space:nowrap;">{{ $s->nomor_surat ?: '—' }}</td>
-                        <td><span class="jenis-badge">{{ $s->jenis_surat }}</span></td>
-                        <td style="max-width:200px;">
-                            <a href="{{ route('surat.show', $s->id) }}" style="text-decoration:none;">
-                                <div style="font-weight:700; color:#333; font-size:13px;">{{ Str::limit($s->perihal, 45) }}</div>
+                {{-- 5 KPI Stat Cards Grid --}}
+                <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3.5 mb-5">
+                    <div class="rounded-2xl bg-white/50 backdrop-blur-xl border border-white/60 p-4 shadow-md text-center">
+                        <div class="w-8 h-8 rounded-xl bg-indigo-100 text-indigo-700 flex items-center justify-center mx-auto mb-2 text-xs font-bold shadow-sm">
+                            <i class="fa-solid fa-envelope"></i>
+                        </div>
+                        <div class="text-2xl font-black text-slate-900 font-mono">{{ $stats['total'] }}</div>
+                        <div class="text-[10px] font-bold text-slate-500 uppercase tracking-wider mt-0.5">Total Surat</div>
+                    </div>
+
+                    <div class="rounded-2xl bg-white/50 backdrop-blur-xl border border-white/60 p-4 shadow-md text-center">
+                        <div class="w-8 h-8 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center mx-auto mb-2 text-xs font-bold shadow-sm">
+                            <i class="fa-solid fa-spinner"></i>
+                        </div>
+                        <div class="text-2xl font-black text-amber-600 font-mono">{{ $stats['diproses'] }}</div>
+                        <div class="text-[10px] font-bold text-slate-500 uppercase tracking-wider mt-0.5">Diproses</div>
+                    </div>
+
+                    <div class="rounded-2xl bg-white/50 backdrop-blur-xl border border-white/60 p-4 shadow-md text-center">
+                        <div class="w-8 h-8 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center mx-auto mb-2 text-xs font-bold shadow-sm">
+                            <i class="fa-solid fa-circle-check"></i>
+                        </div>
+                        <div class="text-2xl font-black text-emerald-600 font-mono">{{ $stats['disetujui'] }}</div>
+                        <div class="text-[10px] font-bold text-slate-500 uppercase tracking-wider mt-0.5">Disetujui</div>
+                    </div>
+
+                    <div class="rounded-2xl bg-white/50 backdrop-blur-xl border border-white/60 p-4 shadow-md text-center">
+                        <div class="w-8 h-8 rounded-xl bg-rose-100 text-rose-700 flex items-center justify-center mx-auto mb-2 text-xs font-bold shadow-sm">
+                            <i class="fa-solid fa-circle-xmark"></i>
+                        </div>
+                        <div class="text-2xl font-black text-rose-600 font-mono">{{ $stats['ditolak'] }}</div>
+                        <div class="text-[10px] font-bold text-slate-500 uppercase tracking-wider mt-0.5">Ditolak</div>
+                    </div>
+
+                    <div class="rounded-2xl bg-white/50 backdrop-blur-xl border border-white/60 p-4 shadow-md text-center">
+                        <div class="w-8 h-8 rounded-xl bg-sky-100 text-sky-700 flex items-center justify-center mx-auto mb-2 text-xs font-bold shadow-sm">
+                            <i class="fa-solid fa-flag-checkered"></i>
+                        </div>
+                        <div class="text-2xl font-black text-sky-600 font-mono">{{ $stats['selesai'] }}</div>
+                        <div class="text-[10px] font-bold text-slate-500 uppercase tracking-wider mt-0.5">Selesai</div>
+                    </div>
+                </div>
+
+                {{-- Filter Bar --}}
+                <div class="rounded-2xl bg-white/45 backdrop-blur-xl border border-white/60 p-4 mb-5 shadow-sm">
+                    <form method="GET" action="{{ route('surat.index') }}" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-2.5 items-center">
+                        <div class="lg:col-span-5">
+                            <input type="text" name="search" value="{{ request('search') }}"
+                                   placeholder="Cari perihal, pengirim, nomor surat..." 
+                                   class="w-full px-3.5 py-2 rounded-xl bg-white/70 focus:bg-white border border-white/80 text-xs font-medium text-slate-800 placeholder-slate-400 outline-none">
+                        </div>
+                        <div class="lg:col-span-3">
+                            <select name="jenis" class="w-full px-3.5 py-2 rounded-xl bg-white/70 focus:bg-white border border-white/80 text-xs font-semibold text-slate-700 outline-none">
+                                <option value="">Semua Jenis Surat</option>
+                                @foreach(\App\Models\Surat::jenisSuratList() as $j)
+                                    <option value="{{ $j }}" {{ request('jenis') === $j ? 'selected' : '' }}>{{ $j }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="lg:col-span-2">
+                            <select name="status" class="w-full px-3.5 py-2 rounded-xl bg-white/70 focus:bg-white border border-white/80 text-xs font-semibold text-slate-700 outline-none">
+                                <option value="">Semua Status</option>
+                                @foreach(\App\Models\Surat::statusList() as $s)
+                                    <option value="{{ $s }}" {{ request('status') === $s ? 'selected' : '' }}>{{ $s }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="lg:col-span-2 flex gap-1.5">
+                            <button type="submit" class="flex-1 py-2 px-3 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold text-xs shadow-md transition flex items-center justify-center gap-1.5">
+                                <i class="fa-solid fa-filter text-[10px]"></i>
+                                <span>Filter</span>
+                            </button>
+                            @if(request()->hasAny(['search','jenis','status']))
+                            <a href="{{ route('surat.index') }}" class="py-2 px-3 rounded-xl bg-white/80 hover:bg-white text-indigo-600 font-bold text-xs border border-white shadow-sm flex items-center justify-center transition">
+                                <i class="fa-solid fa-xmark"></i>
                             </a>
-                            @if($s->keterangan)
-                            <div style="font-size:11px; color:#aab; margin-top:2px;">{{ Str::limit($s->keterangan, 40) }}</div>
                             @endif
-                        </td>
-                        <td>
-                            <div style="font-size:12px; font-weight:600; color:#333;">{{ $s->pengirim }}</div>
-                            <div style="font-size:11px; color:#aab; display:flex; align-items:center; gap:4px;">
-                                <i class="fas fa-arrow-right" style="font-size:9px;"></i>{{ $s->penerima }}
-                            </div>
-                            @if($s->isDiajukanTaruna())
-                            <span style="background:#fff4e6; color:#c05621; border-radius:6px; padding:1px 7px; font-size:10px; font-weight:700; margin-top:3px; display:inline-flex; align-items:center; gap:4px;">
-                                <i class="fas fa-user-graduate"></i> Taruna
-                            </span>
-                            @endif
-                        </td>
-                        <td style="white-space:nowrap;">
-                            <div style="font-size:12px; color:#555;">
-                                <i class="fas fa-calendar" style="color:#667eea; margin-right:5px; font-size:10px;"></i>
-                                {{ \Carbon\Carbon::parse($s->tanggal_surat)->locale('id')->isoFormat('D MMM Y') }}
-                            </div>
-                            @if($s->tanggal_terima)
-                            <div style="font-size:11px; color:#aab; margin-top:2px;">
-                                Terima: {{ \Carbon\Carbon::parse($s->tanggal_terima)->locale('id')->isoFormat('D MMM Y') }}
-                            </div>
-                            @endif
-                        </td>
-                        <td style="text-align:center;">
-                            <span class="status-badge" style="background:{{ $s->status_bg_color }}; color:{{ $s->status_badge_color }};">
-                                {{ $s->status }}
-                            </span>
-                        </td>
-                        <td style="text-align:center;">
-                            <div style="display:flex; align-items:center; justify-content:center; gap:5px;">
-                                @if($s->status === 'Diproses')
-                                    <form method="POST" action="{{ route('surat.updateStatus', $s->id) }}" style="display:inline; margin:0;">
-                                        @csrf @method('PATCH')
-                                        <input type="hidden" name="status" value="Disetujui">
-                                        <button type="submit" class="btn-approve-ico" title="Setujui"
-                                            onclick="return confirm('Setujui surat: {{ addslashes($s->perihal) }}?')"
-                                        ><i class="fas fa-check"></i></button>
-                                    </form>
-                                    <form method="POST" action="{{ route('surat.updateStatus', $s->id) }}" style="display:inline; margin:0;">
-                                        @csrf @method('PATCH')
-                                        <input type="hidden" name="status" value="Ditolak">
-                                        <button type="submit" class="btn-reject-ico" title="Tolak"
-                                            onclick="return confirm('Tolak surat: {{ addslashes($s->perihal) }}?')"
-                                        ><i class="fas fa-times"></i></button>
-                                    </form>
-                                @endif
-                                <a href="{{ route('surat.show', $s->id) }}" class="btn-view" title="Detail"><i class="fas fa-eye"></i></a>
-                                <a href="{{ route('surat.edit', $s->id) }}" class="btn-edit" title="Edit"><i class="fas fa-edit"></i></a>
-                                <button type="button" class="btn-delete" title="Hapus"
-                                        onclick="showSuratDeleteModal('del-surat-{{ $s->id }}', '{{ addslashes(Str::limit($s->perihal, 50)) }}')">
-                                    <i class="fas fa-trash"></i>
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
-                    @endforeach
-                </tbody>
-            </table>
+                        </div>
+                    </form>
+                </div>
 
-            @if($surat->hasPages())
-            <div class="pagination-bar">
-                <div class="pagination-info">Menampilkan {{ $surat->firstItem() }}–{{ $surat->lastItem() }} dari {{ $surat->total() }} surat</div>
-                <div class="pagination-links">
-                    @if($surat->onFirstPage())
-                        <span class="page-btn disabled">‹ Sebelumnya</span>
-                    @else
-                        <a href="{{ $surat->previousPageUrl() }}" class="page-btn normal">‹ Sebelumnya</a>
-                    @endif
-                    @if($surat->hasMorePages())
-                        <a href="{{ $surat->nextPageUrl() }}" class="page-btn active-pg">Berikutnya ›</a>
-                    @else
-                        <span class="page-btn disabled">Berikutnya ›</span>
+                {{-- Table Card / Empty State --}}
+                @if($surat->isEmpty())
+                <div class="rounded-2xl bg-white/50 backdrop-blur-xl border border-white/60 p-10 text-center shadow-lg">
+                    <i class="fa-solid fa-inbox text-4xl text-slate-300 mb-2 block"></i>
+                    <h4 class="text-sm font-bold text-slate-800 mb-1">Belum Ada Data Surat</h4>
+                    <p class="text-xs text-slate-500 mb-3">Klik tombol di bawah untuk membuat dan mengajukan surat baru.</p>
+                    <a href="{{ route('surat.create') }}" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-indigo-600 text-white text-xs font-bold shadow-md transition no-underline">
+                        <i class="fa-solid fa-plus text-xs"></i>
+                        <span>Tambah Surat Pertama</span>
+                    </a>
+                </div>
+                @else
+                <div class="rounded-2xl bg-white/45 backdrop-blur-xl border border-white/60 p-4 sm:p-5 shadow-lg">
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse text-xs">
+                            <thead>
+                                <tr class="bg-white/60 backdrop-blur-md text-[10px] font-bold uppercase tracking-wider text-slate-700 border-b border-white/40">
+                                    <th class="py-3 px-3">#</th>
+                                    <th class="py-3 px-3">No. Surat</th>
+                                    <th class="py-3 px-3">Jenis</th>
+                                    <th class="py-3 px-3">Perihal</th>
+                                    <th class="py-3 px-3">Pengirim / Penerima</th>
+                                    <th class="py-3 px-3">Tanggal</th>
+                                    <th class="py-3 px-3 text-center">Status</th>
+                                    <th class="py-3 px-3 text-center">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-white/30">
+                                @foreach($surat as $i => $s)
+                                <tr class="hover:bg-white/60 transition">
+                                    <td class="py-3 px-3 text-slate-400 font-bold">{{ ($surat->currentPage()-1)*$surat->perPage()+$i+1 }}</td>
+                                    <td class="py-3 px-3 font-mono font-bold text-indigo-700 whitespace-nowrap">{{ $s->nomor_surat ?: '—' }}</td>
+                                    <td class="py-3 px-3">
+                                        <span class="px-2 py-0.5 rounded-full bg-indigo-100 text-indigo-800 font-bold text-[10px] border border-indigo-200">
+                                            {{ $s->jenis_surat }}
+                                        </span>
+                                    </td>
+                                    <td class="py-3 px-3 max-w-[200px]">
+                                        <a href="{{ route('surat.show', $s->id) }}" class="no-underline">
+                                            <div class="font-bold text-slate-900 truncate">{{ $s->perihal }}</div>
+                                        </a>
+                                        @if($s->keterangan)
+                                            <div class="text-[10px] text-slate-500 truncate mt-0.5">{{ $s->keterangan }}</div>
+                                        @endif
+                                    </td>
+                                    <td class="py-3 px-3">
+                                        <div class="font-bold text-slate-800">{{ $s->pengirim }}</div>
+                                        <div class="text-[10px] text-slate-500 flex items-center gap-1 mt-0.5">
+                                            <i class="fa-solid fa-arrow-right text-[8px]"></i>
+                                            <span>{{ $s->penerima }}</span>
+                                        </div>
+                                        @if($s->isDiajukanTaruna())
+                                        <span class="px-2 py-0.2 rounded-md bg-amber-100 text-amber-800 text-[9px] font-bold inline-flex items-center gap-1 mt-1">
+                                            <i class="fa-solid fa-user-graduate text-[8px]"></i> Taruna
+                                        </span>
+                                        @endif
+                                    </td>
+                                    <td class="py-3 px-3 whitespace-nowrap text-slate-600">
+                                        <div class="font-medium">
+                                            <i class="fa-solid fa-calendar text-indigo-500 mr-1 text-[10px]"></i>
+                                            {{ \Carbon\Carbon::parse($s->tanggal_surat)->locale('id')->isoFormat('D MMM Y') }}
+                                        </div>
+                                        @if($s->tanggal_terima)
+                                        <div class="text-[10px] text-slate-400 mt-0.5">
+                                            Terima: {{ \Carbon\Carbon::parse($s->tanggal_terima)->locale('id')->isoFormat('D MMM Y') }}
+                                        </div>
+                                        @endif
+                                    </td>
+                                    <td class="py-3 px-3 text-center">
+                                        <span class="px-2.5 py-0.5 rounded-full font-bold text-[10px]" style="background:{{ $s->status_bg_color }}; color:{{ $s->status_badge_color }};">
+                                            {{ $s->status }}
+                                        </span>
+                                    </td>
+                                    <td class="py-3 px-3 text-center">
+                                        <div class="inline-flex items-center gap-1">
+                                            @if($s->status === 'Diproses')
+                                                <form method="POST" action="{{ route('surat.updateStatus', $s->id) }}" class="inline">
+                                                    @csrf @method('PATCH')
+                                                    <input type="hidden" name="status" value="Disetujui">
+                                                    <button type="submit" class="p-1.5 rounded-lg bg-emerald-100 hover:bg-emerald-200 text-emerald-800 transition" title="Setujui" onclick="return confirm('Setujui surat: {{ addslashes($s->perihal) }}?')">
+                                                        <i class="fa-solid fa-check text-xs"></i>
+                                                    </button>
+                                                </form>
+                                                <form method="POST" action="{{ route('surat.updateStatus', $s->id) }}" class="inline">
+                                                    @csrf @method('PATCH')
+                                                    <input type="hidden" name="status" value="Ditolak">
+                                                    <button type="submit" class="p-1.5 rounded-lg bg-rose-100 hover:bg-rose-200 text-rose-800 transition" title="Tolak" onclick="return confirm('Tolak surat: {{ addslashes($s->perihal) }}?')">
+                                                        <i class="fa-solid fa-xmark text-xs"></i>
+                                                    </button>
+                                                </form>
+                                            @endif
+                                            <a href="{{ route('surat.show', $s->id) }}" class="p-1.5 rounded-lg bg-sky-50 hover:bg-sky-100 text-sky-700 border border-sky-200 shadow-sm transition" title="Detail"><i class="fa-solid fa-eye text-xs"></i></a>
+                                            <a href="{{ route('surat.edit', $s->id) }}" class="p-1.5 rounded-lg bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-200 shadow-sm transition" title="Edit"><i class="fa-solid fa-pen text-xs"></i></a>
+                                            <button type="button" class="p-1.5 rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-600 border border-rose-200 shadow-sm transition" title="Hapus" onclick="showSuratDeleteModal('del-surat-{{ $s->id }}', '{{ addslashes(Str::limit($s->perihal, 50)) }}')">
+                                                <i class="fa-solid fa-trash text-xs"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+
+                    @if($surat->hasPages())
+                    <div class="mt-4">
+                        {{ $surat->links() }}
+                    </div>
                     @endif
                 </div>
-            </div>
-            @endif
-        </div>
-        @endif
+                @endif
 
-    </div>{{-- end main-content --}}
-</div>{{-- end app-layout --}}
+    </div>
+</main>
 
 {{-- Hidden DELETE forms --}}
 @foreach($surat as $s)
@@ -312,16 +246,18 @@ tbody tr:hover { background: #f8f9ff; }
 {{-- Modal Konfirmasi Hapus --}}
 <div class="modal-overlay" id="suratDeleteModal">
     <div class="modal-box">
-        <div class="modal-icon-wrap"><i class="fas fa-envelope-open"></i></div>
-        <h3>Hapus Surat?</h3>
-        <p class="modal-label" id="suratModalPerihal"></p>
-        <p class="modal-sub">Surat ini akan dihapus secara permanen dan tidak dapat dikembalikan.</p>
-        <div class="modal-actions">
-            <button class="modal-cancel" onclick="closeSuratDeleteModal()">
-                <i class="fas fa-times"></i> Batal
+        <div class="w-12 h-12 rounded-full bg-rose-100 text-rose-600 flex items-center justify-center text-xl mx-auto mb-3">
+            <i class="fa-solid fa-trash"></i>
+        </div>
+        <h3 class="text-sm font-bold text-slate-800 mb-1">Hapus Surat?</h3>
+        <p class="text-xs font-semibold text-slate-700 mb-1" id="suratModalPerihal"></p>
+        <p class="text-[11px] text-slate-400 mb-4">Surat ini akan dihapus secara permanen dari sistem.</p>
+        <div class="flex items-center justify-center gap-2">
+            <button class="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs transition" onclick="closeSuratDeleteModal()">
+                Batal
             </button>
-            <button class="modal-confirm" onclick="submitSuratDeleteForm()">
-                <i class="fas fa-trash"></i> Ya, Hapus
+            <button class="px-4 py-2 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs shadow-md transition" onclick="submitSuratDeleteForm()">
+                Ya, Hapus
             </button>
         </div>
     </div>
@@ -348,4 +284,5 @@ document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape') closeSuratDeleteModal();
 });
 </script>
+
 </x-app-layout>

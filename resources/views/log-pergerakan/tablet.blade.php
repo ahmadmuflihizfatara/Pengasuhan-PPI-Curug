@@ -1,7 +1,7 @@
 <x-app-layout>
 <style>
     * { box-sizing: border-box; }
-    body { font-family: 'Inter', sans-serif; background: #f0f2f5; }
+    body { font-family: 'Inter', sans-serif; background: transparent; }
 
     .app-layout { display: flex; min-height: 100vh; }
     .main-content { flex: 1; padding: 24px 28px; min-width: 0; }

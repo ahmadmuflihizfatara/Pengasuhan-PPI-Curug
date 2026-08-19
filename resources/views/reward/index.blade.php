@@ -1,163 +1,120 @@
 <x-app-layout>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-<style>
-* { box-sizing: border-box; }
-body { font-family: 'Inter', sans-serif; background: #f0f2f5; }
-.app-layout { display: flex; min-height: 100vh; }
-.main-content { flex: 1; padding: 28px 30px; min-width: 0; }
 
-.page-header {
-    background: linear-gradient(135deg, #f7b733 0%, #fc4a1a 100%);
-    border-radius: 18px; padding: 28px 32px; color: white;
-    margin-bottom: 24px; position: relative; overflow: hidden;
-    display: flex; align-items: center; justify-content: space-between;
-}
-.page-header::before { content:''; position:absolute; right:-50px; top:-50px; width:180px; height:180px; background:rgba(255,255,255,.08); border-radius:50%; }
-.page-header::after  { content:''; position:absolute; right:80px; bottom:-60px; width:140px; height:140px; background:rgba(255,255,255,.06); border-radius:50%; }
-.page-header-text { position:relative; z-index:1; }
-.page-header h1 { margin:0 0 4px; font-size:22px; font-weight:800; }
-.page-header p  { margin:0; opacity:.85; font-size:13px; }
-.btn-add {
-    position:relative; z-index:1;
-    background:white; color:#b45309;
-    padding:11px 22px; border-radius:25px;
-    text-decoration:none; font-size:13px; font-weight:800;
-    display:flex; align-items:center; gap:7px;
-    white-space:nowrap; box-shadow:0 4px 15px rgba(0,0,0,.15);
-    transition:transform .15s, box-shadow .15s;
-}
-.btn-add:hover { transform:translateY(-2px); box-shadow:0 6px 20px rgba(0,0,0,.2); color:#b45309; }
+{{-- Top Floating Island Capsule Navbar --}}
+<x-island-navbar />
 
-.alert-success { background:linear-gradient(135deg,#43e97b,#38f9d7); color:white; padding:14px 20px; border-radius:12px; margin-bottom:20px; display:flex; align-items:center; gap:10px; font-weight:600; font-size:14px; }
-.alert-error   { background:linear-gradient(135deg,#fc5c7d,#e53e3e); color:white; padding:14px 20px; border-radius:12px; margin-bottom:20px; display:flex; align-items:center; gap:10px; font-weight:600; font-size:14px; }
+<main class="max-w-7xl mx-auto px-4 sm:px-6 pb-12 pt-2">
+    <div class="spatial-workspace-window rounded-3xl bg-white/30 backdrop-blur-2xl border border-white/50 shadow-2xl p-4 sm:p-7 relative overflow-hidden">
+        
 
-.card { background:white; border-radius:16px; overflow:hidden; box-shadow:0 2px 16px rgba(0,0,0,.06); }
-.empty-state { text-align:center; padding:60px 20px; }
-.empty-state i  { font-size:56px; color:#e2e5ee; margin-bottom:16px; display:block; }
-.empty-state h4 { color:#aab; margin:0 0 8px; font-size:16px; }
-.empty-state p  { color:#ccc; margin:0 0 20px; font-size:14px; }
-.btn-primary-pill {
-    background:linear-gradient(135deg,#f7b733,#fc4a1a); color:white;
-    padding:11px 28px; border-radius:25px; text-decoration:none;
-    font-size:13px; font-weight:700; display:inline-flex; align-items:center; gap:7px;
-}
+                
+                {{-- Page Header Glass Banner --}}
+                <div class="rounded-2xl bg-gradient-to-r from-amber-900/90 via-orange-900/85 to-slate-900/90 backdrop-blur-xl border border-white/30 p-6 text-white mb-6 shadow-xl relative overflow-hidden flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                    <div class="relative z-10">
+                        <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/15 backdrop-blur-md border border-white/20 text-[10px] font-bold tracking-widest uppercase text-amber-300 mb-2">
+                            <span>✦</span>
+                            <span>Prestasi Taruna</span>
+                        </div>
+                        <h1 class="text-xl sm:text-2xl font-extrabold tracking-tight text-white mb-1 flex items-center gap-2">
+                            <i class="fa-solid fa-award text-amber-400"></i>
+                            <span>Reward Prestasi Saya</span>
+                        </h1>
+                        <p class="text-xs text-amber-100/80">Pantau status pengajuan reward, rekomendasi pengasuhan, dan poin prestasi Anda</p>
+                    </div>
 
-table { width:100%; border-collapse:collapse; }
-thead tr { background:linear-gradient(135deg,#f7b733,#fc4a1a); }
-th { padding:14px 18px; text-align:left; color:white; font-size:11px; font-weight:700; letter-spacing:.06em; }
-td { padding:14px 18px; font-size:13px; color:#444; border-top:1px solid #f0f2f7; }
-tbody tr { transition:background .1s; }
-tbody tr:hover { background:#fffaf0; }
+                    <div class="relative z-10">
+                        <a href="{{ route('reward.create') }}" class="px-4 py-2 rounded-xl bg-white hover:bg-slate-50 text-slate-900 font-extrabold text-xs shadow-md transition flex items-center gap-2 no-underline">
+                            <i class="fa-solid fa-plus text-amber-600"></i>
+                            <span>Ajukan Reward Baru</span>
+                        </a>
+                    </div>
 
-.jenis-pill { background:#fef3e0; color:#b45309; padding:3px 10px; border-radius:20px; font-size:11px; font-weight:700; display:inline-flex; align-items:center; gap:4px; }
-.status-badge { display:inline-flex; align-items:center; padding:4px 12px; border-radius:20px; font-size:11px; font-weight:700; white-space:nowrap; gap:5px; }
+                    <div class="absolute -right-10 -top-10 w-40 h-40 bg-amber-500/20 rounded-full blur-3xl pointer-events-none"></div>
+                </div>
 
-.btn-view { background:#fef3e0; color:#b45309; border:none; padding:6px 14px; border-radius:20px; font-size:11px; font-weight:700; text-decoration:none; cursor:pointer; display:inline-flex; align-items:center; gap:5px; }
-.btn-view:hover { background:#fde3ae; }
+                {{-- Alerts --}}
+                @if(session('success'))
+                <div class="rounded-2xl bg-emerald-100/90 border border-emerald-300 p-4 text-emerald-800 text-xs font-bold mb-5 flex items-center gap-2 shadow-sm backdrop-blur-md">
+                    <i class="fa-solid fa-circle-check text-emerald-600 text-base"></i>
+                    <span>{{ session('success') }}</span>
+                </div>
+                @endif
+                @if(session('error'))
+                <div class="rounded-2xl bg-rose-100/90 border border-rose-300 p-4 text-rose-800 text-xs font-bold mb-5 flex items-center gap-2 shadow-sm backdrop-blur-md">
+                    <i class="fa-solid fa-circle-exclamation text-rose-600 text-base"></i>
+                    <span>{{ session('error') }}</span>
+                </div>
+                @endif
 
-.notif-dot { width:8px; height:8px; background:#e53e3e; border-radius:50%; display:inline-block; margin-left:4px; animation:pulse 1.5s infinite; }
-@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.3} }
+                @if($daftarReward->isEmpty())
+                <div class="rounded-2xl bg-white/50 backdrop-blur-xl border border-white/60 p-10 text-center shadow-lg">
+                    <i class="fa-solid fa-award text-4xl text-slate-300 mb-3 block"></i>
+                    <h4 class="text-sm font-bold text-slate-800 mb-1">Belum Ada Pengajuan Reward Prestasi</h4>
+                    <p class="text-xs text-slate-500 max-w-md mx-auto mb-4">Laporkan prestasi perlombaan akademik, olahraga, atau kepemimpinan Anda untuk mendapatkan poin penghargaan.</p>
+                    <a href="{{ route('reward.create') }}" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-amber-600 to-orange-600 text-white text-xs font-bold shadow-md transition no-underline">
+                        <i class="fa-solid fa-plus text-xs"></i>
+                        <span>Ajukan Reward Pertama</span>
+                    </a>
+                </div>
+                @else
+                <div class="rounded-2xl bg-white/45 backdrop-blur-xl border border-white/60 p-4 sm:p-5 shadow-lg">
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse text-xs">
+                            <thead>
+                                <tr class="bg-white/60 backdrop-blur-md text-[10px] font-bold uppercase tracking-wider text-slate-700 border-b border-white/40">
+                                    <th class="py-3 px-3">#</th>
+                                    <th class="py-3 px-3">Kategori</th>
+                                    <th class="py-3 px-3">Jenis</th>
+                                    <th class="py-3 px-3">Tanggal Prestasi</th>
+                                    <th class="py-3 px-3">Keterangan</th>
+                                    <th class="py-3 px-3 text-center">Status</th>
+                                    <th class="py-3 px-3 text-center">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-white/30">
+                                @foreach($daftarReward as $i => $r)
+                                <tr class="hover:bg-white/60 transition">
+                                    <td class="py-3 px-3 text-slate-400 font-bold">{{ $i + 1 }}</td>
+                                    <td class="py-3 px-3">
+                                        <div class="font-bold text-slate-900">{{ $r->kategori }}</div>
+                                    </td>
+                                    <td class="py-3 px-3">
+                                        <span class="px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-800 font-bold text-[10px] border border-amber-200 inline-flex items-center gap-1">
+                                            <i class="fa-solid {{ $r->jenis === 'kelompok' ? 'fa-users' : 'fa-user' }} text-[9px]"></i>
+                                            <span>{{ ucfirst($r->jenis) }}{{ $r->jenis === 'kelompok' ? ' ('.$r->jumlah_anggota.' org)' : '' }}</span>
+                                        </span>
+                                    </td>
+                                    <td class="py-3 px-3 text-slate-600 font-medium whitespace-nowrap">
+                                        <i class="fa-solid fa-calendar text-amber-500 mr-1"></i>
+                                        {{ $r->tanggal_prestasi->locale('id')->isoFormat('D MMM Y') }}
+                                    </td>
+                                    <td class="py-3 px-3 max-w-[260px]">
+                                        <div class="text-slate-800 font-medium truncate">{{ $r->keterangan }}</div>
+                                    </td>
+                                    <td class="py-3 px-3 text-center">
+                                        <span class="px-2.5 py-0.5 rounded-full font-bold text-[10px] inline-flex items-center gap-1.5" style="background:{{ $r->status_bg_color }}; color:{{ $r->status_badge_color }};">
+                                            <span>{{ $r->status }}</span>
+                                            @if(!$r->taruna_baca && in_array($r->status, ['Diproses', 'Disetujui', 'Ditolak']))
+                                            <span class="w-2 h-2 rounded-full bg-rose-500 animate-ping"></span>
+                                            @endif
+                                        </span>
+                                    </td>
+                                    <td class="py-3 px-3 text-center">
+                                        <a href="{{ route('reward.show', $r->id) }}" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-800 font-bold text-xs border border-amber-200 shadow-sm transition no-underline">
+                                            <i class="fa-solid fa-eye text-[10px]"></i>
+                                            <span>Detail</span>
+                                        </a>
+                                    </td>
+                                </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                @endif
 
-.toast-container { position:fixed; bottom:24px; right:24px; z-index:9999; display:flex; flex-direction:column; gap:10px; }
-.toast { background:white; border-radius:14px; padding:16px 20px; box-shadow:0 8px 30px rgba(0,0,0,.15); display:flex; align-items:flex-start; gap:12px; min-width:320px; max-width:400px; animation:slideIn .3s ease; border-left:4px solid #f5b301; }
-@keyframes slideIn { from{transform:translateX(120%);opacity:0} to{transform:translateX(0);opacity:1} }
-.toast-icon { width:36px; height:36px; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:16px; color:white; flex-shrink:0; }
-.toast-body .toast-title { font-weight:700; font-size:13px; color:#333; margin-bottom:3px; }
-.toast-body .toast-msg   { font-size:12px; color:#888; }
-.toast-close { margin-left:auto; background:none; border:none; color:#aab; cursor:pointer; font-size:16px; padding:0; }
-</style>
-
-<div class="app-layout">
-    <x-sidebar active="reward" />
-
-    <div class="main-content">
-        <div class="page-header">
-            <div class="page-header-text">
-                <h1><i class="fas fa-award" style="margin-right:10px;"></i>Reward Saya</h1>
-                <p>Pantau status pengajuan reward atas prestasi Anda</p>
-            </div>
-            <a href="{{ route('reward.create') }}" class="btn-add">
-                <i class="fas fa-plus"></i> Ajukan Reward Baru
-            </a>
-        </div>
-
-        @if(session('success'))
-        <div class="alert-success">
-            <i class="fas fa-check-circle" style="font-size:18px;"></i> {{ session('success') }}
-        </div>
-        @endif
-        @if(session('error'))
-        <div class="alert-error">
-            <i class="fas fa-exclamation-circle" style="font-size:18px;"></i> {{ session('error') }}
-        </div>
-        @endif
-
-        @if($daftarReward->isEmpty())
-        <div class="card">
-            <div class="empty-state">
-                <i class="fas fa-award"></i>
-                <h4>Belum ada pengajuan reward</h4>
-                <p>Klik tombol "Ajukan Reward Baru" untuk mengajukan reward atas prestasi Anda.</p>
-                <a href="{{ route('reward.create') }}" class="btn-primary-pill">
-                    <i class="fas fa-plus"></i> Ajukan Reward Pertama
-                </a>
-            </div>
-        </div>
-        @else
-        <div class="card">
-            <table>
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>KATEGORI</th>
-                        <th>JENIS</th>
-                        <th>TANGGAL PRESTASI</th>
-                        <th>KETERANGAN</th>
-                        <th style="text-align:center;">STATUS</th>
-                        <th style="text-align:center;">AKSI</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach($daftarReward as $i => $r)
-                    <tr>
-                        <td style="color:#bbb; font-weight:600;">{{ $i + 1 }}</td>
-                        <td>
-                            <div style="font-weight:700; color:#333;">{{ $r->kategori }}</div>
-                        </td>
-                        <td>
-                            <span class="jenis-pill">
-                                <i class="fas {{ $r->jenis === 'kelompok' ? 'fa-users' : 'fa-user' }}"></i>
-                                {{ ucfirst($r->jenis) }}{{ $r->jenis === 'kelompok' ? ' ('.$r->jumlah_anggota.' org)' : '' }}
-                            </span>
-                        </td>
-                        <td style="font-size:12px; color:#666; white-space:nowrap;">
-                            <i class="fas fa-calendar" style="color:#f5b301; margin-right:5px;"></i>
-                            {{ $r->tanggal_prestasi->locale('id')->isoFormat('D MMM Y') }}
-                        </td>
-                        <td style="max-width:260px;">
-                            <div style="font-weight:600; color:#333;">{{ Str::limit($r->keterangan, 60) }}</div>
-                        </td>
-                        <td style="text-align:center;">
-                            <span class="status-badge" style="background:{{ $r->status_bg_color }}; color:{{ $r->status_badge_color }};">
-                                {{ $r->status }}
-                                @if(!$r->taruna_baca && in_array($r->status, ['Diproses', 'Disetujui', 'Ditolak']))
-                                <span class="notif-dot"></span>
-                                @endif
-                            </span>
-                        </td>
-                        <td style="text-align:center;">
-                            <a href="{{ route('reward.show', $r->id) }}" class="btn-view">
-                                <i class="fas fa-eye"></i> Detail
-                            </a>
-                        </td>
-                    </tr>
-                    @endforeach
-                </tbody>
-            </table>
-        </div>
-        @endif
     </div>
-</div>
+</main>
 
 <div class="toast-container" id="toastContainer"></div>
 
@@ -212,4 +169,5 @@ function pollNotifications() {
 
 setInterval(pollNotifications, 5000);
 </script>
+
 </x-app-layout>

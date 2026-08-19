@@ -1,7 +1,7 @@
 <x-app-layout>
 <style>
 * { box-sizing: border-box; }
-body { font-family: 'Inter', sans-serif; background: #f0f2f5; }
+body { font-family: 'Inter', sans-serif; background: transparent; }
 .app-layout { display: flex; min-height: 100vh; }
 .main-content { flex: 1; padding: 28px 28px 28px 24px; min-width: 0; }
 
@@ -187,10 +187,11 @@ body { font-family: 'Inter', sans-serif; background: #f0f2f5; }
 .btn-create:hover { background:rgba(255,255,255,.28); color:white; }
 </style>
 
-<div class="app-layout">
-    <x-sidebar active="berita" />
+{{-- Top Floating Island Capsule Navbar --}}
+<x-island-navbar />
 
-    <div class="main-content">
+<main class="max-w-7xl mx-auto px-4 sm:px-6 pb-12 pt-2">
+    <div class="spatial-workspace-window rounded-3xl bg-white/30 backdrop-blur-2xl border border-white/50 shadow-2xl p-4 sm:p-7 relative overflow-hidden">
 
         {{-- Alert --}}
         @if(session('success'))
@@ -408,7 +409,6 @@ body { font-family: 'Inter', sans-serif; background: #f0f2f5; }
             {{ $berita->links() }}
         </div>
         @endif
-
     </div>
-</div>
+</main>
 </x-app-layout>

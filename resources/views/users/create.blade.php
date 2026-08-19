@@ -2,7 +2,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 * { box-sizing: border-box; }
-body { font-family: 'Inter', sans-serif; background: #f0f2f5; }
+body { font-family: 'Inter', sans-serif; background: transparent; }
 .app-layout { display: flex; min-height: 100vh; }
 .main-content { flex: 1; padding: 28px; display: flex; align-items: center; justify-content: center; }
 
@@ -25,7 +25,7 @@ body { font-family: 'Inter', sans-serif; background: #f0f2f5; }
 .btn-group { display: flex; gap: 12px; margin-top: 24px; }
 .btn-primary { background: linear-gradient(135deg, #667eea, #764ba2); color: white; border: none; padding: 12px 24px; border-radius: 10px; font-size: 13px; font-weight: 700; cursor: pointer; transition: all .15s; flex: 1; }
 .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(102,126,234,.35); }
-.btn-secondary { background: #f0f2f5; color: #555; border: none; padding: 12px 24px; border-radius: 10px; font-size: 13px; font-weight: 600; cursor: pointer; text-decoration: none; display: flex; align-items: center; justify-content: center; transition: all .15s; }
+.btn-secondary { background: transparent; color: #555; border: none; padding: 12px 24px; border-radius: 10px; font-size: 13px; font-weight: 600; cursor: pointer; text-decoration: none; display: flex; align-items: center; justify-content: center; transition: all .15s; }
 .btn-secondary:hover { background: #e2e5ee; color: #333; }
 
 /* Role color indicators */

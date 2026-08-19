@@ -1,407 +1,225 @@
 <x-app-layout>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-<style>
-* { box-sizing: border-box; }
-body { font-family: 'Inter', sans-serif; background: #f0f2f5; }
 
-.app-layout { display: flex; min-height: 100vh; }
-.main-content { flex: 1; padding: 28px 30px; min-width: 0; }
-
-/* ── Page Header ── */
-.page-header {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    border-radius: 18px; padding: 28px 32px; color: white;
-    margin-bottom: 24px; position: relative; overflow: hidden;
-    display: flex; align-items: center; justify-content: space-between;
-}
-.page-header::before { content:''; position:absolute; right:-50px; top:-50px; width:180px; height:180px; background:rgba(255,255,255,.08); border-radius:50%; }
-.page-header::after  { content:''; position:absolute; right:80px; bottom:-60px; width:140px; height:140px; background:rgba(255,255,255,.06); border-radius:50%; }
-.page-header-text { position:relative; z-index:1; }
-.page-header h1 { margin:0 0 4px; font-size:22px; font-weight:800; }
-.page-header p  { margin:0; opacity:.85; font-size:13px; }
-
-.header-actions { position:relative; z-index:1; display:flex; align-items:center; gap:10px; }
-
-/* ── Toggle ── */
-.view-toggle {
-    display:flex; align-items:center;
-    background:rgba(255,255,255,.18); border-radius:25px;
-    padding:4px; gap:2px;
-    border:1px solid rgba(255,255,255,.25); backdrop-filter:blur(4px);
-}
-.toggle-btn {
-    padding:7px 14px; border-radius:20px; border:none;
-    font-size:12px; font-weight:700; cursor:pointer;
-    display:flex; align-items:center; gap:5px;
-    transition:all .2s; color:rgba(255,255,255,.75); background:transparent;
-}
-.toggle-btn.active { background:white; color:#667eea; box-shadow:0 2px 8px rgba(0,0,0,.15); }
-.toggle-btn:hover:not(.active) { color:white; background:rgba(255,255,255,.12); }
-
-.btn-add {
-    background:white; color:#667eea; padding:11px 22px; border-radius:25px;
-    text-decoration:none; font-size:13px; font-weight:800;
-    display:flex; align-items:center; gap:7px; white-space:nowrap;
-    box-shadow:0 4px 15px rgba(0,0,0,.15); transition:transform .15s, box-shadow .15s;
-}
-.btn-add:hover { transform:translateY(-2px); box-shadow:0 6px 20px rgba(0,0,0,.2); color:#667eea; }
-
-.alert-success {
-    background:linear-gradient(135deg,#43e97b,#38f9d7); color:white;
-    padding:14px 20px; border-radius:12px; margin-bottom:20px;
-    display:flex; align-items:center; gap:10px; font-weight:600; font-size:14px;
-}
-
-/* ── Table View ── */
-.card { background:white; border-radius:16px; overflow:hidden; box-shadow:0 2px 16px rgba(0,0,0,.06); }
-.empty-state { text-align:center; padding:60px 20px; }
-.empty-state i  { font-size:56px; color:#e2e5ee; margin-bottom:16px; display:block; }
-.empty-state h4 { color:#aab; margin:0 0 8px; font-size:16px; }
-.empty-state p  { color:#ccc; margin:0 0 20px; font-size:14px; }
-.btn-primary-pill {
-    background:linear-gradient(135deg,#667eea,#764ba2); color:white;
-    padding:11px 28px; border-radius:25px; text-decoration:none; font-size:13px;
-    font-weight:700; display:inline-flex; align-items:center; gap:7px;
-    box-shadow:0 4px 15px rgba(102,126,234,.4);
-}
-
-table { width:100%; border-collapse:collapse; }
-thead tr { background:linear-gradient(135deg,#667eea,#764ba2); }
-th { padding:14px 18px; text-align:left; color:white; font-size:11px; font-weight:700; letter-spacing:.06em; }
-td { padding:14px 18px; font-size:13px; color:#444; border-top:1px solid #f0f2f7; }
-tbody tr { transition:background .1s; }
-tbody tr:hover { background:#f8f9ff; }
-
-.icon-box  { width:38px; height:38px; border-radius:10px; background:linear-gradient(135deg,#667eea,#764ba2); display:flex; align-items:center; justify-content:center; flex-shrink:0; }
-.time-badge { background:#eef0ff; color:#667eea; padding:4px 12px; border-radius:20px; font-size:11px; font-weight:700; }
-.btn-edit   { background:#eef0ff; color:#667eea; border:none; padding:6px 14px; border-radius:20px; font-size:11px; font-weight:700; text-decoration:none; cursor:pointer; display:inline-flex; align-items:center; gap:5px; transition:background .1s; }
-.btn-edit:hover { background:#dde2ff; }
-.btn-delete { background:#fff0f0; color:#e53e3e; border:none; padding:6px 14px; border-radius:20px; font-size:11px; font-weight:700; cursor:pointer; display:inline-flex; align-items:center; gap:5px; transition:background .1s; }
-.btn-delete:hover { background:#ffe0e0; }
-
-/* ── Calendar View ── */
-#calendarView { display:none; }
-
-.calendar-wrapper { background:white; border-radius:16px; box-shadow:0 2px 16px rgba(0,0,0,.06); overflow:hidden; }
-
-.calendar-nav {
-    display:flex; align-items:center; justify-content:space-between;
-    padding:20px 24px; border-bottom:1px solid #f0f2f7;
-    background:linear-gradient(135deg,#667eea 0%,#764ba2 100%); color:white;
-}
-.calendar-nav h2 { font-size:18px; font-weight:800; margin:0; }
-.cal-nav-btn {
-    width:36px; height:36px; border-radius:50%; border:none;
-    background:rgba(255,255,255,.2); color:white; cursor:pointer; font-size:14px;
-    display:flex; align-items:center; justify-content:center; transition:background .15s;
-}
-.cal-nav-btn:hover { background:rgba(255,255,255,.35); }
-
-.calendar-grid { display:grid; grid-template-columns:repeat(7,1fr); }
-.cal-day-header {
-    padding:10px 8px; text-align:center; font-size:11px; font-weight:800;
-    letter-spacing:.06em; color:#667eea; background:#f8f9ff; border-bottom:1px solid #f0f2f7;
-}
-.cal-day-header:first-child, .cal-day-header:last-child { color:#e53e3e; }
-
-.cal-cell {
-    min-height:100px; padding:8px; border-right:1px solid #f0f2f7;
-    border-bottom:1px solid #f0f2f7; position:relative; cursor:default; transition:background .1s;
-}
-.cal-cell:nth-child(7n) { border-right:none; }
-.cal-cell.other-month   { background:#fafbff; }
-.cal-cell.other-month .cal-date { color:#ccc; }
-.cal-cell.today { background:#f0f2ff; }
-.cal-cell.today .cal-date {
-    background:linear-gradient(135deg,#667eea,#764ba2); color:white;
-    width:26px; height:26px; border-radius:50%;
-    display:flex; align-items:center; justify-content:center; font-weight:800;
-}
-.cal-cell.has-event { cursor:pointer; }
-.cal-cell.has-event:hover { background:#f5f7ff; }
-
-.cal-date {
-    font-size:12px; font-weight:700; color:#444; margin-bottom:4px;
-    width:26px; height:26px; display:flex; align-items:center; justify-content:center; border-radius:50%;
-}
-.cal-cell:nth-child(7n+1) .cal-date,
-.cal-cell:nth-child(7n)   .cal-date { color:#e53e3e; }
-
-.cal-event {
-    background:linear-gradient(135deg,#667eea,#764ba2); color:white; border-radius:6px;
-    padding:3px 7px; font-size:10px; font-weight:700; margin-bottom:3px;
-    display:flex; align-items:center; gap:4px;
-    overflow:hidden; white-space:nowrap; text-overflow:ellipsis;
-    cursor:pointer; transition:opacity .15s; line-height:1.4;
-}
-.cal-event:hover { opacity:.85; }
-.cal-event-apel { background:linear-gradient(135deg,#1baf7a,#2a78d6); }
-.cal-event-more { font-size:10px; font-weight:700; color:#667eea; text-align:center; padding:2px; }
-
-/* ── Popover ── */
-.cal-popover {
-    display:none; position:fixed; background:white; border-radius:14px;
-    box-shadow:0 8px 32px rgba(0,0,0,.18); padding:16px;
-    min-width:220px; max-width:280px; z-index:9000;
-}
-.cal-popover.show { display:block; }
-.cal-popover h4 { margin:0 0 8px; font-size:14px; font-weight:800; color:#333; }
-.cal-popover-row { display:flex; align-items:center; gap:7px; font-size:12px; color:#666; margin-bottom:5px; }
-.cal-popover-row i { color:#667eea; width:14px; text-align:center; }
-.cal-popover-desc { font-size:12px; color:#888; margin-top:8px; padding-top:8px; border-top:1px solid #f0f2f7; line-height:1.5; }
-.cal-popover-actions { display:flex; gap:8px; margin-top:12px; padding-top:10px; border-top:1px solid #f0f2f7; }
-.pop-btn-edit {
-    flex:1; background:#eef0ff; color:#667eea; border:none; padding:7px 10px;
-    border-radius:20px; font-size:11px; font-weight:700; cursor:pointer;
-    text-decoration:none; text-align:center; display:flex; align-items:center; justify-content:center; gap:4px;
-}
-.pop-btn-edit:hover { background:#dde2ff; color:#667eea; }
-.pop-btn-del {
-    flex:1; background:#fff0f0; color:#e53e3e; border:none; padding:7px 10px;
-    border-radius:20px; font-size:11px; font-weight:700; cursor:pointer;
-    text-align:center; display:flex; align-items:center; justify-content:center; gap:4px;
-}
-.pop-btn-del:hover { background:#ffe0e0; }
-
-/* ── Legend ── */
-.calendar-legend {
-    padding:14px 24px; border-top:1px solid #f0f2f7;
-    display:flex; align-items:center; gap:20px; flex-wrap:wrap;
-}
-.legend-item { display:flex; align-items:center; gap:6px; font-size:12px; color:#666; }
-.legend-dot  { width:10px; height:10px; border-radius:50%; }
-
-/* ── Read-only badge for taruna ── */
-.readonly-badge {
-    display:inline-flex; align-items:center; gap:6px;
-    background:rgba(255,255,255,.18); border:1px solid rgba(255,255,255,.3);
-    color:white; border-radius:20px; padding:8px 16px;
-    font-size:12px; font-weight:700; backdrop-filter:blur(4px);
-}
-
-/* ── Delete Modal ── */
-.modal-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,.45); z-index:9999; align-items:center; justify-content:center; }
-.modal-overlay.open { display:flex; }
-.modal-box { background:white; border-radius:20px; padding:32px 28px; max-width:400px; width:90%; box-shadow:0 20px 60px rgba(0,0,0,.2); text-align:center; animation:modalIn .2s ease; }
-@keyframes modalIn { from{transform:scale(.93);opacity:0} to{transform:scale(1);opacity:1} }
-.modal-icon { width:60px; height:60px; border-radius:50%; background:#fff0f0; display:flex; align-items:center; justify-content:center; margin:0 auto 16px; }
-.modal-icon i { font-size:26px; color:#e53e3e; }
-.modal-box h3 { margin:0 0 8px; font-size:18px; font-weight:800; color:#333; }
-.modal-box p  { margin:0 0 24px; font-size:13px; color:#888; line-height:1.5; }
-.modal-actions { display:flex; gap:10px; justify-content:center; }
-.modal-cancel  { background:#f4f5f9; color:#666; border:none; padding:11px 28px; border-radius:25px; font-size:13px; font-weight:700; cursor:pointer; }
-.modal-cancel:hover  { background:#e8e9f0; }
-.modal-confirm { background:linear-gradient(135deg,#fc5c7d,#e53e3e); color:white; border:none; padding:11px 28px; border-radius:25px; font-size:13px; font-weight:700; cursor:pointer; }
-.modal-confirm:hover { opacity:.9; }
-</style>
+{{-- Top Floating Island Capsule Navbar --}}
+<x-island-navbar />
 
 @php $isTaruna = Auth::user()->isTaruna(); @endphp
 
-<div class="app-layout">
+<main class="max-w-7xl mx-auto px-4 sm:px-6 pb-12 pt-2">
+    <div class="spatial-workspace-window rounded-3xl bg-white/30 backdrop-blur-2xl border border-white/50 shadow-2xl p-4 sm:p-7 relative overflow-hidden">
+        
 
-    <x-sidebar active="acara" />
+                
+                {{-- Page Header Glass Banner --}}
+                <div class="rounded-2xl bg-gradient-to-r from-blue-900/90 via-indigo-900/85 to-slate-900/90 backdrop-blur-xl border border-white/30 p-6 text-white mb-6 shadow-xl relative overflow-hidden flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                    <div class="relative z-10">
+                        <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/15 backdrop-blur-md border border-white/20 text-[10px] font-bold tracking-widest uppercase text-sky-200 mb-2">
+                            <span>✦</span>
+                            <span>Agenda &amp; Kegiatan Kampus</span>
+                        </div>
+                        <h1 class="text-xl sm:text-2xl font-extrabold tracking-tight text-white mb-1 flex items-center gap-2">
+                            <i class="fa-solid fa-calendar-days text-sky-400"></i>
+                            <span>{{ $isTaruna ? 'Kalender Kegiatan Taruna' : 'Kelola Acara &amp; Agenda' }}</span>
+                        </h1>
+                        <p class="text-xs text-sky-100/80">{{ $isTaruna ? 'Pantau jadwal acara harian, kegiatan asrama, dan sesi apel' : 'Daftar acara pengasuhan terintegrasi kalender dan presensi apel' }}</p>
+                    </div>
 
-    <div class="main-content">
+                    <div class="relative z-10 flex items-center gap-2">
+                        @unless($isTaruna)
+                        <div class="flex items-center bg-white/20 backdrop-blur-md rounded-xl p-1 border border-white/30">
+                            <button class="px-3 py-1.5 rounded-lg text-xs font-bold text-slate-900 bg-white shadow-sm transition toggle-btn active" id="btnTableView" onclick="switchView('table')">
+                                <i class="fa-solid fa-list mr-1"></i> Tabel
+                            </button>
+                            <button class="px-3 py-1.5 rounded-lg text-xs font-bold text-white hover:text-sky-200 transition toggle-btn" id="btnCalendarView" onclick="switchView('calendar')">
+                                <i class="fa-solid fa-calendar mr-1"></i> Kalender
+                            </button>
+                        </div>
+                        <a href="{{ route('acara.create') }}" class="px-4 py-2 rounded-xl bg-white hover:bg-slate-50 text-slate-900 font-extrabold text-xs shadow-md transition flex items-center gap-2 no-underline">
+                            <i class="fa-solid fa-plus text-indigo-600"></i>
+                            <span>Tambah Acara</span>
+                        </a>
+                        @else
+                        <div class="px-3 py-1.5 rounded-xl bg-white/15 border border-white/20 text-white font-bold text-xs backdrop-blur-md flex items-center gap-1.5">
+                            <i class="fa-solid fa-eye text-sky-300 text-xs"></i>
+                            <span>Mode Kalender</span>
+                        </div>
+                        @endunless
+                    </div>
 
-        {{-- ── PAGE HEADER ── --}}
-        <div class="page-header">
-            <div class="page-header-text">
-                <h1><i class="fas fa-calendar-alt" style="margin-right:10px;"></i>
-                    {{ $isTaruna ? 'Kalender' : 'Kelola Acara' }}
-                </h1>
-                <p>{{ $isTaruna ? 'Lihat jadwal acara dan apel' : 'Daftar acara pengasuhan — kalender juga menampilkan jadwal apel' }}</p>
-            </div>
-            <div class="header-actions">
-                {{-- Toggle view: hanya tampil untuk pengasuh & admin --}}
-                @unless($isTaruna)
-                <div class="view-toggle">
-                    <button class="toggle-btn active" id="btnTableView" onclick="switchView('table')">
-                        <i class="fas fa-list"></i> Tabel
-                    </button>
-                    <button class="toggle-btn" id="btnCalendarView" onclick="switchView('calendar')">
-                        <i class="fas fa-calendar"></i> Kalender
-                    </button>
+                    <div class="absolute -right-10 -top-10 w-40 h-40 bg-sky-500/20 rounded-full blur-3xl pointer-events-none"></div>
                 </div>
-                <a href="{{ route('acara.create') }}" class="btn-add">
-                    <i class="fas fa-plus"></i> Tambah Acara
-                </a>
-                @else
-                {{-- Taruna: label read-only saja --}}
-                <div class="readonly-badge">
-                    <i class="fas fa-eye"></i> Hanya Lihat
+
+                {{-- Alerts --}}
+                @if(session('success'))
+                <div class="rounded-2xl bg-emerald-100/90 border border-emerald-300 p-4 text-emerald-800 text-xs font-bold mb-5 flex items-center gap-2 shadow-sm backdrop-blur-md">
+                    <i class="fa-solid fa-circle-check text-emerald-600 text-base"></i>
+                    <span>{{ session('success') }}</span>
+                </div>
+                @endif
+
+                {{-- TABLE VIEW (Non-Taruna) --}}
+                @unless($isTaruna)
+                <div id="tableView">
+                    @if($acara->isEmpty())
+                    <div class="rounded-2xl bg-white/50 backdrop-blur-xl border border-white/60 p-10 text-center shadow-lg">
+                        <i class="fa-solid fa-calendar-xmark text-4xl text-slate-300 mb-2 block"></i>
+                        <h4 class="text-sm font-bold text-slate-800 mb-1">Belum Ada Acara Terjadwal</h4>
+                        <p class="text-xs text-slate-500 mb-4">Klik tombol di bawah untuk membuat jadwal kegiatan acara baru.</p>
+                        <a href="{{ route('acara.create') }}" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-indigo-600 text-white text-xs font-bold shadow-md transition no-underline">
+                            <i class="fa-solid fa-plus text-xs"></i>
+                            <span>Tambah Acara Pertama</span>
+                        </a>
+                    </div>
+                    @else
+                    <div class="rounded-2xl bg-white/45 backdrop-blur-xl border border-white/60 p-4 sm:p-5 shadow-lg">
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left border-collapse text-xs">
+                                <thead>
+                                    <tr class="bg-white/60 backdrop-blur-md text-[10px] font-bold uppercase tracking-wider text-slate-700 border-b border-white/40">
+                                        <th class="py-3 px-3">#</th>
+                                        <th class="py-3 px-3">Nama Acara</th>
+                                        <th class="py-3 px-3">Tanggal</th>
+                                        <th class="py-3 px-3">Waktu</th>
+                                        <th class="py-3 px-3">Keterangan</th>
+                                        <th class="py-3 px-3 text-center">Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-white/30">
+                                    @foreach($acara as $i => $a)
+                                    <tr class="hover:bg-white/60 transition">
+                                        <td class="py-3 px-3 text-slate-400 font-bold">{{ $i + 1 }}</td>
+                                        <td class="py-3 px-3">
+                                            <div class="flex items-center gap-3">
+                                                <div class="w-8 h-8 rounded-lg bg-indigo-600 text-white flex items-center justify-center text-xs shadow-sm flex-shrink-0">
+                                                    <i class="fa-solid fa-calendar-check"></i>
+                                                </div>
+                                                <span class="font-bold text-slate-900">{{ $a->nama_acara }}</span>
+                                            </div>
+                                        </td>
+                                        <td class="py-3 px-3 text-slate-700 font-medium whitespace-nowrap">
+                                            <i class="fa-solid fa-calendar text-indigo-500 mr-1 text-[10px]"></i>
+                                            {{ \Carbon\Carbon::parse($a->tanggal)->locale('id')->isoFormat('dddd, D MMMM Y') }}
+                                        </td>
+                                        <td class="py-3 px-3">
+                                            <span class="px-2.5 py-0.5 rounded-full bg-indigo-100 text-indigo-800 font-bold text-[10px] border border-indigo-200">
+                                                <i class="fa-solid fa-clock text-[9px] mr-1"></i>
+                                                {{ \Carbon\Carbon::parse($a->jam)->format('H:i') }} WIB
+                                            </span>
+                                        </td>
+                                        <td class="py-3 px-3 max-w-[220px] text-slate-600">
+                                            {!! $a->keterangan ? Str::limit($a->keterangan, 70) : '<span class="text-slate-300">—</span>' !!}
+                                        </td>
+                                        <td class="py-3 px-3 text-center">
+                                            <div class="inline-flex items-center gap-1">
+                                                <a href="{{ route('acara.edit', $a->id) }}" class="p-1.5 rounded-lg bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-200 shadow-sm transition" title="Edit">
+                                                    <i class="fa-solid fa-pen text-xs"></i>
+                                                </a>
+                                                <button type="button" class="p-1.5 rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-600 border border-rose-200 shadow-sm transition" title="Hapus"
+                                                        onclick="showDeleteModal('delete-acara-{{ $a->id }}', '{{ addslashes($a->nama_acara) }}')">
+                                                    <i class="fa-solid fa-trash text-xs"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    @foreach($acara as $a)
+                    <form id="delete-acara-{{ $a->id }}" method="POST" action="{{ route('acara.destroy', $a->id) }}" style="display:none;">
+                        @csrf @method('DELETE')
+                    </form>
+                    @endforeach
+                    @endif
                 </div>
                 @endunless
-            </div>
-        </div>
 
-        @if(session('success'))
-        <div class="alert-success">
-            <i class="fas fa-check-circle" style="font-size:18px;"></i>{{ session('success') }}
-        </div>
-        @endif
+                {{-- CALENDAR VIEW --}}
+                <div id="calendarView" @if($isTaruna) style="display:block;" @else style="display:none;" @endif>
+                    <div class="rounded-2xl bg-white/50 backdrop-blur-xl border border-white/60 shadow-lg overflow-hidden">
+                        
+                        {{-- Calendar Navigation --}}
+                        <div class="p-4 sm:p-5 bg-gradient-to-r from-blue-900/90 via-indigo-900/85 to-slate-900/90 text-white flex items-center justify-between">
+                            <button class="w-8 h-8 rounded-full bg-white/20 hover:bg-white/30 text-white flex items-center justify-center text-xs transition" onclick="changeMonth(-1)">
+                                <i class="fa-solid fa-chevron-left"></i>
+                            </button>
+                            <h2 class="text-base font-extrabold tracking-tight" id="calendarTitle"></h2>
+                            <button class="w-8 h-8 rounded-full bg-white/20 hover:bg-white/30 text-white flex items-center justify-center text-xs transition" onclick="changeMonth(1)">
+                                <i class="fa-solid fa-chevron-right"></i>
+                            </button>
+                        </div>
 
-        {{-- ══════════════════════════════════════════════
-             TABLE VIEW  (pengasuh & admin saja)
-        ══════════════════════════════════════════════ --}}
-        @unless($isTaruna)
-        <div id="tableView">
-            @if($acara->isEmpty())
-            <div class="card">
-                <div class="empty-state">
-                    <i class="fas fa-calendar-times"></i>
-                    <h4>Belum ada acara dijadwalkan</h4>
-                    <p>Klik tombol "Tambah Acara" untuk menambahkan acara baru.</p>
-                    <a href="{{ route('acara.create') }}" class="btn-primary-pill">
-                        <i class="fas fa-plus"></i> Tambah Acara Pertama
-                    </a>
-                </div>
-            </div>
-            @else
-            <div class="card">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>NAMA ACARA</th>
-                            <th>TANGGAL</th>
-                            <th>JAM</th>
-                            <th>KETERANGAN</th>
-                            <th style="text-align:center;">AKSI</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach($acara as $i => $a)
-                        <tr>
-                            <td style="color:#bbb; font-weight:600;">{{ $i + 1 }}</td>
-                            <td>
-                                <div style="display:flex; align-items:center; gap:12px;">
-                                    <div class="icon-box">
-                                        <i class="fas fa-calendar-check" style="color:white; font-size:15px;"></i>
-                                    </div>
-                                    <span style="font-weight:700; color:#333;">{{ $a->nama_acara }}</span>
-                                </div>
-                            </td>
-                            <td>
-                                <i class="fas fa-calendar" style="color:#667eea; margin-right:6px;"></i>
-                                {{ \Carbon\Carbon::parse($a->tanggal)->locale('id')->isoFormat('dddd, D MMMM Y') }}
-                            </td>
-                            <td>
-                                <span class="time-badge">
-                                    <i class="fas fa-clock" style="margin-right:4px;"></i>
-                                    {{ \Carbon\Carbon::parse($a->jam)->format('H:i') }} WIB
-                                </span>
-                            </td>
-                            <td style="max-width:200px; color:#777;">
-                                {!! $a->keterangan ? Str::limit($a->keterangan, 80) : '<span style="color:#ccc;">—</span>' !!}
-                            </td>
-                            <td style="text-align:center;">
-                                <div style="display:flex; align-items:center; justify-content:center; gap:7px;">
-                                    <a href="{{ route('acara.edit', $a->id) }}" class="btn-edit">
-                                        <i class="fas fa-edit"></i> Edit
-                                    </a>
-                                    <button type="button" class="btn-delete"
-                                            onclick="showDeleteModal('delete-acara-{{ $a->id }}', '{{ addslashes($a->nama_acara) }}')">
-                                        <i class="fas fa-trash"></i> Hapus
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-            </div>
+                        {{-- Day Headers --}}
+                        <div class="grid grid-cols-7 border-b border-white/40 bg-white/60 text-[10px] font-extrabold uppercase tracking-wider text-slate-700 text-center py-2">
+                            <div class="text-rose-600">MIN</div>
+                            <div>SEN</div>
+                            <div>SEL</div>
+                            <div>RAB</div>
+                            <div>KAM</div>
+                            <div>JUM</div>
+                            <div class="text-rose-600">SAB</div>
+                        </div>
 
-            @foreach($acara as $a)
-            <form id="delete-acara-{{ $a->id }}" method="POST" action="{{ route('acara.destroy', $a->id) }}" style="display:none;">
-                @csrf @method('DELETE')
-            </form>
-            @endforeach
-            @endif
-        </div>{{-- end #tableView --}}
-        @endunless
+                        {{-- Calendar Grid Days --}}
+                        <div class="grid grid-cols-7" id="calendarDays"></div>
 
-        {{-- ══════════════════════════════════════════════
-             CALENDAR VIEW
-             — Selalu ditampilkan untuk taruna (auto-show)
-             — Toggle untuk pengasuh & admin
-        ══════════════════════════════════════════════ --}}
-        <div id="calendarView" @if($isTaruna) style="display:block;" @else style="display:none;" @endif>
-            <div class="calendar-wrapper">
-                <div class="calendar-nav">
-                    <button class="cal-nav-btn" onclick="changeMonth(-1)">
-                        <i class="fas fa-chevron-left"></i>
-                    </button>
-                    <h2 id="calendarTitle"></h2>
-                    <button class="cal-nav-btn" onclick="changeMonth(1)">
-                        <i class="fas fa-chevron-right"></i>
-                    </button>
-                </div>
-
-                <div class="calendar-grid">
-                    <div class="cal-day-header">MIN</div>
-                    <div class="cal-day-header">SEN</div>
-                    <div class="cal-day-header">SEL</div>
-                    <div class="cal-day-header">RAB</div>
-                    <div class="cal-day-header">KAM</div>
-                    <div class="cal-day-header">JUM</div>
-                    <div class="cal-day-header">SAB</div>
-                </div>
-
-                <div class="calendar-grid" id="calendarDays"></div>
-
-                <div class="calendar-legend">
-                    <div class="legend-item">
-                        <div class="legend-dot" style="background:linear-gradient(135deg,#667eea,#764ba2);"></div>
-                        <span>Acara terjadwal</span>
-                    </div>
-                    <div class="legend-item">
-                        <div class="legend-dot" style="background:linear-gradient(135deg,#1baf7a,#2a78d6);"></div>
-                        <span>Apel</span>
-                    </div>
-                    <div class="legend-item">
-                        <div class="legend-dot" style="background:#eef0ff; border:2px solid #667eea;"></div>
-                        <span>Hari ini</span>
+                        {{-- Legend --}}
+                        <div class="p-4 bg-white/40 border-t border-white/40 flex items-center gap-4 text-xs font-semibold text-slate-700 flex-wrap">
+                            <div class="flex items-center gap-1.5">
+                                <span class="w-2.5 h-2.5 rounded-full bg-indigo-600"></span>
+                                <span>Acara Terjadwal</span>
+                            </div>
+                            <div class="flex items-center gap-1.5">
+                                <span class="w-2.5 h-2.5 rounded-full bg-emerald-600"></span>
+                                <span>Apel Taruna</span>
+                            </div>
+                            <div class="flex items-center gap-1.5">
+                                <span class="w-2.5 h-2.5 rounded-full bg-indigo-100 border border-indigo-600"></span>
+                                <span>Hari Ini</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </div>{{-- end #calendarView --}}
 
-    </div>{{-- end .main-content --}}
-</div>{{-- end .app-layout --}}
+    </div>
+</main>
 
-{{-- ── Delete Modal (hanya dirender untuk non-taruna) ── --}}
+{{-- Delete Modal --}}
 @unless($isTaruna)
 <div class="modal-overlay" id="deleteModal">
     <div class="modal-box">
-        <div class="modal-icon"><i class="fas fa-trash-alt"></i></div>
-        <h3>Hapus Acara?</h3>
-        <p id="modalAcaraName" style="font-weight:600; color:#333; margin-bottom:6px;"></p>
-        <p>Tindakan ini tidak dapat dibatalkan. Acara akan dihapus secara permanen.</p>
-        <div class="modal-actions">
-            <button class="modal-cancel" onclick="closeDeleteModal()">
-                <i class="fas fa-times"></i> Batal
+        <div class="w-12 h-12 rounded-full bg-rose-100 text-rose-600 flex items-center justify-center text-xl mx-auto mb-3">
+            <i class="fa-solid fa-trash"></i>
+        </div>
+        <h3 class="text-sm font-bold text-slate-800 mb-1">Hapus Acara?</h3>
+        <p id="modalAcaraName" class="text-xs font-semibold text-slate-700 mb-1"></p>
+        <p class="text-[11px] text-slate-400 mb-4">Tindakan ini tidak dapat dibatalkan. Acara akan dihapus secara permanen.</p>
+        <div class="flex items-center justify-center gap-2">
+            <button class="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs transition" onclick="closeDeleteModal()">
+                Batal
             </button>
-            <button class="modal-confirm" onclick="submitDeleteForm()">
-                <i class="fas fa-trash"></i> Ya, Hapus
+            <button class="px-4 py-2 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs shadow-md transition" onclick="submitDeleteForm()">
+                Ya, Hapus
             </button>
         </div>
     </div>
 </div>
 @endunless
 
-{{-- ── Calendar Popover ── --}}
+{{-- Calendar Popover --}}
 <div class="cal-popover" id="calPopover">
-    <h4 id="popTitle"></h4>
-    <div class="cal-popover-row"><i class="fas fa-calendar"></i><span id="popDate"></span></div>
-    <div class="cal-popover-row"><i class="fas fa-clock"></i><span id="popTime"></span></div>
-    <div class="cal-popover-row" id="popPembinaRow" style="display:none;"><i class="fas fa-user-tie"></i><span id="popPembina"></span></div>
-    <div class="cal-popover-row" id="popLokasiRow" style="display:none;"><i class="fas fa-location-dot"></i><span id="popLokasi"></span></div>
-    <div class="cal-popover-desc" id="popDesc" style="display:none;"></div>
-    {{-- Tombol edit/hapus acara di popover hanya untuk pengasuh & admin. Apel dikelola di tab Apel. --}}
+    <h4 id="popTitle" class="font-extrabold text-slate-900 text-xs mb-2"></h4>
+    <div class="cal-popover-row text-[11px] text-slate-600 flex items-center gap-1.5 mb-1"><i class="fa-solid fa-calendar text-indigo-600 w-4 text-center"></i><span id="popDate"></span></div>
+    <div class="cal-popover-row text-[11px] text-slate-600 flex items-center gap-1.5 mb-1"><i class="fa-solid fa-clock text-indigo-600 w-4 text-center"></i><span id="popTime"></span></div>
+    <div class="cal-popover-row text-[11px] text-slate-600 flex items-center gap-1.5 mb-1" id="popPembinaRow" style="display:none;"><i class="fa-solid fa-user-tie text-indigo-600 w-4 text-center"></i><span id="popPembina"></span></div>
+    <div class="cal-popover-row text-[11px] text-slate-600 flex items-center gap-1.5 mb-1" id="popLokasiRow" style="display:none;"><i class="fa-solid fa-location-dot text-indigo-600 w-4 text-center"></i><span id="popLokasi"></span></div>
+    <div class="cal-popover-desc text-[11px] text-slate-500 mt-2 pt-2 border-t border-slate-100 leading-relaxed" id="popDesc" style="display:none;"></div>
     @unless($isTaruna)
-    <div class="cal-popover-actions" id="popActions">
-        <a href="#" id="popEditBtn" class="pop-btn-edit"><i class="fas fa-edit"></i> Edit</a>
-        <button onclick="popoverDelete()" class="pop-btn-del"><i class="fas fa-trash"></i> Hapus</button>
+    <div class="flex items-center gap-2 mt-3 pt-2 border-t border-slate-100" id="popActions">
+        <a href="#" id="popEditBtn" class="flex-1 py-1.5 rounded-lg bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-bold text-center text-xs no-underline"><i class="fa-solid fa-pen text-[10px] mr-1"></i> Edit</a>
+        <button onclick="popoverDelete()" class="flex-1 py-1.5 rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-600 font-bold text-center text-xs"><i class="fa-solid fa-trash text-[10px] mr-1"></i> Hapus</button>
     </div>
     @endunless
 </div>
@@ -423,7 +241,6 @@ $acaraJson = $acara->map(function($a) use ($isTaruna) {
     return $item;
 })->toJson();
 
-// Taruna tidak melihat informasi apel — hanya jadwal, pembina, lokasi
 $apelJson = $apel->map(function($p) use ($isTaruna) {
     $item = [
         'type'    => 'apel',
@@ -442,215 +259,201 @@ $apelJson = $apel->map(function($p) use ($isTaruna) {
 @endphp
 
 <script>
-// ── Config ─────────────────────────────────────────────
 const IS_TARUNA   = @json($isTaruna);
 const ACARA_DATA  = @json(json_decode($acaraJson));
 const APEL_DATA   = @json(json_decode($apelJson));
 const ALL_EVENTS  = ACARA_DATA.concat(APEL_DATA);
 
-const eventMap = {};
-ALL_EVENTS.forEach(ev => {
-    if (!eventMap[ev.tanggal]) eventMap[ev.tanggal] = [];
-    eventMap[ev.tanggal].push(ev);
-});
+const BULAN_ID = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+const HARI_ID  = ['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
 
-// ── Calendar State ──────────────────────────────────────
-const today        = new Date();
-let currentYear    = today.getFullYear();
-let currentMonth   = today.getMonth();
+let viewDate = new Date();
 
-const MONTHS_ID = ['Januari','Februari','Maret','April','Mei','Juni',
-                   'Juli','Agustus','September','Oktober','November','Desember'];
+function switchView(mode) {
+    const tbl = document.getElementById('tableView');
+    const cal = document.getElementById('calendarView');
+    const btnTbl = document.getElementById('btnTableView');
+    const btnCal = document.getElementById('btnCalendarView');
 
-// ── View Toggle (non-taruna only) ───────────────────────
-function switchView(view) {
-    const tvEl = document.getElementById('tableView');
-    const cvEl = document.getElementById('calendarView');
-    if (tvEl) tvEl.style.display    = view === 'table'    ? 'block' : 'none';
-    if (cvEl) cvEl.style.display    = view === 'calendar' ? 'block' : 'none';
+    if (mode === 'calendar') {
+        if (tbl) tbl.style.display = 'none';
+        if (cal) cal.style.display = 'block';
+        if (btnCal) { btnCal.classList.add('active', 'bg-white', 'text-slate-900'); btnCal.classList.remove('text-white'); }
+        if (btnTbl) { btnTbl.classList.remove('active', 'bg-white', 'text-slate-900'); btnTbl.classList.add('text-white'); }
+        renderCalendar();
+        sessionStorage.setItem('acaraView', 'calendar');
+    } else {
+        if (tbl) tbl.style.display = 'block';
+        if (cal) cal.style.display = 'none';
+        if (btnTbl) { btnTbl.classList.add('active', 'bg-white', 'text-slate-900'); btnTbl.classList.remove('text-white'); }
+        if (btnCal) { btnCal.classList.remove('active', 'bg-white', 'text-slate-900'); btnCal.classList.add('text-white'); }
+        sessionStorage.setItem('acaraView', 'table');
+    }
+}
 
-    const btnT = document.getElementById('btnTableView');
-    const btnC = document.getElementById('btnCalendarView');
-    if (btnT) btnT.classList.toggle('active', view === 'table');
-    if (btnC) btnC.classList.toggle('active', view === 'calendar');
-
-    if (view === 'calendar') renderCalendar();
+function changeMonth(delta) {
+    viewDate.setMonth(viewDate.getMonth() + delta);
+    renderCalendar();
     closePopover();
-    sessionStorage.setItem('acaraView', view);
 }
 
-// ── Calendar Render ─────────────────────────────────────
 function renderCalendar() {
-    document.getElementById('calendarTitle').textContent =
-        MONTHS_ID[currentMonth] + ' ' + currentYear;
+    const year  = viewDate.getFullYear();
+    const month = viewDate.getMonth();
 
-    const grid      = document.getElementById('calendarDays');
-    grid.innerHTML  = '';
+    document.getElementById('calendarTitle').textContent = BULAN_ID[month] + ' ' + year;
 
-    const firstDay    = new Date(currentYear, currentMonth, 1).getDay();
-    const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
-    const daysInPrev  = new Date(currentYear, currentMonth, 0).getDate();
-    const todayStr    = fmtDate(today);
+    const firstDay = new Date(year, month, 1).getDay();
+    const totalDays = new Date(year, month + 1, 0).getDate();
+    const prevTotalDays = new Date(year, month, 0).getDate();
 
-    // Leading days from prev month
+    const today = new Date();
+    const isThisMonth = today.getFullYear() === year && today.getMonth() === month;
+
+    const grid = document.getElementById('calendarDays');
+    grid.innerHTML = '';
+
+    // Days from previous month
     for (let i = firstDay - 1; i >= 0; i--) {
-        const mo = currentMonth === 0 ? 11 : currentMonth - 1;
-        const yr = currentMonth === 0 ? currentYear - 1 : currentYear;
-        grid.appendChild(buildCell(daysInPrev - i, yr, mo, true, todayStr));
+        const d = prevTotalDays - i;
+        const cell = createCell(d, true, false, []);
+        grid.appendChild(cell);
     }
 
-    // Current month
-    for (let d = 1; d <= daysInMonth; d++) {
-        grid.appendChild(buildCell(d, currentYear, currentMonth, false, todayStr));
+    // Days in current month
+    for (let d = 1; d <= totalDays; d++) {
+        const dateStr = `${year}-${String(month+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+        const events = ALL_EVENTS.filter(e => e.tanggal === dateStr);
+        const isToday = isThisMonth && today.getDate() === d;
+        const cell = createCell(d, false, isToday, events, dateStr);
+        grid.appendChild(cell);
     }
 
-    // Trailing days from next month
-    const rem = grid.children.length % 7;
-    if (rem !== 0) {
-        for (let d = 1; d <= 7 - rem; d++) {
-            const mo = currentMonth === 11 ? 0  : currentMonth + 1;
-            const yr = currentMonth === 11 ? currentYear + 1 : currentYear;
-            grid.appendChild(buildCell(d, yr, mo, true, todayStr));
-        }
+    // Days in next month
+    const totalRendered = firstDay + totalDays;
+    const remaining = totalRendered % 7 === 0 ? 0 : 7 - (totalRendered % 7);
+    for (let d = 1; d <= remaining; d++) {
+        const cell = createCell(d, true, false, []);
+        grid.appendChild(cell);
     }
 }
 
-function fmtDate(d, y, m, day) {
-    if (d instanceof Date) {
-        return d.getFullYear() + '-' +
-               String(d.getMonth() + 1).padStart(2,'0') + '-' +
-               String(d.getDate()).padStart(2,'0');
-    }
-    return y + '-' + String(m + 1).padStart(2,'0') + '-' + String(day).padStart(2,'0');
-}
-
-function buildCell(day, yr, mo, otherMonth, todayStr) {
-    const dateStr = fmtDate(null, yr, mo, day);
-    const events  = eventMap[dateStr] || [];
-    const isToday = dateStr === todayStr;
-
+function createCell(dayNum, isOtherMonth, isToday, events, dateStr) {
     const cell = document.createElement('div');
-    cell.className = 'cal-cell' +
-        (otherMonth        ? ' other-month' : '') +
-        (isToday           ? ' today'       : '') +
-        (events.length > 0 ? ' has-event'   : '');
+    cell.className = 'cal-cell min-h-[90px] p-2 border-r border-b border-white/30 transition hover:bg-white/40' +
+        (isOtherMonth ? ' opacity-40' : '') +
+        (isToday ? ' bg-indigo-50/70' : '') +
+        (events.length > 0 ? ' has-event cursor-pointer' : '');
 
-    const dateDiv = document.createElement('div');
-    dateDiv.className   = 'cal-date';
-    dateDiv.textContent = day;
-    cell.appendChild(dateDiv);
+    const dateEl = document.createElement('div');
+    dateEl.className = 'cal-date text-xs font-bold text-slate-700 mb-1 w-6 h-6 rounded-full flex items-center justify-center' +
+        (isToday ? ' bg-indigo-600 text-white' : '');
+    dateEl.textContent = dayNum;
+    cell.appendChild(dateEl);
 
-    const maxShow = 2;
-    events.slice(0, maxShow).forEach(ev => {
-        const evEl = document.createElement('div');
-        evEl.className = 'cal-event' + (ev.type === 'apel' ? ' cal-event-apel' : '');
-        const icon = ev.type === 'apel' ? 'fa-flag' : 'fa-circle';
-        evEl.innerHTML = `<i class="fas ${icon}" style="font-size:${ev.type === 'apel' ? '8' : '5'}px;flex-shrink:0;"></i>${esc(ev.judul)}`;
-        evEl.title     = ev.judul;
-        evEl.onclick   = e => { e.stopPropagation(); showPopover(ev, e); };
-        cell.appendChild(evEl);
+    const maxDisplay = 2;
+    events.slice(0, maxDisplay).forEach(e => {
+        const ev = document.createElement('div');
+        ev.className = 'cal-event text-[9px] font-bold px-1.5 py-0.5 rounded text-white truncate mb-1 ' +
+            (e.type === 'apel' ? 'bg-emerald-600' : 'bg-indigo-600');
+        ev.textContent = (e.jam ? e.jam + ' ' : '') + e.judul;
+        ev.onclick = function(evClick) {
+            evClick.stopPropagation();
+            openPopover(e, ev);
+        };
+        cell.appendChild(ev);
     });
 
-    if (events.length > maxShow) {
+    if (events.length > maxDisplay) {
         const more = document.createElement('div');
-        more.className   = 'cal-event-more';
-        more.textContent = `+${events.length - maxShow} lainnya`;
-        more.onclick     = e => { e.stopPropagation(); showPopover(events[maxShow], e); };
+        more.className = 'text-[9px] font-bold text-indigo-700 text-center';
+        more.textContent = `+${events.length - maxDisplay} lainnya`;
         cell.appendChild(more);
+    }
+
+    if (events.length > 0) {
+        cell.onclick = function() {
+            openPopover(events[0], cell);
+        };
     }
 
     return cell;
 }
 
-function changeMonth(dir) {
-    currentMonth += dir;
-    if (currentMonth > 11) { currentMonth = 0;  currentYear++; }
-    if (currentMonth <  0) { currentMonth = 11; currentYear--; }
-    renderCalendar();
-    closePopover();
-}
+let activePopoverEvent = null;
 
-// ── Popover ─────────────────────────────────────────────
-let popoverDeleteFormId = null;
-
-function showPopover(ev, mouseEvent) {
+function openPopover(eventData, targetEl) {
+    activePopoverEvent = eventData;
     const pop = document.getElementById('calPopover');
-    document.getElementById('popTitle').textContent = ev.judul;
 
-    const [yr, mo, dy] = ev.tanggal.split('-');
-    const d0 = new Date(yr, mo - 1, dy);
-    const DAYS  = ['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
-    const MONS  = ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
-    document.getElementById('popDate').textContent =
-        DAYS[d0.getDay()] + ', ' + parseInt(dy) + ' ' + MONS[parseInt(mo)-1] + ' ' + yr;
-    document.getElementById('popTime').textContent = (ev.jam || '-') + ' WIB';
+    document.getElementById('popTitle').textContent = eventData.judul;
+    document.getElementById('popDate').textContent = formatTglIndo(eventData.tanggal);
+    document.getElementById('popTime').textContent = eventData.jam ? eventData.jam + ' WIB' : 'Waktu belum diatur';
 
-    const pembinaRow = document.getElementById('popPembinaRow');
-    const lokasiRow  = document.getElementById('popLokasiRow');
-    if (ev.type === 'apel') {
-        document.getElementById('popPembina').textContent = ev.pembina;
-        document.getElementById('popLokasi').textContent  = ev.lokasi;
-        pembinaRow.style.display = 'flex';
-        lokasiRow.style.display  = 'flex';
+    const pRow = document.getElementById('popPembinaRow');
+    const lRow = document.getElementById('popLokasiRow');
+    const dRow = document.getElementById('popDesc');
+    const aRow = document.getElementById('popActions');
+
+    if (eventData.type === 'apel') {
+        pRow.style.display = eventData.pembina ? 'flex' : 'none';
+        document.getElementById('popPembina').textContent = eventData.pembina || '';
+        lRow.style.display = eventData.lokasi ? 'flex' : 'none';
+        document.getElementById('popLokasi').textContent = eventData.lokasi || '';
+        if (aRow) aRow.style.display = 'none';
     } else {
-        pembinaRow.style.display = 'none';
-        lokasiRow.style.display  = 'none';
+        pRow.style.display = 'none';
+        lRow.style.display = 'none';
+        if (aRow) aRow.style.display = 'flex';
+        const editBtn = document.getElementById('popEditBtn');
+        if (editBtn) editBtn.href = eventData.edit_url || '#';
     }
 
-    const descEl = document.getElementById('popDesc');
-    if (ev.keterangan) { descEl.textContent = ev.keterangan; descEl.style.display = 'block'; }
-    else               { descEl.style.display = 'none'; }
-
-    // Actions (edit/hapus) hanya untuk acara milik non-taruna — apel dikelola di tab Apel
-    const actionsEl = document.getElementById('popActions');
-    if (actionsEl) {
-        if (ev.type === 'acara') {
-            actionsEl.style.display = 'flex';
-            document.getElementById('popEditBtn').href = ev.edit_url;
-            popoverDeleteFormId = ev.delete_form;
-        } else {
-            actionsEl.style.display = 'none';
-            popoverDeleteFormId = null;
-        }
+    if (eventData.keterangan) {
+        dRow.style.display = 'block';
+        dRow.textContent = eventData.keterangan;
+    } else {
+        dRow.style.display = 'none';
     }
 
-    // Position
-    pop.style.visibility = 'hidden';
-    pop.style.display    = 'block';
-    const popW = pop.offsetWidth, popH = pop.offsetHeight;
-    pop.style.display    = '';
-    pop.style.visibility = '';
+    const rect = targetEl.getBoundingClientRect();
+    let top = rect.bottom + 8;
+    let left = rect.left;
 
-    const rect = mouseEvent.target.getBoundingClientRect();
-    let left = rect.right + 8, top = rect.top;
-    if (left + popW > window.innerWidth  - 10) left = rect.left - popW - 8;
-    if (top  + popH > window.innerHeight - 10) top  = window.innerHeight - popH - 10;
-    if (top < 10) top = 10;
+    if (left + 260 > window.innerWidth) left = window.innerWidth - 270;
+    if (top + 220 > window.innerHeight) top = rect.top - 230;
 
-    pop.style.left = left + 'px';
-    pop.style.top  = top  + 'px';
+    pop.style.top = Math.max(10, top) + 'px';
+    pop.style.left = Math.max(10, left) + 'px';
     pop.classList.add('show');
 }
 
 function closePopover() {
-    document.getElementById('calPopover').classList.remove('show');
-    popoverDeleteFormId = null;
+    const pop = document.getElementById('calPopover');
+    if (pop) pop.classList.remove('show');
+    activePopoverEvent = null;
 }
 
 function popoverDelete() {
-    if (popoverDeleteFormId) {
-        const nama = document.getElementById('popTitle').textContent;
+    if (activePopoverEvent && activePopoverEvent.delete_form) {
         closePopover();
-        showDeleteModal(popoverDeleteFormId, nama);
+        showDeleteModal(activePopoverEvent.delete_form, activePopoverEvent.judul);
     }
 }
 
-document.addEventListener('click', e => {
+function formatTglIndo(tglStr) {
+    const [y, m, d] = tglStr.split('-').map(Number);
+    const date = new Date(y, m - 1, d);
+    return `${HARI_ID[date.getDay()]}, ${d} ${BULAN_ID[m - 1]} ${y}`;
+}
+
+document.addEventListener('click', function(e) {
     const pop = document.getElementById('calPopover');
-    if (pop.classList.contains('show') && !pop.contains(e.target)) closePopover();
+    if (pop && pop.classList.contains('show') && !pop.contains(e.target) && !e.target.closest('.cal-cell')) {
+        closePopover();
+    }
 });
 
-// ── Delete Modal (non-taruna) ───────────────────────────
 let targetFormId = null;
 
 function showDeleteModal(formId, nama) {
@@ -669,34 +472,18 @@ function submitDeleteForm() {
     if (targetFormId) document.getElementById(targetFormId).submit();
 }
 
-const deleteModal = document.getElementById('deleteModal');
-if (deleteModal) {
-    deleteModal.addEventListener('click', e => { if (e.target === deleteModal) closeDeleteModal(); });
-}
-
-document.addEventListener('keydown', e => {
-    if (e.key === 'Escape') { closeDeleteModal(); closePopover(); }
-});
-
-// ── Init ────────────────────────────────────────────────
-function esc(str) {
-    return (str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-}
-
 (function init() {
     if (IS_TARUNA) {
-        // Taruna: selalu tampilkan kalender, langsung render
         renderCalendar();
     } else {
-        // Pengasuh / admin: restore preferensi tersimpan
         const saved = sessionStorage.getItem('acaraView');
         if (saved === 'calendar') {
             switchView('calendar');
         } else {
-            // default = table, tapi kalender sudah di-hide via inline style
-            // Render dulu supaya siap saat di-toggle
+            renderCalendar();
         }
     }
 })();
 </script>
+
 </x-app-layout>

@@ -1,218 +1,191 @@
 <x-app-layout>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-<style>
-* { box-sizing: border-box; }
-body { font-family: 'Inter', sans-serif; background: #f0f2f5; }
-.app-layout { display: flex; min-height: 100vh; }
-.main-content { flex: 1; padding: 28px 30px; min-width: 0; }
 
-.page-header {
-    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-    border-radius: 18px; padding: 28px 32px; color: white;
-    margin-bottom: 24px; position: relative; overflow: hidden;
-}
-.page-header::before { content:''; position:absolute; right:-50px; top:-50px; width:180px; height:180px; background:rgba(255,255,255,.08); border-radius:50%; }
-.page-header::after  { content:''; position:absolute; right:80px; bottom:-60px; width:140px; height:140px; background:rgba(255,255,255,.06); border-radius:50%; }
-.page-header-text { position:relative; z-index:1; }
-.page-header h1 { margin:0 0 4px; font-size:22px; font-weight:800; }
-.page-header p  { margin:0; opacity:.85; font-size:13px; }
+{{-- Top Floating Island Capsule Navbar --}}
+<x-island-navbar />
 
-.alert-success { background:linear-gradient(135deg,#43e97b,#38f9d7); color:white; padding:14px 20px; border-radius:12px; margin-bottom:20px; display:flex; align-items:center; gap:10px; font-weight:600; font-size:14px; }
-.alert-error   { background:linear-gradient(135deg,#fc5c7d,#e53e3e); color:white; padding:14px 20px; border-radius:12px; margin-bottom:20px; display:flex; align-items:center; gap:10px; font-weight:600; font-size:14px; }
+<main class="max-w-7xl mx-auto px-4 sm:px-6 pb-12 pt-2">
+    <div class="spatial-workspace-window rounded-3xl bg-white/30 backdrop-blur-2xl border border-white/50 shadow-2xl p-4 sm:p-7 relative overflow-hidden">
+        
 
-.stats-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin-bottom: 20px; }
-.stat-card  { background: white; border-radius: 14px; padding: 16px; box-shadow: 0 2px 10px rgba(0,0,0,.05); text-align: center; }
-.stat-icon  { width: 36px; height: 36px; border-radius: 10px; margin: 0 auto 8px; display: flex; align-items: center; justify-content: center; color: white; font-size: 14px; }
-.stat-count { font-size: 22px; font-weight: 800; color: #333; }
-.stat-label { font-size: 10px; color: #aab; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; margin-top: 2px; }
+                
+                {{-- Page Header Glass Banner --}}
+                <div class="rounded-2xl bg-gradient-to-r from-purple-900/90 via-pink-900/85 to-slate-900/90 backdrop-blur-xl border border-white/30 p-6 text-white mb-6 shadow-xl relative overflow-hidden flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                    <div class="relative z-10">
+                        <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/15 backdrop-blur-md border border-white/20 text-[10px] font-bold tracking-widest uppercase text-pink-200 mb-2">
+                            <span>✦</span>
+                            <span>Manajemen Pengasuh &amp; Logistik</span>
+                        </div>
+                        <h1 class="text-xl sm:text-2xl font-extrabold tracking-tight text-white mb-1 flex items-center gap-2">
+                            <i class="fa-solid fa-door-open text-pink-400"></i>
+                            <span>Kelola Keluhan Barak</span>
+                        </h1>
+                        <p class="text-xs text-pink-100/80">Disposisi, proses perbaikan teknis, dan verifikasi keluhan sarana barak taruna</p>
+                    </div>
 
-.filter-bar { background: white; border-radius: 14px; padding: 16px 20px; box-shadow: 0 2px 10px rgba(0,0,0,.05); margin-bottom: 18px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
-.search-wrap { position: relative; flex: 1; min-width: 200px; }
-.search-wrap .fa-search { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: #bbb; font-size: 12px; pointer-events: none; }
-.search-input { width: 100%; padding: 9px 14px 9px 34px; border: 1.5px solid #edf0f7; border-radius: 10px; font-size: 13px; font-family: 'Inter', sans-serif; color: #444; outline: none; background: #fafbff; }
-.search-input:focus { border-color: #d63384; }
-.filter-select { padding: 9px 14px; border: 1.5px solid #edf0f7; border-radius: 10px; font-size: 13px; font-family: 'Inter', sans-serif; color: #444; outline: none; background: #fafbff; cursor: pointer; }
-.btn-filter { background: linear-gradient(135deg,#f093fb,#f5576c); color: white; border: none; padding: 9px 20px; border-radius: 10px; font-size: 13px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 6px; }
-.btn-reset { color: #d63384; text-decoration: none; font-size: 12px; font-weight: 700; display: inline-flex; align-items: center; gap: 5px; }
-
-.card { background: white; border-radius: 16px; overflow: hidden; box-shadow: 0 2px 16px rgba(0,0,0,.06); }
-.empty-state { text-align:center; padding:60px 20px; }
-.empty-state i  { font-size:56px; color:#e2e5ee; margin-bottom:16px; display:block; }
-.empty-state h4 { color:#aab; margin:0 0 8px; font-size:16px; }
-.empty-state p  { color:#ccc; margin:0; font-size:14px; }
-
-table { width: 100%; border-collapse: collapse; }
-thead tr { background: linear-gradient(135deg,#f093fb,#f5576c); }
-th { padding: 14px 18px; text-align: left; color: white; font-size: 11px; font-weight: 700; letter-spacing: .06em; }
-td { padding: 14px 18px; font-size: 13px; color: #444; border-top: 1px solid #f0f2f7; }
-tbody tr { transition: background .1s; }
-tbody tr:hover { background: #fff8fb; }
-
-.status-badge { display: inline-flex; align-items: center; padding: 4px 12px; border-radius: 20px; font-size: 11px; font-weight: 700; white-space: nowrap; gap: 5px; }
-.btn-view { background: #fdf0f9; color: #d63384; border: none; padding: 6px 14px; border-radius: 20px; font-size: 11px; font-weight: 700; text-decoration: none; cursor: pointer; display: inline-flex; align-items: center; gap: 5px; }
-.btn-view:hover { background: #fad3ec; }
-
-.pagination-bar   { padding: 14px 18px; border-top: 1px solid #f0f2f7; display: flex; align-items: center; justify-content: space-between; }
-.pagination-info  { font-size: 12px; color: #aab; }
-.pagination-links { display: flex; gap: 6px; }
-.page-btn { padding: 7px 14px; border-radius: 8px; font-size: 12px; font-weight: 700; text-decoration: none; }
-.page-btn.normal { background: #f4f5f9; color: #666; }
-.page-btn.active-pg { background: linear-gradient(135deg,#f093fb,#f5576c); color: white; }
-.page-btn.disabled { background: #f4f5f9; color: #ccc; pointer-events: none; }
-</style>
-
-<div class="app-layout">
-    <x-sidebar active="keluhan-barak" />
-
-    <div class="main-content">
-        <div class="page-header">
-            <div class="page-header-text">
-                <h1><i class="fas fa-door-open" style="margin-right:10px;"></i>Kelola Keluhan Barak</h1>
-                <p>Kelola dan proses pengajuan keluhan barak dari taruna</p>
-            </div>
-        </div>
-
-        @if(session('success'))
-        <div class="alert-success">
-            <i class="fas fa-check-circle" style="font-size:18px;"></i> {{ session('success') }}
-        </div>
-        @endif
-        @if(session('error'))
-        <div class="alert-error">
-            <i class="fas fa-exclamation-circle" style="font-size:18px;"></i> {{ session('error') }}
-        </div>
-        @endif
-
-        <div class="stats-grid">
-            <div class="stat-card">
-                <div class="stat-icon" style="background:linear-gradient(135deg,#a78bfa,#6d28d9);"><i class="fas fa-door-open"></i></div>
-                <div class="stat-count">{{ $stats['total'] }}</div>
-                <div class="stat-label">Total Keluhan</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-icon" style="background:linear-gradient(135deg,#f6ad55,#e07020);"><i class="fas fa-hourglass-half"></i></div>
-                <div class="stat-count">{{ $stats['diajukan'] }}</div>
-                <div class="stat-label">Diajukan</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-icon" style="background:linear-gradient(135deg,#63b3ed,#3182ce);"><i class="fas fa-spinner"></i></div>
-                <div class="stat-count">{{ $stats['diproses'] }}</div>
-                <div class="stat-label">Diproses</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-icon" style="background:linear-gradient(135deg,#48bb78,#38a169);"><i class="fas fa-check-circle"></i></div>
-                <div class="stat-count">{{ $stats['selesai'] }}</div>
-                <div class="stat-label">Selesai</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-icon" style="background:linear-gradient(135deg,#fc8181,#e53e3e);"><i class="fas fa-times-circle"></i></div>
-                <div class="stat-count">{{ $stats['ditolak'] }}</div>
-                <div class="stat-label">Ditolak</div>
-            </div>
-        </div>
-
-        <div class="filter-bar">
-            <form method="GET" action="{{ route('keluhan-barak.kelola') }}" style="display:contents;">
-                <div class="search-wrap">
-                    <i class="fas fa-search"></i>
-                    <input type="text" name="search" value="{{ request('search') }}"
-                           placeholder="Cari nama, email, nomor barak..." class="search-input">
+                    <div class="absolute -right-10 -top-10 w-40 h-40 bg-pink-500/20 rounded-full blur-3xl pointer-events-none"></div>
                 </div>
-                <select name="asrama" class="filter-select">
-                    <option value="">Semua Asrama</option>
-                    @foreach($asramaList as $a)
-                        <option value="{{ $a }}" {{ request('asrama') === $a ? 'selected' : '' }}>{{ $a }}</option>
-                    @endforeach
-                </select>
-                <select name="status" class="filter-select">
-                    <option value="">Semua Status</option>
-                    @foreach($statusList as $s)
-                        <option value="{{ $s }}" {{ request('status') === $s ? 'selected' : '' }}>{{ $s }}</option>
-                    @endforeach
-                </select>
-                <button type="submit" class="btn-filter"><i class="fas fa-filter"></i> Filter</button>
-                @if(request()->hasAny(['search','asrama','status']))
-                <a href="{{ route('keluhan-barak.kelola') }}" class="btn-reset"><i class="fas fa-times"></i> Reset</a>
+
+                {{-- Alerts --}}
+                @if(session('success'))
+                <div class="rounded-2xl bg-emerald-100/90 border border-emerald-300 p-4 text-emerald-800 text-xs font-bold mb-5 flex items-center gap-2 shadow-sm backdrop-blur-md">
+                    <i class="fa-solid fa-circle-check text-emerald-600 text-base"></i>
+                    <span>{{ session('success') }}</span>
+                </div>
                 @endif
-            </form>
-        </div>
-
-        @if($daftarKeluhan->isEmpty())
-        <div class="card">
-            <div class="empty-state">
-                <i class="fas fa-door-open"></i>
-                <h4>Belum ada keluhan</h4>
-                <p>Belum ada pengajuan keluhan barak yang cocok dengan filter Anda.</p>
-            </div>
-        </div>
-        @else
-        <div class="card">
-            <table>
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>PENGAJU</th>
-                        <th>LOKASI BARAK</th>
-                        <th>TANGGAL</th>
-                        <th style="text-align:center;">STATUS</th>
-                        <th style="text-align:center;">AKSI</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach($daftarKeluhan as $i => $k)
-                    <tr>
-                        <td style="color:#bbb; font-weight:600;">{{ $daftarKeluhan->firstItem() + $i }}</td>
-                        <td>
-                            <div style="font-weight:700; color:#333;">{{ $k->nama }}</div>
-                            <div style="font-size:11px; color:#aab;">{{ $k->email }}</div>
-                            <div style="font-size:11px; color:#aab; margin-top:2px;">{{ $k->prodi }}</div>
-                        </td>
-                        <td>
-                            <span style="background:#fdf0f9; color:#b83280; padding:3px 10px; border-radius:20px; font-size:11px; font-weight:700;">
-                                {{ $k->asrama }}
-                            </span>
-                            <div style="font-weight:700; color:#333; margin-top:4px;">
-                                {{ $k->lorong }} · No. {{ $k->nomor_barak }}
-                            </div>
-                        </td>
-                        <td style="font-size:12px; color:#666; white-space:nowrap;">
-                            <i class="fas fa-calendar" style="color:#d63384; margin-right:5px;"></i>
-                            {{ $k->tanggal_pengajuan->locale('id')->isoFormat('D MMM Y') }}
-                        </td>
-                        <td style="text-align:center;">
-                            <span class="status-badge" style="background:{{ $k->status_bg_color }}; color:{{ $k->status_badge_color }};">
-                                {{ $k->status }}
-                            </span>
-                        </td>
-                        <td style="text-align:center;">
-                            <a href="{{ route('keluhan-barak.detail', $k->id) }}" class="btn-view">
-                                <i class="fas fa-eye"></i> Detail
-                            </a>
-                        </td>
-                    </tr>
-                    @endforeach
-                </tbody>
-            </table>
-
-            @if($daftarKeluhan->hasPages())
-            <div class="pagination-bar">
-                <div class="pagination-info">Menampilkan {{ $daftarKeluhan->firstItem() }}–{{ $daftarKeluhan->lastItem() }} dari {{ $daftarKeluhan->total() }} keluhan</div>
-                <div class="pagination-links">
-                    @if($daftarKeluhan->onFirstPage())
-                        <span class="page-btn disabled">‹ Sebelumnya</span>
-                    @else
-                        <a href="{{ $daftarKeluhan->previousPageUrl() }}" class="page-btn normal">‹ Sebelumnya</a>
-                    @endif
-                    @if($daftarKeluhan->hasMorePages())
-                        <a href="{{ $daftarKeluhan->nextPageUrl() }}" class="page-btn active-pg">Berikutnya ›</a>
-                    @else
-                        <span class="page-btn disabled">Berikutnya ›</span>
-                    @endif
+                @if(session('error'))
+                <div class="rounded-2xl bg-rose-100/90 border border-rose-300 p-4 text-rose-800 text-xs font-bold mb-5 flex items-center gap-2 shadow-sm backdrop-blur-md">
+                    <i class="fa-solid fa-circle-exclamation text-rose-600 text-base"></i>
+                    <span>{{ session('error') }}</span>
                 </div>
-            </div>
-            @endif
-        </div>
-        @endif
+                @endif
+
+                {{-- 5 KPI Stat Cards Grid --}}
+                <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3.5 mb-5">
+                    <div class="rounded-2xl bg-white/50 backdrop-blur-xl border border-white/60 p-4 shadow-md text-center">
+                        <div class="w-8 h-8 rounded-xl bg-purple-100 text-purple-700 flex items-center justify-center mx-auto mb-2 text-xs font-bold shadow-sm">
+                            <i class="fa-solid fa-door-open"></i>
+                        </div>
+                        <div class="text-2xl font-black text-slate-900 font-mono">{{ $stats['total'] }}</div>
+                        <div class="text-[10px] font-bold text-slate-500 uppercase tracking-wider mt-0.5">Total Keluhan</div>
+                    </div>
+
+                    <div class="rounded-2xl bg-white/50 backdrop-blur-xl border border-white/60 p-4 shadow-md text-center">
+                        <div class="w-8 h-8 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center mx-auto mb-2 text-xs font-bold shadow-sm">
+                            <i class="fa-solid fa-hourglass-half"></i>
+                        </div>
+                        <div class="text-2xl font-black text-amber-600 font-mono">{{ $stats['diajukan'] }}</div>
+                        <div class="text-[10px] font-bold text-slate-500 uppercase tracking-wider mt-0.5">Diajukan</div>
+                    </div>
+
+                    <div class="rounded-2xl bg-white/50 backdrop-blur-xl border border-white/60 p-4 shadow-md text-center">
+                        <div class="w-8 h-8 rounded-xl bg-sky-100 text-sky-700 flex items-center justify-center mx-auto mb-2 text-xs font-bold shadow-sm">
+                            <i class="fa-solid fa-spinner"></i>
+                        </div>
+                        <div class="text-2xl font-black text-sky-600 font-mono">{{ $stats['diproses'] }}</div>
+                        <div class="text-[10px] font-bold text-slate-500 uppercase tracking-wider mt-0.5">Diproses</div>
+                    </div>
+
+                    <div class="rounded-2xl bg-white/50 backdrop-blur-xl border border-white/60 p-4 shadow-md text-center">
+                        <div class="w-8 h-8 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center mx-auto mb-2 text-xs font-bold shadow-sm">
+                            <i class="fa-solid fa-circle-check"></i>
+                        </div>
+                        <div class="text-2xl font-black text-emerald-600 font-mono">{{ $stats['selesai'] }}</div>
+                        <div class="text-[10px] font-bold text-slate-500 uppercase tracking-wider mt-0.5">Selesai</div>
+                    </div>
+
+                    <div class="rounded-2xl bg-white/50 backdrop-blur-xl border border-white/60 p-4 shadow-md text-center">
+                        <div class="w-8 h-8 rounded-xl bg-rose-100 text-rose-700 flex items-center justify-center mx-auto mb-2 text-xs font-bold shadow-sm">
+                            <i class="fa-solid fa-circle-xmark"></i>
+                        </div>
+                        <div class="text-2xl font-black text-rose-600 font-mono">{{ $stats['ditolak'] }}</div>
+                        <div class="text-[10px] font-bold text-slate-500 uppercase tracking-wider mt-0.5">Ditolak</div>
+                    </div>
+                </div>
+
+                {{-- Filter Bar --}}
+                <div class="rounded-2xl bg-white/45 backdrop-blur-xl border border-white/60 p-4 mb-5 shadow-sm">
+                    <form method="GET" action="{{ route('keluhan-barak.kelola') }}" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-2.5 items-center">
+                        <div class="lg:col-span-5">
+                            <input type="text" name="search" value="{{ request('search') }}"
+                                   placeholder="Cari nama taruna, email, nomor barak..." 
+                                   class="w-full px-3.5 py-2 rounded-xl bg-white/70 focus:bg-white border border-white/80 text-xs font-medium text-slate-800 placeholder-slate-400 outline-none">
+                        </div>
+                        <div class="lg:col-span-3">
+                            <select name="asrama" class="w-full px-3.5 py-2 rounded-xl bg-white/70 focus:bg-white border border-white/80 text-xs font-semibold text-slate-700 outline-none">
+                                <option value="">Semua Asrama</option>
+                                @foreach($asramaList as $a)
+                                    <option value="{{ $a }}" {{ request('asrama') === $a ? 'selected' : '' }}>{{ $a }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="lg:col-span-2">
+                            <select name="status" class="w-full px-3.5 py-2 rounded-xl bg-white/70 focus:bg-white border border-white/80 text-xs font-semibold text-slate-700 outline-none">
+                                <option value="">Semua Status</option>
+                                @foreach($statusList as $s)
+                                    <option value="{{ $s }}" {{ request('status') === $s ? 'selected' : '' }}>{{ $s }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="lg:col-span-2 flex gap-1.5">
+                            <button type="submit" class="flex-1 py-2 px-3 rounded-xl bg-gradient-to-r from-pink-600 to-rose-600 hover:from-pink-700 hover:to-rose-700 text-white font-bold text-xs shadow-md transition flex items-center justify-center gap-1.5">
+                                <i class="fa-solid fa-filter text-[10px]"></i>
+                                <span>Filter</span>
+                            </button>
+                            @if(request()->hasAny(['search','asrama','status']))
+                            <a href="{{ route('keluhan-barak.kelola') }}" class="py-2 px-3 rounded-xl bg-white/80 hover:bg-white text-rose-600 font-bold text-xs border border-white shadow-sm flex items-center justify-center transition">
+                                <i class="fa-solid fa-xmark"></i>
+                            </a>
+                            @endif
+                        </div>
+                    </form>
+                </div>
+
+                {{-- Table Card --}}
+                @if($daftarKeluhan->isEmpty())
+                <div class="rounded-2xl bg-white/50 backdrop-blur-xl border border-white/60 p-10 text-center shadow-lg">
+                    <i class="fa-solid fa-door-open text-4xl text-slate-300 mb-2 block"></i>
+                    <h4 class="text-sm font-bold text-slate-800 mb-1">Tidak Ada Data Keluhan Ditemukan</h4>
+                    <p class="text-xs text-slate-500">Tidak ada pengajuan keluhan barak yang cocok dengan filter yang dipilih.</p>
+                </div>
+                @else
+                <div class="rounded-2xl bg-white/45 backdrop-blur-xl border border-white/60 p-4 sm:p-5 shadow-lg">
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse text-xs">
+                            <thead>
+                                <tr class="bg-white/60 backdrop-blur-md text-[10px] font-bold uppercase tracking-wider text-slate-700 border-b border-white/40">
+                                    <th class="py-3 px-3">#</th>
+                                    <th class="py-3 px-3">Pengaju</th>
+                                    <th class="py-3 px-3">Lokasi Barak</th>
+                                    <th class="py-3 px-3">Tanggal</th>
+                                    <th class="py-3 px-3 text-center">Status</th>
+                                    <th class="py-3 px-3 text-center">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-white/30">
+                                @foreach($daftarKeluhan as $i => $k)
+                                <tr class="hover:bg-white/60 transition">
+                                    <td class="py-3 px-3 text-slate-400 font-bold">{{ $daftarKeluhan->firstItem() + $i }}</td>
+                                    <td class="py-3 px-3">
+                                        <div class="font-bold text-slate-900">{{ $k->nama }}</div>
+                                        <div class="text-[10px] text-slate-500 font-mono">{{ $k->email }}</div>
+                                        <div class="text-[10px] text-slate-500 font-semibold">{{ $k->prodi }}</div>
+                                    </td>
+                                    <td class="py-3 px-3">
+                                        <span class="px-2 py-0.5 rounded-full bg-pink-100 text-pink-800 font-bold text-[10px] border border-pink-200">
+                                            {{ $k->asrama }}
+                                        </span>
+                                        <div class="font-bold text-slate-900 mt-1">
+                                            {{ $k->lorong }} &bull; No. {{ $k->nomor_barak }}
+                                        </div>
+                                    </td>
+                                    <td class="py-3 px-3 text-slate-600 font-medium whitespace-nowrap">
+                                        <i class="fa-solid fa-calendar text-pink-500 mr-1"></i>
+                                        {{ $k->tanggal_pengajuan->locale('id')->isoFormat('D MMM Y') }}
+                                    </td>
+                                    <td class="py-3 px-3 text-center">
+                                        <span class="px-2.5 py-0.5 rounded-full font-bold text-[10px]" style="background:{{ $k->status_bg_color }}; color:{{ $k->status_badge_color }};">
+                                            {{ $k->status }}
+                                        </span>
+                                    </td>
+                                    <td class="py-3 px-3 text-center">
+                                        <a href="{{ route('keluhan-barak.detail', $k->id) }}" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-pink-50 hover:bg-pink-100 text-pink-700 font-bold text-xs border border-pink-200 shadow-sm transition no-underline">
+                                            <i class="fa-solid fa-eye text-[10px]"></i>
+                                            <span>Detail</span>
+                                        </a>
+                                    </td>
+                                </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="mt-4">
+                        {{ $daftarKeluhan->links() }}
+                    </div>
+                </div>
+                @endif
+
     </div>
-</div>
+</main>
+
 </x-app-layout>

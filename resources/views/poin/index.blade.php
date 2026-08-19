@@ -1,7 +1,7 @@
 <x-app-layout>
 <style>
     * { box-sizing: border-box; }
-    body { font-family: 'Inter', sans-serif; background: #f0f2f5; }
+    body { font-family: 'Inter', sans-serif; background: transparent; }
 
     .app-layout { display: flex; min-height: 100vh; }
     .main-content { flex: 1; padding: 28px 30px; min-width: 0; }
@@ -409,24 +409,26 @@
     .main-content .btn-sm.btn-outline-danger:hover { background: #ffe0e0; color: #e53e3e; }
 </style>
 
-<div class="app-layout">
-    <x-sidebar active="poin" />
+{{-- Top Floating Island Capsule Navbar --}}
+<x-island-navbar />
 
-    <main class="main-content">
+<main class="max-w-7xl mx-auto px-4 sm:px-6 pb-12 pt-2">
+    <div class="spatial-workspace-window rounded-3xl bg-white/30 backdrop-blur-2xl border border-white/50 shadow-2xl p-4 sm:p-7 relative overflow-hidden">
+        
 
-        {{-- Top Success Alert --}}
-        @if(session('success'))
-        <div class="alert alert-success alert-dismissible fade show d-flex align-items-center mb-4 shadow-sm" role="alert">
-            <i class="fas fa-check-circle fs-5 me-2"></i>
-            <div>{{ session('success') }}</div>
-            <button type="button" class="btn-close ms-auto" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-        @endif
 
-        {{-- Header Banner --}}
-        <div class="poin-header-banner">
-            <div>
-                <h1 class="banner-title"><i class="fas fa-balance-scale"></i> Sistem Pengusulan Poin & Sanksi Taruna</h1>
+                {{-- Top Success Alert --}}
+                @if(session('success'))
+                <div class="rounded-2xl bg-emerald-100/90 border border-emerald-300 p-4 text-emerald-800 text-xs font-bold mb-5 flex items-center gap-2 shadow-sm backdrop-blur-md">
+                    <i class="fa-solid fa-circle-check text-emerald-600 text-base"></i>
+                    <div>{{ session('success') }}</div>
+                </div>
+                @endif
+
+                {{-- Header Banner --}}
+                <div class="poin-header-banner">
+                    <div>
+                        <h1 class="banner-title"><i class="fas fa-balance-scale"></i> Sistem Pengusulan Poin & Sanksi Taruna</h1>
                 <p class="banner-sub">Sesuai Peraturan Tata Tertib Taruna (PTTT) PPI Curug &bull; Validasi Admin Pusbangkar</p>
             </div>
             <div>
@@ -958,8 +960,8 @@
 
         </div>
 
-    </main>
-</div>
+    </div>
+</main>
 
 {{-- Master Data JSON JS --}}
 <script>
