@@ -3,8 +3,7 @@
 <style>
 * { box-sizing: border-box; }
 body { font-family: 'Inter', sans-serif; background: transparent; }
-.app-layout { display: flex; min-height: 100vh; }
-.main-content { flex: 1; padding: 28px 30px; min-width: 0; }
+.main-content { max-width: 1200px; margin: 0 auto; padding: 8px 30px 28px; min-width: 0; }
 
 .page-header {
     background: linear-gradient(135deg, #f7b733 0%, #fc4a1a 100%);
@@ -62,8 +61,7 @@ tbody tr:hover { background: #fffaf0; }
 .page-btn.disabled { background: #f4f5f9; color: #ccc; pointer-events: none; }
 </style>
 
-<div class="app-layout">
-    <x-sidebar active="reward" />
+<x-island-navbar />
 
     <div class="main-content">
         <div class="page-header">
@@ -217,5 +215,4 @@ tbody tr:hover { background: #fffaf0; }
         </div>
         @endif
     </div>
-</div>
 </x-app-layout>

@@ -4,8 +4,7 @@
 * { box-sizing: border-box; }
 body { font-family: 'Inter', sans-serif; background: transparent; }
 
-.app-layout { display: flex; min-height: 100vh; }
-.main-content { flex: 1; padding: 28px 30px; min-width: 0; }
+.main-content { max-width: 1200px; margin: 0 auto; padding: 8px 30px 28px; min-width: 0; }
 
 /* Header */
 .page-header {
@@ -60,8 +59,7 @@ body { font-family: 'Inter', sans-serif; background: transparent; }
 .empty-state p { font-size:14px; color:#98a0b3; margin:0; font-weight:600; }
 </style>
 
-<div class="app-layout">
-    <x-sidebar active="apel" />
+<x-island-navbar />
 
     <div class="main-content">
 
@@ -147,7 +145,6 @@ body { font-family: 'Inter', sans-serif; background: transparent; }
 
         @endif
     </div>
-</div>
 
 <script>
 function bukaApel(id) {

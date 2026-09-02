@@ -3,8 +3,7 @@
     * { box-sizing: border-box; }
     body { font-family: 'Inter', sans-serif; background: transparent; }
 
-    .app-layout { display: flex; min-height: 100vh; }
-    .main-content { flex: 1; padding: 24px 28px; min-width: 0; }
+    .main-content { max-width: 1200px; margin: 0 auto; padding: 8px 28px 24px; min-width: 0; }
 
     /* === HEADER BANNER === */
     .tablet-banner {
@@ -337,8 +336,7 @@
     }
 </style>
 
-<div class="app-layout">
-    <x-sidebar active="log-pergerakan" />
+<x-island-navbar />
 
     <main class="main-content">
 
@@ -677,7 +675,6 @@
         </div>
 
     </main>
-</div>
 
 <script>
     // Switcher Tab Mode (Keberangkatan vs Kepulangan)

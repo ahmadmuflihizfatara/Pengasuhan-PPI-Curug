@@ -110,7 +110,7 @@
                                             {!! $a->keterangan ? Str::limit($a->keterangan, 70) : '<span class="text-slate-300">—</span>' !!}
                                         </td>
                                         <td class="py-3 px-3 text-center">
-                                            <div class="inline-flex items-center gap-1">
+                                            <div class="inline-flex flex-col items-stretch gap-1">
                                                 <a href="{{ route('acara.edit', $a->id) }}" class="p-1.5 rounded-lg bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-200 shadow-sm transition" title="Edit">
                                                     <i class="fa-solid fa-pen text-xs"></i>
                                                 </a>

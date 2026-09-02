@@ -3,8 +3,7 @@
 <style>
 * { box-sizing: border-box; }
 body { font-family: 'Inter', sans-serif; background: transparent; }
-.app-layout { display: flex; min-height: 100vh; }
-.main-content { flex: 1; padding: 28px 30px; min-width: 0; }
+.main-content { max-width: 1200px; margin: 0 auto; padding: 8px 30px 28px; min-width: 0; }
 
 .page-header {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -75,8 +74,7 @@ tbody tr:hover { background:#f8f9ff; }
 .toast-close { margin-left:auto; background:none; border:none; color:#aab; cursor:pointer; font-size:16px; padding:0; }
 </style>
 
-<div class="app-layout">
-    <x-sidebar active="surat-taruna" />
+<x-island-navbar />
 
     <div class="main-content">
         <div class="page-header">
@@ -172,7 +170,6 @@ tbody tr:hover { background:#f8f9ff; }
         </div>
         @endif
     </div>
-</div>
 
 <!-- Toast Notification Container -->
 <div class="toast-container" id="toastContainer"></div>
