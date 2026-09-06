@@ -41,7 +41,7 @@
             left: -20px;
             right: -20px;
             bottom: -20px;
-            background-image: url('{{ asset('images/BG.png') }}');
+            background-image: url('{{ asset('assets/img/auth-bg.jpg') }}');
             background-size: cover;
             background-position: center center;
             background-repeat: no-repeat;
@@ -58,7 +58,7 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: radial-gradient(circle at 50% 30%, rgba(15, 23, 42, 0.12) 0%, rgba(15, 23, 42, 0.45) 100%);
+            background: radial-gradient(circle at 50% 35%, rgba(15, 23, 42, 0.45) 0%, rgba(15, 23, 42, 0.82) 100%);
             z-index: -9;
             pointer-events: none;
         }
@@ -75,69 +75,49 @@
     <div id="global-cockpit-bg-layer"></div>
     <div id="global-cockpit-overlay-layer"></div>
 
-    {{-- Top Floating Island Capsule Navbar --}}
-    <header class="w-full pt-5 pb-3 px-4 sm:px-8 sticky top-0 z-50 flex items-center justify-between pointer-events-auto">
-        <!-- Brand Logo Left -->
-        <a href="{{ url('/') }}" class="flex items-center gap-3 px-3.5 py-2 rounded-2xl bg-white/40 hover:bg-white/60 backdrop-blur-xl border border-white/50 transition-all duration-300 shadow-md group">
-            <div class="w-8 h-8 rounded-xl bg-gradient-to-tr from-blue-700 via-indigo-600 to-sky-500 flex items-center justify-center text-white font-black text-sm shadow-inner group-hover:scale-105 transition-transform">
-                <i class="fa-solid fa-plane-departure text-xs"></i>
-            </div>
-            <div class="text-left">
-                <div class="font-extrabold text-slate-900 tracking-tight text-xs uppercase leading-none">PPI CURUG</div>
-                <div class="text-[9px] font-semibold text-slate-600 tracking-widest uppercase">Pengasuhan</div>
-            </div>
-        </a>
-
-        <!-- Center Floating Capsule Navigation Dock -->
-        <nav class="hidden md:flex items-center gap-2 px-4 py-2 rounded-full bg-slate-900/75 backdrop-blur-2xl border border-white/15 shadow-2xl">
-            <a href="#fitur" class="text-xs font-semibold text-white/80 hover:text-white px-3 py-1 rounded-full hover:bg-white/10 transition">Pilar Pengasuhan</a>
-            <a href="#stats" class="text-xs font-semibold text-white/80 hover:text-white px-3 py-1 rounded-full hover:bg-white/10 transition">Statistik</a>
-            <a href="#tentang" class="text-xs font-semibold text-white/80 hover:text-white px-3 py-1 rounded-full hover:bg-white/10 transition">Tentang</a>
-        </nav>
-
-        <!-- Right Quick Action Pill / Auth Button -->
-        <div class="flex items-center gap-2">
-            @if (Route::has('login'))
-                <a href="{{ route('login') }}" class="px-5 py-2.5 rounded-full bg-white hover:bg-slate-50 text-slate-950 font-extrabold text-xs shadow-xl transition-all duration-200 active:scale-95 flex items-center gap-2">
-                    <span>Masuk ke Kokpit</span>
-                    <i class="fa-solid fa-arrow-right text-[10px]"></i>
-                </a>
-            @endif
-        </div>
-    </header>
-
-    {{-- Hero Section with Editorial Display Typography & Omnibar --}}
-    <main class="flex-1 max-w-7xl mx-auto px-4 py-8 sm:py-12 w-full flex flex-col items-center justify-center">
+    {{-- Hero Section with Editorial Display Typography --}}
+    <main class="flex-1 max-w-7xl mx-auto px-4 py-12 sm:py-16 w-full flex flex-col items-center justify-center">
         
-        <div class="max-w-4xl text-center flex flex-col items-center mb-10">
-            <!-- Top Floating Pill Tag -->
-            <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/30 backdrop-blur-xl border border-white/40 shadow-sm text-xs font-bold text-slate-900 mb-5 animate-fade-in">
-                <span class="text-amber-500 font-black">✦</span>
-                <span>Sistem Informasi Pengasuhan & Karakter Taruna</span>
+        <div class="max-w-4xl text-center flex flex-col items-center mb-12">
+            
+            <!-- Brand Badge Top -->
+            <div class="flex items-center gap-3 px-4 py-2 rounded-2xl bg-white/20 hover:bg-white/30 backdrop-blur-xl border border-white/30 transition-all duration-300 shadow-xl mb-6">
+                <div class="w-8 h-8 rounded-xl bg-gradient-to-tr from-blue-700 via-indigo-600 to-sky-500 flex items-center justify-center text-white font-black text-sm shadow-inner">
+                    <i class="fa-solid fa-plane-departure text-xs"></i>
+                </div>
+                <div class="text-left">
+                    <div class="font-extrabold text-white tracking-tight text-xs uppercase leading-none">PPI CURUG</div>
+                    <div class="text-[9px] font-semibold text-sky-200 tracking-widest uppercase">Pengasuhan Taruna</div>
+                </div>
             </div>
 
-            <!-- Large Editorial Serif Display Headline -->
-            <h1 class="hero-title-serif text-4xl sm:text-6xl md:text-7xl font-normal tracking-tight text-slate-900 drop-shadow-sm leading-[1.08] mb-4">
+            <!-- Top Floating Pill Tag -->
+            <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-slate-900/80 backdrop-blur-xl border border-white/20 shadow-lg text-xs font-bold text-sky-300 mb-5 animate-fade-in">
+                <span class="text-amber-400 font-black">✦</span>
+                <span>Sistem Informasi Pengasuhan &amp; Karakter Taruna</span>
+            </div>
+
+            <!-- Large Editorial Serif Display Headline (High Contrast White) -->
+            <h1 class="hero-title-serif text-4xl sm:text-6xl md:text-7xl font-normal tracking-tight text-white drop-shadow-[0_4px_24px_rgba(0,0,0,0.9)] leading-[1.08] mb-5">
                 Keunggulan Disiplin untuk Pemimpin Masa Depan
             </h1>
 
-            <!-- Subtitle Sans-serif -->
-            <p class="text-xs sm:text-base text-slate-700 max-w-2xl mx-auto leading-relaxed mb-8 font-medium">
+            <!-- Subtitle Sans-serif (High Contrast Slate-200) -->
+            <p class="text-sm sm:text-base md:text-lg text-slate-100/90 max-w-2xl mx-auto leading-relaxed mb-9 font-medium drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)]">
                 Platform terpadu Politeknik Penerbangan Indonesia Curug untuk manajemen kedisiplinan, pemantauan pos jaga real-time, raport poin, perizinan asrama, dan pembinaan karakter taruna kelas dunia.
             </p>
 
-            <!-- Floating Omnibar Search Pill with Action Button (Inspired by design.mp4) -->
-            <div class="w-full max-w-xl relative group">
-                <div class="flex items-center bg-white/40 hover:bg-white/60 focus-within:bg-white/80 backdrop-blur-2xl border border-white/60 focus-within:border-indigo-400 rounded-full px-5 py-3 shadow-2xl transition-all duration-300">
-                    <i class="fa-solid fa-magnifying-glass text-slate-500 text-sm ml-1 mr-3"></i>
-                    <input type="text" 
-                           id="globalSearchInput"
-                           placeholder="Cek status perizinan, info kedisiplinan, pos jaga..." 
-                           class="w-full bg-transparent border-none outline-none text-xs sm:text-sm text-slate-900 placeholder-slate-500 font-semibold focus:ring-0">
-                    <a href="{{ route('login') }}" class="w-9 h-9 rounded-full bg-slate-950 hover:bg-slate-800 text-white flex items-center justify-center transition-transform duration-200 active:scale-95 shadow-md flex-shrink-0" title="Cari / Akses">
-                        <i class="fa-solid fa-arrow-right text-xs"></i>
-                    </a>
-                </div>
+            <!-- CTA Action Buttons -->
+            <div class="flex flex-wrap items-center justify-center gap-3.5">
+                @if (Route::has('login'))
+                <a href="{{ route('login') }}" class="px-8 py-3.5 rounded-full bg-gradient-to-r from-blue-600 via-indigo-600 to-sky-500 hover:from-blue-500 hover:to-indigo-500 text-white font-extrabold text-xs sm:text-sm shadow-2xl transition-all duration-200 active:scale-95 flex items-center gap-2.5 no-underline group">
+                    <span>Masuk ke Sistem Pengasuhan</span>
+                    <i class="fa-solid fa-arrow-right text-xs group-hover:translate-x-1 transition-transform"></i>
+                </a>
+                @endif
+                <a href="#fitur" class="px-7 py-3.5 rounded-full bg-white/20 hover:bg-white/30 backdrop-blur-xl border border-white/30 text-white font-bold text-xs sm:text-sm shadow-lg transition-all duration-200 no-underline">
+                    <span>Pelajari 4 Pilar</span>
+                </a>
             </div>
         </div>
 

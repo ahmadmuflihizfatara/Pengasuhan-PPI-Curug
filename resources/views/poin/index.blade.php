@@ -245,8 +245,8 @@
     .tingkat-card.active-ringan,
     .tingkat-card.active-sedang,
     .tingkat-card.active-berat { opacity: 1; }
-    .tingkat-name { font-size: 10.5px; font-weight: 500; color: rgba(255,255,255,.85); margin-bottom: 2px; }
-    .tingkat-poin { font-size: 13.5px; font-weight: 700; color: white; }
+    .tingkat-name { font-size: 10.5px; font-weight: 500; color: rgba(0,0,0,.85); margin-bottom: 2px; }
+    .tingkat-poin { font-size: 13.5px; font-weight: 700; color: #111; }
 
     /* Riwayat Tabs (custom, replace default bootstrap nav-tabs) */
     .riwayat-tabs {

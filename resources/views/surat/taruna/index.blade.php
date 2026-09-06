@@ -3,8 +3,8 @@
 <style>
 * { box-sizing: border-box; }
 body { font-family: 'Inter', sans-serif; background: transparent; }
-.app-layout { display: flex; min-height: 100vh; }
-.main-content { flex: 1; padding: 28px 30px; min-width: 0; }
+.app-layout { display: block; min-height: 100vh; }
+.main-content { padding: 28px 30px; min-width: 0; max-width: 80rem; margin: 0 auto; width: 100%; }
 
 .page-header {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -76,7 +76,7 @@ tbody tr:hover { background:#f8f9ff; }
 </style>
 
 <div class="app-layout">
-    <x-sidebar active="surat-taruna" />
+    <x-island-navbar />
 
     <div class="main-content">
         <div class="page-header">

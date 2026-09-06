@@ -17,6 +17,45 @@
 
     {{-- Auth stylesheet custom --}}
     <link rel="stylesheet" href="{{ asset('css/login.css') }}">
+
+    <style>
+        *, *::before, *::after { box-sizing: border-box; }
+        html, body {
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Fixed blurred cockpit background container (sama seperti landing page) */
+        .global-cockpit-background {
+            position: fixed;
+            top: -20px;
+            left: -20px;
+            right: -20px;
+            bottom: -20px;
+            background-image: url('{{ asset('assets/img/auth-bg.jpg') }}');
+            background-size: cover;
+            background-position: center center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            filter: blur(4px) brightness(0.92);
+            transform: scale(1.04);
+            z-index: -10;
+            pointer-events: none;
+        }
+
+        .global-cockpit-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 50% 35%, rgba(15, 23, 42, 0.45) 0%, rgba(15, 23, 42, 0.82) 100%);
+            z-index: -9;
+            pointer-events: none;
+        }
+    </style>
 </head>
 <body class="antialiased text-slate-800 font-sans min-h-screen relative overflow-x-hidden">
     
