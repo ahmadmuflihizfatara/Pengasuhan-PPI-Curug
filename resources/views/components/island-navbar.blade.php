@@ -61,7 +61,8 @@
                 @endif
             </a>
 
-            {{-- 3. Log Pergerakan (Pos Jaga) --}}
+            {{-- 3. Log Pergerakan (Pos Jaga) - hanya pengasuh & admin --}}
+            @if($user && !$user->isTaruna())
             <a href="{{ route('log-pergerakan.index') }}" 
                class="{{ $isActive('log-pergerakan') ? 'bg-white text-slate-950 font-bold px-3.5 py-2 shadow-md' : 'text-white/70 hover:text-white hover:bg-white/10 p-2.5' }} rounded-full transition-all duration-200 flex items-center gap-2 no-underline text-xs flex-shrink-0" 
                title="Pos Jaga Gerbang & Log Pergerakan">
@@ -70,6 +71,7 @@
                 <span class="text-xs font-bold">Log Gerbang</span>
                 @endif
             </a>
+            @endif
 
             {{-- 4. Apel & Presensi --}}
             <a href="{{ $apelUrl }}" 
@@ -383,10 +385,12 @@
                         <span>Catatan Poin Disiplin</span>
                     </a>
 
+                    @if($user && !$user->isTaruna())
                     <a href="{{ route('log-pergerakan.index') }}" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl font-semibold transition no-underline {{ $isActive('log-pergerakan') ? 'bg-white text-slate-950 font-bold shadow-md' : 'text-white/80 hover:bg-white/10 hover:text-white' }}">
                         <i class="fa-solid fa-person-walking w-4 text-center {{ $isActive('log-pergerakan') ? 'text-indigo-600' : 'text-teal-400' }}"></i>
                         <span>Log Pos Jaga Gerbang</span>
                     </a>
+                    @endif
 
                     <a href="{{ $apelUrl }}" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl font-semibold transition no-underline {{ $isActive('apel') ? 'bg-white text-slate-950 font-bold shadow-md' : 'text-white/80 hover:bg-white/10 hover:text-white' }}">
                         <i class="fa-solid fa-clipboard-check w-4 text-center {{ $isActive('apel') ? 'text-indigo-600' : 'text-emerald-400' }}"></i>
