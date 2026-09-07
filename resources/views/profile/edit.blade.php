@@ -3,14 +3,13 @@
 <style>
 * { box-sizing: border-box; }
 body { font-family: 'Inter', sans-serif; background: transparent; }
-.app-layout { display: flex; min-height: 100vh; }
-.main-content { flex: 1; padding: 28px 28px 28px 24px; min-width: 0; }
+.app-layout { display: block; min-height: 100vh; }
+.main-content { padding: 28px 28px 28px 24px; min-width: 0; max-width: 80rem; margin: 0 auto; width: 100%; }
 .profile-title { font-size: 22px; font-weight: 800; color: #333; margin: 0 0 4px 0; }
 .profile-subtitle { font-size: 13px; color: #888; margin: 0 0 24px 0; }
 </style>
 
 <div class="app-layout">
-    <x-sidebar active="profile" />
 
     <div class="main-content">
         <h1 class="profile-title"><i class="fas fa-user-circle" style="color:#764ba2; margin-right:10px;"></i>{{ __('Profile') }}</h1>

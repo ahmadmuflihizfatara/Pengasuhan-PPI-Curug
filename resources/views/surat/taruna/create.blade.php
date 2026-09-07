@@ -3,7 +3,8 @@
 <style>
 * { box-sizing: border-box; }
 body { font-family: 'Inter', sans-serif; background: transparent; }
-.main-content { margin: 0 auto; padding: 8px 30px 28px; min-width: 0; max-width: 820px; }
+.app-layout { display: block; min-height: 100vh; }
+.main-content { padding: 28px 30px; min-width: 0; max-width: 820px; margin: 0 auto; width: 100%; }
 
 .back-link { display:inline-flex; align-items:center; gap:7px; color:#667eea; text-decoration:none; font-size:13px; font-weight:600; margin-bottom:20px; }
 .back-link:hover { text-decoration:underline; }
@@ -49,7 +50,8 @@ textarea.form-control { resize:vertical; min-height:110px; }
 .error-box ul { margin:0; padding-left:18px; color:#e53e3e; font-size:13px; }
 </style>
 
-<x-island-navbar />
+<div class="app-layout">
+    <x-island-navbar />
 
     <div class="main-content">
         <a href="{{ route('surat-taruna.index') }}" class="back-link">

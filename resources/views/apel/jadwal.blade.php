@@ -4,7 +4,8 @@
 * { box-sizing: border-box; }
 body { font-family: 'Inter', sans-serif; background: transparent; }
 
-.main-content { max-width: 1200px; margin: 0 auto; padding: 8px 30px 28px; min-width: 0; }
+.app-layout { display: block; min-height: 100vh; }
+.main-content { padding: 28px 30px; min-width: 0; max-width: 80rem; margin: 0 auto; width: 100%; }
 
 /* Header */
 .page-header {
@@ -59,7 +60,8 @@ body { font-family: 'Inter', sans-serif; background: transparent; }
 .empty-state p { font-size:14px; color:#98a0b3; margin:0; font-weight:600; }
 </style>
 
-<x-island-navbar />
+<div class="app-layout">
+    <x-island-navbar />
 
     <div class="main-content">
 

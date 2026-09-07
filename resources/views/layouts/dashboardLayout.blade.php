@@ -75,6 +75,9 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 
+    {{-- Alpine.js (menu dropdown, modal, mobile drawer) --}}
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.9/dist/cdn.min.js"></script>
+
     {{-- Global: handle delete-user buttons (event delegation, works on any page) --}}
     <script>
     document.addEventListener('click', function (e) {

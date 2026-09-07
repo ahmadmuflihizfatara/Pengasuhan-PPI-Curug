@@ -295,7 +295,9 @@
                                 <i class="fa-solid fa-calendar-days text-indigo-600"></i>
                                 <span>Jadwal Pengasuhan</span>
                             </h3>
+                            @unless(Auth::user()->isTaruna())
                             <a href="{{ route('acara.create') }}" class="text-xs font-bold text-indigo-700 hover:underline">+ Tambah</a>
+                            @endunless
                         </div>
 
                         @if($semuaAcara->isEmpty())

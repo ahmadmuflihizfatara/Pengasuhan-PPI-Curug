@@ -3,7 +3,8 @@
 <style>
 * { box-sizing: border-box; }
 body { font-family: 'Inter', sans-serif; background: transparent; }
-.main-content { max-width: 1000px; margin: 0 auto; padding: 8px 28px 28px; min-width: 0; }
+.app-layout { display: block; min-height: 100vh; }
+.main-content { flex: 1; padding: 28px 28px 28px 24px; min-width: 0; max-width: 80rem; margin: 0 auto; width: 100%; }
 
 .topbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; flex-wrap: wrap; gap: 10px; }
 .back-link { display: inline-flex; align-items: center; gap: 7px; color: #b45309; text-decoration: none; font-size: 13px; font-weight: 600; }
@@ -56,7 +57,8 @@ body { font-family: 'Inter', sans-serif; background: transparent; }
 .modal-btn-confirm-reject  { background:linear-gradient(135deg,#e53e3e,#fc5c7d); color:white; border:none; padding:10px 24px; border-radius:25px; font-size:13px; font-weight:800; cursor:pointer; }
 </style>
 
-<x-island-navbar />
+<div class="app-layout">
+    <x-island-navbar />
 
     <div class="main-content">
         <div class="topbar">

@@ -3,8 +3,8 @@
 <style>
 * { box-sizing: border-box; }
 body { font-family: 'Inter', sans-serif; background: transparent; }
-.app-layout { display: flex; min-height: 100vh; }
-.main-content { flex: 1; padding: 28px 28px 28px 24px; min-width: 0; }
+.app-layout { display: block; min-height: 100vh; }
+.main-content { flex: 1; padding: 28px 28px 28px 24px; min-width: 0; max-width: 80rem; margin: 0 auto; width: 100%; }
 
 .topbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
 .back-link { display: inline-flex; align-items: center; gap: 7px; color: #b45309; text-decoration: none; font-size: 13px; font-weight: 600; }
@@ -35,7 +35,7 @@ body { font-family: 'Inter', sans-serif; background: transparent; }
 </style>
 
 <div class="app-layout">
-    <x-sidebar active="reward" />
+    <x-island-navbar />
 
     <div class="main-content">
         <div class="topbar">

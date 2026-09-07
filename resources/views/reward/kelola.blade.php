@@ -3,7 +3,8 @@
 <style>
 * { box-sizing: border-box; }
 body { font-family: 'Inter', sans-serif; background: transparent; }
-.main-content { max-width: 1200px; margin: 0 auto; padding: 8px 30px 28px; min-width: 0; }
+.app-layout { display: block; min-height: 100vh; }
+.main-content { padding: 28px 30px; min-width: 0; max-width: 80rem; margin: 0 auto; width: 100%; }
 
 .page-header {
     background: linear-gradient(135deg, #f7b733 0%, #fc4a1a 100%);
@@ -61,7 +62,8 @@ tbody tr:hover { background: #fffaf0; }
 .page-btn.disabled { background: #f4f5f9; color: #ccc; pointer-events: none; }
 </style>
 
-<x-island-navbar />
+<div class="app-layout">
+    <x-island-navbar />
 
     <div class="main-content">
         <div class="page-header">

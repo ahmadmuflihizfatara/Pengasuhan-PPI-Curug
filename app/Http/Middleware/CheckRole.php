@@ -18,6 +18,11 @@ class CheckRole
             return redirect()->route('login');
         }
 
+        // Admin memiliki akses penuh ke semua halaman
+        if ($request->user()->isAdmin()) {
+            return $next($request);
+        }
+
         if (!in_array($request->user()->role, $roles)) {
             abort(403, 'Akses ditolak. Anda tidak memiliki izin untuk halaman ini.');
         }

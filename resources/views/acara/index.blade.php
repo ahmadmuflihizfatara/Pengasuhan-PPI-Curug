@@ -216,17 +216,11 @@
     <div class="cal-popover-row text-[11px] text-slate-600 flex items-center gap-1.5 mb-1" id="popPembinaRow" style="display:none;"><i class="fa-solid fa-user-tie text-indigo-600 w-4 text-center"></i><span id="popPembina"></span></div>
     <div class="cal-popover-row text-[11px] text-slate-600 flex items-center gap-1.5 mb-1" id="popLokasiRow" style="display:none;"><i class="fa-solid fa-location-dot text-indigo-600 w-4 text-center"></i><span id="popLokasi"></span></div>
     <div class="cal-popover-desc text-[11px] text-slate-500 mt-2 pt-2 border-t border-slate-100 leading-relaxed" id="popDesc" style="display:none;"></div>
-    @unless($isTaruna)
-    <div class="flex items-center gap-2 mt-3 pt-2 border-t border-slate-100" id="popActions">
-        <a href="#" id="popEditBtn" class="flex-1 py-1.5 rounded-lg bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-bold text-center text-xs no-underline"><i class="fa-solid fa-pen text-[10px] mr-1"></i> Edit</a>
-        <button onclick="popoverDelete()" class="flex-1 py-1.5 rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-600 font-bold text-center text-xs"><i class="fa-solid fa-trash text-[10px] mr-1"></i> Hapus</button>
-    </div>
-    @endunless
 </div>
 
 @php
-$acaraJson = $acara->map(function($a) use ($isTaruna) {
-    $item = [
+$acara = $acara->map(function($a) {
+    return [
         'type'       => 'acara',
         'id'         => $a->id,
         'judul'      => $a->nama_acara,
@@ -234,15 +228,10 @@ $acaraJson = $acara->map(function($a) use ($isTaruna) {
         'jam'        => \Carbon\Carbon::parse($a->jam)->format('H:i'),
         'keterangan' => $a->keterangan,
     ];
-    if (!$isTaruna) {
-        $item['edit_url']    = route('acara.edit', $a->id);
-        $item['delete_form'] = 'delete-acara-' . $a->id;
-    }
-    return $item;
 })->toJson();
 
-$apelJson = $apel->map(function($p) use ($isTaruna) {
-    $item = [
+$apel = $apel->map(function($p) {
+    return [
         'type'    => 'apel',
         'id'      => $p->id,
         'judul'   => $p->judul,
@@ -250,18 +239,15 @@ $apelJson = $apel->map(function($p) use ($isTaruna) {
         'jam'     => $p->jam ? \Carbon\Carbon::parse($p->jam)->format('H:i') : '',
         'pembina' => $p->pembina,
         'lokasi'  => $p->lokasi,
+        'keterangan' => $p->informasi,
     ];
-    if (!$isTaruna) {
-        $item['keterangan'] = $p->informasi;
-    }
-    return $item;
 })->toJson();
 @endphp
 
 <script>
 const IS_TARUNA   = @json($isTaruna);
-const ACARA_DATA  = @json(json_decode($acaraJson));
-const APEL_DATA   = @json(json_decode($apelJson));
+const ACARA_DATA  = @json(json_decode($acara));
+const APEL_DATA   = @json(json_decode($apel));
 const ALL_EVENTS  = ACARA_DATA.concat(APEL_DATA);
 
 const BULAN_ID = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
@@ -393,20 +379,15 @@ function openPopover(eventData, targetEl) {
     const pRow = document.getElementById('popPembinaRow');
     const lRow = document.getElementById('popLokasiRow');
     const dRow = document.getElementById('popDesc');
-    const aRow = document.getElementById('popActions');
 
     if (eventData.type === 'apel') {
         pRow.style.display = eventData.pembina ? 'flex' : 'none';
         document.getElementById('popPembina').textContent = eventData.pembina || '';
         lRow.style.display = eventData.lokasi ? 'flex' : 'none';
         document.getElementById('popLokasi').textContent = eventData.lokasi || '';
-        if (aRow) aRow.style.display = 'none';
     } else {
         pRow.style.display = 'none';
         lRow.style.display = 'none';
-        if (aRow) aRow.style.display = 'flex';
-        const editBtn = document.getElementById('popEditBtn');
-        if (editBtn) editBtn.href = eventData.edit_url || '#';
     }
 
     if (eventData.keterangan) {
@@ -432,13 +413,6 @@ function closePopover() {
     const pop = document.getElementById('calPopover');
     if (pop) pop.classList.remove('show');
     activePopoverEvent = null;
-}
-
-function popoverDelete() {
-    if (activePopoverEvent && activePopoverEvent.delete_form) {
-        closePopover();
-        showDeleteModal(activePopoverEvent.delete_form, activePopoverEvent.judul);
-    }
 }
 
 function formatTglIndo(tglStr) {
