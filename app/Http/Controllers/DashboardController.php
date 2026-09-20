@@ -8,7 +8,9 @@ use Illuminate\Http\JsonResponse;
 use App\Helpers\DashboardHelper;
 use App\Models\Acara;
 use App\Models\KeluhanBarak;
+use App\Models\Konsinyir;
 use App\Models\Mahasiswa;
+use App\Models\NilaiTaruna;
 use App\Models\PoinMahasiswa;
 use App\Models\Surat;
 
@@ -51,13 +53,20 @@ class DashboardController extends Controller
             'ditolak'   => KeluhanBarak::where('status', 'Ditolak')->count(),
         ];
 
-        // Point total + grafik prodi/tingkat if Taruna
+        // Point total + grafik prodi/tingkat + status konsinyir if Taruna
         $totalPoin = 0;
         $chartData = null;
-        if (auth()->user()->isTaruna()) {
+        $konsinyirAktif = null;
+        $nilaiSemester = collect();
+        if (auth()->user()->hasTarunaAccess()) {
             $student = Mahasiswa::where('user_id', auth()->id())->first();
             if ($student) {
                 $totalPoin = PoinMahasiswa::where('mahasiswa_id', $student->id)->get()->sum('nilai_efektif');
+                $konsinyirAktif = Konsinyir::where('mahasiswa_id', $student->id)
+                    ->orderByDesc('tanggal_mulai')
+                    ->get()
+                    ->first(fn ($k) => $k->status === 'aktif');
+                $nilaiSemester = NilaiTaruna::where('mahasiswa_id', $student->id)->orderBy('semester')->get();
             }
             $chartData = Mahasiswa::chartDataPerTingkat();
         }
@@ -72,6 +81,8 @@ class DashboardController extends Controller
             'keluhanStats'     => $keluhanStats,
             'totalPoin'        => $totalPoin,
             'chartData'        => $chartData,
+            'konsinyirAktif'   => $konsinyirAktif,
+            'nilaiSemester'    => $nilaiSemester,
         ]);
     }
 

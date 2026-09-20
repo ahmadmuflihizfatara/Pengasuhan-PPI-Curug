@@ -64,20 +64,34 @@
         animation: blink 1.2s infinite;
     }
     @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+
+    .badge-validasi-ok {
+        background: #dcfce7; color: #15803d; border: 1px solid #86efac;
+        padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 800;
+        display: inline-flex; align-items: center; gap: 6px;
+    }
+    .badge-validasi-pending {
+        background: #fef3c7; color: #92400e; border: 1px solid #fcd34d;
+        padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 800;
+        display: inline-flex; align-items: center; gap: 6px;
+    }
 </style>
 
-<div class="app-layout">
-    <x-sidebar active="log-pergerakan" />
+{{-- Top Floating Island Capsule Navbar --}}
+<x-island-navbar />
 
-    <main class="main-content">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 pb-12 pt-2">
+    <div class="spatial-workspace-window rounded-3xl bg-white/30 backdrop-blur-2xl border border-white/50 shadow-2xl p-4 sm:p-7 relative overflow-hidden">
 
         <div class="mb-3">
             <a href="{{ route('log-pergerakan.index') }}" class="btn btn-outline-secondary btn-sm fw-bold rounded-3">
                 <i class="fas fa-arrow-left me-1"></i> Kembali ke Rekapitulasi
             </a>
+            @if(auth()->user()->isAdmin())
             <a href="{{ route('log-pergerakan.tablet') }}" class="btn btn-outline-primary btn-sm fw-bold rounded-3 ms-2">
                 <i class="fas fa-tablet-alt me-1"></i> Buka Mode Tablet
             </a>
+            @endif
         </div>
 
         <div class="detail-card">
@@ -90,8 +104,14 @@
                         Kategori: <strong>{{ ucfirst($log->kategori) }}</strong> &bull; Sub: <strong>{{ $log->subkategori }}</strong>
                     </div>
                 </div>
-                <div>
-                    {!! $log->getStatusBadgeHtml() !!}
+                <div class="text-end">
+                    <div class="mb-2">{!! $log->getStatusBadgeHtml() !!}</div>
+                    <div>
+                        {!! $log->getValidasiBadgeHtml() !!}
+                        @if($log->is_validated && $log->validator)
+                        <div class="small text-muted mt-1">oleh {{ $log->validator->name }} &bull; {{ $log->validated_at->format('d/m/Y H:i') }}</div>
+                        @endif
+                    </div>
                 </div>
             </div>
 
@@ -196,8 +216,27 @@
             </div>
             @endif
 
+            {{-- Aksi Validasi Pengasuh/Admin --}}
+            <div class="p-3 bg-white border {{ $log->is_validated ? 'border-success' : 'border-warning' }} rounded-4 d-flex align-items-center justify-content-between mt-3">
+                <div>
+                    <h6 class="fw-bold text-dark mb-1">
+                        <i class="fas fa-user-check {{ $log->is_validated ? 'text-success' : 'text-warning' }} me-1"></i>
+                        {{ $log->is_validated ? 'Log Ini Sudah Divalidasi' : 'Log Ini Belum Divalidasi' }}
+                    </h6>
+                    <p class="text-muted small mb-0">Validasi menyatakan data izin ini sudah diperiksa dan sesuai fakta di lapangan.</p>
+                </div>
+                <form action="{{ route('log-pergerakan.validasi', $log->id) }}" method="POST" onsubmit="return confirm('{{ $log->is_validated ? 'Batalkan validasi log ini?' : 'Validasi log ini?' }}')">
+                    @csrf
+                    @method('PATCH')
+                    <button type="submit" class="btn {{ $log->is_validated ? 'btn-outline-secondary' : 'btn-success' }} fw-bold px-4 py-2 rounded-3">
+                        <i class="fas {{ $log->is_validated ? 'fa-rotate-left' : 'fa-check-circle' }} me-1"></i>
+                        {{ $log->is_validated ? 'Batalkan Validasi' : 'Validasi Sekarang' }}
+                    </button>
+                </form>
+            </div>
+
         </div>
 
-    </main>
+    </div>
 </div>
 </x-app-layout>

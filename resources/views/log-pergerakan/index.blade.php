@@ -33,10 +33,12 @@
                     </div>
 
                     <div class="relative z-10 flex flex-wrap items-center gap-2">
+                        @if(auth()->user()->isAdmin())
                         <a href="{{ route('log-pergerakan.tablet') }}" class="px-4 py-2 rounded-xl bg-white hover:bg-slate-50 text-slate-900 font-extrabold text-xs shadow-md transition flex items-center gap-2 no-underline">
                             <i class="fa-solid fa-tablet-screen-button text-indigo-600"></i>
                             <span>Mode Tablet Pos Jaga</span>
                         </a>
+                        @endif
                         <a href="{{ route('log-pergerakan.tv') }}" target="_blank" class="px-4 py-2 rounded-xl bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-400/40 text-emerald-300 font-bold text-xs backdrop-blur-md transition flex items-center gap-2 no-underline">
                             <i class="fa-solid fa-tv"></i>
                             <span>TV Monitoring</span>
@@ -48,7 +50,7 @@
                 </div>
 
                 {{-- Top Stats Row --}}
-                <div class="grid grid-cols-2 lg:grid-cols-4 gap-3.5 mb-5">
+                <div class="grid grid-cols-2 lg:grid-cols-5 gap-3.5 mb-5">
                     
                     <div class="rounded-2xl bg-rose-50/70 backdrop-blur-xl border border-rose-200/80 p-4 shadow-md">
                         <div class="text-[10px] font-bold uppercase tracking-wider text-rose-800 flex items-center gap-1.5 mb-1">
@@ -83,12 +85,21 @@
                         <div class="text-[10px] text-sky-900/70 font-semibold mt-1">Kegiatan luar asrama</div>
                     </div>
 
+                    <div class="rounded-2xl bg-amber-50/70 backdrop-blur-xl border border-amber-200/80 p-4 shadow-md">
+                        <div class="text-[10px] font-bold uppercase tracking-wider text-amber-800 flex items-center gap-1.5 mb-1">
+                            <i class="fa-solid fa-hourglass-half text-[9px]"></i>
+                            <span>Menunggu Validasi</span>
+                        </div>
+                        <div class="text-2xl sm:text-3xl font-black text-amber-700 font-mono tracking-tight">{{ $stats['belum_validasi'] }}</div>
+                        <div class="text-[10px] text-amber-900/70 font-semibold mt-1">Log taruna belum diaudit</div>
+                    </div>
+
                 </div>
 
                 {{-- Filter Bar --}}
                 <div class="rounded-2xl bg-white/45 backdrop-blur-xl border border-white/60 p-4 mb-5 shadow-sm">
                     <form action="{{ route('log-pergerakan.index') }}" method="GET" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-2.5 items-center">
-                        <div class="lg:col-span-4">
+                        <div class="lg:col-span-3">
                             <input type="text" class="w-full px-3.5 py-2 rounded-xl bg-white/70 focus:bg-white border border-white/80 text-xs font-medium text-slate-800 placeholder-slate-400 outline-none" name="search" value="{{ request('search') }}" placeholder="Cari nama, NPM, rute...">
                         </div>
                         <div class="lg:col-span-2">
@@ -107,6 +118,13 @@
                             </select>
                         </div>
                         <div class="lg:col-span-2">
+                            <select class="w-full px-3.5 py-2 rounded-xl bg-white/70 focus:bg-white border border-white/80 text-xs font-semibold text-slate-700 outline-none" name="validasi">
+                                <option value="">Semua Validasi</option>
+                                <option value="tervalidasi" {{ request('validasi')==='tervalidasi'?'selected':'' }}>✅ Tervalidasi</option>
+                                <option value="pending" {{ request('validasi')==='pending'?'selected':'' }}>⏳ Menunggu Validasi</option>
+                            </select>
+                        </div>
+                        <div class="lg:col-span-1">
                             <input type="date" class="w-full px-3 py-2 rounded-xl bg-white/70 focus:bg-white border border-white/80 text-xs font-medium text-slate-800 outline-none" name="tanggal" value="{{ request('tanggal') }}">
                         </div>
                         <div class="lg:col-span-2 flex gap-1.5">
@@ -114,7 +132,7 @@
                                 <i class="fa-solid fa-filter text-[10px]"></i>
                                 <span>Filter</span>
                             </button>
-                            @if(request()->hasAny(['search', 'kategori', 'status', 'tanggal']))
+                            @if(request()->hasAny(['search', 'kategori', 'status', 'validasi', 'tanggal']))
                             <a href="{{ route('log-pergerakan.index') }}" class="py-2 px-3 rounded-xl bg-white/80 hover:bg-white text-slate-600 font-bold text-xs border border-white shadow-sm flex items-center justify-center transition">
                                 <i class="fa-solid fa-xmark"></i>
                             </a>
@@ -126,16 +144,17 @@
                 {{-- Main Data Table --}}
                 <div class="rounded-2xl bg-white/45 backdrop-blur-xl border border-white/60 p-4 sm:p-5 shadow-lg">
                     <div class="overflow-x-auto">
-                        <table class="w-full text-left border-collapse text-xs">
+                        <table data-server-sort class="w-full text-left border-collapse text-xs">
                             <thead>
                                 <tr class="bg-white/60 backdrop-blur-md text-[10px] font-bold uppercase tracking-wider text-slate-700 border-b border-white/40">
                                     <th class="py-3 px-3">#</th>
-                                    <th class="py-3 px-3">Taruna / Koordinator</th>
-                                    <th class="py-3 px-3">Kategori</th>
+                                    <th data-sort="nama" class="py-3 px-3">Taruna / Koordinator</th>
+                                    <th data-sort="kategori" class="py-3 px-3">Kategori</th>
                                     <th class="py-3 px-3">Detail Kegiatan</th>
-                                    <th class="py-3 px-3">Waktu Berangkat</th>
-                                    <th class="py-3 px-3">Waktu Kembali</th>
-                                    <th class="py-3 px-3">Status</th>
+                                    <th data-sort="berangkat" class="py-3 px-3">Waktu Berangkat</th>
+                                    <th data-sort="kembali" class="py-3 px-3">Waktu Kembali</th>
+                                    <th data-sort="status" class="py-3 px-3">Status</th>
+                                    <th data-sort="validasi" class="py-3 px-3">Validasi</th>
                                     <th class="py-3 px-3 text-center">Aksi</th>
                                 </tr>
                             </thead>
@@ -179,6 +198,21 @@
                                     <td class="py-3 px-3">
                                         {!! $item->getStatusBadgeHtml() !!}
                                     </td>
+                                    <td class="py-3 px-3">
+                                        <form action="{{ route('log-pergerakan.validasi', $item->id) }}" method="POST" class="inline" onsubmit="return confirm('{{ $item->is_validated ? 'Batalkan validasi log ini?' : 'Validasi log ini? Pastikan data sudah sesuai fakta di lapangan.' }}')">
+                                            @csrf
+                                            @method('PATCH')
+                                            @if($item->is_validated)
+                                            <button type="submit" class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-700 border border-emerald-300 text-[10px] font-bold transition hover:bg-emerald-200" title="Klik untuk batalkan validasi">
+                                                <i class="fa-solid fa-user-check text-[9px]"></i> Tervalidasi
+                                            </button>
+                                            @else
+                                            <button type="submit" class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-amber-100 text-amber-700 border border-amber-300 text-[10px] font-bold transition hover:bg-amber-200" title="Klik untuk validasi">
+                                                <i class="fa-solid fa-hourglass-half text-[9px]"></i> Menunggu
+                                            </button>
+                                            @endif
+                                        </form>
+                                    </td>
                                     <td class="py-3 px-3 text-center">
                                         <div class="inline-flex items-center gap-1">
                                             <a href="{{ route('log-pergerakan.show', $item->id) }}" class="p-1.5 rounded-lg bg-white/80 hover:bg-white text-indigo-700 border border-white/90 shadow-sm transition" title="Lihat Detail">
@@ -207,7 +241,7 @@
                                 </tr>
                                 @empty
                                 <tr>
-                                    <td colspan="8" class="text-center py-10 text-slate-400">
+                                    <td colspan="9" class="text-center py-10 text-slate-400">
                                         <i class="fa-solid fa-inbox text-3xl mb-2 block"></i>
                                         <span class="font-semibold text-xs">Belum ada catatan log pergerakan taruna yang sesuai.</span>
                                     </td>

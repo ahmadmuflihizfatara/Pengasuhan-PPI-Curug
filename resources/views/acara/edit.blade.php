@@ -1,5 +1,4 @@
 <x-app-layout>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 * { box-sizing: border-box; }
 body { font-family: 'Inter', sans-serif; background: transparent; }
@@ -37,10 +36,11 @@ textarea.form-control { resize: vertical; min-height: 100px; }
 .btn-cancel:hover { border-color: #f5576c; color: #f5576c; }
 </style>
 
-<div class="app-layout">
-    <x-sidebar active="acara" />
+{{-- Top Floating Island Capsule Navbar --}}
+<x-island-navbar />
 
-    <div class="main-content">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 pb-12 pt-2">
+    <div class="spatial-workspace-window rounded-3xl bg-white/30 backdrop-blur-2xl border border-white/50 shadow-2xl p-4 sm:p-7 relative overflow-hidden">
         <a href="{{ route('acara.index') }}" class="back-link">
             <i class="fas fa-arrow-left"></i> Kembali ke Daftar Acara
         </a>

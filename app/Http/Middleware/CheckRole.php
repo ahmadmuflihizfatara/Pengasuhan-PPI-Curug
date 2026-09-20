@@ -23,7 +23,15 @@ class CheckRole
             return $next($request);
         }
 
-        if (!in_array($request->user()->role, $roles)) {
+        // Nama akses khusus (kasi_internal, polisi_taruna) boleh dipakai di
+        // daftar role rute — taruna yang diberi akses tersebut oleh admin lolos
+        // 'duty_taruna' = akses otomatis taruna yang duty minggu ini
+        $aksesKhusus = $request->user()->isTaruna() ? ($request->user()->akses_khusus ?? []) : [];
+        if (in_array('duty_taruna', $roles) && $request->user()->isDutyTaruna()) {
+            $aksesKhusus[] = 'duty_taruna';
+        }
+
+        if (!in_array($request->user()->role, $roles) && !array_intersect($roles, $aksesKhusus)) {
             abort(403, 'Akses ditolak. Anda tidak memiliki izin untuk halaman ini.');
         }
 

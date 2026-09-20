@@ -212,7 +212,7 @@ body { font-family: 'Inter', sans-serif; background: transparent; }
                 <p>Artikel, pengumuman, dan informasi seputar kegiatan taruna</p>
             </div>
             <div class="page-header-actions">
-                @if(!Auth::user()->isTaruna())
+                @if(!Auth::user()->hasTarunaAccess())
                 <a href="{{ route('berita.create') }}" class="btn-create">
                     <i class="fas fa-plus"></i> Tulis Berita
                 </a>
@@ -298,7 +298,7 @@ body { font-family: 'Inter', sans-serif; background: transparent; }
                             </div>
                             <span class="bc-read-more">Baca <i class="fas fa-arrow-right" style="font-size:9px;"></i></span>
                         </div>
-                        @if(!Auth::user()->isTaruna())
+                        @if(!Auth::user()->hasTarunaAccess())
                         <div class="bc-staff-actions">
                             <a href="{{ route('berita.edit', $item) }}" class="bc-action-btn edit" onclick="event.preventDefault(); event.stopPropagation(); window.location='{{ route('berita.edit', $item) }}';">
                                 <i class="fas fa-pen"></i> Edit
@@ -330,13 +330,13 @@ body { font-family: 'Inter', sans-serif; background: transparent; }
             <p>
                 @if(request('search'))
                     Tidak ada hasil untuk "<strong>{{ request('search') }}</strong>". Coba kata kunci lain.
-                @elseif(!Auth::user()->isTaruna())
+                @elseif(!Auth::user()->hasTarunaAccess())
                     Mulai tulis berita pertama untuk taruna.
                 @else
                     Belum ada berita yang dipublikasikan.
                 @endif
             </p>
-            @if(!Auth::user()->isTaruna())
+            @if(!Auth::user()->hasTarunaAccess())
             <a href="{{ route('berita.create') }}" style="display:inline-flex;align-items:center;gap:8px;margin-top:16px;background:linear-gradient(135deg,#667eea,#764ba2);color:white;padding:10px 22px;border-radius:10px;text-decoration:none;font-weight:700;font-size:13px;">
                 <i class="fas fa-plus"></i> Tulis Berita Pertama
             </a>
@@ -382,7 +382,7 @@ body { font-family: 'Inter', sans-serif; background: transparent; }
                         </div>
                         <span class="bc-read-more">Baca <i class="fas fa-arrow-right" style="font-size:9px;"></i></span>
                     </div>
-                    @if(!Auth::user()->isTaruna())
+                    @if(!Auth::user()->hasTarunaAccess())
                     <div class="bc-staff-actions">
                         <a href="{{ route('berita.edit', $item) }}" class="bc-action-btn edit" onclick="event.preventDefault(); event.stopPropagation(); window.location='{{ route('berita.edit', $item) }}';">
                             <i class="fas fa-pen"></i> Edit

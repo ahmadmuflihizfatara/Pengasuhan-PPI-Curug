@@ -1,3 +1,5 @@
+@import "./design-system.css";
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -7,14 +9,15 @@
    ============================================================ */
 
 :root {
-    --glass-bg: rgba(255, 255, 255, 0.55);
-    --glass-bg-hover: rgba(255, 255, 255, 0.72);
-    --glass-bg-subtle: rgba(255, 255, 255, 0.4);
-    --glass-border: rgba(255, 255, 255, 0.55);
-    --glass-border-subtle: rgba(255, 255, 255, 0.35);
-    --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.18), 0 2px 6px rgba(0, 0, 0, 0.08);
-    --glass-shadow-lg: 0 16px 45px 0 rgba(0, 0, 0, 0.25);
-    --glass-blur: 14px;
+    /* alias lama -> token kanonik (design-system.css) */
+    --glass-bg: var(--glass-panel);
+    --glass-bg-hover: var(--glass-card);
+    --glass-bg-subtle: var(--glass-subtle);
+    --glass-border: var(--border-glass);
+    --glass-border-subtle: var(--border-glass-subtle);
+    --glass-shadow: var(--shadow-glass);
+    --glass-shadow-lg: var(--shadow-glass-lg);
+    --glass-blur: var(--blur-standard);
 }
 
 html, body {
@@ -50,9 +53,10 @@ html, body {
 }
 
 .sidebar .sb-nav a.active {
-    background: linear-gradient(135deg, rgba(79, 70, 229, 0.85), rgba(99, 102, 241, 0.95)) !important;
-    color: white !important;
-    box-shadow: 0 4px 16px rgba(79, 70, 229, 0.4) !important;
+    background: var(--glass-solid) !important;
+    color: var(--ink-900) !important;
+    font-weight: 700 !important;
+    box-shadow: var(--shadow-glass-sm) !important;
 }
 
 /* ============================================================
@@ -102,14 +106,17 @@ html, body {
 .greeting-banner,
 .poin-header-banner,
 .hero-card {
-    background: linear-gradient(135deg, rgba(30, 58, 138, 0.78), rgba(59, 130, 246, 0.72)) !important;
-    backdrop-filter: blur(18px) saturate(180%) !important;
-    -webkit-backdrop-filter: blur(18px) saturate(180%) !important;
-    border: 1px solid rgba(255, 255, 255, 0.45) !important;
-    border-radius: 20px !important;
-    box-shadow: 0 12px 35px rgba(30, 58, 138, 0.35) !important;
-    color: white !important;
+    background: linear-gradient(90deg, rgba(30, 58, 138, 0.90), rgba(49, 46, 129, 0.85), rgba(15, 23, 42, 0.90)) !important;
+    backdrop-filter: blur(var(--blur-standard)) saturate(180%) !important;
+    -webkit-backdrop-filter: blur(var(--blur-standard)) saturate(180%) !important;
+    border: 1px solid rgba(255, 255, 255, 0.30) !important;
+    border-radius: var(--radius-lg) !important;
+    padding: var(--space-6) !important;
+    box-shadow: var(--shadow-glass-lg) !important;
+    color: var(--ink-on-dark) !important;
 }
+.page-header::before,
+.page-header::after { display: none !important; }
 
 /* Pos Jaga Quick Monitor Banner in Dashboard */
 .card-pos-jaga-banner {
@@ -141,10 +148,10 @@ html, body {
 }
 
 .subtab.active {
-    background: linear-gradient(135deg, rgba(74, 58, 167, 0.85), rgba(42, 120, 214, 0.9)) !important;
-    color: white !important;
+    background: var(--accent) !important;
+    color: var(--ink-on-dark) !important;
     border-color: transparent !important;
-    box-shadow: 0 6px 18px rgba(74, 58, 167, 0.35) !important;
+    box-shadow: 0 6px 18px rgba(79, 70, 229, 0.35) !important;
 }
 
 /* ============================================================
@@ -175,8 +182,8 @@ input[type="password"] {
 textarea:focus,
 input:focus {
     background: rgba(255, 255, 255, 0.95) !important;
-    border-color: #3b82f6 !important;
-    box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.25) !important;
+    border-color: var(--focus-ring) !important;
+    box-shadow: var(--shadow-focus) !important;
 }
 
 .mhs-list-dropdown,
@@ -272,7 +279,7 @@ tbody tr:hover td,
     border: 1px solid var(--glass-border) !important;
 }
 .tl-item.is-today .tl-card {
-    border-color: #4a3aa7 !important;
+    border-color: var(--accent) !important;
     background: rgba(248, 247, 255, 0.78) !important;
 }
 
@@ -372,3 +379,196 @@ tbody tr:hover td,
     }
 }
 
+
+/* ============================================================
+   LEGACY -> CANON: kelas inline <style> halaman lama dipetakan
+   ke token sistem desain agar 44 halaman lama tampil konsisten
+   tanpa mengedit satu per satu. Hapus blok ini setelah halaman
+   dimigrasi ke kelas .ds-*.
+   ============================================================ */
+/* Tombol utama (inline .btn-primary ungu #667eea + Bootstrap .btn-primary biru) -> accent */
+.btn-primary,
+.btn.btn-primary,
+.btn-submit,
+.btn-save,
+.btn-simpan {
+    background: var(--accent) !important;
+    background-image: none !important;
+    color: var(--ink-on-dark) !important;
+    border: 1px solid transparent !important;
+    border-radius: var(--radius-md) !important;
+    font-weight: 800 !important;
+    font-size: 12px !important;
+    box-shadow: var(--shadow-glass-sm) !important;
+}
+.btn-primary:hover,
+.btn.btn-primary:hover,
+.btn-submit:hover,
+.btn-save:hover,
+.btn-simpan:hover {
+    background: var(--accent-hover) !important;
+    color: var(--ink-on-dark) !important;
+    transform: none !important;
+}
+/* Tombol di atas page header: pill kaca putih (ds-btn--secondary --pill) */
+.page-header .btn-primary,
+.page-header .btn-primary-pill {
+    background: var(--glass-solid) !important;
+    color: var(--accent-ink) !important;
+    border-radius: var(--radius-pill) !important;
+}
+.btn-secondary,
+.btn.btn-secondary,
+.btn-cancel,
+.btn-back,
+.btn.btn-outline-secondary,
+.btn.btn-outline-primary {
+    background: var(--glass-card) !important;
+    color: var(--accent-ink) !important;
+    border: 1px solid var(--border-glass-glow) !important;
+    border-radius: var(--radius-md) !important;
+    font-weight: 800 !important;
+    font-size: 12px !important;
+}
+.btn-secondary:hover,
+.btn-cancel:hover,
+.btn-back:hover { background: var(--glass-solid) !important; }
+.btn.btn-danger, .btn-reject, .btn-delete,
+.btn.btn-success, .btn-done, .btn-process {
+    background: var(--glass-card) !important;
+    border: 1px solid var(--border-glass-glow) !important;
+    border-radius: var(--radius-md) !important;
+    font-weight: 700 !important;
+    text-transform: none !important;
+}
+.btn.btn-danger, .btn-reject, .btn-delete { color: var(--danger-ink) !important; }
+.btn.btn-success, .btn-done, .btn-process { color: var(--success-ink) !important; }
+/* badge lama -> kaca */
+.role-badge, .user-role, .badge {
+    background: var(--glass-card) !important;
+    border: 1px solid var(--border-glass-glow) !important;
+    color: var(--ink-700) !important;
+    text-transform: none !important;
+    letter-spacing: 0 !important;
+}
+
+/* Alert flash -> kartu kaca, status hanya di ikon */
+.flash-success, .alert-success, .alert.alert-success,
+.flash-error, .alert-error, .alert-danger, .alert.alert-danger {
+    background: var(--glass-card) !important;
+    border: 1px solid var(--border-glass-glow) !important;
+    color: var(--ink-900) !important;
+    border-radius: var(--radius-lg) !important;
+    font-size: 12px !important;
+    font-weight: 600 !important;
+    text-transform: none !important;
+    backdrop-filter: blur(var(--blur-subtle));
+    -webkit-backdrop-filter: blur(var(--blur-subtle));
+}
+.flash-success i, .alert-success i { color: var(--success-ink) !important; }
+.flash-error i, .alert-error i, .alert-danger i { color: var(--danger-ink) !important; }
+.flash-error, .alert-error, .alert-danger, .alert.alert-danger { border-color: var(--danger-border) !important; }
+
+/* Kartu lama berlatar putih solid -> kaca */
+.section-card,
+.user-card,
+.profile-card,
+.detail-card,
+.info-card {
+    background: var(--glass-panel) !important;
+    backdrop-filter: blur(var(--blur-standard)) saturate(180%) !important;
+    -webkit-backdrop-filter: blur(var(--blur-standard)) saturate(180%) !important;
+    border: 1px solid var(--border-glass) !important;
+    border-radius: var(--radius-lg) !important;
+    box-shadow: var(--shadow-glass) !important;
+}
+.section-card-header { border-bottom: 1px solid var(--border-glass-subtle) !important; background: transparent !important; }
+.section-card-header h3 { color: var(--ink-900) !important; font-weight: 800 !important; }
+
+/* Label form lama (11px #888) -> label sistem */
+.form-label {
+    font-size: 10px !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.05em !important;
+    text-transform: uppercase !important;
+    color: var(--ink-700) !important;
+    margin-bottom: 6px !important;
+}
+.form-control,
+.form-select {
+    border-radius: var(--radius-md) !important;
+    font-size: 12px !important;
+    font-weight: 600 !important;
+    color: var(--ink-900) !important;
+}
+.form-control:focus,
+.form-select:focus { border-color: var(--focus-ring) !important; }
+
+
+/* ── Table tools: search / filter / sort (resources/js/table-tools.js) ── */
+.tt-bar {
+    display:flex; flex-wrap:wrap; align-items:center; gap:8px;
+    padding:10px 12px; margin:0 0 12px;
+    background:rgba(255,255,255,.55); border:1px solid rgba(255,255,255,.8);
+    border-radius:14px; box-shadow:0 1px 0 rgba(255,255,255,.6) inset, 0 4px 14px -6px rgba(15,23,42,.12);
+    font-family:'Inter', system-ui, sans-serif;
+}
+.tt-search-wrap { position:relative; flex:1 1 200px; min-width:160px; max-width:340px; }
+.tt-search-wrap svg { position:absolute; left:11px; top:50%; width:14px; height:14px; transform:translateY(-50%); color:#94a3b8; pointer-events:none; }
+.tt-search {
+    width:100%; padding:8px 12px 8px 32px; border-radius:10px;
+    font-size:12px; font-weight:600; color:#0f172a; font-family:inherit;
+    background:rgba(255,255,255,.85); border:1px solid rgba(226,232,240,.9); outline:none;
+    transition:border-color .15s, box-shadow .15s;
+}
+.tt-search::placeholder { color:#94a3b8; font-weight:500; }
+.tt-search:focus { background:#fff; border-color:#6366f1; box-shadow:0 0 0 3px rgba(99,102,241,.14); }
+.tt-search::-webkit-search-cancel-button { cursor:pointer; }
+
+.tt-filter-wrap { position:relative; display:inline-flex; margin:0; }
+.tt-filter-wrap::after {
+    content:''; position:absolute; right:11px; top:50%; width:6px; height:6px;
+    border-right:1.5px solid #64748b; border-bottom:1.5px solid #64748b;
+    transform:translateY(-70%) rotate(45deg); pointer-events:none;
+}
+.tt-filter {
+    appearance:none; -webkit-appearance:none;
+    padding:8px 28px 8px 12px; border-radius:999px; cursor:pointer;
+    font-size:11px; font-weight:700; color:#334155; font-family:inherit;
+    background:rgba(255,255,255,.85); border:1px solid rgba(226,232,240,.9); outline:none;
+    max-width:210px; text-overflow:ellipsis; white-space:nowrap; overflow:hidden;
+    transition:border-color .15s, box-shadow .15s, background .15s;
+}
+.tt-filter:hover { background:#fff; }
+.tt-filter:focus { border-color:#6366f1; box-shadow:0 0 0 3px rgba(99,102,241,.14); }
+.tt-filter-wrap.tt-active .tt-filter { background:#eef2ff; border-color:#a5b4fc; color:#3730a3; }
+.tt-filter-wrap.tt-active::after { border-color:#4f46e5; }
+
+.tt-right { margin-left:auto; display:inline-flex; align-items:center; gap:8px; }
+.tt-reset {
+    display:inline-flex; align-items:center; gap:4px; padding:6px 10px; border-radius:999px;
+    font-size:11px; font-weight:700; color:#be123c; background:#fff1f2; border:1px solid #fecdd3;
+    cursor:pointer; font-family:inherit; transition:background .15s;
+}
+.tt-reset:hover { background:#ffe4e6; }
+.tt-reset svg { width:12px; height:12px; }
+.tt-count {
+    font-size:10px; font-weight:800; letter-spacing:.04em; text-transform:uppercase; white-space:nowrap;
+    color:#64748b; background:rgba(241,245,249,.9); border:1px solid rgba(226,232,240,.9);
+    padding:5px 10px; border-radius:999px;
+}
+.tt-count.tt-count-filtered { color:#3730a3; background:#eef2ff; border-color:#c7d2fe; }
+
+th.tt-sortable { cursor:pointer; user-select:none; white-space:nowrap; transition:color .15s; }
+th.tt-sortable:hover { color:#4f46e5; }
+.tt-ind { display:inline-block; margin-left:5px; font-size:9px; opacity:.35; vertical-align:middle; }
+.tt-ind::after { content:'▲▼'; letter-spacing:-2px; }
+th.tt-asc  .tt-ind, th.tt-desc .tt-ind { opacity:1; color:#4f46e5; }
+th.tt-asc  .tt-ind::after { content:'▲'; letter-spacing:0; }
+th.tt-desc .tt-ind::after { content:'▼'; letter-spacing:0; }
+
+@media (max-width:640px) {
+    .tt-bar { padding:8px; gap:6px; }
+    .tt-search-wrap { flex-basis:100%; max-width:none; }
+    .tt-right { margin-left:0; width:100%; justify-content:space-between; }
+}

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\AksesFitur;
 use App\Models\KeluhanBarak;
 use App\Models\User;
+use App\Traits\SortsQuery;
 use App\Traits\LogsActivity;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -14,6 +15,7 @@ use Illuminate\View\View;
 class KeluhanBarakStaffController extends Controller
 {
     use LogsActivity;
+    use SortsQuery;
 
     /**
      * Daftar semua keluhan dengan filter status, asrama, dan pencarian.
@@ -38,6 +40,7 @@ class KeluhanBarakStaffController extends Controller
             });
         }
 
+        $this->applySort($query, $request, ['pengaju' => 'nama', 'lokasi' => 'asrama', 'tanggal' => 'tanggal_pengajuan', 'status' => 'status']);
         $daftarKeluhan = $query->paginate(10)->withQueryString();
 
         $stats = [

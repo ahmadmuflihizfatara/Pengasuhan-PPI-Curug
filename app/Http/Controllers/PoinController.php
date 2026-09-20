@@ -25,9 +25,11 @@ class PoinController extends Controller
         $user = auth()->user();
 
         // ====================================================
-        // 1. ROLE TARUNA: Auto-load raport poin miliknya sendiri
+        // 1. TARUNA: Auto-load raport poin miliknya sendiri
+        //    (Taruna dengan akses Polisi Taruna TIDAK masuk sini — mereka butuh
+        //    tampilan pencarian untuk memberikan pelanggaran ke taruna lain)
         // ====================================================
-        if ($user->isTaruna()) {
+        if ($user->isTaruna() && !$user->isPolisiTaruna()) {
             $selectedStudent = Mahasiswa::where('user_id', $user->id)->first();
 
             $riwayatPelanggaran = collect();
@@ -76,7 +78,8 @@ class PoinController extends Controller
         }
 
         // ====================================================
-        // 2. ROLE PENGASUH / ADMIN: Manajemen & Pengusulan Poin
+        // 2. ROLE PENGASUH / ADMIN / POLISI TARUNA: Manajemen & Pengusulan Poin
+        //    (Polisi Taruna dibatasi ke pengusulan pelanggaran saja — lihat store())
         // ====================================================
         $selectedNpm     = $request->get('npm');
         $selectedStudent = null;
@@ -163,6 +166,11 @@ class PoinController extends Controller
             'keterangan' => 'nullable|string|max:1000',
             'foto_bukti' => 'nullable|image|max:5120',
         ]);
+
+        // Polisi Taruna hanya berwenang mengajukan pelanggaran, bukan penghargaan
+        if (auth()->user()->isPolisiTaruna() && $request->kategori !== 'pelanggaran') {
+            abort(403, 'Polisi Taruna hanya dapat mengajukan pelanggaran/pengurangan poin.');
+        }
 
         $student = Mahasiswa::where('npm', $request->npm)->first();
 

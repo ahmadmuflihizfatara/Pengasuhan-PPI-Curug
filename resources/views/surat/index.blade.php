@@ -135,16 +135,16 @@
                 @else
                 <div class="rounded-2xl bg-white/45 backdrop-blur-xl border border-white/60 p-4 sm:p-5 shadow-lg">
                     <div class="overflow-x-auto">
-                        <table class="w-full text-left border-collapse text-xs">
+                        <table data-server-sort class="w-full text-left border-collapse text-xs">
                             <thead>
                                 <tr class="bg-white/60 backdrop-blur-md text-[10px] font-bold uppercase tracking-wider text-slate-700 border-b border-white/40">
                                     <th class="py-3 px-3">#</th>
-                                    <th class="py-3 px-3">No. Surat</th>
-                                    <th class="py-3 px-3">Jenis</th>
-                                    <th class="py-3 px-3">Perihal</th>
-                                    <th class="py-3 px-3">Pengirim / Penerima</th>
-                                    <th class="py-3 px-3">Tanggal</th>
-                                    <th class="py-3 px-3 text-center">Status</th>
+                                    <th data-sort="nomor" class="py-3 px-3">No. Surat</th>
+                                    <th data-sort="jenis" class="py-3 px-3">Jenis</th>
+                                    <th data-sort="perihal" class="py-3 px-3">Perihal</th>
+                                    <th data-sort="pengirim" class="py-3 px-3">Pengirim / Penerima</th>
+                                    <th data-sort="tanggal" class="py-3 px-3">Tanggal</th>
+                                    <th data-sort="status" class="py-3 px-3 text-center">Status</th>
                                     <th class="py-3 px-3 text-center">Aksi</th>
                                 </tr>
                             </thead>

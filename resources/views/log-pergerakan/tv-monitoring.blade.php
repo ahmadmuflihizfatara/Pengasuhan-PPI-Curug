@@ -453,7 +453,7 @@
                 </div>
 
                 <div class="table-responsive">
-                    <table class="active-table">
+                    <table class="active-table" data-no-tools>
                         <thead>
                             <tr>
                                 <th>Taruna / Koordinator</th>
@@ -587,7 +587,10 @@
         // Live Polling Data from API every 5 seconds
         async function fetchLiveTVData() {
             try {
-                const response = await fetch("{{ route('log-pergerakan.api') }}");
+                const response = await fetch("{{ route('log-pergerakan.api') }}", {
+                    headers: { 'X-Requested-With': 'XMLHttpRequest' }
+                });
+                if (response.status === 401) { window.location.reload(); return; }
                 if (!response.ok) return;
                 const json = await response.json();
 

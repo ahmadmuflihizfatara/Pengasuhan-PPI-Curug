@@ -9,7 +9,7 @@
 
                 
                 {{-- Page Header Glass Banner --}}
-                <div class="rounded-2xl bg-gradient-to-r from-purple-900/90 via-pink-900/85 to-slate-900/90 backdrop-blur-xl border border-white/30 p-6 text-white mb-6 shadow-xl relative overflow-hidden flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                <div class="rounded-2xl bg-gradient-to-r from-blue-900/90 via-indigo-900/85 to-slate-900/90 backdrop-blur-xl border border-white/30 p-6 text-white mb-6 shadow-xl relative overflow-hidden flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                     <div class="relative z-10">
                         <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/15 backdrop-blur-md border border-white/20 text-[10px] font-bold tracking-widest uppercase text-pink-200 mb-2">
                             <span>✦</span>
@@ -130,14 +130,14 @@
                 @else
                 <div class="rounded-2xl bg-white/45 backdrop-blur-xl border border-white/60 p-4 sm:p-5 shadow-lg">
                     <div class="overflow-x-auto">
-                        <table class="w-full text-left border-collapse text-xs">
+                        <table data-server-sort class="w-full text-left border-collapse text-xs">
                             <thead>
                                 <tr class="bg-white/60 backdrop-blur-md text-[10px] font-bold uppercase tracking-wider text-slate-700 border-b border-white/40">
                                     <th class="py-3 px-3">#</th>
-                                    <th class="py-3 px-3">Pengaju</th>
-                                    <th class="py-3 px-3">Lokasi Barak</th>
-                                    <th class="py-3 px-3">Tanggal</th>
-                                    <th class="py-3 px-3 text-center">Status</th>
+                                    <th data-sort="pengaju" class="py-3 px-3">Pengaju</th>
+                                    <th data-sort="lokasi" class="py-3 px-3">Lokasi Barak</th>
+                                    <th data-sort="tanggal" class="py-3 px-3">Tanggal</th>
+                                    <th data-sort="status" class="py-3 px-3 text-center">Status</th>
                                     <th class="py-3 px-3 text-center">Aksi</th>
                                 </tr>
                             </thead>

@@ -13,11 +13,12 @@
         return str_starts_with($currentRoute, $prefix);
     };
 
-    $apelUrl = $user && $user->isTaruna() ? route('apel.jadwal') : route('apel.index');
-    $jadwalUrl = $user && $user->isTaruna() ? route('jadwal.taruna') : route('jadwal.index');
-    $barakUrl = $user && $user->isTaruna() ? route('keluhan-barak.index') : route('keluhan-barak.kelola');
-    $suratUrl = $user && $user->isTaruna() ? route('surat-taruna.index') : route('surat.index');
-    $rewardUrl = $user && $user->isTaruna() ? route('reward.index') : route('reward.kelola');
+    $logPergerakanUrl = $user && $user->hasTarunaAccess() ? route('log-pergerakan.mandiri') : route('log-pergerakan.index');
+    $apelUrl = $user && $user->hasTarunaAccess() ? route('apel.jadwal') : route('apel.index');
+    $jadwalUrl = $user && $user->hasTarunaAccess() ? route('jadwal.taruna') : route('jadwal.index');
+    $barakUrl = $user && $user->hasTarunaAccess() ? route('keluhan-barak.index') : route('keluhan-barak.kelola');
+    $suratUrl = $user && $user->hasTarunaAccess() ? route('surat-taruna.index') : route('surat.index');
+    $rewardUrl = $user && $user->hasTarunaAccess() ? route('reward.index') : route('reward.kelola');
 @endphp
 
 <div x-data="{ mobileMenuOpen: false }">
@@ -61,10 +62,10 @@
                 @endif
             </a>
 
-            {{-- 3. Log Pergerakan (Pos Jaga) - hanya pengasuh & admin --}}
-            @if($user && !$user->isTaruna())
-            <a href="{{ route('log-pergerakan.index') }}" 
-               class="{{ $isActive('log-pergerakan') ? 'bg-white text-slate-950 font-bold px-3.5 py-2 shadow-md' : 'text-white/70 hover:text-white hover:bg-white/10 p-2.5' }} rounded-full transition-all duration-200 flex items-center gap-2 no-underline text-xs flex-shrink-0" 
+            {{-- 3. Log Pergerakan (Pos Jaga): taruna input mandiri, pengasuh/admin validator --}}
+            @if($user)
+            <a href="{{ $logPergerakanUrl }}"
+               class="{{ $isActive('log-pergerakan') ? 'bg-white text-slate-950 font-bold px-3.5 py-2 shadow-md' : 'text-white/70 hover:text-white hover:bg-white/10 p-2.5' }} rounded-full transition-all duration-200 flex items-center gap-2 no-underline text-xs flex-shrink-0"
                title="Pos Jaga Gerbang & Log Pergerakan">
                 <i class="fa-solid fa-person-walking text-xs"></i>
                 @if($isActive('log-pergerakan'))
@@ -93,14 +94,50 @@
                 @endif
             </a>
 
-            {{-- 6. Konsinyir (Pengasuh & Admin) --}}
-            @if($user && !$user->isTaruna())
-            <a href="{{ route('konsinyir.index') }}" 
-               class="{{ $isActive('konsinyir') ? 'bg-white text-slate-950 font-bold px-3.5 py-2 shadow-md' : 'text-white/70 hover:text-white hover:bg-white/10 p-2.5' }} rounded-full transition-all duration-200 flex items-center gap-2 no-underline text-xs flex-shrink-0" 
+            {{-- 5b. Duty Taruna (khusus Kepala Seksi Internal & Admin) --}}
+            @if($user && ($user->isKasiInternal() || $user->isAdmin()))
+            <a href="{{ route('duty.index') }}"
+               class="{{ $isActive('duty') ? 'bg-white text-slate-950 font-bold px-3.5 py-2 shadow-md' : 'text-white/70 hover:text-white hover:bg-white/10 p-2.5' }} rounded-full transition-all duration-200 flex items-center gap-2 no-underline text-xs flex-shrink-0"
+               title="Jadwal Duty Taruna Mingguan">
+                <i class="fa-solid fa-calendar-check text-xs"></i>
+                @if($isActive('duty'))
+                <span class="text-xs font-bold">Duty Taruna</span>
+                @endif
+            </a>
+            @endif
+
+            {{-- 5c. Laporan Duty Taruna (taruna duty minggu ini, pengasuh, admin) --}}
+            @if($user && (!$user->isTaruna() || $user->isDutyTaruna()))
+            <a href="{{ route('laporan-duty.index') }}"
+               class="{{ $isActive('laporan-duty') ? 'bg-white text-slate-950 font-bold px-3.5 py-2 shadow-md' : 'text-white/70 hover:text-white hover:bg-white/10 p-2.5' }} rounded-full transition-all duration-200 flex items-center gap-2 no-underline text-xs flex-shrink-0"
+               title="Laporan Duty Taruna (Taruna Sakit)">
+                <i class="fa-solid fa-notes-medical text-xs"></i>
+                @if($isActive('laporan-duty'))
+                <span class="text-xs font-bold">Laporan Duty</span>
+                @endif
+            </a>
+            @endif
+
+            {{-- 6. Konsinyir (Pengasuh & Admin kelola, Taruna lihat saja) --}}
+            @if($user)
+            <a href="{{ route('konsinyir.index') }}"
+               class="{{ $isActive('konsinyir') ? 'bg-white text-slate-950 font-bold px-3.5 py-2 shadow-md' : 'text-white/70 hover:text-white hover:bg-white/10 p-2.5' }} rounded-full transition-all duration-200 flex items-center gap-2 no-underline text-xs flex-shrink-0"
                title="Data Konsinyir Taruna">
                 <i class="fa-solid fa-user-lock text-xs"></i>
                 @if($isActive('konsinyir'))
                 <span class="text-xs font-bold">Konsinyir</span>
+                @endif
+            </a>
+            @endif
+
+            {{-- 6b. Pengisian Nilai Taruna (Pengasuh & Admin) --}}
+            @if($user && !$user->hasTarunaAccess())
+            <a href="{{ route('nilai-taruna.index') }}"
+               class="{{ $isActive('nilai-taruna') ? 'bg-white text-slate-950 font-bold px-3.5 py-2 shadow-md' : 'text-white/70 hover:text-white hover:bg-white/10 p-2.5' }} rounded-full transition-all duration-200 flex items-center gap-2 no-underline text-xs flex-shrink-0"
+               title="Pengisian Nilai Taruna">
+                <i class="fa-solid fa-chart-line text-xs"></i>
+                @if($isActive('nilai-taruna'))
+                <span class="text-xs font-bold">Nilai</span>
                 @endif
             </a>
             @endif
@@ -187,6 +224,10 @@
                     <a href="{{ route('akses.index') }}" class="flex items-center gap-2.5 px-3 py-2 rounded-xl hover:bg-white/10 transition no-underline text-white font-semibold">
                         <i class="fa-solid fa-shield-halved text-sky-400 w-4"></i>
                         <span>Hak Akses</span>
+                    </a>
+                    <a href="{{ route('akses-khusus.index') }}" class="flex items-center gap-2.5 px-3 py-2 rounded-xl hover:bg-white/10 transition no-underline text-white font-semibold">
+                        <i class="fa-solid fa-key text-amber-400 w-4"></i>
+                        <span>Akses Taruna</span>
                     </a>
                     <a href="{{ route('activity-log.index') }}" class="flex items-center gap-2.5 px-3 py-2 rounded-xl hover:bg-white/10 transition no-underline text-white font-semibold">
                         <i class="fa-solid fa-clock-rotate-left text-amber-400 w-4"></i>
@@ -385,10 +426,10 @@
                         <span>Catatan Poin Disiplin</span>
                     </a>
 
-                    @if($user && !$user->isTaruna())
-                    <a href="{{ route('log-pergerakan.index') }}" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl font-semibold transition no-underline {{ $isActive('log-pergerakan') ? 'bg-white text-slate-950 font-bold shadow-md' : 'text-white/80 hover:bg-white/10 hover:text-white' }}">
+                    @if($user)
+                    <a href="{{ $logPergerakanUrl }}" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl font-semibold transition no-underline {{ $isActive('log-pergerakan') ? 'bg-white text-slate-950 font-bold shadow-md' : 'text-white/80 hover:bg-white/10 hover:text-white' }}">
                         <i class="fa-solid fa-person-walking w-4 text-center {{ $isActive('log-pergerakan') ? 'text-indigo-600' : 'text-teal-400' }}"></i>
-                        <span>Log Pos Jaga Gerbang</span>
+                        <span>{{ $user->hasTarunaAccess() ? 'Izin Keluar / Pulang' : 'Log Pos Jaga Gerbang' }}</span>
                     </a>
                     @endif
 
@@ -402,10 +443,31 @@
                         <span>Jadwal & Duty</span>
                     </a>
 
-                    @if($user && !$user->isTaruna())
+                    @if($user && ($user->isKasiInternal() || $user->isAdmin()))
+                    <a href="{{ route('duty.index') }}" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl font-semibold transition no-underline {{ $isActive('duty') ? 'bg-white text-slate-950 font-bold shadow-md' : 'text-white/80 hover:bg-white/10 hover:text-white' }}">
+                        <i class="fa-solid fa-calendar-check w-4 text-center {{ $isActive('duty') ? 'text-indigo-600' : 'text-amber-400' }}"></i>
+                        <span>Duty Taruna</span>
+                    </a>
+                    @endif
+
+                    @if($user && (!$user->isTaruna() || $user->isDutyTaruna()))
+                    <a href="{{ route('laporan-duty.index') }}" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl font-semibold transition no-underline {{ $isActive('laporan-duty') ? 'bg-white text-slate-950 font-bold shadow-md' : 'text-white/80 hover:bg-white/10 hover:text-white' }}">
+                        <i class="fa-solid fa-notes-medical w-4 text-center {{ $isActive('laporan-duty') ? 'text-indigo-600' : 'text-rose-400' }}"></i>
+                        <span>Laporan Duty Taruna</span>
+                    </a>
+                    @endif
+
+                    @if($user)
                     <a href="{{ route('konsinyir.index') }}" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl font-semibold transition no-underline {{ $isActive('konsinyir') ? 'bg-white text-slate-950 font-bold shadow-md' : 'text-white/80 hover:bg-white/10 hover:text-white' }}">
                         <i class="fa-solid fa-user-lock w-4 text-center {{ $isActive('konsinyir') ? 'text-indigo-600' : 'text-rose-400' }}"></i>
                         <span>Data Konsinyir</span>
+                    </a>
+                    @endif
+
+                    @if($user && !$user->hasTarunaAccess())
+                    <a href="{{ route('nilai-taruna.index') }}" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl font-semibold transition no-underline {{ $isActive('nilai-taruna') ? 'bg-white text-slate-950 font-bold shadow-md' : 'text-white/80 hover:bg-white/10 hover:text-white' }}">
+                        <i class="fa-solid fa-chart-line w-4 text-center {{ $isActive('nilai-taruna') ? 'text-indigo-600' : 'text-emerald-400' }}"></i>
+                        <span>Pengisian Nilai Taruna</span>
                     </a>
                     @endif
 
@@ -447,6 +509,11 @@
                     <a href="{{ route('akses.index') }}" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl font-semibold transition no-underline {{ $isActive('akses') ? 'bg-white text-slate-950 font-bold shadow-md' : 'text-white/80 hover:bg-white/10 hover:text-white' }}">
                         <i class="fa-solid fa-shield-halved w-4 text-center {{ $isActive('akses') ? 'text-indigo-600' : 'text-sky-400' }}"></i>
                         <span>Hak Akses</span>
+                    </a>
+
+                    <a href="{{ route('akses-khusus.index') }}" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl font-semibold transition no-underline {{ $isActive('akses-khusus') ? 'bg-white text-slate-950 font-bold shadow-md' : 'text-white/80 hover:bg-white/10 hover:text-white' }}">
+                        <i class="fa-solid fa-key w-4 text-center {{ $isActive('akses-khusus') ? 'text-indigo-600' : 'text-amber-400' }}"></i>
+                        <span>Pemberian Akses Taruna</span>
                     </a>
 
                     <a href="{{ route('activity-log.index') }}" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl font-semibold transition no-underline {{ $isActive('activity-log') ? 'bg-white text-slate-950 font-bold shadow-md' : 'text-white/80 hover:bg-white/10 hover:text-white' }}">

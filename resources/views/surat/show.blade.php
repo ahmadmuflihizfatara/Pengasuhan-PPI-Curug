@@ -1,5 +1,4 @@
 <x-app-layout>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 * { box-sizing: border-box; }
 body { font-family: 'Inter', sans-serif; background: transparent; }
@@ -64,10 +63,11 @@ body { font-family: 'Inter', sans-serif; background: transparent; }
 .taruna-tag { background:#fff4e6; color:#c05621; border-radius:8px; padding:8px 14px; font-size:12px; font-weight:700; display:inline-flex; align-items:center; gap:6px; margin-bottom:16px; }
 </style>
 
-<div class="app-layout">
-    <x-sidebar active="surat" />
+{{-- Top Floating Island Capsule Navbar --}}
+<x-island-navbar />
 
-    <div class="main-content">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 pb-12 pt-2">
+    <div class="spatial-workspace-window rounded-3xl bg-white/30 backdrop-blur-2xl border border-white/50 shadow-2xl p-4 sm:p-7 relative overflow-hidden">
         <!-- Top bar -->
         <div class="topbar">
             <a href="{{ route('surat.index') }}" class="back-link">

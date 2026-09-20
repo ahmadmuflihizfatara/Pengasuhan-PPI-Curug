@@ -9,7 +9,7 @@
 
                 
                 {{-- Page Header --}}
-                <div class="rounded-2xl bg-gradient-to-r from-rose-900/90 via-orange-900/85 to-slate-900/90 backdrop-blur-xl border border-white/30 p-6 text-white mb-6 shadow-xl relative overflow-hidden flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                <div class="rounded-2xl bg-gradient-to-r from-blue-900/90 via-indigo-900/85 to-slate-900/90 backdrop-blur-xl border border-white/30 p-6 text-white mb-6 shadow-xl relative overflow-hidden flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                     <div class="relative z-10">
                         <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/15 backdrop-blur-md border border-white/20 text-[10px] font-bold tracking-widest uppercase text-amber-300 mb-2">
                             <span>✦</span>
@@ -44,6 +44,7 @@
                 </div>
                 @endif
 
+                @unless(auth()->user()->hasTarunaAccess())
                 {{-- Form Tambah Konsinyir --}}
                 <div class="rounded-2xl bg-white/50 backdrop-blur-xl border border-white/60 p-5 sm:p-6 mb-6 shadow-lg">
                     <div class="pb-3.5 mb-4 border-b border-white/30">
@@ -96,6 +97,7 @@
                         </button>
                     </form>
                 </div>
+                @endunless
 
                 {{-- Sedang Konsinyir Section --}}
                 <div class="mb-6">
@@ -115,7 +117,8 @@
                     </div>
                 </div>
 
-                {{-- Riwayat Konsinyir Section --}}
+                {{-- Riwayat Konsinyir Section — taruna hanya lihat yang sedang aktif --}}
+                @unless(auth()->user()->hasTarunaAccess())
                 <div>
                     <div class="flex items-center gap-2 mb-3">
                         <i class="fa-solid fa-clock-rotate-left text-slate-500 text-sm"></i>
@@ -132,10 +135,12 @@
                         @endif
                     </div>
                 </div>
+                @endunless
 
     </div>
 </main>
 
+@unless(auth()->user()->hasTarunaAccess())
 {{-- Modal Konfirmasi Hapus --}}
 <div class="modal-overlay" id="hapusModal">
     <div class="modal-box">
@@ -196,5 +201,6 @@ document.getElementById('hapusModal').addEventListener('click', function(e) {
     if (e.target === this) tutupHapusModal();
 });
 </script>
+@endunless
 
 </x-app-layout>

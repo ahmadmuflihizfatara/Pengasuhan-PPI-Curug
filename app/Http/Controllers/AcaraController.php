@@ -131,7 +131,7 @@ class AcaraController extends Controller
     // ─────────────────────────────────────────────────────
     private function authorizeStaff(): void
     {
-        if (Auth::user()->isTaruna()) {
+        if (Auth::user()->hasTarunaAccess()) {
             abort(403, 'Akses ditolak. Taruna tidak dapat mengelola acara.');
         }
     }

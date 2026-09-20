@@ -3,7 +3,7 @@
 {{-- Top Floating Island Capsule Navbar --}}
 <x-island-navbar />
 
-@php $isTaruna = Auth::user()->isTaruna(); @endphp
+@php $isTaruna = Auth::user()->hasTarunaAccess(); @endphp
 
 <main class="max-w-7xl mx-auto px-4 sm:px-6 pb-12 pt-2">
     <div class="spatial-workspace-window rounded-3xl bg-white/30 backdrop-blur-2xl border border-white/50 shadow-2xl p-4 sm:p-7 relative overflow-hidden">

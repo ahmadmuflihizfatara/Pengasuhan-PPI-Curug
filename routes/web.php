@@ -9,7 +9,10 @@ use App\Http\Controllers\ApelController;
 use App\Http\Controllers\JadwalController;
 use App\Http\Controllers\DutyTarunaController;
 use App\Http\Controllers\AksesController;
+use App\Http\Controllers\AksesKhususController;
 use App\Http\Controllers\KonsinyirController;
+use App\Http\Controllers\LaporanDutyController;
+use App\Http\Controllers\NilaiTarunaController;
 use App\Http\Controllers\SuratController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\ActivityLogController; // <-- TAMBAHAN
@@ -69,10 +72,12 @@ Route::middleware('auth')->group(function () {
         ->middleware('role:taruna')
         ->name('api.suratNotifications');
 
-    // Tambah & hapus poin: hanya pengasuh & admin
+    // Tambah poin: pengasuh, admin & polisi taruna (polisi taruna dibatasi ke pelanggaran di controller)
     Route::post('/poin', [PoinController::class, 'store'])
-        ->middleware('role:pengasuh,admin')
+        ->middleware('role:pengasuh,admin,polisi_taruna')
         ->name('poin.store');
+    // Hapus poin: hanya pengasuh & admin
+
     Route::delete('/poin/{id}', [PoinController::class, 'destroy'])
         ->middleware('role:pengasuh,admin')
         ->name('poin.destroy');
@@ -125,15 +130,30 @@ Route::middleware('auth')->group(function () {
         ->name('apel.jadwal');
 
     // ===========================
-    // JADWAL — pengasuh: jadwal pengasuh + duty taruna
+    // JADWAL — pengasuh: jadwal pengasuh saja
+    // DUTY TARUNA — dibuat khusus Kepala Seksi Internal (pengasuh hanya lihat)
     // ===========================
     Route::middleware('role:pengasuh')->group(function () {
         Route::get('/jadwal', [JadwalController::class, 'index'])->name('jadwal.index');
         Route::post('/jadwal/generate', [JadwalController::class, 'generate'])->name('jadwal.generate');
         Route::post('/jadwal/set', [JadwalController::class, 'set'])->name('jadwal.set');
+    });
 
-        Route::get('/jadwal/duty', [DutyTarunaController::class, 'index'])->name('duty.index');
-        Route::post('/jadwal/duty', [DutyTarunaController::class, 'store'])->name('duty.store');
+    Route::get('/jadwal/duty', [DutyTarunaController::class, 'index'])
+        ->middleware('role:pengasuh,kasi_internal')
+        ->name('duty.index');
+    Route::post('/jadwal/duty', [DutyTarunaController::class, 'store'])
+        ->middleware('role:kasi_internal')
+        ->name('duty.store');
+
+    // ===========================
+    // LAPORAN DUTY TARUNA — taruna duty minggu ini (akses otomatis) lapor sakit;
+    // pengasuh & admin lihat laporan masuk
+    // ===========================
+    Route::middleware('role:pengasuh,admin,duty_taruna')->group(function () {
+        Route::get('/laporan-duty', [LaporanDutyController::class, 'index'])->name('laporan-duty.index');
+        Route::post('/laporan-duty', [LaporanDutyController::class, 'store'])->name('laporan-duty.store');
+        Route::delete('/laporan-duty/{laporan}', [LaporanDutyController::class, 'destroy'])->name('laporan-duty.destroy');
     });
 
     // Jadwal untuk taruna — hanya lihat (pengasuh hari ini + duty minggu ini)
@@ -142,12 +162,23 @@ Route::middleware('auth')->group(function () {
         ->name('jadwal.taruna');
 
     // ===========================
-    // KONSINYIR — hanya pengasuh
+    // KONSINYIR — pengasuh kelola, taruna lihat saja (read-only)
     // ===========================
+    Route::get('/konsinyir', [KonsinyirController::class, 'index'])
+        ->middleware('role:pengasuh,taruna')
+        ->name('konsinyir.index');
     Route::middleware('role:pengasuh')->group(function () {
-        Route::get('/konsinyir', [KonsinyirController::class, 'index'])->name('konsinyir.index');
         Route::post('/konsinyir', [KonsinyirController::class, 'store'])->name('konsinyir.store');
         Route::delete('/konsinyir/{konsinyir}', [KonsinyirController::class, 'destroy'])->name('konsinyir.destroy');
+    });
+
+    // ===========================
+    // NILAI TARUNA — pengasuh & admin input; taruna lihat rekap di dashboard
+    // ===========================
+    Route::middleware('role:pengasuh,admin')->group(function () {
+        Route::get('/nilai-taruna', [NilaiTarunaController::class, 'index'])->name('nilai-taruna.index');
+        Route::post('/nilai-taruna', [NilaiTarunaController::class, 'store'])->name('nilai-taruna.store');
+        Route::delete('/nilai-taruna/{nilai}', [NilaiTarunaController::class, 'destroy'])->name('nilai-taruna.destroy');
     });
 
     // ===========================
@@ -156,6 +187,10 @@ Route::middleware('auth')->group(function () {
     Route::middleware('role:admin')->group(function () {
         Route::get('/akses', [AksesController::class, 'index'])->name('akses.index');
         Route::post('/akses', [AksesController::class, 'update'])->name('akses.update');
+
+        // Pemberian akses khusus (Kasi Internal / Polisi Taruna) ke akun taruna
+        Route::get('/akses-khusus', [AksesKhususController::class, 'index'])->name('akses-khusus.index');
+        Route::patch('/akses-khusus/{user}', [AksesKhususController::class, 'update'])->name('akses-khusus.update');
     });
 
     // ===========================
@@ -302,16 +337,35 @@ Route::middleware('auth')->group(function () {
     ->name('berita.toggle-pin');
 
     // ===========================
-    // LOG PERGERAKAN TARUNA (TABLET & TV MONITORING) - hanya pengasuh & admin
+    // LOG PERGERAKAN TARUNA (POS JAGA GERBANG)
+    // Taruna: input mandiri izin keluar/pulang. Pengasuh: validator saja (tidak input).
     // ===========================
     Route::middleware('role:pengasuh,admin')->group(function () {
         Route::get('/log-pergerakan', [\App\Http\Controllers\LogPergerakanController::class, 'index'])->name('log-pergerakan.index');
-        Route::get('/log-pergerakan/tablet', [\App\Http\Controllers\LogPergerakanController::class, 'tablet'])->name('log-pergerakan.tablet');
-        Route::post('/log-pergerakan', [\App\Http\Controllers\LogPergerakanController::class, 'store'])->name('log-pergerakan.store');
-        Route::patch('/log-pergerakan/{id}/kembali', [\App\Http\Controllers\LogPergerakanController::class, 'updateKembali'])->name('log-pergerakan.kembali');
         Route::get('/log-pergerakan/tv-monitoring', [\App\Http\Controllers\LogPergerakanController::class, 'tvMonitoring'])->name('log-pergerakan.tv');
         Route::get('/log-pergerakan/api-data', [\App\Http\Controllers\LogPergerakanController::class, 'apiData'])->name('log-pergerakan.api');
+    });
+
+    // Form manual pos jaga — khusus admin (pengasuh tidak lagi input manual)
+    Route::get('/log-pergerakan/tablet', [\App\Http\Controllers\LogPergerakanController::class, 'tablet'])
+        ->middleware('role:admin')
+        ->name('log-pergerakan.tablet');
+
+    // Form mandiri taruna: input izin keluar & konfirmasi kembali sendiri
+    Route::get('/log-pergerakan/mandiri', [\App\Http\Controllers\LogPergerakanController::class, 'mandiri'])
+        ->middleware('role:taruna')
+        ->name('log-pergerakan.mandiri');
+
+    // Store & kembali: taruna (punya sendiri) atau admin (input manual di tablet)
+    Route::middleware('role:taruna,admin')->group(function () {
+        Route::post('/log-pergerakan', [\App\Http\Controllers\LogPergerakanController::class, 'store'])->name('log-pergerakan.store');
+        Route::patch('/log-pergerakan/{id}/kembali', [\App\Http\Controllers\LogPergerakanController::class, 'updateKembali'])->name('log-pergerakan.kembali');
+    });
+
+    // Rute dengan wildcard {id} — didaftarkan paling akhir agar tidak menangkap path spesifik di atas (tablet/mandiri/tv-monitoring/api-data)
+    Route::middleware('role:pengasuh,admin')->group(function () {
         Route::get('/log-pergerakan/{id}', [\App\Http\Controllers\LogPergerakanController::class, 'show'])->name('log-pergerakan.show');
+        Route::patch('/log-pergerakan/{id}/validasi', [\App\Http\Controllers\LogPergerakanController::class, 'validasi'])->name('log-pergerakan.validasi');
         Route::delete('/log-pergerakan/{id}', [\App\Http\Controllers\LogPergerakanController::class, 'destroy'])
             ->name('log-pergerakan.destroy');
     });

@@ -1,5 +1,4 @@
 <x-app-layout>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 * { box-sizing: border-box; }
 body { font-family: 'Inter', sans-serif; background: transparent; }
@@ -98,12 +97,11 @@ select.form-control { cursor: pointer; }
 .btn-save:hover { opacity: .9; }
 </style>
 
-<div class="app-layout">
-    <!-- SIDEBAR -->
-    <x-sidebar active="setting" />
+{{-- Top Floating Island Capsule Navbar --}}
+<x-island-navbar />
 
-    <!-- MAIN -->
-    <div class="main-content">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 pb-12 pt-2">
+    <div class="spatial-workspace-window rounded-3xl bg-white/30 backdrop-blur-2xl border border-white/50 shadow-2xl p-4 sm:p-7 relative overflow-hidden">
 
         <!-- Header -->
         <div class="page-header">

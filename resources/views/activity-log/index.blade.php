@@ -303,15 +303,15 @@ tbody tr:hover { background:#fafbff; }
 
             @if($logs->count() > 0)
             <div style="overflow-x:auto;">
-                <table>
+                <table data-server-sort>
                     <thead>
                         <tr>
                             <th>#</th>
-                            <th>Waktu</th>
-                            <th>Modul</th>
-                            <th>Aksi</th>
+                            <th data-sort="waktu">Waktu</th>
+                            <th data-sort="modul">Modul</th>
+                            <th data-sort="aksi">Aksi</th>
                             <th>Deskripsi Aktivitas</th>
-                            <th>Pelaku</th>
+                            <th data-sort="pelaku">Pelaku</th>
                             <th style="text-align:center;">Detail</th>
                         </tr>
                     </thead>

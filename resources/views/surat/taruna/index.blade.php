@@ -1,5 +1,4 @@
 <x-app-layout>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 * { box-sizing: border-box; }
 body { font-family: 'Inter', sans-serif; background: transparent; }
@@ -217,7 +216,7 @@ function showToast(perihal, status, suratId) {
 }
 
 function pollNotifications() {
-    fetch("{{ route('api.suratNotifications') }}")
+    fetch("{{ route('api.suratNotifications') }}", { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
         .then(res => res.json())
         .then(data => {
             if (data.count > 0) {

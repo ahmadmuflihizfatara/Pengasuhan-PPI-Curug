@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\AksesFitur;
 use App\Models\Reward;
 use App\Models\User;
+use App\Traits\SortsQuery;
 use App\Traits\LogsActivity;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -14,6 +15,7 @@ use Illuminate\View\View;
 class RewardStaffController extends Controller
 {
     use LogsActivity;
+    use SortsQuery;
 
     /**
      * Daftar semua pengajuan reward dengan filter status, kategori, dan pencarian.
@@ -38,6 +40,7 @@ class RewardStaffController extends Controller
             });
         }
 
+        $this->applySort($query, $request, ['pengaju' => 'nama', 'kategori' => 'kategori', 'jenis' => 'jenis', 'tanggal' => 'tanggal_prestasi', 'status' => 'status']);
         $daftarReward = $query->paginate(10)->withQueryString();
 
         $stats = [

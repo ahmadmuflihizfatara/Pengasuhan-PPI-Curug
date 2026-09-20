@@ -9,7 +9,7 @@
 
                 
                 {{-- Page Header Glass Banner --}}
-                <div class="rounded-2xl bg-gradient-to-r from-amber-900/90 via-orange-900/85 to-slate-900/90 backdrop-blur-xl border border-white/30 p-6 text-white mb-6 shadow-xl relative overflow-hidden flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                <div class="rounded-2xl bg-gradient-to-r from-blue-900/90 via-indigo-900/85 to-slate-900/90 backdrop-blur-xl border border-white/30 p-6 text-white mb-6 shadow-xl relative overflow-hidden flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                     <div class="relative z-10">
                         <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/15 backdrop-blur-md border border-white/20 text-[10px] font-bold tracking-widest uppercase text-amber-300 mb-2">
                             <span>✦</span>
@@ -151,7 +151,7 @@ function showToast(reward) {
 }
 
 function pollNotifications() {
-    fetch("{{ route('api.rewardNotifications') }}")
+    fetch("{{ route('api.rewardNotifications') }}", { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
         .then(res => res.json())
         .then(data => {
             if (data.count > 0) {

@@ -1,5 +1,4 @@
 <x-app-layout>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 * { box-sizing: border-box; }
 body { font-family: 'Inter', sans-serif; background: transparent; }
@@ -57,10 +56,11 @@ body { font-family: 'Inter', sans-serif; background: transparent; }
 .modal-btn-confirm-reject  { background:linear-gradient(135deg,#e53e3e,#fc5c7d); color:white; border:none; padding:10px 24px; border-radius:25px; font-size:13px; font-weight:800; cursor:pointer; }
 </style>
 
-<div class="app-layout">
-    <x-sidebar active="keluhan-barak" />
+{{-- Top Floating Island Capsule Navbar --}}
+<x-island-navbar />
 
-    <div class="main-content">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 pb-12 pt-2">
+    <div class="spatial-workspace-window rounded-3xl bg-white/30 backdrop-blur-2xl border border-white/50 shadow-2xl p-4 sm:p-7 relative overflow-hidden">
         <div class="topbar">
             <a href="{{ route('keluhan-barak.kelola') }}" class="back-link">
                 <i class="fas fa-arrow-left"></i> Kembali ke Daftar Keluhan

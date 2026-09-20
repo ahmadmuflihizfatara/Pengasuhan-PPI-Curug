@@ -1,5 +1,4 @@
 <x-app-layout>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 * { box-sizing: border-box; }
 body { font-family: 'Inter', sans-serif; background: transparent; }
@@ -28,10 +27,11 @@ body { font-family: 'Inter', sans-serif; background: transparent; }
 .role-admin { background: #f3eeff; border-left: 4px solid #764ba2; }
 </style>
 
-<div class="app-layout">
-    <x-sidebar active="users" />
+{{-- Top Floating Island Capsule Navbar --}}
+<x-island-navbar />
 
-    <div class="main-content">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 pb-12 pt-2">
+    <div class="spatial-workspace-window rounded-3xl bg-white/30 backdrop-blur-2xl border border-white/50 shadow-2xl p-4 sm:p-7 relative overflow-hidden">
         <div class="form-card">
             <h1 class="form-title"><i class="fas fa-user-edit" style="color:#764ba2; margin-right:10px;"></i>Edit Akun</h1>
             <p class="form-subtitle">Ubah data akun <strong>{{ $user->name }}</strong></p>

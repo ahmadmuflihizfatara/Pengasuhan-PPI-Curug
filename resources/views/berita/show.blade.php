@@ -154,10 +154,11 @@ body { font-family: 'Inter', sans-serif; background: transparent; }
 .bc-alert-success { background:#e6fff5; color:#276749; border:1px solid #b2f5ea; }
 </style>
 
-<div class="app-layout">
-    <x-sidebar active="berita" />
+{{-- Top Floating Island Capsule Navbar --}}
+<x-island-navbar />
 
-    <div class="main-content">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 pb-12 pt-2">
+    <div class="spatial-workspace-window rounded-3xl bg-white/30 backdrop-blur-2xl border border-white/50 shadow-2xl p-4 sm:p-7 relative overflow-hidden">
 
         @if(session('success'))
         <div class="bc-alert bc-alert-success"><i class="fas fa-check-circle"></i> {{ session('success') }}</div>
@@ -231,7 +232,7 @@ body { font-family: 'Inter', sans-serif; background: transparent; }
                     </div>
 
                     {{-- Staff Actions --}}
-                    @if(!Auth::user()->isTaruna())
+                    @if(!Auth::user()->hasTarunaAccess())
                     <div class="staff-bar">
                         <span><i class="fas fa-tools"></i> Kelola:</span>
                         <a href="{{ route('berita.edit', $beritum) }}" class="bc-action-btn edit">

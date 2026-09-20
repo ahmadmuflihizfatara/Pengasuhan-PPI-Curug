@@ -1,5 +1,4 @@
 <x-app-layout>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 * { box-sizing: border-box; }
 body { font-family: 'Inter', sans-serif; background: transparent; }
@@ -106,6 +105,12 @@ body { font-family: 'Inter', sans-serif; background: transparent; }
                         <span class="user-role" style="background:{{ $roleInfo['bg'] }}; color:{{ $roleInfo['color'] }};">
                             {{ $roleInfo['label'] }}
                         </span>
+                        @foreach($user->akses_khusus ?? [] as $ak)
+                        @php $ai = \App\Models\User::DAFTAR_AKSES[$ak] ?? ['label' => $ak, 'ikon' => '', 'warna' => '#888']; @endphp
+                        <span class="user-role" style="background:{{ $ai['warna'] }}18; color:{{ $ai['warna'] }}; margin-left:4px;">
+                            <i class="fas {{ $ai['ikon'] }}"></i> {{ $ai['label'] }}
+                        </span>
+                        @endforeach
                         @if($user->prodi)
                         <span class="user-role" style="background: transparent; color:#555; margin-left:4px;">
                             {{ $user->prodi }}

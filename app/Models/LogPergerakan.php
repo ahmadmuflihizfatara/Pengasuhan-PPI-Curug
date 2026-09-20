@@ -44,6 +44,9 @@ class LogPergerakan extends Model
         'catatan_kembali',
         'created_by',
         'verified_by',
+        'is_validated',
+        'validated_by',
+        'validated_at',
     ];
 
     protected $casts = [
@@ -51,6 +54,8 @@ class LogPergerakan extends Model
         'estimasi_kembali' => 'datetime',
         'waktu_kembali'    => 'datetime',
         'jumlah_anggota'   => 'integer',
+        'is_validated'     => 'boolean',
+        'validated_at'     => 'datetime',
     ];
 
     /**
@@ -77,6 +82,14 @@ class LogPergerakan extends Model
         return $this->belongsTo(User::class, 'verified_by');
     }
 
+    /**
+     * Pengasuh/admin yang memvalidasi (mengaudit) log ini
+     */
+    public function validator()
+    {
+        return $this->belongsTo(User::class, 'validated_by');
+    }
+
     // Helper status
     public function isBelumKembali(): bool
     {
@@ -91,6 +104,14 @@ class LogPergerakan extends Model
     public function getStatusLabel(): string
     {
         return $this->status === self::STATUS_BERANGKAT ? 'BELUM KEMBALI' : 'SUDAH KEMBALI';
+    }
+
+    public function getValidasiBadgeHtml(): string
+    {
+        if ($this->is_validated) {
+            return '<span class="badge-validasi-ok"><i class="fas fa-user-check me-1"></i> Tervalidasi</span>';
+        }
+        return '<span class="badge-validasi-pending"><i class="fas fa-hourglass-half me-1"></i> Menunggu Validasi</span>';
     }
 
     public function getStatusBadgeHtml(): string

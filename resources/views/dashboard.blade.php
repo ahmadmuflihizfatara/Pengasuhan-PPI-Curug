@@ -46,7 +46,7 @@
                 </div>
 
                 {{-- ── 2. STAT KPI CARDS ── --}}
-                @if(Auth::user()->isTaruna())
+                @if(Auth::user()->hasTarunaAccess())
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
                         <div class="rounded-2xl bg-white/60 backdrop-blur-xl border border-white/70 p-5 shadow-lg flex items-center gap-4">
                             <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 text-white flex items-center justify-center text-xl shadow-md flex-shrink-0">
@@ -65,15 +65,49 @@
                                     <i class="fa-solid fa-star"></i>
                                 </div>
                                 <div>
-                                    <div class="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Raport Poin Saya</div>
+                                    <div class="text-[11px] font-bold text-slate-500 uppercase tracking-wider">{{ Auth::user()->isPolisiTaruna() ? 'Kelola Poin Taruna' : 'Raport Poin Saya' }}</div>
+                                    @if(Auth::user()->isPolisiTaruna())
+                                    <div class="text-sm font-bold text-slate-800 mt-1">Beri Pelanggaran</div>
+                                    <div class="text-xs text-rose-600 font-bold mt-0.5">Cari &amp; Usulkan &rarr;</div>
+                                    @else
                                     <div class="text-2xl font-black text-slate-900 font-mono tracking-tight" id="taruna-total-poin">
                                         {{ $totalPoin >= 0 ? '+' : '' }}{{ $totalPoin }}
                                     </div>
                                     <div class="text-xs text-emerald-600 font-bold mt-0.5">Buka Rincian Poin &rarr;</div>
+                                    @endif
                                 </div>
                             </div>
                             <i class="fa-solid fa-chevron-right text-slate-400 group-hover:text-slate-700 transition"></i>
                         </a>
+                    </div>
+
+                    @if($konsinyirAktif)
+                    <div class="rounded-2xl bg-gradient-to-r from-blue-900/90 via-indigo-900/85 to-slate-900/90 backdrop-blur-xl border border-rose-400/40 p-5 text-white mb-6 shadow-xl relative overflow-hidden flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                        <div class="flex items-center gap-4 relative z-10">
+                            <div class="w-12 h-12 rounded-xl bg-rose-500/20 border border-rose-400/40 flex items-center justify-center text-xl text-rose-300 flex-shrink-0 shadow-inner">
+                                <i class="fa-solid fa-user-lock"></i>
+                            </div>
+                            <div>
+                                <div class="text-[10px] font-extrabold uppercase tracking-widest text-rose-200">Anda Sedang Menjalani Konsinyir</div>
+                                <div class="text-sm sm:text-base font-black text-white mt-0.5">
+                                    {{ $konsinyirAktif->tanggal_mulai->locale('id')->isoFormat('D MMM Y') }} &rarr; {{ $konsinyirAktif->tanggal_selesai->locale('id')->isoFormat('D MMM Y') }}
+                                    <span class="text-xs font-bold text-amber-300 bg-amber-950/60 px-2 py-0.5 rounded-full border border-amber-500/30 ml-1">{{ $konsinyirAktif->lama_hari }} hari</span>
+                                </div>
+                                @if($konsinyirAktif->keterangan)
+                                <div class="text-xs text-rose-100/80 mt-1">{{ $konsinyirAktif->keterangan }}</div>
+                                @endif
+                            </div>
+                        </div>
+                        <a href="{{ route('konsinyir.index') }}" class="relative z-10 flex-shrink-0 px-4 py-2 rounded-xl bg-white/90 hover:bg-white text-slate-900 font-extrabold text-xs shadow-md transition flex items-center gap-2 no-underline">
+                            <i class="fa-solid fa-list-check"></i>
+                            <span>Lihat Detail</span>
+                        </a>
+                        <div class="absolute -right-10 -top-10 w-40 h-40 bg-rose-500/20 rounded-full blur-3xl pointer-events-none"></div>
+                    </div>
+                    @endif
+
+                    <div class="mb-6">
+                        <x-rekap-nilai-taruna :nilai="$nilaiSemester" />
                     </div>
 
                     <div class="mb-6">
@@ -141,7 +175,7 @@
                     $activePergerakan = \App\Models\LogPergerakan::where('status', 'berangkat')->count();
                     $kembaliHariIni   = \App\Models\LogPergerakan::whereDate('waktu_berangkat', \Carbon\Carbon::today())->where('status', 'kembali')->count();
                 @endphp
-                @unless(Auth::user()->isTaruna())
+                @unless(Auth::user()->hasTarunaAccess())
                 <div class="rounded-2xl bg-gradient-to-r from-slate-900/85 via-slate-800/85 to-indigo-950/85 backdrop-blur-xl border border-white/30 p-5 text-white mb-6 shadow-xl flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
                     <div class="flex items-center gap-4">
                         <div class="w-12 h-12 rounded-xl bg-blue-500/20 border border-blue-400/40 flex items-center justify-center text-xl text-blue-400 flex-shrink-0 shadow-inner">
@@ -163,10 +197,17 @@
                     </div>
 
                     <div class="flex flex-wrap items-center gap-2.5 w-full md:w-auto">
+                        @if(Auth::user()->isAdmin())
                         <a href="{{ route('log-pergerakan.tablet') }}" class="flex-1 md:flex-initial px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs shadow-md transition flex items-center justify-center gap-2 no-underline">
                             <i class="fa-solid fa-tablet-screen-button"></i>
                             <span>Mode Tablet Pos Jaga</span>
                         </a>
+                        @else
+                        <a href="{{ route('log-pergerakan.index') }}" class="flex-1 md:flex-initial px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs shadow-md transition flex items-center justify-center gap-2 no-underline">
+                            <i class="fa-solid fa-user-check"></i>
+                            <span>Validasi Log Taruna</span>
+                        </a>
+                        @endif
                         <a href="{{ route('log-pergerakan.tv') }}" target="_blank" class="flex-1 md:flex-initial px-4 py-2 rounded-xl bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-400/40 text-emerald-300 font-bold text-xs backdrop-blur-md transition flex items-center justify-center gap-2 no-underline">
                             <i class="fa-solid fa-tv"></i>
                             <span>TV Monitoring Jaga</span>
@@ -176,7 +217,7 @@
                 @endunless
 
                 {{-- ── 4. ACARA PENGASUHAN MENDATANG ── --}}
-                @if(!Auth::user()->isTaruna())
+                @if(!Auth::user()->hasTarunaAccess())
                 <div class="mb-6">
                     <div class="flex items-center justify-between mb-3.5">
                         <h3 class="text-xs font-bold uppercase tracking-wider text-slate-800 flex items-center gap-2">
@@ -297,7 +338,7 @@
                                 <i class="fa-solid fa-calendar-days text-indigo-600"></i>
                                 <span>Jadwal Pengasuhan</span>
                             </h3>
-                            @unless(Auth::user()->isTaruna())
+                            @unless(Auth::user()->hasTarunaAccess())
                             <a href="{{ route('acara.create') }}" class="text-xs font-bold text-indigo-700 hover:underline">+ Tambah</a>
                             @endunless
                         </div>
@@ -347,7 +388,7 @@
                 </div>
 
                 {{-- ── 6. QUICK ACTION TILES ── --}}
-                @if(!Auth::user()->isTaruna())
+                @if(!Auth::user()->hasTarunaAccess())
                 <div>
                     <h3 class="text-xs font-bold uppercase tracking-wider text-slate-800 mb-3 flex items-center gap-2">
                         <i class="fa-solid fa-bolt text-amber-500"></i>
@@ -403,13 +444,13 @@
     </div>
 </main>
 
-@if(Auth::user()->isTaruna())
+@if(Auth::user()->hasTarunaAccess())
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         const totalPoinEl = document.getElementById('taruna-total-poin');
         
         function pollPoints() {
-            fetch("{{ route('api.myPoints') }}")
+            fetch("{{ route('api.myPoints') }}", { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
                 .then(res => res.json())
                 .then(data => {
                     if (data.success) {

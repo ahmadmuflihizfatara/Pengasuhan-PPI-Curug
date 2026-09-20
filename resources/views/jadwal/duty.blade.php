@@ -1,5 +1,4 @@
 <x-app-layout>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 * { box-sizing: border-box; }
 body { font-family: 'Inter', sans-serif; background: transparent; }
@@ -131,6 +130,14 @@ tbody tr:hover { background:#fafbff; }
         </div>
         @endunless
 
+        @php $bolehEdit = auth()->user()->isKasiInternal() || auth()->user()->canManageSystem(); @endphp
+        @if($bolehIsi && !$bolehEdit)
+        <div class="flash-locked">
+            <i class="fas fa-eye"></i>
+            Duty taruna hanya dapat diisi oleh Kepala Seksi Internal. Anda bisa melihat jadwal, tapi tidak mengubahnya.
+        </div>
+        @endif
+
         {{-- Pilih minggu --}}
         <div class="week-bar">
             <div class="week-select-wrap">
@@ -200,8 +207,8 @@ tbody tr:hover { background:#fafbff; }
             @endif
         </div>
 
-        {{-- Form isi duty (hanya jika akses dibuka) --}}
-        @if($bolehIsi)
+        {{-- Form isi duty (hanya jika akses dibuka & role berwenang: Kasi Internal / Admin) --}}
+        @if($bolehIsi && $bolehEdit)
         <div class="form-card">
             <div class="form-head">
                 <h2><i class="fas fa-pen-to-square" style="color:#1baf7a;"></i>

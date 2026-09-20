@@ -282,9 +282,9 @@
             </a>
         </li>
 
-        @if($user->isTaruna())
+        @if($user->hasTarunaAccess())
             <li>
-                <a href="{{ route('log-pergerakan.tablet') }}" class="sb-nav-link {{ $active==='log-pergerakan'?'active':'' }}">
+                <a href="{{ route('log-pergerakan.mandiri') }}" class="sb-nav-link {{ $active==='log-pergerakan'?'active':'' }}">
                     <div class="flex items-center gap-2.5">
                         <i class="fa-solid fa-person-walking nav-icon"></i>
                         <span>Log Pergerakan</span>
@@ -307,6 +307,16 @@
                     </div>
                 </a>
             </li>
+            @if($user->isDutyTaruna())
+            <li>
+                <a href="{{ route('laporan-duty.index') }}" class="sb-nav-link {{ $active==='laporan-duty'?'active':'' }}">
+                    <div class="flex items-center gap-2.5">
+                        <i class="fa-solid fa-notes-medical nav-icon"></i>
+                        <span>Laporan Duty Taruna</span>
+                    </div>
+                </a>
+            </li>
+            @endif
             <li>
                 <a href="{{ route('apel.jadwal') }}" class="sb-nav-link {{ $active==='apel'?'active':'' }}">
                     <div class="flex items-center gap-2.5">
@@ -439,6 +449,22 @@
                     </div>
                 </a>
             </li>
+            <li>
+                <a href="{{ route('laporan-duty.index') }}" class="sb-nav-link {{ $active==='laporan-duty'?'active':'' }}">
+                    <div class="flex items-center gap-2.5">
+                        <i class="fa-solid fa-notes-medical nav-icon"></i>
+                        <span>Laporan Duty Taruna</span>
+                    </div>
+                </a>
+            </li>
+            <li>
+                <a href="{{ route('nilai-taruna.index') }}" class="sb-nav-link {{ $active==='nilai-taruna'?'active':'' }}">
+                    <div class="flex items-center gap-2.5">
+                        <i class="fa-solid fa-chart-line nav-icon"></i>
+                        <span>Nilai Taruna</span>
+                    </div>
+                </a>
+            </li>
             @if($user->isPengasuh())
             <li>
                 <a href="{{ route('apel.index') }}" class="sb-nav-link {{ $active==='apel'?'active':'' }}">
@@ -492,6 +518,14 @@
             </a>
         </li>
         <li>
+            <a href="{{ route('akses-khusus.index') }}" class="sb-nav-link {{ $active==='akses-khusus'?'active':'' }}">
+                <div class="flex items-center gap-2.5">
+                    <i class="fa-solid fa-key nav-icon"></i>
+                    <span>Akses Taruna</span>
+                </div>
+            </a>
+        </li>
+        <li>
             <a href="{{ route('activity-log.index') }}" class="sb-nav-link {{ $active==='activity-log'?'active':'' }}">
                 <div class="flex items-center gap-2.5">
                     <i class="fa-solid fa-clock-rotate-left nav-icon"></i>
@@ -503,7 +537,7 @@
     @endif
 
     {{-- ── PENCARIAN CEPAT TARUNA ── --}}
-    @if(!$user->isTaruna())
+    @if(!$user->hasTarunaAccess())
     <hr class="sb-line-divider">
     <span class="sb-group-label">Pencarian Taruna</span>
     <div class="sb-search-box">
@@ -540,7 +574,7 @@
     <hr class="sb-line-divider">
     <span class="sb-group-label">Pengaturan</span>
     <ul class="sb-nav-list">
-        @if(!$user->isTaruna())
+        @if(!$user->hasTarunaAccess())
         <li>
             <a href="{{ route('profile.edit') }}" class="sb-nav-link {{ $active==='profile'?'active':'' }}">
                 <div class="flex items-center gap-2.5">

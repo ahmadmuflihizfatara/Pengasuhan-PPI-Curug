@@ -433,7 +433,7 @@
             </div>
             <div>
                 <span class="badge bg-white text-dark px-3 py-2 fw-bold shadow-sm">
-                    <i class="fas fa-user-shield text-primary me-1"></i> Mode: {{ auth()->user()->canManageSystem() ? 'Admin Pusbangkar (Validator)' : 'Pengasuh (Pengusul)' }}
+                    <i class="fas fa-user-shield text-primary me-1"></i> Mode: {{ auth()->user()->canManageSystem() ? 'Admin Pusbangkar (Validator)' : (auth()->user()->isPolisiTaruna() ? 'Polisi Taruna (Pengusul Pelanggaran)' : 'Pengasuh (Pengusul)') }}
                 </span>
             </div>
         </div>
@@ -674,6 +674,8 @@
                             <input type="hidden" name="nilai" id="inputNilaiPoin" value="5">
 
                             {{-- TOGGLE CABANG USULAN (A. Penghargaan vs B. Pelanggaran) --}}
+                            {{-- Polisi Taruna hanya berwenang mengajukan pelanggaran, jadi toggle disembunyikan --}}
+                            @unless(auth()->user()->isPolisiTaruna())
                             <div class="usulan-toggle">
                                 <button type="button" class="toggle-btn active-pelanggaran" id="btnPilihPelanggaran" onclick="switchKategori('pelanggaran')">
                                     <i class="fas fa-ban"></i> B. Pelanggaran (Indisipliner -)
@@ -682,6 +684,13 @@
                                     <i class="fas fa-trophy"></i> A. Penghargaan (Prestasi +)
                                 </button>
                             </div>
+                            @else
+                            <div class="usulan-toggle">
+                                <button type="button" class="toggle-btn active-pelanggaran" disabled>
+                                    <i class="fas fa-ban"></i> Pelanggaran (Indisipliner -)
+                                </button>
+                            </div>
+                            @endunless
 
                             {{-- ================= FORM CABANG B: PELANGGARAN PTTT ================= --}}
                             <div id="sectionFormPelanggaran">
@@ -771,6 +780,9 @@
                                 @if(auth()->user()->canManageSystem())
                                 <i class="fas fa-info-circle text-primary me-1"></i>
                                 <strong>Mode Admin Pusbangkar:</strong> Poin yang disimpan akan <strong>langsung tervalidasi</strong> dan otomatis terakumulasi ke profil taruna.
+                                @elseif(auth()->user()->isPolisiTaruna())
+                                <i class="fas fa-info-circle text-warning me-1"></i>
+                                <strong>Mode Polisi Taruna:</strong> Pelanggaran yang diajukan akan dikirim sebagai <strong>Usulan Temuan</strong> dan diproses validasi oleh Admin Pusbangkar.
                                 @else
                                 <i class="fas fa-info-circle text-warning me-1"></i>
                                 <strong>Mode Pengasuh:</strong> Poin yang disimpan akan dikirim sebagai <strong>Usulan Temuan</strong> dan diproses validasi oleh Admin Pusbangkar.

@@ -6,12 +6,15 @@ use App\Models\LogPergerakan;
 use App\Models\Mahasiswa;
 use App\Models\User;
 use App\Models\ActivityLog;
+use App\Traits\SortsQuery;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Carbon\Carbon;
 
 class LogPergerakanController extends Controller
 {
+    use SortsQuery;
+
     /**
      * Halaman Manajemen / Riwayat Log Pergerakan Taruna
      */
@@ -27,6 +30,11 @@ class LogPergerakanController extends Controller
         // Filter Status
         if ($request->filled('status')) {
             $query->where('status', $request->status);
+        }
+
+        // Filter Validasi
+        if ($request->filled('validasi')) {
+            $query->where('is_validated', $request->validasi === 'tervalidasi');
         }
 
         // Filter Tanggal
@@ -49,6 +57,7 @@ class LogPergerakanController extends Controller
             });
         }
 
+        $this->applySort($query, $request, ['nama' => 'nama', 'kategori' => 'kategori', 'berangkat' => 'waktu_berangkat', 'kembali' => 'waktu_kembali', 'status' => 'status', 'validasi' => 'is_validated']);
         $logs = $query->paginate(15)->withQueryString();
 
         // Statistik Hari Ini
@@ -60,6 +69,7 @@ class LogPergerakanController extends Controller
             'perizinan'      => LogPergerakan::whereDate('waktu_berangkat', $today)->where('kategori', LogPergerakan::KAT_PERIZINAN)->count(),
             'ekskul'         => LogPergerakan::whereDate('waktu_berangkat', $today)->where('kategori', LogPergerakan::KAT_EKSTRAKURIKULER)->count(),
             'olahraga'       => LogPergerakan::whereDate('waktu_berangkat', $today)->where('kategori', LogPergerakan::KAT_OLAHRAGA)->count(),
+            'belum_validasi' => LogPergerakan::where('is_validated', false)->count(),
         ];
 
         return view('log-pergerakan.index', compact('logs', 'stats'));
@@ -89,16 +99,45 @@ class LogPergerakanController extends Controller
     }
 
     /**
-     * Simpan Log Keberangkatan Baru
+     * Tampilan Mandiri Taruna: input izin keluar & konfirmasi kembali sendiri.
+     * Pengasuh tidak lagi input manual — hanya memvalidasi (lihat index/show).
+     */
+    public function mandiri(Request $request)
+    {
+        $user = auth()->user();
+        $mahasiswa = $user->mahasiswa;
+
+        $activeLog = LogPergerakan::where('user_id', $user->id)
+            ->where('status', LogPergerakan::STATUS_BERANGKAT)
+            ->latest('waktu_berangkat')
+            ->first();
+
+        $riwayat = LogPergerakan::where('user_id', $user->id)
+            ->latest('waktu_berangkat')
+            ->take(5)
+            ->get();
+
+        $identitas = [
+            'nama'  => $user->name,
+            'npm'   => $mahasiswa->npm ?? null,
+            'prodi' => $mahasiswa->prodi ?? $user->prodi ?? null,
+        ];
+
+        return view('log-pergerakan.mandiri', compact('activeLog', 'riwayat', 'identitas'));
+    }
+
+    /**
+     * Simpan Log Keberangkatan Baru.
+     * Taruna: identitas dikunci ke akun sendiri (anti-impersonasi).
+     * Admin: input manual via mode tablet (identitas bebas diisi/dicari).
      */
     public function store(Request $request)
     {
-        $validated = $request->validate([
+        $isTaruna = auth()->user()->hasTarunaAccess();
+
+        $rules = [
             'kategori'           => 'required|in:perizinan,ekstrakurikuler,olahraga',
             'subkategori'        => 'required|string|max:100',
-            'nama'               => 'required|string|max:255',
-            'npm'                => 'nullable|string|max:50',
-            'prodi'              => 'nullable|string|max:100',
             'waktu_berangkat'    => 'required|date',
             'estimasi_kembali'   => 'nullable|date',
             'keterangan_keluhan' => 'nullable|string',
@@ -109,7 +148,33 @@ class LogPergerakanController extends Controller
             'rute'               => 'nullable|string|max:255',
             'pengikut'           => 'nullable|string',
             'foto_keberangkatan' => 'nullable|image|max:5120', // Max 5MB
-        ]);
+        ];
+
+        if (!$isTaruna) {
+            $rules['nama']  = 'required|string|max:255';
+            $rules['npm']   = 'nullable|string|max:50';
+            $rules['prodi'] = 'nullable|string|max:100';
+        }
+
+        $validated = $request->validate($rules);
+
+        if ($isTaruna) {
+            // Taruna hanya boleh input untuk dirinya sendiri, satu izin aktif dalam satu waktu
+            $user = auth()->user();
+            $sudahAktif = LogPergerakan::where('user_id', $user->id)
+                ->where('status', LogPergerakan::STATUS_BERANGKAT)
+                ->exists();
+
+            if ($sudahAktif) {
+                return redirect()->back()->with('error', 'Anda masih memiliki izin keluar yang belum ditandai kembali. Selesaikan itu dulu sebelum mengajukan izin baru.');
+            }
+
+            $mahasiswa = $user->mahasiswa;
+            $validated['user_id'] = $user->id;
+            $validated['nama']    = $user->name;
+            $validated['npm']     = $mahasiswa->npm ?? null;
+            $validated['prodi']   = $mahasiswa->prodi ?? $user->prodi ?? null;
+        }
 
         // Upload Foto Keberangkatan jika ada
         if ($request->hasFile('foto_keberangkatan')) {
@@ -117,8 +182,8 @@ class LogPergerakanController extends Controller
             $validated['foto_keberangkatan'] = $path;
         }
 
-        // Cari user_id jika ada relasi user (npm ada di tabel mahasiswa, bukan users)
-        if (!empty($validated['npm'])) {
+        // Cari user_id jika ada relasi user (npm ada di tabel mahasiswa, bukan users) — hanya untuk input manual admin
+        if (!$isTaruna && !empty($validated['npm'])) {
             $mahasiswa = Mahasiswa::where('npm', $validated['npm'])->first();
             if ($mahasiswa) {
                 $validated['user_id'] = $mahasiswa->user_id;
@@ -162,6 +227,10 @@ class LogPergerakanController extends Controller
     public function updateKembali(Request $request, $id)
     {
         $log = LogPergerakan::findOrFail($id);
+
+        if (auth()->user()->hasTarunaAccess() && $log->user_id !== auth()->id()) {
+            abort(403, 'Anda hanya bisa mengubah status kepulangan izin milik sendiri.');
+        }
 
         $request->validate([
             'waktu_kembali'   => 'nullable|date',
@@ -298,11 +367,53 @@ class LogPergerakanController extends Controller
     }
 
     /**
+     * Validasi (audit) log oleh Pengasuh/Admin. Toggle: validasi <-> batalkan validasi.
+     * Pengasuh berperan sebagai validator saja, bukan penginput data.
+     */
+    public function validasi(Request $request, $id)
+    {
+        $log = LogPergerakan::findOrFail($id);
+
+        if ($log->is_validated) {
+            $log->is_validated = false;
+            $log->validated_by = null;
+            $log->validated_at = null;
+            $pesan = "Validasi untuk {$log->nama} dibatalkan.";
+            $aksi  = 'batal validasi';
+        } else {
+            $log->is_validated = true;
+            $log->validated_by = auth()->id();
+            $log->validated_at = Carbon::now();
+            $pesan = "Log pergerakan {$log->nama} telah divalidasi.";
+            $aksi  = 'validasi';
+        }
+
+        $log->save();
+
+        if (auth()->check()) {
+            ActivityLog::create([
+                'user_id'   => auth()->id(),
+                'user_name' => auth()->user()->name,
+                'user_role' => auth()->user()->role,
+                'modul'     => 'log pergerakan',
+                'aksi'      => $aksi,
+                'deskripsi' => "Memvalidasi log pergerakan untuk {$log->nama} ({$log->kategori})",
+            ]);
+        }
+
+        if ($request->ajax() || $request->wantsJson()) {
+            return response()->json(['success' => true, 'message' => $pesan, 'data' => $log]);
+        }
+
+        return redirect()->back()->with('success', $pesan);
+    }
+
+    /**
      * Detail Modal / Halaman Satu Log
      */
     public function show($id)
     {
-        $log = LogPergerakan::with(['user', 'creator', 'verifier'])->findOrFail($id);
+        $log = LogPergerakan::with(['user', 'creator', 'verifier', 'validator'])->findOrFail($id);
         return view('log-pergerakan.show', compact('log'));
     }
 

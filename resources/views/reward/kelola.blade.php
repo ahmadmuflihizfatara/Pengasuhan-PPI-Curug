@@ -1,5 +1,4 @@
 <x-app-layout>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 * { box-sizing: border-box; }
 body { font-family: 'Inter', sans-serif; background: transparent; }
@@ -148,15 +147,15 @@ tbody tr:hover { background: #fffaf0; }
         </div>
         @else
         <div class="card">
-            <table>
+            <table data-server-sort>
                 <thead>
                     <tr>
                         <th>#</th>
-                        <th>PENGAJU</th>
-                        <th>KATEGORI</th>
-                        <th>JENIS</th>
-                        <th>TANGGAL</th>
-                        <th style="text-align:center;">STATUS</th>
+                        <th data-sort="pengaju">PENGAJU</th>
+                        <th data-sort="kategori">KATEGORI</th>
+                        <th data-sort="jenis">JENIS</th>
+                        <th data-sort="tanggal">TANGGAL</th>
+                        <th data-sort="status" style="text-align:center;">STATUS</th>
                         <th style="text-align:center;">AKSI</th>
                     </tr>
                 </thead>

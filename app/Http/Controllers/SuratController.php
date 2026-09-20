@@ -5,11 +5,13 @@ namespace App\Http\Controllers;
 use App\Models\Surat;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use App\Traits\SortsQuery;
 use App\Traits\LogsActivity; // <-- TAMBAHAN
 
 class SuratController extends Controller
 {
     use LogsActivity; // <-- TAMBAHAN
+    use SortsQuery;
 
     public function index(Request $request)
     {
@@ -31,6 +33,7 @@ class SuratController extends Controller
             });
         }
 
+        $this->applySort($query, $request, ['nomor' => 'nomor_surat', 'jenis' => 'jenis_surat', 'perihal' => 'perihal', 'pengirim' => 'pengirim', 'tanggal' => 'tanggal_surat', 'status' => 'status']);
         $surat = $query->paginate(10)->withQueryString();
 
         $stats = [

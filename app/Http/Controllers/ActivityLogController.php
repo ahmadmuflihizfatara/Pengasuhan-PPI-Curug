@@ -4,10 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Models\ActivityLog;
 use App\Models\User;
+use App\Traits\SortsQuery;
 use Illuminate\Http\Request;
 
 class ActivityLogController extends Controller
 {
+    use SortsQuery;
+
     public function index(Request $request)
     {
         $query = ActivityLog::with('user')->latest();
@@ -46,6 +49,7 @@ class ActivityLogController extends Controller
             });
         }
 
+        $this->applySort($query, $request, ['waktu' => 'created_at', 'modul' => 'modul', 'aksi' => 'aksi', 'pelaku' => 'user_name']);
         $logs = $query->paginate(20)->withQueryString();
 
         // Statistik ringkasan
