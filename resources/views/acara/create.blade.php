@@ -3,8 +3,8 @@
 <style>
 * { box-sizing: border-box; }
 body { font-family: 'Inter', sans-serif; background: transparent; }
-.app-layout { display: flex; min-height: 100vh; }
-.main-content { flex: 1; padding: 28px 30px; min-width: 0; max-width: 760px; }
+.app-layout { display: block; min-height: 100vh; }
+.main-content { padding: 28px 30px; min-width: 0; max-width: 760px; margin: 0 auto; width: 100%; }
 
 .page-header {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -55,7 +55,7 @@ textarea.form-control { resize: vertical; min-height: 100px; }
 </style>
 
 <div class="app-layout">
-    <x-sidebar active="acara" />
+    <x-island-navbar />
 
     <div class="main-content">
         <a href="{{ route('acara.index') }}" class="back-link">

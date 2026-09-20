@@ -172,6 +172,7 @@ tbody tr:hover { background:#f8f9ff; }
         </div>
         @endif
     </div>
+</div>
 
 <!-- Toast Notification Container -->
 <div class="toast-container" id="toastContainer"></div>

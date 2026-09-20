@@ -177,6 +177,7 @@ body { font-family: 'Inter', sans-serif; background: transparent; }
             </div>
         </div>
     </div>
+</div>
 
 <form method="POST" action="{{ route('reward.updateStatus', $reward->id) }}" id="statusForm" style="display:none;">
     @csrf @method('PATCH')

@@ -134,4 +134,5 @@ textarea.form-control { resize:vertical; min-height:110px; }
             </form>
         </div>
     </div>
+</div>
 </x-app-layout>

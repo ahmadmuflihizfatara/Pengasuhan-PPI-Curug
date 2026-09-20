@@ -2,8 +2,8 @@
 <style>
 * { box-sizing: border-box; }
 body { font-family: 'Inter', sans-serif; background: transparent; }
-.app-layout   { display: flex; min-height: 100vh; }
-.main-content { flex: 1; padding: 28px 28px 28px 24px; min-width: 0; }
+.app-layout   { display: block; min-height: 100vh; }
+.main-content { padding: 28px 28px 28px 24px; min-width: 0; max-width: 80rem; margin: 0 auto; width: 100%; }
 
 /* ── Breadcrumb ── */
 .breadcrumb { display:flex; align-items:center; gap:7px; margin-bottom:20px; font-size:12px; color:#888; }
@@ -125,7 +125,7 @@ select.form-control { appearance: none; background-image: url("data:image/svg+xm
 </style>
 
 <div class="app-layout">
-    <x-sidebar active="berita" />
+    <x-island-navbar />
 
     <div class="main-content">
 

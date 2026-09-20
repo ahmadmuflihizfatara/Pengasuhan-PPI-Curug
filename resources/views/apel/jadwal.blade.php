@@ -147,6 +147,7 @@ body { font-family: 'Inter', sans-serif; background: transparent; }
 
         @endif
     </div>
+</div>
 
 <script>
 function bukaApel(id) {

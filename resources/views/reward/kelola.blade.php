@@ -217,4 +217,5 @@ tbody tr:hover { background: #fffaf0; }
         </div>
         @endif
     </div>
+</div>
 </x-app-layout>

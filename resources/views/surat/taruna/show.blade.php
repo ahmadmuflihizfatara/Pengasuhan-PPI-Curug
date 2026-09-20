@@ -149,4 +149,5 @@ body { font-family: 'Inter', sans-serif; background: transparent; }
             @endif
         </div>
     </div>
+</div>
 </x-app-layout>

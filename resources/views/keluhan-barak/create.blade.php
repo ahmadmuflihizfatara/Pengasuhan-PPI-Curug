@@ -3,8 +3,8 @@
 <style>
 * { box-sizing: border-box; }
 body { font-family: 'Inter', sans-serif; background: transparent; }
-.app-layout { display: flex; min-height: 100vh; }
-.main-content { flex: 1; padding: 28px 30px; min-width: 0; max-width: 820px; }
+.app-layout { display: block; min-height: 100vh; }
+.main-content { padding: 28px 30px; min-width: 0; max-width: 820px; margin: 0 auto; width: 100%; }
 
 .back-link { display:inline-flex; align-items:center; gap:7px; color:#d63384; text-decoration:none; font-size:13px; font-weight:600; margin-bottom:20px; }
 .back-link:hover { text-decoration:underline; }
@@ -50,7 +50,7 @@ textarea.form-control { resize:vertical; min-height:110px; }
 </style>
 
 <div class="app-layout">
-    <x-sidebar active="keluhan-barak" />
+    <x-island-navbar />
 
     <div class="main-content">
         <a href="{{ route('keluhan-barak.index') }}" class="back-link">

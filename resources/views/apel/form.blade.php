@@ -8,14 +8,14 @@
 * { box-sizing: border-box; }
 body { font-family: 'Inter', sans-serif; background: transparent; }
 
-.app-layout { display: flex; min-height: 100vh; }
-.main-content { flex: 1; padding: 28px 30px; min-width: 0; }
+.app-layout { display: block; min-height: 100vh; }
+.main-content { padding: 28px 30px; min-width: 0; max-width: 80rem; margin: 0 auto; width: 100%; }
 
 .breadcrumb { display:flex; align-items:center; gap:8px; font-size:13px; color:#888; margin-bottom:18px; }
 .breadcrumb a { color:#1baf7a; text-decoration:none; font-weight:600; }
 .breadcrumb a:hover { text-decoration:underline; }
 
-.form-card { background:white; border-radius:18px; box-shadow:0 4px 20px rgba(0,0,0,.06); max-width:780px; overflow:hidden; }
+.form-card { background:white; border-radius:18px; box-shadow:0 4px 20px rgba(0,0,0,.06); max-width:780px; margin:0 auto; overflow:hidden; }
 .form-card-head { background:linear-gradient(135deg,#1baf7a,#2a78d6); padding:24px 30px; color:white; }
 .form-card-head h1 { margin:0 0 4px; font-size:20px; font-weight:800; }
 .form-card-head p { margin:0; font-size:13px; opacity:.88; }
@@ -80,7 +80,7 @@ select.form-control { appearance:none; cursor:pointer;
 </style>
 
 <div class="app-layout">
-    <x-sidebar active="apel" />
+    <x-island-navbar />
 
     <div class="main-content">
         <div class="breadcrumb">

@@ -141,6 +141,7 @@
                     $activePergerakan = \App\Models\LogPergerakan::where('status', 'berangkat')->count();
                     $kembaliHariIni   = \App\Models\LogPergerakan::whereDate('waktu_berangkat', \Carbon\Carbon::today())->where('status', 'kembali')->count();
                 @endphp
+                @unless(Auth::user()->isTaruna())
                 <div class="rounded-2xl bg-gradient-to-r from-slate-900/85 via-slate-800/85 to-indigo-950/85 backdrop-blur-xl border border-white/30 p-5 text-white mb-6 shadow-xl flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
                     <div class="flex items-center gap-4">
                         <div class="w-12 h-12 rounded-xl bg-blue-500/20 border border-blue-400/40 flex items-center justify-center text-xl text-blue-400 flex-shrink-0 shadow-inner">
@@ -172,6 +173,7 @@
                         </a>
                     </div>
                 </div>
+                @endunless
 
                 {{-- ── 4. ACARA PENGASUHAN MENDATANG ── --}}
                 @if(!Auth::user()->isTaruna())
