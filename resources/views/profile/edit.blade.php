@@ -13,7 +13,7 @@ body { font-family: 'Inter', sans-serif; background: transparent; }
 
 <div class="max-w-7xl mx-auto px-4 sm:px-6 pb-12 pt-2">
     <div class="spatial-workspace-window rounded-3xl bg-white/30 backdrop-blur-2xl border border-white/50 shadow-2xl p-4 sm:p-7 relative overflow-hidden">
-        <h1 class="profile-title"><i class="fas fa-user-circle" style="color:#764ba2; margin-right:10px;"></i>{{ __('Profile') }}</h1>
+        <h1 class="profile-title"><i class="fas fa-user-circle" style="color:#4338ca; margin-right:10px;"></i>{{ __('Profile') }}</h1>
         <p class="profile-subtitle">Update your account's profile information and email address.</p>
 
         <div class="space-y-6">

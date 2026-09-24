@@ -172,6 +172,18 @@
                 @endif
             </a>
 
+            {{-- Kalkulator BMI (taruna) --}}
+            @if($user && $user->hasTarunaAccess())
+            <a href="{{ route('bmi.index') }}"
+               class="{{ $isActive('bmi') ? 'bg-white text-slate-950 font-bold px-3.5 py-2 shadow-md' : 'text-white/70 hover:text-white hover:bg-white/10 p-2.5' }} rounded-full transition-all duration-200 flex items-center gap-2 no-underline text-xs flex-shrink-0"
+               title="Kalkulator BMI">
+                <i class="fa-solid fa-weight-scale text-xs"></i>
+                @if($isActive('bmi'))
+                <span class="text-xs font-bold">BMI</span>
+                @endif
+            </a>
+            @endif
+
             {{-- 10. Kalender & Acara --}}
             <a href="{{ route('acara.index') }}" 
                class="{{ $isActive('acara') ? 'bg-white text-slate-950 font-bold px-3.5 py-2 shadow-md' : 'text-white/70 hover:text-white hover:bg-white/10 p-2.5' }} rounded-full transition-all duration-200 flex items-center gap-2 no-underline text-xs flex-shrink-0" 
@@ -487,6 +499,13 @@
                         <i class="fa-solid fa-award w-4 text-center {{ $isActive('reward') ? 'text-indigo-600' : 'text-amber-400' }}"></i>
                         <span>Reward & Prestasi</span>
                     </a>
+
+                    @if($user && $user->hasTarunaAccess())
+                    <a href="{{ route('bmi.index') }}" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl font-semibold transition no-underline {{ $isActive('bmi') ? 'bg-white text-slate-950 font-bold shadow-md' : 'text-white/80 hover:bg-white/10 hover:text-white' }}">
+                        <i class="fa-solid fa-weight-scale w-4 text-center {{ $isActive('bmi') ? 'text-indigo-600' : 'text-emerald-400' }}"></i>
+                        <span>Kalkulator BMI</span>
+                    </a>
+                    @endif
 
                     <a href="{{ route('acara.index') }}" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl font-semibold transition no-underline {{ $isActive('acara') ? 'bg-white text-slate-950 font-bold shadow-md' : 'text-white/80 hover:bg-white/10 hover:text-white' }}">
                         <i class="fa-solid fa-calendar-days w-4 text-center {{ $isActive('acara') ? 'text-indigo-600' : 'text-sky-400' }}"></i>

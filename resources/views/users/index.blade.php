@@ -8,7 +8,7 @@ body { font-family: 'Inter', sans-serif; background: transparent; }
 
 /* Page header */
 .page-header {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #4f46e5 0%, #4338ca 100%);
     border-radius: 18px; padding: 28px 32px; color: white;
     margin-bottom: 24px; position: relative; overflow: hidden;
     display: flex; align-items: center; justify-content: space-between;
@@ -18,8 +18,8 @@ body { font-family: 'Inter', sans-serif; background: transparent; }
 .page-header-text { position: relative; z-index: 1; }
 .page-title { font-size: 22px; font-weight: 800; color: white; margin: 0 0 4px 0; }
 .page-subtitle { font-size: 13px; color: rgba(255,255,255,.85); margin: 0; }
-.btn-primary { position: relative; z-index: 1; background: white; color: #667eea; border: none; padding: 11px 22px; border-radius: 25px; font-size: 13px; font-weight: 800; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; white-space: nowrap; box-shadow: 0 4px 15px rgba(0,0,0,.15); transition: transform .15s, box-shadow .15s; }
-.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,.2); color: #667eea; }
+.btn-primary { position: relative; z-index: 1; background: white; color: #4f46e5; border: none; padding: 11px 22px; border-radius: 25px; font-size: 13px; font-weight: 800; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; white-space: nowrap; box-shadow: 0 4px 15px rgba(0,0,0,.15); transition: transform .15s, box-shadow .15s; }
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,.2); color: #4f46e5; }
 
 /* User cards */
 .role-section { margin-bottom: 32px; }
@@ -36,8 +36,8 @@ body { font-family: 'Inter', sans-serif; background: transparent; }
 .user-role { font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 20px; display: inline-block; margin-top: 4px; }
 .user-actions { display: flex; gap: 6px; }
 .btn-icon { width: 32px; height: 32px; border-radius: 8px; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 12px; transition: all .15s; }
-.btn-edit { background: #eef0ff; color: #667eea; }
-.btn-edit:hover { background: #667eea; color: white; }
+.btn-edit { background: #eef0ff; color: #4f46e5; }
+.btn-edit:hover { background: #4f46e5; color: white; }
 .btn-delete { background: #fff0f0; color: #e05252; }
 .btn-delete:hover { background: #e05252; color: white; }
 
@@ -75,11 +75,11 @@ body { font-family: 'Inter', sans-serif; background: transparent; }
 
         @php
             $roleGroups = [
-                'admin' => ['label' => 'Admin', 'color' => '#764ba2', 'bg' => '#f3eeff', 'icon' => 'fa-crown'],
+                'admin' => ['label' => 'Admin', 'color' => '#4338ca', 'bg' => '#f3eeff', 'icon' => 'fa-crown'],
                 'pengasuh'      => ['label' => 'Pengasuh',      'color' => '#3182ce', 'bg' => '#ebf4ff', 'icon' => 'fa-chalkboard-teacher'],
                 'taruna'        => ['label' => 'Taruna',         'color' => '#38a169', 'bg' => '#f0fff4', 'icon' => 'fa-user-graduate'],
             ];
-            $avatarColors = ['#667eea','#764ba2','#f093fb','#f5576c','#38a169','#e07020','#3182ce','#d53f8c'];
+            $avatarColors = ['#4f46e5','#4338ca','#f093fb','#f5576c','#38a169','#e07020','#3182ce','#d53f8c'];
         @endphp
 
         @foreach($roleGroups as $roleKey => $roleInfo)

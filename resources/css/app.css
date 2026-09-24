@@ -169,11 +169,11 @@ input[type="date"],
 input[type="file"],
 input[type="email"],
 input[type="password"] {
-    background: rgba(255, 255, 255, 0.75) !important;
-    backdrop-filter: blur(10px) !important;
-    -webkit-backdrop-filter: blur(10px) !important;
-    border: 1.5px solid rgba(255, 255, 255, 0.65) !important;
-    border-radius: 10px !important;
+    background: var(--glass-card) !important;
+    backdrop-filter: blur(var(--blur-subtle)) !important;
+    -webkit-backdrop-filter: blur(var(--blur-subtle)) !important;
+    border: 1.5px solid var(--border-glass-glow) !important;
+    border-radius: var(--radius-md) !important;
 }
 
 .form-control:focus,
@@ -181,7 +181,7 @@ input[type="password"] {
 .mhs-search-box input:focus,
 textarea:focus,
 input:focus {
-    background: rgba(255, 255, 255, 0.95) !important;
+    background: var(--glass-solid) !important;
     border-color: var(--focus-ring) !important;
     box-shadow: var(--shadow-focus) !important;
 }
@@ -212,7 +212,7 @@ thead th,
     backdrop-filter: blur(10px) !important;
     -webkit-backdrop-filter: blur(10px) !important;
     border-bottom: 2px solid rgba(255, 255, 255, 0.6) !important;
-    color: #1e293b !important;
+    color: var(--ink-700) !important;
     font-weight: 800 !important;
 }
 
@@ -503,6 +503,175 @@ tbody tr:hover td,
 }
 .form-control:focus,
 .form-select:focus { border-color: var(--focus-ring) !important; }
+
+/* Teks page header lama (h1/p, .page-title, .page-subtitle) -> PageHeader */
+.page-header, .tablet-banner, .status-banner { margin-bottom: var(--space-6) !important; }
+.page-header h1, .page-header .page-title, .detail-header h2, .banner-title, .status-banner h1 {
+    font-size: 24px !important; line-height: 32px !important; font-weight: 800 !important;
+    letter-spacing: -0.025em; color: var(--ink-on-dark) !important; margin: 0 0 var(--space-1) !important;
+}
+.page-header h1 i, .page-header .page-title i, .banner-title i { color: #a5b4fc !important; }
+.page-header p, .page-header .page-subtitle, .detail-header .nomor, .banner-sub, .status-banner p {
+    font-size: 12px !important; line-height: 16px !important; color: var(--ink-on-dark-muted) !important; opacity: 1 !important; margin: 0 !important;
+}
+
+/* Header kartu detail (gradien ungu) -> gradien PageHeader */
+.detail-header, .tablet-banner, .status-banner {
+    background: linear-gradient(90deg, rgba(30,58,138,.90), rgba(49,46,129,.85), rgba(15,23,42,.90)) !important;
+    color: var(--ink-on-dark) !important;
+    padding: var(--space-6) !important;
+}
+.detail-header::before, .detail-header::after, .status-banner::before, .status-banner::after, .tablet-banner::before, .tablet-banner::after { display: none !important; }
+.detail-header .jenis-label { color: #fcd34d !important; opacity: 1 !important; font-size: 10px !important; letter-spacing: .1em !important; }
+.doc-icon { background: rgba(255,255,255,.15) !important; border: 1px solid rgba(255,255,255,.2); border-radius: var(--radius-md) !important; color: #a5b4fc; }
+
+/* Kartu form/detail lama -> GlassCard */
+.card, .form-card, .detail-card { color: var(--ink-900); }
+.form-card, .detail-card { overflow: hidden; }
+.detail-body { padding: var(--space-6) !important; }
+.form-card-head, .card-header { border-bottom: 1px solid var(--border-glass-subtle) !important; background: transparent !important; color: var(--ink-900) !important; }
+.detail-field, .info-item {
+    background: var(--glass-card) !important;
+    border: 1px solid var(--border-glass-glow) !important;
+    border-radius: var(--radius-md) !important;
+}
+.field-label, .section-divider, .role-section-title, .info-label {
+    font-size: 10px !important; font-weight: 700 !important; letter-spacing: .05em !important;
+    text-transform: uppercase !important; color: var(--ink-700) !important;
+}
+.section-divider { border-bottom: 1px solid var(--border-glass-subtle) !important; }
+.field-value { color: var(--ink-900) !important; font-weight: 700 !important; font-size: 13px !important; }
+.form-hint, .opt, .timestamps span { color: var(--ink-600) !important; }
+.timestamps { border-top: 1px solid var(--border-glass-subtle) !important; }
+.req, .invalid-feedback { color: var(--danger-ink) !important; }
+.btn-row { border-top: 1px solid var(--border-glass-subtle) !important; }
+
+/* Lampiran berkas */
+.file-attachment, .file-info {
+    background: var(--glass-card) !important; border: 1px solid var(--border-glass-glow) !important;
+    border-radius: var(--radius-md) !important; color: var(--ink-900) !important;
+}
+.file-attachment-icon { background: linear-gradient(135deg, #2563eb, var(--accent)) !important; border-radius: var(--radius-md) !important; color: var(--ink-on-dark); }
+.file-input { background: var(--glass-card) !important; border: 1.5px dashed var(--ink-400) !important; border-radius: var(--radius-md) !important; }
+
+/* Tombol lama yang tersisa -> Button */
+.btn-download, .modal-btn-confirm-approve, .btn-primary-pill {
+    background: var(--accent) !important; background-image: none !important; color: var(--ink-on-dark) !important;
+    border: 1px solid transparent !important; border-radius: var(--radius-md) !important;
+    font-size: 12px !important; font-weight: 700 !important; box-shadow: var(--shadow-glass-sm) !important;
+}
+.btn-download:hover, .modal-btn-confirm-approve:hover { background: var(--accent-hover) !important; }
+.btn-edit, .btn-edit-top, .btn-delete-top, .btn-approve, .modal-btn-cancel, .modal-btn-confirm-reject {
+    background: var(--glass-card) !important; background-image: none !important;
+    border: 1px solid var(--border-glass-glow) !important; border-radius: var(--radius-md) !important;
+    font-weight: 700 !important; font-size: 12px !important; box-shadow: var(--shadow-glass-sm);
+    transition: background-color .15s, transform .1s;
+}
+.btn-icon { border-radius: var(--radius-sm) !important; }
+.btn-edit, .btn-edit-top { color: var(--accent-ink) !important; }
+.btn-delete, .btn-delete-top, .modal-btn-confirm-reject { color: var(--danger-ink) !important; }
+.btn-approve { color: var(--success-ink) !important; }
+.modal-btn-cancel { color: var(--ink-700) !important; }
+.btn-edit:hover, .btn-edit-top:hover, .btn-delete:hover, .btn-delete-top:hover, .btn-approve:hover,
+.modal-btn-cancel:hover, .modal-btn-confirm-reject:hover { background: var(--glass-solid) !important; }
+.btn-edit:active, .btn-delete:active, .btn-download:active, .btn-primary:active, .btn-secondary:active, .btn-submit:active, .btn-cancel:active { transform: scale(.97) !important; }
+
+/* Tautan kembali & breadcrumb -> pill kaca kecil */
+.back-link {
+    display: inline-flex !important; align-items: center; gap: var(--space-1-5);
+    padding: var(--space-1-5) var(--space-3); border-radius: var(--radius-pill);
+    background: var(--glass-card); border: 1px solid var(--border-glass-glow);
+    backdrop-filter: blur(var(--blur-subtle)); -webkit-backdrop-filter: blur(var(--blur-subtle));
+    color: var(--accent-ink) !important; font-size: 12px !important; font-weight: 700 !important; text-decoration: none !important;
+}
+.back-link:hover { background: var(--glass-solid); }
+.breadcrumb, .breadcrumb a { color: var(--ink-700) !important; font-size: 11px !important; font-weight: 600 !important; }
+
+/* Kotak error validasi -> Alert danger */
+.error-box {
+    background: var(--glass-card) !important; border: 1px solid var(--danger-border) !important;
+    border-radius: var(--radius-lg) !important; box-shadow: var(--shadow-glass-sm);
+    backdrop-filter: blur(var(--blur-subtle)); -webkit-backdrop-filter: blur(var(--blur-subtle));
+}
+.error-box p { color: var(--danger-ink) !important; font-size: 12px !important; }
+.error-box ul { color: var(--ink-900) !important; font-size: 12px !important; font-weight: 500; }
+
+/* Info banner lama -> Alert info */
+.info-banner, .taruna-tag {
+    background: var(--glass-card) !important; border: 1px solid var(--border-glass-glow) !important;
+    border-radius: var(--radius-lg) !important; color: var(--ink-900) !important;
+}
+.info-banner i, .taruna-tag i { color: var(--info-ink) !important; }
+
+/* Avatar lama -> Avatar sistem */
+.user-avatar { background: linear-gradient(135deg, var(--brand-navy), var(--accent)) !important; border-radius: var(--radius-md) !important; box-shadow: var(--shadow-glass-sm); }
+.user-name { color: var(--ink-900) !important; }
+.user-email { color: var(--ink-600) !important; }
+.user-role { background: var(--glass-card) !important; border: 1px solid var(--border-glass-glow); }
+
+/* Modal lama: judul, teks, textarea */
+.modal-box h3 { color: var(--ink-900) !important; font-size: 16px !important; font-weight: 800 !important; }
+.modal-box p { color: var(--ink-600) !important; font-size: 12px !important; }
+.modal-textarea {
+    background: var(--glass-card) !important; border: 1.5px solid var(--border-glass-glow) !important;
+    border-radius: var(--radius-md) !important; font-size: 12px !important; color: var(--ink-900) !important;
+}
+.modal-textarea:focus { border-color: var(--focus-ring) !important; box-shadow: var(--shadow-focus) !important; }
+
+/* Stat card lama -> StatCard: satu gradien ikon, angka mono */
+.stat-icon { background: linear-gradient(135deg, #2563eb, var(--accent)) !important; border-radius: var(--radius-md) !important; box-shadow: var(--shadow-glass-sm); }
+.stat-num { font-family: var(--font-mono) !important; font-weight: 900 !important; color: var(--ink-900) !important; letter-spacing: -0.025em; }
+.stat-label { color: var(--ink-600) !important; font-weight: 700 !important; font-size: 11px !important; }
+
+/* Header tabel bergradien -> kaca */
+thead tr { background: transparent !important; }
+
+/* Tombol filter & pagination aktif -> accent solid */
+.btn-filter, .filter-btn.primary, .pagination .page-item.active .page-link {
+    background: var(--accent) !important; background-image: none !important;
+    border-color: transparent !important; color: var(--ink-on-dark) !important;
+    border-radius: var(--radius-md) !important; font-weight: 700 !important;
+}
+.btn-filter:hover, .filter-btn.primary:hover { background: var(--accent-hover) !important; }
+.pagination .page-link { background: var(--glass-card) !important; border-color: var(--border-glass-glow) !important; color: var(--ink-700) !important; }
+
+/* Kartu berita & chip aksi -> GlassCard + Button xs */
+.berita-card {
+    background: var(--glass-panel) !important; border: 1px solid var(--border-glass) !important;
+    backdrop-filter: blur(var(--blur-standard)) saturate(180%); -webkit-backdrop-filter: blur(var(--blur-standard)) saturate(180%);
+    box-shadow: var(--shadow-glass) !important;
+}
+.berita-card:hover { background: var(--glass-card) !important; box-shadow: var(--shadow-card-hover) !important; transform: translateY(-3px) !important; }
+.berita-card.pinned-card { border: 1px solid var(--warning-border) !important; }
+.bc-title { color: var(--ink-900) !important; font-weight: 800 !important; }
+.bc-desc, .bc-author-name, .bc-date { color: var(--ink-600) !important; }
+.bc-footer { border-top: 1px solid var(--border-glass-subtle) !important; }
+.bc-read-more { color: var(--accent-ink) !important; }
+.bc-ava { background: linear-gradient(135deg, var(--brand-navy), var(--accent)) !important; }
+.kat-badge, .bc-action-btn {
+    background: var(--glass-card) !important; border: 1px solid var(--border-glass-glow) !important;
+    border-radius: var(--radius-pill) !important; font-weight: 700 !important;
+}
+.bc-action-btn { border-radius: var(--radius-sm) !important; font-size: 10px !important; }
+.bc-action-btn:hover { background: var(--glass-solid) !important; opacity: 1 !important; }
+.bc-action-btn.edit { color: var(--accent-ink) !important; }
+.bc-action-btn.del  { color: var(--danger-ink) !important; }
+.bc-action-btn.pin  { color: var(--warning-ink) !important; }
+
+/* Panel lama berlatar putih -> kaca */
+.filter-bar, .akses-card {
+    background: var(--glass-panel) !important; border: 1px solid var(--border-glass) !important;
+    border-radius: var(--radius-lg) !important; box-shadow: var(--shadow-glass) !important;
+    backdrop-filter: blur(var(--blur-standard)) saturate(180%); -webkit-backdrop-filter: blur(var(--blur-standard)) saturate(180%);
+}
+.btn-buka { background: var(--accent) !important; background-image: none !important; color: var(--ink-on-dark) !important; border-radius: var(--radius-md) !important; }
+.btn-buka:hover { background: var(--accent-hover) !important; }
+
+/* Empty state -> ds-empty */
+.empty-state { background: transparent !important; color: var(--ink-500) !important; font-size: 12px; font-weight: 600; }
+.empty-state h3 { color: var(--ink-500) !important; font-size: 12px !important; font-weight: 700 !important; }
+.empty-state i { color: var(--ink-400) !important; font-size: 30px !important; }
+.empty-state p { font-size: 12px !important; font-weight: 600; }
 
 
 /* ── Table tools: search / filter / sort (resources/js/table-tools.js) ── */

@@ -8,7 +8,7 @@
 
     /* === HEADER === */
     .poin-header-banner {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background: linear-gradient(135deg, #4f46e5 0%, #4338ca 100%);
         border-radius: 18px;
         padding: 24px 30px;
         color: white;
@@ -18,7 +18,7 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
-        box-shadow: 0 8px 20px -6px rgba(102, 126, 234, 0.28);
+        box-shadow: 0 8px 20px -6px rgba(79,70,229, 0.28);
     }
     .poin-header-banner::after {
         content: ''; position: absolute; right: -40px; top: -40px; width: 180px; height: 180px;
@@ -48,7 +48,7 @@
         width: 22px; height: 22px; border-radius: 50%; background: #eef0f7; color: #888;
         display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700;
     }
-    .flow-step.active .flow-num { background: #667eea; color: white; }
+    .flow-step.active .flow-num { background: #4f46e5; color: white; }
     .flow-step.active { color: #555; }
     .flow-arrow { color: #edf0f7; font-size: 14px; }
 
@@ -110,9 +110,9 @@
         transition: background 0.15s;
     }
     .mhs-item-opt:hover { background: #fafbff; }
-    .mhs-item-opt.selected { background: #eef0ff; border-left: 3px solid #667eea; }
+    .mhs-item-opt.selected { background: #eef0ff; border-left: 3px solid #4f46e5; }
     .mhs-opt-ava {
-        width: 26px; height: 26px; border-radius: 7px; background: linear-gradient(135deg, #667eea, #764ba2); color: white;
+        width: 26px; height: 26px; border-radius: 7px; background: linear-gradient(135deg, #4f46e5, #4338ca); color: white;
         display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 600; flex-shrink: 0;
     }
     .mhs-opt-name { font-size: 12.5px; font-weight: 600; color: #444; }
@@ -128,7 +128,7 @@
         border: 1px solid #edf0f7;
     }
     .student-profile-ava {
-        width: 56px; height: 56px; border-radius: 50%; background: linear-gradient(135deg, #667eea, #764ba2); color: white;
+        width: 56px; height: 56px; border-radius: 50%; background: linear-gradient(135deg, #4f46e5, #4338ca); color: white;
         display: flex; align-items: center; justify-content: center; font-size: 20px; font-weight: 600;
         margin: 0 auto 10px;
     }
@@ -270,13 +270,13 @@
 
     /* Kotak Judul Riwayat — gaya header Acara (gradient + toggle pill) */
     .riwayat-title-box {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background: linear-gradient(135deg, #4f46e5 0%, #4338ca 100%);
         border-radius: 18px;
         padding: 22px 26px;
         margin-bottom: 10px;
         position: relative;
         overflow: hidden;
-        box-shadow: 0 8px 18px -8px rgba(102,126,234,.35);
+        box-shadow: 0 8px 18px -8px rgba(79,70,229,.35);
     }
     .riwayat-title-box::before {
         content: ''; position: absolute; right: -40px; top: -40px; width: 160px; height: 160px;
@@ -324,14 +324,14 @@
     .table-custom tbody tr:hover td { background: #f8f9ff; }
 
     /* Tabel Riwayat Poin — gaya samakan seperti tabel Acara */
-    .table-riwayat thead tr { background: linear-gradient(135deg, #667eea, #764ba2); }
+    .table-riwayat thead tr { background: linear-gradient(135deg, #4f46e5, #4338ca); }
     .table-riwayat th {
         background: transparent; color: white; font-weight: 700; text-transform: uppercase;
         letter-spacing: .06em; border-bottom: none; padding: 14px 18px;
     }
     .table-riwayat td { padding: 14px 18px; }
     .riwayat-row-num { color: #bbb; font-weight: 600; }
-    .riwayat-date-icon { color: #764ba2; margin-right: 6px; }
+    .riwayat-date-icon { color: #4338ca; margin-right: 6px; }
     .riwayat-icon-box {
         width: 36px; height: 36px; border-radius: 10px; flex-shrink: 0;
         display: flex; align-items: center; justify-content: center; color: white; font-size: 14px;
@@ -387,11 +387,11 @@
     .main-content input[type="file"].form-control::file-selector-button:hover { background: #e2e4f5; }
     .main-content .form-select:focus,
     .main-content .form-control:focus {
-        border-color: #667eea; background: white; box-shadow: none;
+        border-color: #4f46e5; background: white; box-shadow: none;
     }
     .main-content .btn-primary {
-        background: linear-gradient(135deg, #667eea, #764ba2); border: none;
-        border-radius: 25px !important; box-shadow: 0 4px 15px rgba(102,126,234,.4);
+        background: linear-gradient(135deg, #4f46e5, #4338ca); border: none;
+        border-radius: 25px !important; box-shadow: 0 4px 15px rgba(79,70,229,.4);
         padding: 11px 28px; font-size: 13px; font-weight: 700;
     }
     .main-content .btn-primary:hover { opacity: .92; }
@@ -606,6 +606,7 @@
                             <div class="student-profile-ava">{{ strtoupper(substr($selectedStudent->nickname ?? $selectedStudent->nama, 0, 2)) }}</div>
                             <div class="student-profile-name">{{ $selectedStudent->nama }}</div>
                             <div class="student-profile-meta">NPM: {{ $selectedStudent->npm }} &bull; Kelas: {{ $selectedStudent->kelas }}</div>
+                            <div class="student-profile-meta" style="font-weight:800; color:var(--ink-900);">Poin total: {{ (float) $poinTotal }} <span style="font-weight:600; color:var(--ink-600);">(awal {{ \App\Models\PoinMahasiswa::POIN_AWAL }} + penghargaan − pelanggaran)</span></div>
                         </div>
 
                         {{-- DUAL SCORE BOX (Penghargaan TIDAK mengurangi Pelanggaran) --}}
@@ -625,7 +626,7 @@
                             </div>
                         </div>
 
-                        {{-- STATUS SANKSI TARUNA (Threshold Pelanggaran) --}}
+                        {{-- STATUS SANKSI TARUNA (berdasarkan poin total) --}}
                         <div class="sanksi-status-alert" style="background:{{ $statusSanksi['bg'] }}; border-color:{{ $statusSanksi['border'] }}; color:{{ $statusSanksi['color'] }};">
                             <div class="sanksi-icon"><i class="{{ $statusSanksi['icon'] }}"></i></div>
                             <div>
@@ -637,16 +638,16 @@
                         {{-- Progress Threshold Bar --}}
                         <div class="threshold-bar-wrapper">
                             <div class="d-flex justify-content-between text-muted" style="font-size:10px; font-weight:800; margin-bottom:4px;">
-                                <span>Aman (&lt;50)</span>
-                                <span>SP 1 (50-74)</span>
-                                <span>SP 2 (75-99)</span>
-                                <span>SP 3 (≥100)</span>
+                                <span>Aman (&gt;15)</span>
+                                <span>SP 1 (−9 – 15)</span>
+                                <span>SP 2 (−34 – −10)</span>
+                                <span>SP 3 (≤ −35)</span>
                             </div>
                             <div class="threshold-bar">
-                                <div class="t-step t-aman" title="Status Aman (<50)"></div>
-                                <div class="t-step t-sp1" title="SP 1 (50-74)"></div>
-                                <div class="t-step t-sp2" title="SP 2 (75-99)"></div>
-                                <div class="t-step t-sp3" title="SP 3 (≥100)"></div>
+                                <div class="t-step t-aman" title="Status Aman (poin total > 15)"></div>
+                                <div class="t-step t-sp1" title="SP 1 (poin total −9 – 15)"></div>
+                                <div class="t-step t-sp2" title="SP 2 (poin total −34 – −10)"></div>
+                                <div class="t-step t-sp3" title="SP 3 (poin total ≤ −35)"></div>
                             </div>
                         </div>
                     </div>

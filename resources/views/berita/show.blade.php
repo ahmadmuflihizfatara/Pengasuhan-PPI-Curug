@@ -11,7 +11,7 @@ body { font-family: 'Inter', sans-serif; background: transparent; }
     margin-bottom:20px; font-size:12px; color:#888;
     list-style:none; padding:0; background:none;
 }
-.bc-breadcrumb a  { color:#667eea; text-decoration:none; font-weight:600; }
+.bc-breadcrumb a  { color:#4f46e5; text-decoration:none; font-weight:600; }
 .bc-breadcrumb a:hover { text-decoration:underline; }
 .bc-breadcrumb i  { font-size:10px; }
 
@@ -58,7 +58,7 @@ body { font-family: 'Inter', sans-serif; background: transparent; }
 }
 .article-summary {
     font-size:15px; color:#718096; line-height:1.7;
-    border-left:4px solid #667eea; padding-left:16px;
+    border-left:4px solid #4f46e5; padding-left:16px;
     margin-bottom:28px; font-style:italic;
 }
 
@@ -70,9 +70,9 @@ body { font-family: 'Inter', sans-serif; background: transparent; }
 .article-body ul, .article-body ol { padding-left:22px; margin:0 0 16px; }
 .article-body li  { margin-bottom:6px; }
 .article-body strong { color:#2d3748; }
-.article-body a   { color:#667eea; }
+.article-body a   { color:#4f46e5; }
 .article-body blockquote {
-    border-left:4px solid #667eea; padding:12px 18px;
+    border-left:4px solid #4f46e5; padding:12px 18px;
     background:#f7f8ff; border-radius:0 10px 10px 0;
     margin:18px 0; font-style:italic; color:#555;
 }
@@ -87,7 +87,7 @@ body { font-family: 'Inter', sans-serif; background: transparent; }
 }
 .author-big-ava {
     width:48px; height:48px; border-radius:50%;
-    background:linear-gradient(135deg,#667eea,#764ba2);
+    background:linear-gradient(135deg,#4f46e5,#4338ca);
     color:white; font-size:18px; font-weight:800;
     display:flex; align-items:center; justify-content:center; flex-shrink:0;
 }
@@ -107,7 +107,7 @@ body { font-family: 'Inter', sans-serif; background: transparent; }
     text-decoration:none; transition:opacity .15s;
 }
 .bc-action-btn:hover { opacity:.85; }
-.bc-action-btn.edit  { background:#eef0ff; color:#667eea; }
+.bc-action-btn.edit  { background:#eef0ff; color:#4f46e5; }
 .bc-action-btn.del   { background:#fff0f0; color:#e53e3e; }
 .bc-action-btn.pin   { background:#fff7e6; color:#e07020; }
 
@@ -118,7 +118,7 @@ body { font-family: 'Inter', sans-serif; background: transparent; }
 .back-btn {
     display:flex; align-items:center; gap:8px;
     background:white; border-radius:12px; padding:13px 16px;
-    text-decoration:none; font-size:13px; font-weight:600; color:#667eea;
+    text-decoration:none; font-size:13px; font-weight:600; color:#4f46e5;
     box-shadow:0 2px 10px rgba(0,0,0,.06); margin-bottom:16px;
     transition:background .15s;
 }
@@ -264,7 +264,7 @@ body { font-family: 'Inter', sans-serif; background: transparent; }
                 @if($terkait->isNotEmpty())
                 <div class="related-card">
                     <div class="related-header">
-                        <h3><i class="fas fa-layer-group" style="color:#667eea;margin-right:7px;"></i>Berita Terkait</h3>
+                        <h3><i class="fas fa-layer-group" style="color:#4f46e5;margin-right:7px;"></i>Berita Terkait</h3>
                     </div>
                     @foreach($terkait as $r)
                     <a href="{{ route('berita.show', $r) }}" class="related-item">

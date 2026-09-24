@@ -7,8 +7,11 @@ use App\Models\KeluhanBarak;
 use App\Models\User;
 use App\Traits\SortsQuery;
 use App\Traits\LogsActivity;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 
@@ -21,6 +24,46 @@ class KeluhanBarakStaffController extends Controller
      * Daftar semua keluhan dengan filter status, asrama, dan pencarian.
      */
     public function kelola(Request $request): View
+    {
+        $query = $this->filteredQuery($request);
+
+        $this->applySort($query, $request, ['pengaju' => 'nama', 'lokasi' => 'asrama', 'tanggal' => 'tanggal_pengajuan', 'status' => 'status']);
+        $daftarKeluhan = $query->paginate(10)->withQueryString();
+
+        $stats = [
+            'total'     => KeluhanBarak::count(),
+            'diajukan'  => KeluhanBarak::where('status', 'Diajukan')->count(),
+            'diproses'  => KeluhanBarak::where('status', 'Diproses')->count(),
+            'selesai'   => KeluhanBarak::where('status', 'Selesai')->count(),
+            'ditolak'   => KeluhanBarak::where('status', 'Ditolak')->count(),
+        ];
+
+        return view('keluhan-barak.kelola', [
+            'daftarKeluhan' => $daftarKeluhan,
+            'stats'         => $stats,
+            'statusList'    => KeluhanBarak::statusList(),
+            'asramaList'    => KeluhanBarak::ASRAMA,
+        ]);
+    }
+
+    /**
+     * Ekspor keluhan (mengikuti filter status/asrama/pencarian aktif) ke PDF.
+     */
+    public function exportPdf(Request $request): Response
+    {
+        $daftarKeluhan = $this->filteredQuery($request)->get();
+
+        return Pdf::loadView('keluhan-barak.pdf', [
+            'daftarKeluhan' => $daftarKeluhan,
+            'filter'        => $request->only('status', 'asrama', 'search'),
+        ])->setPaper('a4', 'landscape')
+          ->download('keluhan-barak-' . now()->setTimezone('Asia/Jakarta')->format('Ymd-His') . '.pdf');
+    }
+
+    /**
+     * Query keluhan dengan filter status, asrama, dan pencarian.
+     */
+    private function filteredQuery(Request $request): Builder
     {
         $query = KeluhanBarak::latest('tanggal_pengajuan')->latest('id');
 
@@ -40,23 +83,7 @@ class KeluhanBarakStaffController extends Controller
             });
         }
 
-        $this->applySort($query, $request, ['pengaju' => 'nama', 'lokasi' => 'asrama', 'tanggal' => 'tanggal_pengajuan', 'status' => 'status']);
-        $daftarKeluhan = $query->paginate(10)->withQueryString();
-
-        $stats = [
-            'total'     => KeluhanBarak::count(),
-            'diajukan'  => KeluhanBarak::where('status', 'Diajukan')->count(),
-            'diproses'  => KeluhanBarak::where('status', 'Diproses')->count(),
-            'selesai'   => KeluhanBarak::where('status', 'Selesai')->count(),
-            'ditolak'   => KeluhanBarak::where('status', 'Ditolak')->count(),
-        ];
-
-        return view('keluhan-barak.kelola', [
-            'daftarKeluhan' => $daftarKeluhan,
-            'stats'         => $stats,
-            'statusList'    => KeluhanBarak::statusList(),
-            'asramaList'    => KeluhanBarak::ASRAMA,
-        ]);
+        return $query;
     }
 
     /**

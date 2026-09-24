@@ -6,10 +6,10 @@ body { font-family: 'Inter', sans-serif; background: transparent; }
 .main-content { flex: 1; padding: 28px 28px 28px 24px; min-width: 0; }
 
 .topbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
-.back-link { display: inline-flex; align-items: center; gap: 7px; color: #667eea; text-decoration: none; font-size: 13px; font-weight: 600; }
+.back-link { display: inline-flex; align-items: center; gap: 7px; color: #4f46e5; text-decoration: none; font-size: 13px; font-weight: 600; }
 .back-link:hover { text-decoration: underline; }
 .action-btns { display: flex; gap: 8px; }
-.btn-edit-top { background: #eef0ff; color: #667eea; padding: 8px 18px; border-radius: 10px; text-decoration: none; font-size: 12px; font-weight: 700; display: inline-flex; align-items: center; gap: 6px; transition: background .1s; }
+.btn-edit-top { background: #eef0ff; color: #4f46e5; padding: 8px 18px; border-radius: 10px; text-decoration: none; font-size: 12px; font-weight: 700; display: inline-flex; align-items: center; gap: 6px; transition: background .1s; }
 .btn-edit-top:hover { background: #dde2ff; }
 .btn-delete-top { background: #fff0f0; color: #e53e3e; border: none; padding: 8px 18px; border-radius: 10px; font-size: 12px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; }
 .btn-delete-top:hover { background: #ffe0e0; }
@@ -18,7 +18,7 @@ body { font-family: 'Inter', sans-serif; background: transparent; }
 .detail-card { background: white; border-radius: 16px; overflow: hidden; box-shadow: 0 2px 16px rgba(0,0,0,.06); }
 
 /* Card header banner */
-.detail-header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 28px 32px; color: white; position: relative; overflow: hidden; }
+.detail-header { background: linear-gradient(135deg, #4f46e5 0%, #4338ca 100%); padding: 28px 32px; color: white; position: relative; overflow: hidden; }
 .detail-header::before { content: ''; position: absolute; right: -30px; top: -30px; width: 140px; height: 140px; background: rgba(255,255,255,.08); border-radius: 50%; }
 .detail-header-inner { position: relative; z-index: 1; display: flex; align-items: flex-start; gap: 18px; }
 .doc-icon { width: 54px; height: 54px; border-radius: 14px; background: rgba(255,255,255,.2); display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 22px; }
@@ -35,8 +35,8 @@ body { font-family: 'Inter', sans-serif; background: transparent; }
 .field-label { font-size: 10px; font-weight: 700; color: #aab; text-transform: uppercase; letter-spacing: .06em; margin-bottom: 6px; display: flex; align-items: center; gap: 5px; }
 .field-value { font-size: 14px; font-weight: 700; color: #333; }
 .file-attachment { background: #eef0ff; border-radius: 12px; padding: 14px 18px; display: flex; align-items: center; justify-content: space-between; }
-.file-attachment-icon { width: 40px; height: 40px; border-radius: 10px; background: linear-gradient(135deg, #667eea, #764ba2); display: flex; align-items: center; justify-content: center; margin-right: 12px; flex-shrink: 0; }
-.btn-download { background: linear-gradient(135deg, #667eea, #764ba2); color: white; padding: 9px 20px; border-radius: 10px; text-decoration: none; font-size: 12px; font-weight: 700; display: inline-flex; align-items: center; gap: 6px; }
+.file-attachment-icon { width: 40px; height: 40px; border-radius: 10px; background: linear-gradient(135deg, #4f46e5, #4338ca); display: flex; align-items: center; justify-content: center; margin-right: 12px; flex-shrink: 0; }
+.btn-download { background: linear-gradient(135deg, #4f46e5, #4338ca); color: white; padding: 9px 20px; border-radius: 10px; text-decoration: none; font-size: 12px; font-weight: 700; display: inline-flex; align-items: center; gap: 6px; }
 
 .timestamps { margin-top: 18px; padding-top: 14px; border-top: 1px solid #f0f2f7; display: flex; gap: 20px; }
 .timestamps span { font-size: 11px; color: #ccc; display: flex; align-items: center; gap: 5px; }
@@ -53,7 +53,7 @@ body { font-family: 'Inter', sans-serif; background: transparent; }
 .modal-box h3 { margin:0 0 8px; font-size:17px; font-weight:800; color:#333; }
 .modal-box p  { margin:0 0 18px; font-size:13px; color:#666; line-height:1.6; }
 .modal-textarea { width:100%; padding:12px 14px; border:2px solid #edf0f7; border-radius:10px; font-size:13px; font-family:'Inter',sans-serif; resize:vertical; min-height:90px; outline:none; }
-.modal-textarea:focus { border-color:#667eea; }
+.modal-textarea:focus { border-color:#4f46e5; }
 .modal-actions { display:flex; gap:10px; justify-content:flex-end; margin-top:18px; }
 .modal-btn-cancel { background:#f4f5f9; color:#666; border:none; padding:10px 22px; border-radius:25px; font-size:13px; font-weight:700; cursor:pointer; }
 .modal-btn-confirm-approve { background:linear-gradient(135deg,#38a169,#48bb78); color:white; border:none; padding:10px 24px; border-radius:25px; font-size:13px; font-weight:800; cursor:pointer; }
@@ -171,7 +171,7 @@ body { font-family: 'Inter', sans-serif; background: transparent; }
                                 </div>
                                 <div>
                                     <div style="font-size:13px; font-weight:700; color:#333;">Dokumen Terlampir</div>
-                                    <div style="font-size:12px; color:#667eea;">{{ basename($surat->file_path) }}</div>
+                                    <div style="font-size:12px; color:#4f46e5;">{{ basename($surat->file_path) }}</div>
                                 </div>
                             </div>
                             <a href="{{ Storage::url($surat->file_path) }}" target="_blank" class="btn-download">

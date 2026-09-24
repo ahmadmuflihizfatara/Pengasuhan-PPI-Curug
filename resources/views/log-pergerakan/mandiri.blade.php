@@ -8,7 +8,7 @@ body { font-family: 'Inter', sans-serif; background: transparent; }
 
 /* === HEADER BANNER === */
 .tablet-banner {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #4f46e5 0%, #4338ca 100%);
     border-radius: 18px;
     padding: 24px 30px;
     color: white;
@@ -64,7 +64,7 @@ body { font-family: 'Inter', sans-serif; background: transparent; }
     padding: 14px 18px; margin-bottom: 22px; display: flex; align-items: center; gap: 14px;
 }
 .identitas-avatar {
-    width: 42px; height: 42px; border-radius: 50%; background: #667eea; color: white;
+    width: 42px; height: 42px; border-radius: 50%; background: #4f46e5; color: white;
     display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 16px; flex-shrink: 0;
 }
 .identitas-name { font-weight: 800; color: #333; font-size: 14.5px; }
@@ -94,12 +94,12 @@ body { font-family: 'Inter', sans-serif; background: transparent; }
 .cat-card:hover {
     border-color: #a5b0f0;
     transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(102, 126, 234, 0.1);
+    box-shadow: 0 8px 20px rgba(79,70,229, 0.1);
 }
 .cat-card.active {
-    border-color: #667eea;
+    border-color: #4f46e5;
     background: #f8f9ff;
-    box-shadow: 0 8px 24px rgba(102, 126, 234, 0.15);
+    box-shadow: 0 8px 24px rgba(79,70,229, 0.15);
 }
 .cat-card.active::after {
     content: '\f00c';
@@ -110,7 +110,7 @@ body { font-family: 'Inter', sans-serif; background: transparent; }
     right: 14px;
     width: 24px;
     height: 24px;
-    background: #667eea;
+    background: #4f46e5;
     color: white;
     border-radius: 50%;
     font-size: 11px;
@@ -156,7 +156,7 @@ body { font-family: 'Inter', sans-serif; background: transparent; }
     transition: border .15s;
 }
 .form-control:focus, .form-select:focus {
-    border-color: #667eea;
+    border-color: #4f46e5;
     background: white;
     box-shadow: none;
     outline: none;
@@ -171,7 +171,7 @@ body { font-family: 'Inter', sans-serif; background: transparent; }
 }
 .subcat-pill:hover { border-color: #aab; background: #fafbff; }
 .subcat-pill.active {
-    background: #667eea; border-color: #667eea; color: white;
+    background: #4f46e5; border-color: #4f46e5; color: white;
 }
 
 .status-awal-box {
@@ -192,13 +192,13 @@ body { font-family: 'Inter', sans-serif; background: transparent; }
 }
 
 .btn-submit-log {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #4f46e5 0%, #4338ca 100%);
     color: white; border: none; border-radius: 25px; padding: 14px 28px;
     font-size: 14px; font-weight: 700; width: 100%; cursor: pointer;
     transition: transform 0.2s, box-shadow 0.2s;
     display: flex; align-items: center; justify-content: center; gap: 10px;
 }
-.btn-submit-log:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(102, 126, 234, .4); }
+.btn-submit-log:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(79,70,229, .4); }
 
 /* Riwayat */
 .riwayat-item {
@@ -240,7 +240,7 @@ body { font-family: 'Inter', sans-serif; background: transparent; }
                 <i class="fas fa-right-from-bracket"></i> Izin Keluar & Kembali Mandiri
             </h1>
             <p class="banner-sub">
-                Catat sendiri keberangkatan &amp; kepulangan Anda. Data langsung tersinkron ke TV Monitoring Pos Jaga, dan akan diperiksa (divalidasi) oleh pengasuh.
+                Catat sendiri keberangkatan &amp; kepulangan Anda. Data langsung tersimpan dan akan diperiksa (divalidasi) oleh pengasuh.
             </p>
         </div>
 
@@ -458,7 +458,7 @@ body { font-family: 'Inter', sans-serif; background: transparent; }
                 <div class="status-awal-box">
                     <div>
                         <div class="fw-bold text-dark"><i class="fas fa-shield-alt text-danger me-1"></i> STATUS AWAL KELUAR:</div>
-                        <div class="small text-muted">Data akan otomatis ditandai <strong>BELUM KEMBALI</strong> dan disinkronkan ke TV Jaga.</div>
+                        <div class="small text-muted">Data akan otomatis ditandai <strong>BELUM KEMBALI</strong>.</div>
                     </div>
                     <div>
                         <span class="status-badge-berangkat">

@@ -42,7 +42,10 @@ class DashboardController extends Controller
         ];
 
         // Surat terbaru
-        $suratTerbaru = Surat::latest()->take(5)->get();
+        // Taruna: seluruh surat yang diajukan akunnya sendiri; staf: 5 surat terbaru
+        $suratTerbaru = auth()->user()->hasTarunaAccess()
+            ? Surat::where('user_id', auth()->id())->latest()->get()
+            : Surat::latest()->take(5)->get();
 
         // Keluhan barak stats
         $keluhanStats = [
@@ -54,14 +57,21 @@ class DashboardController extends Controller
         ];
 
         // Point total + grafik prodi/tingkat + status konsinyir if Taruna
-        $totalPoin = 0;
+        $poinTaruna = ['pelanggaran' => 0, 'penghargaan' => 0];
         $chartData = null;
         $konsinyirAktif = null;
         $nilaiSemester = collect();
+        $student = null;
         if (auth()->user()->hasTarunaAccess()) {
             $student = Mahasiswa::where('user_id', auth()->id())->first();
             if ($student) {
-                $totalPoin = PoinMahasiswa::where('mahasiswa_id', $student->id)->get()->sum('nilai_efektif');
+                // Sama dengan PoinController::myPointsApi: hanya poin yang sudah disetujui
+                $disetujui = PoinMahasiswa::where('mahasiswa_id', $student->id)
+                    ->where('status_validasi', PoinMahasiswa::STATUS_DISETUJUI);
+                $poinTaruna = [
+                    'pelanggaran' => (clone $disetujui)->where('kategori', PoinMahasiswa::KAT_PELANGGARAN)->sum('nilai'),
+                    'penghargaan' => (clone $disetujui)->where('kategori', PoinMahasiswa::KAT_PRESTASI)->sum('nilai'),
+                ];
                 $konsinyirAktif = Konsinyir::where('mahasiswa_id', $student->id)
                     ->orderByDesc('tanggal_mulai')
                     ->get()
@@ -79,10 +89,11 @@ class DashboardController extends Controller
             'suratStats'       => $suratStats,
             'suratTerbaru'     => $suratTerbaru,
             'keluhanStats'     => $keluhanStats,
-            'totalPoin'        => $totalPoin,
+            'poinTaruna'       => $poinTaruna,
             'chartData'        => $chartData,
             'konsinyirAktif'   => $konsinyirAktif,
             'nilaiSemester'    => $nilaiSemester,
+            'student'          => $student,
         ]);
     }
 

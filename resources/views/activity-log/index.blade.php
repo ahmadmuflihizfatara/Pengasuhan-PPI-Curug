@@ -13,7 +13,7 @@ body { font-family: 'Inter', sans-serif; background: transparent; }
 
 /* Header Banner */
 .page-header {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #4f46e5 0%, #4338ca 100%);
     border-radius: 18px; padding: 28px 32px;
     color: white; margin-bottom: 24px;
     position: relative; overflow: hidden;
@@ -59,12 +59,12 @@ body { font-family: 'Inter', sans-serif; background: transparent; }
     outline:none; color:#444; background:#fafbff;
     transition:border-color .15s;
 }
-.filter-input:focus, .filter-select:focus { border-color:#667eea; }
+.filter-input:focus, .filter-select:focus { border-color:#4f46e5; }
 .filter-search { position:relative; }
 .filter-search .fa-search { position:absolute; left:11px; top:50%; transform:translateY(-50%); color:#bbb; font-size:12px; pointer-events:none; }
 .filter-search .filter-input { padding-left:32px; }
 .btn-filter {
-    background:linear-gradient(135deg,#667eea,#764ba2);
+    background:linear-gradient(135deg,#4f46e5,#4338ca);
     color:white; border:none; border-radius:9px;
     padding:9px 20px; font-size:13px; font-family:'Inter',sans-serif;
     font-weight:700; cursor:pointer; white-space:nowrap;
@@ -87,7 +87,7 @@ body { font-family: 'Inter', sans-serif; background: transparent; }
 .log-card-count { font-size:12px; color:#9aa0bc; }
 
 table { width:100%; border-collapse:collapse; }
-thead tr { background:linear-gradient(135deg,#667eea,#764ba2); }
+thead tr { background:linear-gradient(135deg,#4f46e5,#4338ca); }
 th { padding:12px 16px; text-align:left; font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.07em; color:white; white-space:nowrap; }
 td { padding:13px 16px; font-size:13px; color:#444; border-top:1px solid #f0f2f7; vertical-align:middle; }
 tbody tr { transition:background .1s; }
@@ -104,7 +104,7 @@ tbody tr:hover { background:#fafbff; }
 .pelaku-wrap { display:flex; align-items:center; gap:9px; }
 .pelaku-ava  {
     width:32px; height:32px; border-radius:50%;
-    background:linear-gradient(135deg,#667eea,#764ba2);
+    background:linear-gradient(135deg,#4f46e5,#4338ca);
     color:white; font-size:12px; font-weight:800;
     display:flex; align-items:center; justify-content:center; flex-shrink:0;
 }
@@ -113,7 +113,7 @@ tbody tr:hover { background:#fafbff; }
 
 /* Detail button */
 .btn-detail {
-    background:#eef0ff; color:#667eea; border:none;
+    background:#eef0ff; color:#4f46e5; border:none;
     border-radius:20px; padding:5px 14px; font-size:11px;
     font-family:'Inter',sans-serif; font-weight:700; cursor:pointer;
     display:inline-flex; align-items:center; gap:5px; transition:background .1s;
@@ -124,10 +124,10 @@ tbody tr:hover { background:#fafbff; }
 .detail-row { background:#fafbff !important; }
 .detail-inner {
     border-radius:10px; padding:14px 18px;
-    border-left:4px solid #667eea;
+    border-left:4px solid #4f46e5;
     background:#f4f6ff; margin:4px 0;
 }
-.detail-label { font-size:11px; font-weight:700; color:#667eea; text-transform:uppercase; letter-spacing:.05em; margin-bottom:10px; }
+.detail-label { font-size:11px; font-weight:700; color:#4f46e5; text-transform:uppercase; letter-spacing:.05em; margin-bottom:10px; }
 .detail-grid  { display:flex; flex-wrap:wrap; gap:8px; }
 .detail-chip  { background:white; border:1px solid #e5e7eb; border-radius:8px; padding:7px 12px; min-width:120px; }
 .detail-chip-key   { font-size:10px; color:#9aa0bc; font-weight:700; text-transform:uppercase; letter-spacing:.04em; margin-bottom:2px; }
@@ -146,8 +146,8 @@ tbody tr:hover { background:#fafbff; }
 
 /* Pagination */
 .pagination { display:flex; gap:4px; list-style:none; padding:0; margin:0; }
-.pagination .page-item .page-link { border-radius:8px !important; border:1.5px solid #e5e7eb; color:#667eea; font-size:13px; font-weight:600; padding:6px 12px; font-family:'Inter',sans-serif; }
-.pagination .page-item.active .page-link { background:linear-gradient(135deg,#667eea,#764ba2); border-color:transparent; color:white; }
+.pagination .page-item .page-link { border-radius:8px !important; border:1.5px solid #e5e7eb; color:#4f46e5; font-size:13px; font-weight:600; padding:6px 12px; font-family:'Inter',sans-serif; }
+.pagination .page-item.active .page-link { background:linear-gradient(135deg,#4f46e5,#4338ca); border-color:transparent; color:white; }
 .pagination .page-item.disabled .page-link { color:#ccc; }
 
 /* Alert success */
@@ -187,7 +187,7 @@ tbody tr:hover { background:#fafbff; }
         {{-- ── STATS ── --}}
         <div class="stats-grid">
             <div class="stat-card">
-                <div class="stat-icon" style="background:linear-gradient(135deg,#667eea,#764ba2);">
+                <div class="stat-icon" style="background:linear-gradient(135deg,#4f46e5,#4338ca);">
                     <i class="fas fa-list-alt"></i>
                 </div>
                 <div>
@@ -196,7 +196,7 @@ tbody tr:hover { background:#fafbff; }
                 </div>
             </div>
             <div class="stat-card">
-                <div class="stat-icon" style="background:linear-gradient(135deg,#9f7aea,#764ba2);">
+                <div class="stat-icon" style="background:linear-gradient(135deg,#9f7aea,#4338ca);">
                     <i class="fas fa-star"></i>
                 </div>
                 <div>
@@ -295,7 +295,7 @@ tbody tr:hover { background:#fafbff; }
         <div class="log-card">
             <div class="log-card-header">
                 <div class="log-card-title">
-                    <i class="fas fa-history" style="color:#667eea;"></i>
+                    <i class="fas fa-history" style="color:#4f46e5;"></i>
                     Riwayat Aktivitas
                 </div>
                 <div class="log-card-count">{{ $logs->total() }} entri ditemukan</div>
@@ -411,7 +411,7 @@ tbody tr:hover { background:#fafbff; }
                 <p>
                     @if(request()->hasAny(['search','modul','aksi','dari','sampai']))
                         Tidak ada hasil yang cocok dengan filter.
-                        <a href="{{ route('activity-log.index') }}" style="color:#667eea;font-weight:600;">Reset filter</a>
+                        <a href="{{ route('activity-log.index') }}" style="color:#4f46e5;font-weight:600;">Reset filter</a>
                     @else
                         Log akan muncul otomatis saat ada aktivitas pada sistem.
                     @endif

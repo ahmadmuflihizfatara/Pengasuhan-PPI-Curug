@@ -39,10 +39,6 @@
                             <span>Mode Tablet Pos Jaga</span>
                         </a>
                         @endif
-                        <a href="{{ route('log-pergerakan.tv') }}" target="_blank" class="px-4 py-2 rounded-xl bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-400/40 text-emerald-300 font-bold text-xs backdrop-blur-md transition flex items-center gap-2 no-underline">
-                            <i class="fa-solid fa-tv"></i>
-                            <span>TV Monitoring</span>
-                        </a>
                     </div>
 
                     {{-- Ambient glow --}}

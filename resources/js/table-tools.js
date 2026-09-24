@@ -41,6 +41,14 @@
             && !/(19|20)\d{2}/.test(v));     // tanggal "20 Sep 2026"
     }
 
+    // Urut alami untuk teks: "Semester 2" sebelum "Semester 10"
+    const collator = new Intl.Collator('id', { numeric: true, sensitivity: 'base' });
+    function compareKeys(a, b) {
+        if (typeof a === 'string' && typeof b === 'string') return collator.compare(a, b);
+        if (typeof a !== typeof b) return typeof a === 'number' ? -1 : 1;   // angka sebelum teks ("—")
+        return a === b ? 0 : (a > b ? 1 : -1);
+    }
+
     function el(tag, cls, html) {
         const n = document.createElement(tag);
         if (cls) n.className = cls;
@@ -99,7 +107,7 @@
             const sel = el('select', 'tt-filter');
             sel.setAttribute('aria-label', 'Filter ' + f.label);
             sel.innerHTML = `<option value="">${f.label}: Semua</option>`
-                + f.values.sort((a, b) => sortKey(a) > sortKey(b) ? 1 : -1)
+                + f.values.sort((a, b) => compareKeys(sortKey(a), sortKey(b)))
                     .map(v => `<option value="${v.replace(/"/g, '&quot;')}">${v}</option>`).join('');
             wrap.appendChild(sel);
             bar.appendChild(wrap);
@@ -115,7 +123,7 @@
         bar.appendChild(right);
 
         // Sisipkan di atas pembungkus scroll, bukan di dalamnya
-        const anchor = table.closest('.overflow-x-auto, .table-responsive, [style*="overflow"]') || table;
+        const anchor = table.closest('.ds-table-wrap, .overflow-x-auto, .table-responsive, [style*="overflow"]') || table;
         anchor.parentNode.insertBefore(bar, anchor);
 
         // ---- Filter + search
@@ -173,9 +181,7 @@
                 headers.forEach(h => h.classList.remove('tt-asc', 'tt-desc'));
                 th.classList.add(asc ? 'tt-asc' : 'tt-desc');
                 [...dataRows].sort((a, b) => {
-                    const ka = sortKey(cellValue(a.cells[col])), kb = sortKey(cellValue(b.cells[col]));
-                    if (ka === kb) return 0;
-                    return (ka > kb ? 1 : -1) * (asc ? 1 : -1);
+                    return compareKeys(sortKey(cellValue(a.cells[col])), sortKey(cellValue(b.cells[col]))) * (asc ? 1 : -1);
                 }).forEach(r => tbody.appendChild(r));
             });
         });

@@ -76,52 +76,72 @@ class PoinMahasiswa extends Model
         return $this->status_validasi === self::STATUS_DITOLAK;
     }
 
+    /** Poin total awal setiap taruna. Poin total = POIN_AWAL + penghargaan − pelanggaran. */
+    const POIN_AWAL = 65;
+
     /**
-     * Hitung Status Sanksi berdasarkan Total Poin Pelanggaran murni
+     * Tingkat sanksi berdasarkan poin total, dari terberat ke teringan.
+     * 'atas' = poin total tertinggi yang masih masuk tingkat itu (null = tanpa batas atas).
+     * Setara aturan lama (SP 1 di 50 pelanggaran, SP 2 di 75, SP 3 di 100) dengan titik awal 65.
      */
-    public static function getStatusSanksi(float $totalPelanggaran): array
+    const TINGKAT_SANKSI = [
+        'sp3'  => ['label' => 'Surat Peringatan 3 & Sidang', 'bawah' => null, 'atas' => -35],
+        'sp2'  => ['label' => 'Surat Peringatan 2',          'bawah' => -34,  'atas' => -10],
+        'sp1'  => ['label' => 'Surat Peringatan 1',          'bawah' => -9,   'atas' => 15],
+        'aman' => ['label' => 'Aman',                        'bawah' => 16,   'atas' => null],
+    ];
+
+    public static function hitungPoinTotal(float $totalPelanggaran, float $totalPenghargaan): float
     {
-        if ($totalPelanggaran >= 100) {
-            return [
+        return self::POIN_AWAL + $totalPenghargaan - $totalPelanggaran;
+    }
+
+    /**
+     * Status sanksi berdasarkan poin total (makin kecil makin berat).
+     */
+    public static function getStatusSanksi(float $poinTotal): array
+    {
+        $level = collect(self::TINGKAT_SANKSI)
+            ->search(fn ($t) => $t['atas'] !== null && $poinTotal <= $t['atas']) ?: 'aman';
+
+        return match ($level) {
+            'sp3' => [
                 'status'     => 'SP 3 & Rekomendasi Sidang',
                 'level'      => 'sp3',
                 'color'      => '#991b1b',
                 'bg'         => '#fee2e2',
                 'border'     => '#f87171',
                 'icon'       => 'fas fa-gavel',
-                'desc'       => 'Akumulasi pelanggaran mencapai batas kritis. Taruna direkomendasikan untuk Sidang Dewan Kehormatan Taruna.',
-            ];
-        } elseif ($totalPelanggaran >= 75) {
-            return [
+                'desc'       => 'Poin total mencapai −35 atau kurang. Taruna direkomendasikan untuk Sidang Dewan Kehormatan Taruna.',
+            ],
+            'sp2' => [
                 'status'     => 'SP 2',
                 'level'      => 'sp2',
                 'color'      => '#c2410c',
                 'bg'         => '#ffedd5',
                 'border'     => '#fb923c',
                 'icon'       => 'fas fa-exclamation-circle',
-                'desc'       => 'Akumulasi pelanggaran mencapai 75-99 poin. Diterbitkan Surat Peringatan 2 (SP 2).',
-            ];
-        } elseif ($totalPelanggaran >= 50) {
-            return [
+                'desc'       => 'Poin total berada di −34 s/d −10. Diterbitkan Surat Peringatan 2 (SP 2).',
+            ],
+            'sp1' => [
                 'status'     => 'SP 1',
                 'level'      => 'sp1',
                 'color'      => '#b45309',
                 'bg'         => '#fef3c7',
                 'border'     => '#fcd34d',
                 'icon'       => 'fas fa-exclamation-triangle',
-                'desc'       => 'Akumulasi pelanggaran mencapai 50-74 poin. Diterbitkan Surat Peringatan 1 (SP 1).',
-            ];
-        }
-
-        return [
-            'status'     => 'Status Aman',
-            'level'      => 'aman',
-            'color'      => '#15803d',
-            'bg'         => '#dcfce7',
-            'border'     => '#86efac',
-            'icon'       => 'fas fa-shield-check',
-            'desc'       => 'Poin pelanggaran di bawah 50 poin. Kedisiplinan taruna terpantau dalam kondisi baik.',
-        ];
+                'desc'       => 'Poin total berada di −9 s/d 15. Diterbitkan Surat Peringatan 1 (SP 1).',
+            ],
+            default => [
+                'status'     => 'Status Aman',
+                'level'      => 'aman',
+                'color'      => '#15803d',
+                'bg'         => '#dcfce7',
+                'border'     => '#86efac',
+                'icon'       => 'fa-solid fa-shield-halved',
+                'desc'       => 'Poin total di atas 15. Kedisiplinan taruna terpantau dalam kondisi baik.',
+            ],
+        };
     }
 
     /**

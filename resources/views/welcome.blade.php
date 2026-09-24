@@ -165,7 +165,7 @@
                     </div>
                     <h3 class="text-sm font-bold text-slate-900 mb-1.5">Pos Jaga & Log Pergerakan</h3>
                     <p class="text-xs text-slate-600 leading-relaxed mb-4">
-                        Pemantauan arus keluar masuk taruna di gerbang utama secara real-time via tablet dan monitor TV live.
+                        Pemantauan arus keluar masuk taruna di gerbang utama secara real-time via tablet.
                     </p>
                     <div class="flex items-center text-[11px] font-bold text-sky-700 group-hover:underline">
                         <span>Monitoring Gerbang</span>

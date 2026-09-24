@@ -124,6 +124,11 @@ Route::middleware('auth')->group(function () {
         Route::delete('/apel/{apel}', [ApelController::class, 'destroy'])->name('apel.destroy');
     });
 
+    // Kalkulator BMI — khusus taruna (hitung di browser, tidak disimpan)
+    Route::view('/bmi', 'bmi.index')
+        ->middleware('role:taruna')
+        ->name('bmi.index');
+
     // Jadwal apel — taruna, hanya lihat (tanpa informasi apel)
     Route::get('/jadwal-apel', [ApelController::class, 'jadwalTaruna'])
         ->middleware('role:taruna')
@@ -199,6 +204,8 @@ Route::middleware('auth')->group(function () {
     Route::middleware('role:pengasuh,admin')->group(function () {
         Route::get('/keluhan-barak/kelola', [KeluhanBarakStaffController::class, 'kelola'])
             ->name('keluhan-barak.kelola');
+        Route::get('/keluhan-barak/export-pdf', [KeluhanBarakStaffController::class, 'exportPdf'])
+            ->name('keluhan-barak.exportPdf');
         Route::get('/keluhan-barak/{keluhan}/detail', [KeluhanBarakStaffController::class, 'showDetail'])
             ->name('keluhan-barak.detail');
         Route::patch('/keluhan-barak/{keluhan}/status', [KeluhanBarakStaffController::class, 'updateStatus'])
@@ -329,6 +336,13 @@ Route::middleware('auth')->group(function () {
     Route::get('/activity-log', [ActivityLogController::class, 'index'])
         ->middleware('role:admin')
         ->name('activity-log.index');
+
+    // ===========================
+    // MONITORING TV — pengasuh & admin (layar penuh, dibuka dari dashboard)
+    // ===========================
+    Route::get('/monitoring-tv', [\App\Http\Controllers\MonitoringTvController::class, 'index'])
+        ->middleware('role:pengasuh,admin')
+        ->name('monitoring-tv.index');
     // ===========================
     // BERITA       
     // ===========================
@@ -342,8 +356,6 @@ Route::middleware('auth')->group(function () {
     // ===========================
     Route::middleware('role:pengasuh,admin')->group(function () {
         Route::get('/log-pergerakan', [\App\Http\Controllers\LogPergerakanController::class, 'index'])->name('log-pergerakan.index');
-        Route::get('/log-pergerakan/tv-monitoring', [\App\Http\Controllers\LogPergerakanController::class, 'tvMonitoring'])->name('log-pergerakan.tv');
-        Route::get('/log-pergerakan/api-data', [\App\Http\Controllers\LogPergerakanController::class, 'apiData'])->name('log-pergerakan.api');
     });
 
     // Form manual pos jaga — khusus admin (pengasuh tidak lagi input manual)
@@ -362,7 +374,7 @@ Route::middleware('auth')->group(function () {
         Route::patch('/log-pergerakan/{id}/kembali', [\App\Http\Controllers\LogPergerakanController::class, 'updateKembali'])->name('log-pergerakan.kembali');
     });
 
-    // Rute dengan wildcard {id} — didaftarkan paling akhir agar tidak menangkap path spesifik di atas (tablet/mandiri/tv-monitoring/api-data)
+    // Rute dengan wildcard {id} — didaftarkan paling akhir agar tidak menangkap path spesifik di atas (tablet/mandiri)
     Route::middleware('role:pengasuh,admin')->group(function () {
         Route::get('/log-pergerakan/{id}', [\App\Http\Controllers\LogPergerakanController::class, 'show'])->name('log-pergerakan.show');
         Route::patch('/log-pergerakan/{id}/validasi', [\App\Http\Controllers\LogPergerakanController::class, 'validasi'])->name('log-pergerakan.validasi');

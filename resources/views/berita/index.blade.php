@@ -7,7 +7,7 @@ body { font-family: 'Inter', sans-serif; background: transparent; }
 
 /* ── Page Header ── */
 .page-header {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #4f46e5 0%, #4338ca 100%);
     border-radius: 18px; padding: 28px 32px;
     color: white; margin-bottom: 24px;
     display: flex; align-items: center; justify-content: space-between;
@@ -35,7 +35,7 @@ body { font-family: 'Inter', sans-serif; background: transparent; }
     border: 2px solid transparent;
 }
 .stat-pill:hover          { transform: translateY(-2px); box-shadow: 0 5px 18px rgba(0,0,0,.1); }
-.stat-pill.active         { border-color: #667eea; }
+.stat-pill.active         { border-color: #4f46e5; }
 .stat-pill .sp-count      { font-size: 20px; font-weight: 800; color: #333; }
 .stat-pill .sp-label      { font-size: 11px; color: #888; font-weight: 500; margin-top: 2px; }
 .stat-pill .sp-dot        { width: 8px; height: 8px; border-radius: 50%; display: inline-block; margin-right: 5px; }
@@ -55,7 +55,7 @@ body { font-family: 'Inter', sans-serif; background: transparent; }
     font-size:13px; font-family:'Inter',sans-serif;
     outline:none; color:#444; transition:border-color .15s;
 }
-.filter-bar input:focus { border-color:#667eea; }
+.filter-bar input:focus { border-color:#4f46e5; }
 .filter-bar select {
     padding:9px 32px 9px 12px; border:1.5px solid #edf0f7;
     border-radius:9px; font-size:13px; color:#444;
@@ -63,14 +63,14 @@ body { font-family: 'Inter', sans-serif; background: transparent; }
     background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%23999' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E") no-repeat right 10px center;
     outline:none; cursor:pointer;
 }
-.filter-bar select:focus { border-color:#667eea; }
+.filter-bar select:focus { border-color:#4f46e5; }
 .filter-btn {
     padding:9px 18px; border-radius:9px; font-size:13px;
     font-weight:600; border:none; cursor:pointer;
     transition:background .15s;
 }
-.filter-btn.primary { background:linear-gradient(135deg,#667eea,#764ba2); color:white; }
-.filter-btn.secondary { background:#f0f1fb; color:#667eea; }
+.filter-btn.primary { background:linear-gradient(135deg,#4f46e5,#4338ca); color:white; }
+.filter-btn.secondary { background:#f0f1fb; color:#4f46e5; }
 
 /* ── Pinned Banner ── */
 .pinned-section { margin-bottom: 24px; }
@@ -140,9 +140,9 @@ body { font-family: 'Inter', sans-serif; background: transparent; }
     display:flex; align-items:center; justify-content:space-between;
 }
 .bc-author { display:flex; align-items:center; gap:7px; }
-.bc-ava  { width:24px; height:24px; border-radius:50%; background:linear-gradient(135deg,#667eea,#764ba2); color:white; font-size:9px; font-weight:800; display:flex; align-items:center; justify-content:center; }
+.bc-ava  { width:24px; height:24px; border-radius:50%; background:linear-gradient(135deg,#4f46e5,#4338ca); color:white; font-size:9px; font-weight:800; display:flex; align-items:center; justify-content:center; }
 .bc-author-name { font-size:11px; color:#888; }
-.bc-read-more   { font-size:11px; color:#667eea; font-weight:700; display:flex; align-items:center; gap:4px; }
+.bc-read-more   { font-size:11px; color:#4f46e5; font-weight:700; display:flex; align-items:center; gap:4px; }
 
 /* ── Staff Actions ── */
 .bc-staff-actions { display:flex; gap:6px; margin-top:8px; }
@@ -152,7 +152,7 @@ body { font-family: 'Inter', sans-serif; background: transparent; }
     text-decoration:none; transition:opacity .15s;
 }
 .bc-action-btn:hover { opacity:.85; }
-.bc-action-btn.edit  { background:#eef0ff; color:#667eea; }
+.bc-action-btn.edit  { background:#eef0ff; color:#4f46e5; }
 .bc-action-btn.del   { background:#fff0f0; color:#e53e3e; }
 .bc-action-btn.pin   { background:#fff7e6; color:#e07020; }
 
@@ -224,7 +224,7 @@ body { font-family: 'Inter', sans-serif; background: transparent; }
         <div class="stats-row">
             <a href="{{ route('berita.index') }}" class="stat-pill {{ !request('kategori') || request('kategori') === 'semua' ? 'active' : '' }}">
                 <div class="sp-count">{{ $stats['total'] }}</div>
-                <div class="sp-label"><span class="sp-dot" style="background:#667eea;"></span>Semua</div>
+                <div class="sp-label"><span class="sp-dot" style="background:#4f46e5;"></span>Semua</div>
             </a>
             <a href="{{ route('berita.index', ['kategori' => 'pengumuman']) }}" class="stat-pill {{ request('kategori') === 'pengumuman' ? 'active' : '' }}">
                 <div class="sp-count">{{ $stats['pengumuman'] }}</div>
@@ -337,7 +337,7 @@ body { font-family: 'Inter', sans-serif; background: transparent; }
                 @endif
             </p>
             @if(!Auth::user()->hasTarunaAccess())
-            <a href="{{ route('berita.create') }}" style="display:inline-flex;align-items:center;gap:8px;margin-top:16px;background:linear-gradient(135deg,#667eea,#764ba2);color:white;padding:10px 22px;border-radius:10px;text-decoration:none;font-weight:700;font-size:13px;">
+            <a href="{{ route('berita.create') }}" style="display:inline-flex;align-items:center;gap:8px;margin-top:16px;background:linear-gradient(135deg,#4f46e5,#4338ca);color:white;padding:10px 22px;border-radius:10px;text-decoration:none;font-weight:700;font-size:13px;">
                 <i class="fas fa-plus"></i> Tulis Berita Pertama
             </a>
             @endif
@@ -345,7 +345,7 @@ body { font-family: 'Inter', sans-serif; background: transparent; }
         @elseif($berita->isNotEmpty())
         <div class="section-header" style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
             <h3 style="font-size:15px;font-weight:700;color:#333;margin:0;">
-                <i class="fas fa-list" style="color:#667eea;margin-right:8px;"></i>
+                <i class="fas fa-list" style="color:#4f46e5;margin-right:8px;"></i>
                 Semua Berita
                 @if(request('search'))
                 <span style="font-size:12px;color:#888;font-weight:400;"> — hasil pencarian "{{ request('search') }}"</span>

@@ -111,6 +111,10 @@
                                 <i class="fa-solid fa-filter text-[10px]"></i>
                                 <span>Filter</span>
                             </button>
+                            <a href="{{ route('keluhan-barak.exportPdf', request()->only(['search','asrama','status'])) }}" title="Ekspor PDF (sesuai filter)" class="py-2 px-3 rounded-xl bg-white/80 hover:bg-white text-slate-700 font-bold text-xs border border-white shadow-sm flex items-center justify-center gap-1.5 transition no-underline">
+                                <i class="fa-solid fa-file-pdf text-rose-600"></i>
+                                <span>PDF</span>
+                            </a>
                             @if(request()->hasAny(['search','asrama','status']))
                             <a href="{{ route('keluhan-barak.kelola') }}" class="py-2 px-3 rounded-xl bg-white/80 hover:bg-white text-rose-600 font-bold text-xs border border-white shadow-sm flex items-center justify-center transition">
                                 <i class="fa-solid fa-xmark"></i>

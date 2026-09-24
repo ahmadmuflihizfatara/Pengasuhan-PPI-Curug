@@ -41,7 +41,7 @@ body { font-family: 'Inter', sans-serif; background: transparent; }
 .form-group.full { grid-column: span 2; }
 .form-label { display: block; font-size: 11px; font-weight: 700; color: #888; text-transform: uppercase; letter-spacing: .05em; margin-bottom: 7px; }
 .form-control { width: 100%; padding: 11px 14px; border: 2px solid #edf0f7; border-radius: 10px; font-size: 13px; font-family: 'Inter', sans-serif; color: #333; background: #fafbff; outline: none; transition: border .15s; }
-.form-control:focus { border-color: #667eea; background: white; }
+.form-control:focus { border-color: #4f46e5; background: white; }
 select.form-control { cursor: pointer; }
 
 /* Foto upload */
@@ -55,18 +55,18 @@ select.form-control { cursor: pointer; }
     background: #fafbff;
     position: relative;
 }
-.foto-upload-area:hover { border-color: #667eea; background: #f0f0ff; }
+.foto-upload-area:hover { border-color: #4f46e5; background: #f0f0ff; }
 .foto-upload-area input[type="file"] { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
 .foto-preview-wrap { display: flex; align-items: center; gap: 20px; }
 .foto-preview { width: 80px; height: 80px; border-radius: 50%; object-fit: cover; border: 3px solid #edf0f7; background: #edf0f7; flex-shrink: 0; }
-.foto-preview-placeholder { width: 80px; height: 80px; border-radius: 50%; background: linear-gradient(135deg, #667eea, #764ba2); display: flex; align-items: center; justify-content: center; font-size: 28px; font-weight: 800; color: white; flex-shrink: 0; }
+.foto-preview-placeholder { width: 80px; height: 80px; border-radius: 50%; background: linear-gradient(135deg, #4f46e5, #4338ca); display: flex; align-items: center; justify-content: center; font-size: 28px; font-weight: 800; color: white; flex-shrink: 0; }
 .foto-upload-info { text-align: left; }
 .foto-upload-info strong { display: block; font-size: 13px; font-weight: 700; color: #333; margin-bottom: 3px; }
 .foto-upload-info span { font-size: 12px; color: #999; }
 .foto-upload-hint { margin-top: 12px; font-size: 11px; color: #bbb; }
 
 /* Password section */
-.pwd-toggle { font-size: 12px; font-weight: 600; color: #667eea; cursor: pointer; display: inline-flex; align-items: center; gap: 5px; margin-bottom: 16px; background: #eef0ff; padding: 6px 14px; border-radius: 8px; border: none; }
+.pwd-toggle { font-size: 12px; font-weight: 600; color: #4f46e5; cursor: pointer; display: inline-flex; align-items: center; gap: 5px; margin-bottom: 16px; background: #eef0ff; padding: 6px 14px; border-radius: 8px; border: none; }
 .pwd-section { display: none; }
 .pwd-section.open { display: block; }
 
@@ -81,19 +81,19 @@ select.form-control { cursor: pointer; }
     font-weight: 500; color: #555; transition: all .12s;
     background: #fafbff;
 }
-.jabatan-label:hover { border-color: #667eea; background: #f0f0ff; }
+.jabatan-label:hover { border-color: #4f46e5; background: #f0f0ff; }
 .jabatan-option input:checked + .jabatan-label {
-    border-color: #667eea;
+    border-color: #4f46e5;
     background: linear-gradient(135deg, #eef0ff, #f0f0ff);
     color: #5a67d8;
     font-weight: 700;
 }
 .jabatan-dot { width: 10px; height: 10px; border-radius: 50%; background: #ddd; flex-shrink: 0; transition: background .12s; }
-.jabatan-option input:checked + .jabatan-label .jabatan-dot { background: #667eea; }
+.jabatan-option input:checked + .jabatan-label .jabatan-dot { background: #4f46e5; }
 
 /* Buttons */
 .btn-row { display: flex; gap: 12px; justify-content: flex-end; margin-top: 4px; }
-.btn-save { background: linear-gradient(135deg, #667eea, #764ba2); color: white; border: none; padding: 12px 30px; border-radius: 25px; font-size: 13px; font-weight: 800; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 4px 15px rgba(102,126,234,.4); transition: opacity .15s; }
+.btn-save { background: linear-gradient(135deg, #4f46e5, #4338ca); color: white; border: none; padding: 12px 30px; border-radius: 25px; font-size: 13px; font-weight: 800; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 4px 15px rgba(79,70,229,.4); transition: opacity .15s; }
 .btn-save:hover { opacity: .9; }
 </style>
 
@@ -140,7 +140,7 @@ select.form-control { cursor: pointer; }
             <!-- PROFIL DASAR -->
             <div class="section-card">
                 <div class="section-card-header">
-                    <div class="section-card-icon" style="background:linear-gradient(135deg,#667eea,#764ba2);">
+                    <div class="section-card-icon" style="background:linear-gradient(135deg,#4f46e5,#4338ca);">
                         <i class="fas fa-user"></i>
                     </div>
                     <h3>Informasi Profil</h3>
@@ -200,7 +200,7 @@ select.form-control { cursor: pointer; }
                                 <strong>Klik untuk upload foto</strong>
                                 <span>atau drag & drop gambar ke sini</span>
                                 <div style="margin-top:8px;">
-                                    <span style="background:#eef0ff; color:#667eea; font-size:11px; font-weight:700; padding:3px 10px; border-radius:20px; display:inline-block;">
+                                    <span style="background:#eef0ff; color:#4f46e5; font-size:11px; font-weight:700; padding:3px 10px; border-radius:20px; display:inline-block;">
                                         <i class="fas fa-image"></i> JPG, PNG, WEBP maks. 2MB
                                     </span>
                                 </div>

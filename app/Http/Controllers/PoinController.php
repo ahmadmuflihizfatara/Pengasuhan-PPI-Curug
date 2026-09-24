@@ -36,7 +36,8 @@ class PoinController extends Controller
             $riwayatPenghargaan = collect();
             $totalPelanggaran   = 0;
             $totalPenghargaan   = 0;
-            $statusSanksi       = PoinMahasiswa::getStatusSanksi(0);
+            $poinTotal          = PoinMahasiswa::POIN_AWAL;
+            $statusSanksi       = PoinMahasiswa::getStatusSanksi($poinTotal);
 
             if ($selectedStudent) {
                 // Poin Pelanggaran yang Tervalidasi (Approved)
@@ -61,8 +62,9 @@ class PoinController extends Controller
                 // Total akumulasi penghargaan (+) - TIDAK MENGURANGI PELANGGARAN
                 $totalPenghargaan = $riwayatPenghargaan->sum('nilai');
 
-                // Status Sanksi berdasarkan Total Poin Pelanggaran
-                $statusSanksi = PoinMahasiswa::getStatusSanksi($totalPelanggaran);
+                // Status Sanksi berdasarkan poin total (awal 65 + penghargaan − pelanggaran)
+                $poinTotal    = PoinMahasiswa::hitungPoinTotal($totalPelanggaran, $totalPenghargaan);
+                $statusSanksi = PoinMahasiswa::getStatusSanksi($poinTotal);
             }
 
             return view('poin.taruna', compact(
@@ -73,6 +75,7 @@ class PoinController extends Controller
                 'riwayatPenghargaan',
                 'totalPelanggaran',
                 'totalPenghargaan',
+                'poinTotal',
                 'statusSanksi'
             ) + ['selectedNpm' => $selectedStudent->npm ?? null]);
         }
@@ -89,7 +92,8 @@ class PoinController extends Controller
         $riwayatPending     = collect();
         $totalPelanggaran   = 0;
         $totalPenghargaan   = 0;
-        $statusSanksi       = PoinMahasiswa::getStatusSanksi(0);
+        $poinTotal          = PoinMahasiswa::POIN_AWAL;
+        $statusSanksi       = PoinMahasiswa::getStatusSanksi($poinTotal);
 
         if ($selectedNpm) {
             $selectedStudent = $allMahasiswa->firstWhere('npm', $selectedNpm);
@@ -119,8 +123,9 @@ class PoinController extends Controller
                     ->orderByDesc('created_at')
                     ->get();
 
-                // Status Sanksi Murni dari Poin Pelanggaran
-                $statusSanksi = PoinMahasiswa::getStatusSanksi($totalPelanggaran);
+                // Status Sanksi berdasarkan poin total (awal 65 + penghargaan − pelanggaran)
+                $poinTotal    = PoinMahasiswa::hitungPoinTotal($totalPelanggaran, $totalPenghargaan);
+                $statusSanksi = PoinMahasiswa::getStatusSanksi($poinTotal);
             }
         }
 
@@ -144,6 +149,7 @@ class PoinController extends Controller
             'riwayatPending',
             'totalPelanggaran',
             'totalPenghargaan',
+            'poinTotal',
             'statusSanksi',
             'allPendingValidation',
             'masterPelanggaran',
@@ -360,12 +366,14 @@ class PoinController extends Controller
             ->get();
         $totalPenghargaan = $riwayatPenghargaan->sum('nilai');
 
-        $statusSanksi = PoinMahasiswa::getStatusSanksi($totalPelanggaran);
+        $poinTotal    = PoinMahasiswa::hitungPoinTotal($totalPelanggaran, $totalPenghargaan);
+        $statusSanksi = PoinMahasiswa::getStatusSanksi($poinTotal);
 
         return response()->json([
             'success'            => true,
             'totalPelanggaran'   => $totalPelanggaran,
             'totalPenghargaan'   => $totalPenghargaan,
+            'poinTotal'          => $poinTotal,
             'statusSanksi'       => $statusSanksi,
             'riwayatPelanggaran' => $riwayatPelanggaran,
             'riwayatPenghargaan' => $riwayatPenghargaan,

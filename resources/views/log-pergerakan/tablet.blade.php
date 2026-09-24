@@ -7,7 +7,7 @@
 
     /* === HEADER BANNER === */
     .tablet-banner {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background: linear-gradient(135deg, #4f46e5 0%, #4338ca 100%);
         border-radius: 18px;
         padding: 24px 30px;
         color: white;
@@ -17,7 +17,7 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
-        box-shadow: 0 8px 20px -6px rgba(102, 126, 234, 0.35);
+        box-shadow: 0 8px 20px -6px rgba(79,70,229, 0.35);
     }
     .tablet-banner::after {
         content: ''; position: absolute; right: -40px; top: -40px; width: 180px; height: 180px;
@@ -69,7 +69,7 @@
     .mode-tab:hover { color: #333; }
     .mode-tab.active {
         background: white;
-        color: #667eea;
+        color: #4f46e5;
         box-shadow: 0 4px 12px rgba(0,0,0,0.06);
     }
     .tab-badge {
@@ -105,12 +105,12 @@
     .cat-card:hover {
         border-color: #a5b0f0;
         transform: translateY(-2px);
-        box-shadow: 0 8px 20px rgba(102, 126, 234, 0.1);
+        box-shadow: 0 8px 20px rgba(79,70,229, 0.1);
     }
     .cat-card.active {
-        border-color: #667eea;
+        border-color: #4f46e5;
         background: #f8f9ff;
-        box-shadow: 0 8px 24px rgba(102, 126, 234, 0.15);
+        box-shadow: 0 8px 24px rgba(79,70,229, 0.15);
     }
     .cat-card.active::after {
         content: '\f00c';
@@ -121,7 +121,7 @@
         right: 14px;
         width: 24px;
         height: 24px;
-        background: #667eea;
+        background: #4f46e5;
         color: white;
         border-radius: 50%;
         font-size: 11px;
@@ -167,7 +167,7 @@
         transition: border .15s;
     }
     .form-control:focus, .form-select:focus {
-        border-color: #667eea;
+        border-color: #4f46e5;
         background: white;
         box-shadow: none;
         outline: none;
@@ -182,7 +182,7 @@
     }
     .subcat-pill:hover { border-color: #aab; background: #fafbff; }
     .subcat-pill.active {
-        background: #667eea; border-color: #667eea; color: white;
+        background: #4f46e5; border-color: #4f46e5; color: white;
     }
 
     /* Status Awal Box */
@@ -216,7 +216,7 @@
     }
 
     .btn-submit-log {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background: linear-gradient(135deg, #4f46e5 0%, #4338ca 100%);
         color: white;
         border: none;
         border-radius: 25px;
@@ -233,7 +233,7 @@
     }
     .btn-submit-log:hover {
         transform: translateY(-2px);
-        box-shadow: 0 6px 20px rgba(102, 126, 234, .4);
+        box-shadow: 0 6px 20px rgba(79,70,229, .4);
     }
 
     /* === MODE 2: KEPULANGAN / TARUNA KEMBALI === */
@@ -356,7 +356,7 @@
                     <i class="fas fa-tablet-alt"></i> Sistem Pengisian Tablet Log Pergerakan Taruna
                 </h1>
                 <p class="banner-sub">
-                    Pencatatan Keberangkatan & Kepulangan Taruna Terintegrasi Real-Time ke Dashboard TV Monitoring Jaga
+                    Pencatatan Keberangkatan & Kepulangan Taruna Terintegrasi Real-Time
                 </p>
             </div>
             <div class="quick-stats-badge">
@@ -368,9 +368,6 @@
                     <div class="stat-pill-num text-light">{{ $stats['sudah_kembali'] }}</div>
                     <div class="stat-pill-label">Kembali Hari Ini</div>
                 </div>
-                <a href="{{ route('log-pergerakan.tv') }}" target="_blank" class="btn btn-outline-light d-flex align-items-center gap-2 fw-bold rounded-3 px-3">
-                    <i class="fas fa-tv"></i> Buka Layar TV Jaga
-                </a>
             </div>
         </div>
 
@@ -573,7 +570,7 @@
                     <div class="status-awal-box">
                         <div>
                             <div class="fw-bold text-dark"><i class="fas fa-shield-alt text-danger me-1"></i> STATUS AWAL KELUAR:</div>
-                            <div class="small text-muted">Data akan otomatis ditandai <strong>BELUM KEMBALI</strong> dan disinkronkan ke TV Jaga.</div>
+                            <div class="small text-muted">Data akan otomatis ditandai <strong>BELUM KEMBALI</strong>.</div>
                         </div>
                         <div>
                             <span class="status-badge-berangkat">
@@ -584,7 +581,7 @@
 
                     {{-- Tombol Simpan --}}
                     <button type="submit" class="btn-submit-log">
-                        <i class="fas fa-save fs-5"></i> SIMPAN DATA KEBERANGKATAN & SINKRONKAN KE TV JAGA
+                        <i class="fas fa-save fs-5"></i> SIMPAN DATA KEBERANGKATAN
                     </button>
                 </form>
             </div>

@@ -7,7 +7,7 @@ body { font-family: 'Inter', sans-serif; background: transparent; }
 .main-content { flex: 1; padding: 28px 30px; min-width: 0; }
 
 .page-header {
-    background: linear-gradient(135deg, #764ba2 0%, #4a3aa7 100%);
+    background: linear-gradient(135deg, #4338ca 0%, #4a3aa7 100%);
     border-radius: 18px; padding: 28px 32px; color: white; margin-bottom: 22px;
     position: relative; overflow: hidden;
 }

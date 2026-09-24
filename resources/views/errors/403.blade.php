@@ -10,7 +10,7 @@
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
             font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #4f46e5 0%, #4338ca 100%);
             min-height: 100vh;
             display: flex;
             align-items: center;
@@ -45,7 +45,7 @@
             box-shadow: 0 12px 30px rgba(238,90,36,.35);
         }
         .code { font-size: 72px; font-weight: 900; line-height: 1;
-            background: linear-gradient(135deg, #667eea, #764ba2);
+            background: linear-gradient(135deg, #4f46e5, #4338ca);
             -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 8px; }
         .title { font-size: 22px; font-weight: 800; color: #333; margin-bottom: 10px; }
         .desc { font-size: 14px; color: #888; line-height: 1.7; margin-bottom: 28px; }
@@ -62,7 +62,7 @@
         .role-badge { display: inline-block; padding: 4px 14px; border-radius: 20px; font-size: 12px; font-weight: 700; }
 
         .btn-back {
-            background: linear-gradient(135deg, #667eea, #764ba2);
+            background: linear-gradient(135deg, #4f46e5, #4338ca);
             color: white;
             border: none;
             padding: 14px 32px;
@@ -77,7 +77,7 @@
             cursor: pointer;
             font-family: 'Inter', sans-serif;
         }
-        .btn-back:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(102,126,234,.4); color: white; }
+        .btn-back:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(79,70,229,.4); color: white; }
     </style>
 </head>
 <body>
@@ -94,7 +94,7 @@
         <div class="role-info">
             <div class="role-info-label">Role Anda saat ini</div>
             @php
-                $roleColors = ['taruna' => ['#f0fff4','#38a169'], 'pengasuh' => ['#ebf4ff','#3182ce'], 'admin' => ['#f3eeff','#764ba2']];
+                $roleColors = ['taruna' => ['#f0fff4','#38a169'], 'pengasuh' => ['#ebf4ff','#3182ce'], 'admin' => ['#f3eeff','#4338ca']];
                 $role = auth()->user()->role;
                 $rc = $roleColors[$role] ?? ['#f8f8f8','#888'];
             @endphp

@@ -6,7 +6,7 @@ body { font-family: 'Inter', sans-serif; background: transparent; }
 .main-content { padding: 28px 30px; min-width: 0; max-width: 760px; margin: 0 auto; width: 100%; }
 
 .page-header {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #4f46e5 0%, #4338ca 100%);
     border-radius: 18px; padding: 28px 32px; color: white;
     margin-bottom: 24px; position: relative; overflow: hidden;
 }
@@ -14,14 +14,14 @@ body { font-family: 'Inter', sans-serif; background: transparent; }
 .page-header h1 { margin: 0 0 4px 0; font-size: 22px; font-weight: 800; position: relative; z-index: 1; }
 .page-header p { margin: 0; opacity: .85; font-size: 13px; position: relative; z-index: 1; }
 
-.back-link { display: inline-flex; align-items: center; gap: 7px; color: #667eea; text-decoration: none; font-size: 13px; font-weight: 600; margin-bottom: 20px; }
+.back-link { display: inline-flex; align-items: center; gap: 7px; color: #4f46e5; text-decoration: none; font-size: 13px; font-weight: 600; margin-bottom: 20px; }
 .back-link:hover { text-decoration: underline; }
 
 .card { background: white; border-radius: 16px; padding: 32px; box-shadow: 0 2px 16px rgba(0,0,0,.06); }
 
 .form-group { margin-bottom: 20px; }
 .form-label { display: block; font-size: 13px; font-weight: 700; color: #444; margin-bottom: 8px; }
-.form-label i { color: #667eea; margin-right: 6px; }
+.form-label i { color: #4f46e5; margin-right: 6px; }
 .form-control {
     width: 100%; padding: 11px 14px;
     border: 2px solid #e8ebf5; border-radius: 10px;
@@ -29,7 +29,7 @@ body { font-family: 'Inter', sans-serif; background: transparent; }
     color: #333; background: #fafbff; outline: none;
     transition: border .15s;
 }
-.form-control:focus { border-color: #667eea; background: white; }
+.form-control:focus { border-color: #4f46e5; background: white; }
 .form-control.error { border-color: #fc8181; }
 textarea.form-control { resize: vertical; min-height: 100px; }
 .form-hint { font-size: 12px; color: #e53e3e; margin-top: 5px; }
@@ -37,11 +37,11 @@ textarea.form-control { resize: vertical; min-height: 100px; }
 
 .btn-row { display: flex; gap: 12px; margin-top: 28px; padding-top: 20px; border-top: 1px solid #f0f2f7; }
 .btn-submit {
-    flex: 1; background: linear-gradient(135deg, #667eea, #764ba2);
+    flex: 1; background: linear-gradient(135deg, #4f46e5, #4338ca);
     color: white; border: none; padding: 13px; border-radius: 12px;
     font-size: 14px; font-weight: 700; cursor: pointer;
     display: flex; align-items: center; justify-content: center; gap: 8px;
-    box-shadow: 0 4px 15px rgba(102,126,234,.4); transition: opacity .15s;
+    box-shadow: 0 4px 15px rgba(79,70,229,.4); transition: opacity .15s;
 }
 .btn-submit:hover { opacity: .9; }
 .btn-cancel {
@@ -50,7 +50,7 @@ textarea.form-control { resize: vertical; min-height: 100px; }
     display: flex; align-items: center; gap: 8px; border: 2px solid #e8ebf5;
     transition: border .15s;
 }
-.btn-cancel:hover { border-color: #667eea; color: #667eea; }
+.btn-cancel:hover { border-color: #4f46e5; color: #4f46e5; }
 </style>
 
 <div class="app-layout">

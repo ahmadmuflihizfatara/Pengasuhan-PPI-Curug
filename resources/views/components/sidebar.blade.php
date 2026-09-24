@@ -401,15 +401,6 @@
                 </a>
             </li>
             <li>
-                <a href="{{ route('log-pergerakan.tv') }}" target="_blank" class="sb-nav-link" style="color: #0284c7;">
-                    <div class="flex items-center gap-2.5">
-                        <i class="fa-solid fa-tv nav-icon" style="color: #0284c7;"></i>
-                        <span>TV Pos Jaga</span>
-                    </div>
-                    <span class="sb-badge-live">LIVE</span>
-                </a>
-            </li>
-            <li>
                 <a href="{{ route('surat.index') }}" class="sb-nav-link {{ $active==='surat'?'active':'' }}">
                     <div class="flex items-center gap-2.5">
                         <i class="fa-solid fa-envelope-open-text nav-icon"></i>
