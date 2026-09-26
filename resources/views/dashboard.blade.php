@@ -52,6 +52,63 @@
                     <div class="absolute right-32 -bottom-20 w-48 h-48 bg-sky-500/20 rounded-full blur-3xl pointer-events-none"></div>
                 </div>
 
+                {{-- ── 1b. PEMBERITAHUAN TUGAS TARUNA (duty / kasi internal / polisi taruna) ── --}}
+                @php
+                    $u = Auth::user();
+                    $tugasSaya = [];
+                    if ($u->isDutyTaruna()) {
+                        $tugasSaya[] = [
+                            'label' => 'Duty Taruna', 'ikon' => 'fa-user-clock', 'warna' => '#059669',
+                            'ket'   => 'Bertugas duty minggu ini (' . \App\Models\DutyTaruna::labelPeriode(\App\Models\DutyTaruna::awalMinggu()) . '). Laporkan taruna sakit melalui laporan duty.',
+                            'url'   => route('laporan-duty.index'), 'aksi' => 'Buka Laporan Duty',
+                        ];
+                    }
+                    if ($u->isKasiInternal()) {
+                        $tugasSaya[] = \App\Models\User::DAFTAR_AKSES[\App\Models\User::AKSES_KASI_INTERNAL] + ['url' => route('duty.index'), 'aksi' => 'Atur Jadwal Duty'];
+                    }
+                    if ($u->isPolisiTaruna()) {
+                        $tugasSaya[] = \App\Models\User::DAFTAR_AKSES[\App\Models\User::AKSES_POLISI_TARUNA] + ['url' => route('poin.index'), 'aksi' => 'Beri Pelanggaran'];
+                    }
+                @endphp
+                @if($tugasSaya)
+                <div class="ds-card mb-6">
+                    <div class="ds-card__head">
+                        <h3 class="ds-card__title"><i class="fa-solid fa-bell ds-icon"></i> Pemberitahuan Tugas</h3>
+                        <p class="ds-card__desc">Anda sedang mengemban {{ count($tugasSaya) }} tugas khusus</p>
+                    </div>
+                    <div class="tugas-grid">
+                        @foreach($tugasSaya as $t)
+                        <a href="{{ $t['url'] }}" class="tugas-item">
+                            <span class="tugas-item__ikon" style="background:linear-gradient(135deg,{{ $t['warna'] }},var(--accent));"><i class="fa-solid {{ $t['ikon'] }}"></i></span>
+                            <span class="tugas-item__isi">
+                                <span class="tugas-item__label">Anda bertugas sebagai {{ $t['label'] }}</span>
+                                <span class="tugas-item__ket">{{ $t['ket'] }}</span>
+                                <span class="tugas-item__aksi">{{ $t['aksi'] }} <i class="fa-solid fa-arrow-right"></i></span>
+                            </span>
+                        </a>
+                        @endforeach
+                    </div>
+                </div>
+                <style>
+                    .tugas-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: var(--space-3); }
+                    .tugas-item {
+                        display: flex; align-items: flex-start; gap: var(--space-3); text-decoration: none;
+                        background: var(--glass-card); border: 1px solid var(--border-glass-glow);
+                        border-radius: var(--radius-md); padding: var(--space-3-5) var(--space-4);
+                        transition: background-color .15s, transform .15s;
+                    }
+                    .tugas-item:hover { background: var(--glass-solid); transform: translateY(-2px); }
+                    .tugas-item__ikon {
+                        width: 40px; height: 40px; border-radius: var(--radius-md); flex-shrink: 0;
+                        display: grid; place-items: center; font-size: 16px; color: var(--ink-on-dark); box-shadow: var(--shadow-glass-sm);
+                    }
+                    .tugas-item__isi { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+                    .tugas-item__label { font-size: 13px; font-weight: 800; color: var(--ink-900); }
+                    .tugas-item__ket { font-size: 11px; line-height: 15px; font-weight: 500; color: var(--ink-600); }
+                    .tugas-item__aksi { margin-top: var(--space-1); font-size: 11px; font-weight: 700; color: var(--accent-ink); display: inline-flex; align-items: center; gap: var(--space-1-5); }
+                </style>
+                @endif
+
                 {{-- ── 2. STAT KPI CARDS ── --}}
                 @if(Auth::user()->hasTarunaAccess())
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">

@@ -3,19 +3,6 @@
 * { box-sizing: border-box; }
 body { font-family: 'Inter', sans-serif; background: transparent; }
 
-.app-layout { display: flex; min-height: 100vh; }
-.main-content { flex: 1; padding: 28px 30px; min-width: 0; }
-
-.page-header {
-    background: linear-gradient(135deg, #4a3aa7 0%, #2a78d6 100%);
-    border-radius: 18px; padding: 28px 32px; color: white; margin-bottom: 22px;
-    position: relative; overflow: hidden;
-}
-.page-header::before { content:''; position:absolute; right:-60px; top:-60px; width:220px; height:220px; background:rgba(255,255,255,.1); border-radius:50%; }
-.page-header::after  { content:''; position:absolute; right:70px; bottom:-80px; width:180px; height:180px; background:rgba(255,255,255,.07); border-radius:50%; }
-.page-header h1 { margin:0 0 4px; font-size:22px; font-weight:800; position:relative; z-index:1; }
-.page-header p  { margin:0; opacity:.88; font-size:13px; position:relative; z-index:1; }
-
 .flash-success { background:#f0fff4; border:1px solid #c6f6d5; color:#276749; padding:12px 18px; border-radius:12px; margin-bottom:18px; font-size:13px; font-weight:600; display:flex; align-items:center; gap:8px; }
 .flash-error { background:#fff5f5; border:1px solid #feb2b2; color:#c53030; padding:12px 18px; border-radius:12px; margin-bottom:18px; font-size:13px; font-weight:600; display:flex; gap:8px; align-items:flex-start; }
 .flash-error ul { margin:0; padding-left:16px; }
@@ -103,10 +90,7 @@ tbody tr:hover { background:#fafbff; }
 <main class="max-w-7xl mx-auto px-4 sm:px-6 pb-12 pt-2">
     <div class="spatial-workspace-window rounded-3xl bg-white/30 backdrop-blur-2xl border border-white/50 shadow-2xl p-4 sm:p-7 relative overflow-hidden">
 
-        <div class="page-header">
-            <h1><i class="fas fa-user-group" style="margin-right:10px;"></i>Duty Taruna</h1>
-            <p>Daftar {{ $jumlahWajib }} taruna yang bertugas piket setiap minggunya</p>
-        </div>
+        <x-page-banner title="Duty Taruna" :subtitle="'Daftar ' . $jumlahWajib . ' taruna yang bertugas piket setiap minggunya'" />
 
         @include('jadwal._tabs', ['aktif' => 'duty'])
 

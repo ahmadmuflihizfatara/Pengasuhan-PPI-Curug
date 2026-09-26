@@ -144,6 +144,12 @@ Route::middleware('auth')->group(function () {
         Route::post('/jadwal/set', [JadwalController::class, 'set'])->name('jadwal.set');
     });
 
+    // Alokasi pengasuh per hari — hanya admin
+    Route::middleware('role:admin')->group(function () {
+        Route::get('/jadwal/alokasi', [JadwalController::class, 'alokasi'])->name('jadwal.alokasi');
+        Route::put('/jadwal/alokasi', [JadwalController::class, 'simpanAlokasi'])->name('jadwal.alokasi.simpan');
+    });
+
     Route::get('/jadwal/duty', [DutyTarunaController::class, 'index'])
         ->middleware('role:pengasuh,kasi_internal')
         ->name('duty.index');

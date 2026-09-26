@@ -10,6 +10,7 @@ use App\Traits\LogsActivity;
 use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 
@@ -18,8 +19,8 @@ class JadwalController extends Controller
     use LogsActivity;
 
     /**
-     * Timeline jadwal pengasuh untuk satu bulan.
-     * Hari yang belum di-generate tetap ditampilkan (pakai jadwal mingguan default),
+     * Timeline jadwal pengasuh untuk satu bulan — tiga pengasuh per hari.
+     * Hari yang belum di-generate tetap ditampilkan (pakai alokasi mingguan default),
      * ditandai belum tersimpan — supaya timeline selalu utuh sebulan penuh.
      */
     public function index(Request $request): View
@@ -35,43 +36,44 @@ class JadwalController extends Controller
             ->whereYear('tanggal', $tahun)
             ->whereMonth('tanggal', $bulan)
             ->get()
-            ->keyBy(fn ($j) => $j->tanggal->format('Y-m-d'));
+            ->groupBy(fn ($j) => $j->tanggal->format('Y-m-d'));
 
-        $semuaPengasuh = Pengasuh::orderByRaw("FIELD(hari, 'senin','selasa','rabu','kamis','jumat','sabtu','minggu')")->get();
-        $pengasuhByHari = $semuaPengasuh->keyBy('hari');
+        $semuaPengasuh  = Pengasuh::urutHari()->get();
+        $pengasuhByHari = $semuaPengasuh->whereNotNull('hari')->groupBy('hari');
 
         $timeline = collect(range(1, $jumlahHari))->map(function ($d) use ($awalBulan, $tersimpan, $pengasuhByHari, $hariIniStr) {
             $tanggal = $awalBulan->copy()->day($d);
             $key     = $tanggal->format('Y-m-d');
             $jadwal  = $tersimpan->get($key);
-            $pengasuh = $jadwal?->pengasuh ?? $pengasuhByHari->get(Pengasuh::hariDari($tanggal));
+
+            $petugas = $jadwal
+                ? $jadwal->map(fn ($j) => ['pengasuh' => $j->pengasuh, 'catatan' => $j->catatan])
+                : $pengasuhByHari->get(Pengasuh::hariDari($tanggal), collect())
+                    ->map(fn ($p) => ['pengasuh' => $p, 'catatan' => null]);
 
             return [
-                'tanggal'    => $tanggal,
-                'pengasuh'   => $pengasuh,
-                'catatan'    => $jadwal?->catatan,
-                'tersimpan'  => (bool) $jadwal,
-                'is_today'   => $key === $hariIniStr,
+                'tanggal'   => $tanggal,
+                'petugas'   => $petugas->sortBy(fn ($x) => $x['pengasuh']->nama)->values(),
+                'tersimpan' => (bool) $jadwal,
+                'is_today'  => $key === $hariIniStr,
             ];
         });
 
-        $petugasHariIni = $timeline->firstWhere('is_today', true);
-        $sudahDigenerate = $tersimpan->count() >= $jumlahHari;
-
         return view('jadwal.index', [
             'timeline'         => $timeline,
-            'petugasHariIni'   => $petugasHariIni,
+            'petugasHariIni'   => $timeline->firstWhere('is_today', true),
             'semuaPengasuh'    => $semuaPengasuh,
+            'pengasuhByHari'   => $pengasuhByHari,
             'bulan'            => $bulan,
             'tahun'            => $tahun,
-            'sudahDigenerate'  => $sudahDigenerate,
+            'sudahDigenerate'  => $tersimpan->count() >= $jumlahHari,
             'bolehIsi'         => AksesFitur::diizinkan(AksesFitur::JADWAL_PENGASUH),
             'bulanDepan'       => $this->melewatiBulanIni($tahun, $bulan),
         ]);
     }
 
     /**
-     * Generate jadwal satu bulan dari roster mingguan (satu pengasuh per hari).
+     * Generate jadwal satu bulan dari alokasi mingguan (tiga pengasuh per hari).
      * Tidak menimpa tanggal yang sudah punya jadwal manual/override.
      * Hanya sampai bulan berjalan — bulan berikutnya belum boleh digenerate.
      */
@@ -88,23 +90,11 @@ class JadwalController extends Controller
             return back()->with('error', 'Jadwal hanya dapat digenerate sampai bulan berjalan.');
         }
 
-        $awalBulan  = Carbon::create($tahun, $bulan, 1);
-        $pengasuhByHari = Pengasuh::all()->keyBy('hari');
+        $awalBulan = Carbon::create($tahun, $bulan, 1);
 
         $dibuat = 0;
         for ($d = 1; $d <= $awalBulan->daysInMonth; $d++) {
-            $tanggal  = $awalBulan->copy()->day($d);
-            $pengasuh = $pengasuhByHari->get(Pengasuh::hariDari($tanggal));
-
-            if (!$pengasuh) {
-                continue;
-            }
-
-            $jadwal = JadwalPengasuh::firstOrCreate(
-                ['tanggal' => $tanggal->format('Y-m-d')],
-                ['pengasuh_id' => $pengasuh->id]
-            );
-            if ($jadwal->wasRecentlyCreated) {
+            if ($this->isiDefault($awalBulan->copy()->day($d))) {
                 $dibuat++;
             }
         }
@@ -121,7 +111,8 @@ class JadwalController extends Controller
     }
 
     /**
-     * Set/override pengasuh bertugas pada satu tanggal (mis. tukar jaga).
+     * Tukar jaga: ganti satu dari tiga pengasuh bertugas pada satu tanggal.
+     * Tanggal yang belum tersimpan diisi dulu dari alokasi default, lalu ditukar.
      */
     public function set(Request $request): RedirectResponse
     {
@@ -131,6 +122,7 @@ class JadwalController extends Controller
 
         $data = $request->validate([
             'tanggal'     => ['required', 'date'],
+            'ganti_id'    => ['nullable', Rule::exists('pengasuh', 'id')],
             'pengasuh_id' => ['required', Rule::exists('pengasuh', 'id')],
             'catatan'     => ['nullable', 'string', 'max:500'],
         ]);
@@ -140,10 +132,22 @@ class JadwalController extends Controller
             return back()->with('error', 'Jadwal hanya dapat diatur sampai bulan berjalan.');
         }
 
-        $jadwal = JadwalPengasuh::updateOrCreate(
-            ['tanggal' => $data['tanggal']],
-            ['pengasuh_id' => $data['pengasuh_id'], 'catatan' => $data['catatan'] ?? null]
-        );
+        $this->isiDefault($tgl);
+        $hariItu = fn () => JadwalPengasuh::whereDate('tanggal', $tgl);
+        $gantiId = $data['ganti_id'] ?? null;
+
+        if ((int) $data['pengasuh_id'] !== (int) $gantiId
+            && $hariItu()->where('pengasuh_id', $data['pengasuh_id'])->exists()) {
+            return back()->with('error', 'Pengasuh tersebut sudah bertugas pada tanggal ini.');
+        }
+
+        $jadwal = $gantiId ? $hariItu()->where('pengasuh_id', $gantiId)->first() : null;
+        if (!$jadwal && $hariItu()->count() >= Pengasuh::PER_HARI) {
+            return back()->with('error', 'Tanggal ini sudah terisi ' . Pengasuh::PER_HARI . ' pengasuh — pilih pengasuh yang ditukar.');
+        }
+
+        $jadwal ??= new JadwalPengasuh(['tanggal' => $tgl->format('Y-m-d')]);
+        $jadwal->fill(['pengasuh_id' => $data['pengasuh_id'], 'catatan' => $data['catatan'] ?? null])->save();
 
         $pengasuh = Pengasuh::find($data['pengasuh_id']);
         $this->logActivity(
@@ -159,13 +163,63 @@ class JadwalController extends Controller
     }
 
     /**
+     * Alokasi pengasuh per hari (admin) — tetapkan tiga pengasuh default untuk tiap hari.
+     * Berlaku untuk tanggal yang belum digenerate dan generate berikutnya.
+     */
+    public function alokasi(): View
+    {
+        $semuaPengasuh = Pengasuh::orderBy('nama')->get();
+
+        return view('jadwal.alokasi', [
+            'semuaPengasuh'  => $semuaPengasuh,
+            'pengasuhByHari' => $semuaPengasuh->whereNotNull('hari')->groupBy('hari'),
+        ]);
+    }
+
+    public function simpanAlokasi(Request $request): RedirectResponse
+    {
+        $data = $request->validate([
+            'alokasi'     => ['required', 'array'],
+            'alokasi.*'   => ['array', 'max:' . Pengasuh::PER_HARI],
+            'alokasi.*.*' => ['nullable', Rule::exists('pengasuh', 'id')],
+        ]);
+
+        $alokasi = collect($data['alokasi'])
+            ->only(array_keys(Pengasuh::HARI))
+            ->map(fn ($ids) => array_values(array_filter($ids)));
+
+        $semuaId = $alokasi->flatten();
+        if ($semuaId->count() !== $semuaId->unique()->count()) {
+            return back()->withInput()->with('error', 'Satu pengasuh hanya bisa dialokasikan ke satu hari.');
+        }
+
+        DB::transaction(function () use ($alokasi) {
+            Pengasuh::query()->update(['hari' => null]);
+            foreach ($alokasi as $hari => $ids) {
+                Pengasuh::whereIn('id', $ids)->update(['hari' => $hari]);
+            }
+        });
+
+        $this->logActivity(
+            modul: 'jadwal',
+            aksi: 'ubah',
+            deskripsi: 'Mengubah alokasi pengasuh per hari',
+            detail: $alokasi->all()
+        );
+
+        return redirect()->route('jadwal.alokasi')->with('success', 'Alokasi pengasuh per hari berhasil disimpan.');
+    }
+
+    /**
      * Jadwal untuk taruna — hanya lihat: pengasuh bertugas hari ini + duty taruna minggu ini.
      */
     public function taruna(): View
     {
-        $hariIni  = now()->startOfDay();
-        $jadwal   = JadwalPengasuh::with('pengasuh')->whereDate('tanggal', $hariIni)->first();
-        $pengasuh = $jadwal?->pengasuh ?? Pengasuh::bertugasPada($hariIni);
+        $hariIni = now()->startOfDay();
+        $jadwal  = JadwalPengasuh::with('pengasuh')->whereDate('tanggal', $hariIni)->get();
+        $petugas = $jadwal->isNotEmpty()
+            ? $jadwal->map(fn ($j) => ['pengasuh' => $j->pengasuh, 'catatan' => $j->catatan])
+            : Pengasuh::bertugasPada($hariIni)->map(fn ($p) => ['pengasuh' => $p, 'catatan' => null]);
 
         $mingguIni = DutyTaruna::awalMinggu();
         $duty = DutyTaruna::with('mahasiswa')
@@ -176,11 +230,28 @@ class JadwalController extends Controller
 
         return view('jadwal.taruna', [
             'hariIni'   => $hariIni,
-            'pengasuh'  => $pengasuh,
-            'catatan'   => $jadwal?->catatan,
+            'petugas'   => $petugas->sortBy(fn ($x) => $x['pengasuh']->nama)->values(),
             'mingguIni' => $mingguIni,
             'duty'      => $duty,
         ]);
+    }
+
+    /**
+     * Isi tanggal dari alokasi mingguan default bila belum punya jadwal tersimpan.
+     * Mengembalikan true bila ada baris baru dibuat.
+     */
+    private function isiDefault(Carbon $tanggal): bool
+    {
+        if (JadwalPengasuh::whereDate('tanggal', $tanggal)->exists()) {
+            return false;
+        }
+
+        $petugas = Pengasuh::bertugasPada($tanggal);
+        foreach ($petugas as $p) {
+            JadwalPengasuh::create(['tanggal' => $tanggal->format('Y-m-d'), 'pengasuh_id' => $p->id]);
+        }
+
+        return $petugas->isNotEmpty();
     }
 
     /** Bulan yang diminta melewati bulan berjalan? */

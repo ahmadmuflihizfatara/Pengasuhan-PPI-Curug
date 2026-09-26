@@ -3,31 +3,6 @@
 * { box-sizing: border-box; }
 body { font-family: 'Inter', sans-serif; background: transparent; }
 
-.app-layout { display: flex; min-height: 100vh; }
-.main-content { flex: 1; padding: 28px 30px; min-width: 0; }
-
-/* Header */
-.page-header {
-    background: linear-gradient(135deg, #4a3aa7 0%, #2a78d6 100%);
-    border-radius: 18px; padding: 28px 32px;
-    color: white; margin-bottom: 22px;
-    position: relative; overflow: hidden;
-    display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;
-}
-.page-header::before { content:''; position:absolute; right:-60px; top:-60px; width:220px; height:220px; background:rgba(255,255,255,.1); border-radius:50%; }
-.page-header::after  { content:''; position:absolute; right:70px; bottom:-80px; width:180px; height:180px; background:rgba(255,255,255,.07); border-radius:50%; }
-.page-header h1 { margin:0 0 4px; font-size:22px; font-weight:800; position:relative; z-index:1; }
-.page-header p  { margin:0; opacity:.88; font-size:13px; position:relative; z-index:1; }
-
-.btn-primary {
-    background:white; color:#4a3aa7; border:none;
-    padding:10px 18px; border-radius:11px; font-size:13px; font-weight:700;
-    cursor:pointer; text-decoration:none; display:inline-flex; align-items:center; gap:7px;
-    position:relative; z-index:1; transition:transform .15s, box-shadow .15s;
-    box-shadow:0 4px 14px rgba(0,0,0,.12); font-family:'Inter',sans-serif;
-}
-.btn-primary:hover { transform:translateY(-2px); box-shadow:0 8px 22px rgba(0,0,0,.18); color:#4a3aa7; }
-
 .flash-success { background:#f0fff4; border:1px solid #c6f6d5; color:#276749; padding:12px 18px; border-radius:12px; margin-bottom:18px; font-size:13px; font-weight:600; display:flex; align-items:center; gap:8px; }
 .flash-error { background:#fff5f5; border:1px solid #feb2b2; color:#c53030; padding:12px 18px; border-radius:12px; margin-bottom:18px; font-size:13px; font-weight:600; display:flex; align-items:center; gap:8px; }
 .flash-locked { background:#fff8ec; border:1px solid #fbd38d; color:#a06a0a; padding:12px 18px; border-radius:12px; margin-bottom:18px; font-size:13px; font-weight:600; display:flex; align-items:center; gap:8px; }
@@ -42,28 +17,28 @@ body { font-family: 'Inter', sans-serif; background: transparent; }
 .subtab:hover { border-color:#4a3aa7; color:#4a3aa7; }
 .subtab.active { background:linear-gradient(135deg,#4a3aa7,#2a78d6); color:white; border-color:transparent; }
 
-/* Hero: petugas hari ini */
+/* Hero: petugas hari ini (tiga pengasuh) */
 .hero-card {
     background:linear-gradient(135deg,#4a3aa7,#2a78d6); border-radius:18px; padding:24px 28px;
     color:white; margin-bottom:22px; display:flex; align-items:center; gap:20px; flex-wrap:wrap;
     box-shadow:0 6px 20px rgba(74,58,167,.25);
 }
-.hero-avatar {
-    width:64px; height:64px; border-radius:50%; background:rgba(255,255,255,.22);
-    display:flex; align-items:center; justify-content:center; font-size:24px; font-weight:800; flex-shrink:0;
-}
 .hero-label { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.08em; opacity:.8; margin-bottom:3px; }
-.hero-name { font-size:20px; font-weight:800; margin-bottom:2px; }
 .hero-sub { font-size:12.5px; opacity:.85; }
+.hero-petugas { display:flex; gap:10px; flex-wrap:wrap; margin-top:10px; }
+.hero-orang { display:flex; align-items:center; gap:8px; background:rgba(255,255,255,.12); border:1px solid rgba(255,255,255,.2); border-radius:12px; padding:6px 12px 6px 6px; }
+.hero-avatar { width:32px; height:32px; border-radius:50%; background:rgba(255,255,255,.22); display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:800; flex-shrink:0; }
+.hero-name { font-size:13px; font-weight:700; }
 .hero-badge { margin-left:auto; background:rgba(255,255,255,.2); border-radius:20px; padding:7px 16px; font-size:12px; font-weight:700; display:flex; align-items:center; gap:6px; }
 
 /* Roster mingguan */
 .roster-card { background:white; border-radius:16px; padding:18px 22px; box-shadow:0 2px 12px rgba(0,0,0,.05); margin-bottom:22px; }
 .roster-title { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.06em; color:#8a93b0; margin-bottom:12px; }
-.roster-row { display:flex; gap:10px; flex-wrap:wrap; }
-.roster-chip { display:flex; align-items:center; gap:8px; background:#fafbff; border:1px solid #eef0f7; border-radius:11px; padding:8px 12px; }
-.roster-chip .day { font-size:10px; font-weight:800; color:#4a3aa7; text-transform:uppercase; }
-.roster-chip .nm  { font-size:12px; font-weight:600; color:#333; }
+.roster-row { display:grid; grid-template-columns:repeat(auto-fill,minmax(180px,1fr)); gap:10px; }
+.roster-chip { background:#fafbff; border:1px solid #eef0f7; border-radius:11px; padding:8px 12px; }
+.roster-chip .day { font-size:10px; font-weight:800; color:#4a3aa7; text-transform:uppercase; display:block; margin-bottom:2px; }
+.roster-chip .nm  { font-size:12px; font-weight:600; color:#333; display:block; }
+.roster-chip .kosong { font-size:12px; color:#b0b6c5; font-style:italic; }
 
 /* Month nav + generate */
 .month-bar { display:flex; align-items:center; justify-content:space-between; margin-bottom:18px; flex-wrap:wrap; gap:12px; }
@@ -94,25 +69,27 @@ body { font-family: 'Inter', sans-serif; background: transparent; }
 
 .tl-card {
     background:white; border-radius:14px; padding:14px 18px; box-shadow:0 2px 10px rgba(0,0,0,.05);
-    display:flex; align-items:center; gap:14px; flex-wrap:wrap; border:2px solid transparent; transition:border-color .15s;
+    display:flex; align-items:flex-start; gap:14px; flex-wrap:wrap; border:2px solid transparent; transition:border-color .15s;
 }
 .tl-item.is-today .tl-card { border-color:#4a3aa7; background:#f8f7ff; }
-.tl-date { min-width:120px; }
+.tl-date { min-width:120px; padding-top:6px; }
 .tl-date .day-name { font-size:11px; font-weight:700; color:#8a93b0; text-transform:uppercase; letter-spacing:.04em; }
 .tl-date .day-full  { font-size:13px; font-weight:700; color:#333; }
 
-.tl-pengasuh { display:flex; align-items:center; gap:10px; flex:1; min-width:180px; }
-.tl-avatar { width:36px; height:36px; border-radius:50%; background:linear-gradient(135deg,#4a3aa7,#2a78d6); color:white; display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:800; flex-shrink:0; }
-.tl-pengasuh-name { font-size:13.5px; font-weight:700; color:#2b2b33; }
-.tl-catatan { font-size:11.5px; color:#98a0b3; margin-top:1px; }
+.tl-petugas { flex:1; min-width:220px; display:flex; flex-direction:column; gap:8px; }
+.tl-pengasuh { display:flex; align-items:center; gap:10px; }
+.tl-avatar { width:32px; height:32px; border-radius:50%; background:linear-gradient(135deg,#4a3aa7,#2a78d6); color:white; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:800; flex-shrink:0; }
+.tl-pengasuh-name { font-size:13px; font-weight:700; color:#2b2b33; flex:1; }
+.tl-catatan { font-size:11.5px; color:#98a0b3; margin-top:1px; font-weight:500; }
+.dinas-saya { background:#e0e7ff; color:#3730a3; font-size:10.5px; font-weight:800; padding:2px 8px; border-radius:12px; margin-left:6px; }
 
-.tl-status { font-size:10.5px; font-weight:700; padding:3px 10px; border-radius:20px; white-space:nowrap; }
+.tl-status { font-size:10.5px; font-weight:700; padding:3px 10px; border-radius:20px; white-space:nowrap; margin-top:6px; }
 .tl-status.saved   { background:#f0fff4; color:#276749; }
 .tl-status.default { background:#fff8ec; color:#a06a0a; }
 
 .btn-swap {
-    background:#f4f3ff; color:#4a3aa7; border:none; padding:7px 13px; border-radius:9px;
-    font-size:11.5px; font-weight:700; cursor:pointer; display:inline-flex; align-items:center; gap:5px; transition:background .15s;
+    background:#f4f3ff; color:#4a3aa7; border:none; padding:5px 11px; border-radius:9px;
+    font-size:11px; font-weight:700; cursor:pointer; display:inline-flex; align-items:center; gap:5px; transition:background .15s; flex-shrink:0;
 }
 .btn-swap:hover { background:#e7e4ff; }
 
@@ -145,15 +122,13 @@ body { font-family: 'Inter', sans-serif; background: transparent; }
 {{-- Top Floating Island Capsule Navbar --}}
 <x-island-navbar />
 
+@php $userId = Auth::id(); @endphp
+
 <main class="max-w-7xl mx-auto px-4 sm:px-6 pb-12 pt-2">
     <div class="spatial-workspace-window rounded-3xl bg-white/30 backdrop-blur-2xl border border-white/50 shadow-2xl p-4 sm:p-7 relative overflow-hidden">
 
-        <div class="page-header">
-            <div>
-                <h1><i class="fas fa-user-clock" style="margin-right:10px;"></i>Jadwal Pengasuh</h1>
-                <p>Jadwal jaga pengasuh bulanan — satu pengasuh bertugas tetap per hari</p>
-            </div>
-        </div>
+        <x-page-banner title="Jadwal Pengasuh"
+                       :subtitle="'Jadwal jaga pengasuh bulanan — ' . \App\Models\Pengasuh::PER_HARI . ' pengasuh bertugas setiap hari'" />
 
         @include('jadwal._tabs', ['aktif' => 'pengasuh'])
 
@@ -172,13 +147,19 @@ body { font-family: 'Inter', sans-serif; background: transparent; }
         @endunless
 
         {{-- Petugas hari ini --}}
-        @if($petugasHariIni && $petugasHariIni['pengasuh'])
+        @if($petugasHariIni && $petugasHariIni['petugas']->isNotEmpty())
         <div class="hero-card">
-            <div class="hero-avatar">{{ strtoupper(substr($petugasHariIni['pengasuh']->nama, 0, 2)) }}</div>
             <div>
                 <div class="hero-label">Bertugas Hari Ini</div>
-                <div class="hero-name">{{ $petugasHariIni['pengasuh']->nama }}</div>
                 <div class="hero-sub">{{ $petugasHariIni['tanggal']->locale('id')->isoFormat('dddd, D MMMM Y') }}</div>
+                <div class="hero-petugas">
+                    @foreach($petugasHariIni['petugas'] as $x)
+                    <div class="hero-orang">
+                        <div class="hero-avatar">{{ strtoupper(substr($x['pengasuh']->nama, 0, 2)) }}</div>
+                        <span class="hero-name">{{ $x['pengasuh']->nama }}</span>
+                    </div>
+                    @endforeach
+                </div>
             </div>
             <div class="hero-badge">
                 <i class="fas {{ $petugasHariIni['tersimpan'] ? 'fa-check-circle' : 'fa-circle-info' }}"></i>
@@ -187,15 +168,19 @@ body { font-family: 'Inter', sans-serif; background: transparent; }
         </div>
         @endif
 
-        {{-- Roster mingguan tetap --}}
+        {{-- Alokasi mingguan default --}}
         @if($semuaPengasuh->isNotEmpty())
         <div class="roster-card">
-            <div class="roster-title"><i class="fas fa-repeat" style="margin-right:5px;"></i>Roster Mingguan Tetap</div>
+            <div class="roster-title"><i class="fas fa-repeat" style="margin-right:5px;"></i>Alokasi Mingguan Default</div>
             <div class="roster-row">
-                @foreach($semuaPengasuh as $p)
+                @foreach(\App\Models\Pengasuh::HARI as $hari => $label)
                 <div class="roster-chip">
-                    <span class="day">{{ $p->hari_label }}</span>
+                    <span class="day">{{ $label }}</span>
+                    @forelse($pengasuhByHari->get($hari, collect()) as $p)
                     <span class="nm">{{ $p->nama }}</span>
+                    @empty
+                    <span class="kosong">Belum ada pengasuh</span>
+                    @endforelse
                 </div>
                 @endforeach
             </div>
@@ -250,12 +235,17 @@ body { font-family: 'Inter', sans-serif; background: transparent; }
         <div class="empty-roster">
             <i class="fas fa-user-clock"></i>
             <p>Belum ada data pengasuh.</p>
-            <small>Jalankan seeder PengasuhSeeder untuk membuat 7 akun roster mingguan.</small>
+            <small>Jalankan seeder PengasuhSeeder untuk membuat 21 akun pengasuh (tiga per hari).</small>
         </div>
         @else
         <div class="timeline">
             @foreach($timeline as $item)
-            <div class="tl-item {{ $item['is_today'] ? 'is-today' : '' }}">
+            @php
+                $tglKey   = $item['tanggal']->format('Y-m-d');
+                $tglLabel = $item['tanggal']->locale('id')->isoFormat('dddd, D MMMM Y');
+                $dinasSaya = $item['petugas']->contains(fn ($x) => $x['pengasuh']->user_id === $userId);
+            @endphp
+            <div class="tl-item {{ $item['is_today'] ? 'is-today' : '' }}" data-saya="{{ $dinasSaya ? 1 : 0 }}">
                 <div class="tl-dot">{{ $item['tanggal']->format('d') }}</div>
                 <div class="tl-card">
                     <div class="tl-date">
@@ -263,35 +253,42 @@ body { font-family: 'Inter', sans-serif; background: transparent; }
                         <div class="day-full">{{ $item['tanggal']->locale('id')->isoFormat('D MMM Y') }}</div>
                     </div>
 
-                    <div class="tl-pengasuh">
-                        @if($item['pengasuh'])
-                        <div class="tl-avatar">{{ strtoupper(substr($item['pengasuh']->nama, 0, 2)) }}</div>
-                        <div>
+                    <div class="tl-petugas">
+                        @forelse($item['petugas'] as $x)
+                        <div class="tl-pengasuh">
+                            <div class="tl-avatar">{{ strtoupper(substr($x['pengasuh']->nama, 0, 2)) }}</div>
                             <div class="tl-pengasuh-name">
-                                {{ $item['pengasuh']->nama }}
-                                @if(stripos($item['pengasuh']->nama, Auth::user()->name) !== false || stripos(Auth::user()->name, $item['pengasuh']->nama) !== false)
-                                <span style="background:#e0e7ff; color:#3730a3; font-size:10.5px; font-weight:800; padding:2px 8px; border-radius:12px; margin-left:6px;"><i class="fas fa-user-check"></i> DINAS SAYA</span>
+                                {{ $x['pengasuh']->nama }}
+                                @if($x['pengasuh']->user_id === $userId)
+                                <span class="dinas-saya"><i class="fas fa-user-check"></i> DINAS SAYA</span>
+                                @endif
+                                @if($x['catatan'])
+                                <div class="tl-catatan"><i class="fas fa-note-sticky"></i> {{ $x['catatan'] }}</div>
                                 @endif
                             </div>
-                            @if($item['catatan'])
-                            <div class="tl-catatan"><i class="fas fa-note-sticky"></i> {{ $item['catatan'] }}</div>
+                            @if($bolehIsi && !$bulanDepan)
+                            <button type="button" class="btn-swap"
+                                    onclick="bukaSwapModal('{{ $tglKey }}', '{{ $tglLabel }}', {{ $x['pengasuh']->id }}, @js($x['pengasuh']->nama), @js($x['catatan'] ?? ''))">
+                                <i class="fas fa-right-left"></i> Tukar
+                            </button>
                             @endif
                         </div>
-                        @else
+                        @empty
                         <span style="color:#ccc; font-size:12.5px;">Belum ada pengasuh untuk hari ini</span>
+                        @endforelse
+
+                        @if($bolehIsi && !$bulanDepan && $item['petugas']->count() < \App\Models\Pengasuh::PER_HARI)
+                        <div>
+                            <button type="button" class="btn-swap" onclick="bukaSwapModal('{{ $tglKey }}', '{{ $tglLabel }}', null, null, '')">
+                                <i class="fas fa-plus"></i> Tambah Pengasuh
+                            </button>
+                        </div>
                         @endif
                     </div>
 
                     <span class="tl-status {{ $item['tersimpan'] ? 'saved' : 'default' }}">
                         {{ $item['tersimpan'] ? 'Tersimpan' : 'Default' }}
                     </span>
-
-                    @if($bolehIsi && !$bulanDepan)
-                    <button type="button" class="btn-swap"
-                            onclick="bukaSwapModal('{{ $item['tanggal']->format('Y-m-d') }}', '{{ $item['tanggal']->locale('id')->isoFormat('dddd, D MMMM Y') }}', {{ $item['pengasuh']?->id ?? 'null' }}, '{{ addslashes($item['catatan'] ?? '') }}')">
-                        <i class="fas fa-right-left"></i> Tukar
-                    </button>
-                    @endif
                 </div>
             </div>
             @endforeach
@@ -299,7 +296,7 @@ body { font-family: 'Inter', sans-serif; background: transparent; }
         @endif
 
     </div>
-</div>
+</main>
 
 {{-- Modal tukar jaga --}}
 <div class="modal-overlay" id="swapModal">
@@ -309,6 +306,7 @@ body { font-family: 'Inter', sans-serif; background: transparent; }
         <form method="POST" action="{{ route('jadwal.set') }}">
             @csrf
             <input type="hidden" name="tanggal" id="swapTanggal">
+            <input type="hidden" name="ganti_id" id="swapGanti">
 
             <label for="swapPengasuh">Pengasuh Bertugas</label>
             <select name="pengasuh_id" id="swapPengasuh" required>
@@ -329,12 +327,14 @@ body { font-family: 'Inter', sans-serif; background: transparent; }
 </div>
 
 <script>
-function bukaSwapModal(tanggal, tanggalLabel, pengasuhId, catatan) {
+function bukaSwapModal(tanggal, tanggalLabel, pengasuhId, pengasuhNama, catatan) {
     document.getElementById('swapTanggal').value = tanggal;
-    document.getElementById('swapTanggalLabel').textContent = tanggalLabel;
+    document.getElementById('swapGanti').value = pengasuhId || '';
+    document.getElementById('swapTanggalLabel').textContent = pengasuhNama
+        ? tanggalLabel + ' — menggantikan ' + pengasuhNama
+        : tanggalLabel + ' — tambah pengasuh bertugas';
     document.getElementById('swapCatatan').value = catatan || '';
-    const select = document.getElementById('swapPengasuh');
-    if (pengasuhId) select.value = pengasuhId;
+    if (pengasuhId) document.getElementById('swapPengasuh').value = pengasuhId;
     document.getElementById('swapModal').classList.add('open');
 }
 function tutupSwapModal() {
@@ -351,25 +351,16 @@ let hanyaDinasSaya = false;
 function toggleHanyaDinasSaya() {
     hanyaDinasSaya = !hanyaDinasSaya;
     const btn = document.getElementById('btnToggleHanyaSaya');
-    const items = document.querySelectorAll('.tl-item');
-    const userName = "{{ addslashes(Auth::user()->name) }}".toLowerCase();
 
-    if (hanyaDinasSaya) {
-        btn.style.background = 'linear-gradient(135deg,#4a3aa7,#2a78d6)';
-        btn.style.color = 'white';
-        btn.innerHTML = '<i class="fas fa-check"></i> Menampilkan Dinas Saya Saja';
-        items.forEach(item => {
-            const pName = item.querySelector('.tl-pengasuh-name')?.innerText.toLowerCase() || '';
-            item.style.display = pName.includes(userName) ? 'block' : 'none';
-        });
-    } else {
-        btn.style.background = '#f4f3ff';
-        btn.style.color = '#4a3aa7';
-        btn.innerHTML = '<i class="fas fa-filter"></i> Hanya Jadwal Dinas Saya';
-        items.forEach(item => item.style.display = 'block');
-    }
+    btn.style.background = hanyaDinasSaya ? 'linear-gradient(135deg,#4a3aa7,#2a78d6)' : '#f4f3ff';
+    btn.style.color = hanyaDinasSaya ? 'white' : '#4a3aa7';
+    btn.innerHTML = hanyaDinasSaya
+        ? '<i class="fas fa-check"></i> Menampilkan Dinas Saya Saja'
+        : '<i class="fas fa-filter"></i> Hanya Jadwal Dinas Saya';
+
+    document.querySelectorAll('.tl-item').forEach(item => {
+        item.style.display = !hanyaDinasSaya || item.dataset.saya === '1' ? 'block' : 'none';
+    });
 }
 </script>
-    </div>
-</main>
 </x-app-layout>
