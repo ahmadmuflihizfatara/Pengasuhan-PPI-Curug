@@ -8,80 +8,105 @@
         
 
                 
-                {{-- Page Header --}}
-                <div class="rounded-2xl bg-gradient-to-r from-blue-900/90 via-indigo-900/85 to-slate-900/90 backdrop-blur-xl border border-white/30 p-6 text-white mb-6 shadow-xl relative overflow-hidden flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-                    <div class="relative z-10">
-                        <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/15 backdrop-blur-md border border-white/20 text-[10px] font-bold tracking-widest uppercase text-amber-300 mb-2">
-                            <span>✦</span>
-                            <span>Manajemen Disiplin &amp; Asrama</span>
-                        </div>
-                        <h1 class="text-xl sm:text-2xl font-extrabold tracking-tight text-white mb-1 flex items-center gap-2">
-                            <i class="fa-solid fa-user-lock text-rose-400"></i>
-                            <span>Data Konsinyir Taruna</span>
-                        </h1>
-                        <p class="text-xs text-rose-100/80">Pencatatan taruna yang menjalani masa konsinyir kampus — sinkron otomatis ke database mahasiswa</p>
-                    </div>
+                {{-- Header — sama dengan header tab poin & log gerbang --}}
+                <x-page-banner title="Data Konsinyir Taruna"
+                    :subtitle="auth()->user()->hasTarunaAccess()
+                        ? 'Daftar taruna yang sedang menjalani masa konsinyir kampus.'
+                        : 'Pencatatan taruna yang menjalani masa konsinyir kampus — sinkron otomatis ke database mahasiswa.'" />
+                <style>
+                    .konsinyir-head {
+                        padding: var(--space-4) var(--space-5); border-bottom: 1px solid var(--border-glass);
+                        display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); flex-wrap: wrap;
+                    }
+                    .konsinyir-head__judul { margin: 0; font-size: 16px; line-height: 22px; font-weight: 800; color: var(--ink-900); display: flex; align-items: center; gap: var(--space-2); }
+                    .konsinyir-head__desc { margin: 2px 0 0; font-size: 12px; font-weight: 500; color: var(--ink-600); }
+                    .konsinyir-head__jumlah { font-size: 12px; padding: var(--space-1) var(--space-3); }
+                    .konsinyir-wrap .ds-table { font-size: 13px; line-height: 18px; }
+                    .konsinyir-wrap .ds-table thead th { font-size: 11px; color: var(--ink-900); }
+                    .konsinyir-wrap .ds-badge { font-size: 11px; }
+                    .konsinyir-wrap .ds-empty { font-size: 13px; color: var(--ink-600); }
+                    .konsinyir-wrap tr.konsinyir-saya { background: var(--accent-tint); }
 
-                    <div class="absolute -right-10 -top-10 w-40 h-40 bg-rose-500/20 rounded-full blur-3xl pointer-events-none"></div>
-                </div>
+                    /* Notifikasi */
+                    .konsinyir-alert { align-items: center; gap: var(--space-3); }
+                    .ds-alert--success.konsinyir-alert { border-color: var(--success-border); }
+                    .konsinyir-alert__ikon { width: 36px; height: 36px; border-radius: var(--radius-pill); flex-shrink: 0; display: grid; place-items: center; font-size: 16px; }
+                    .ds-alert--success .konsinyir-alert__ikon { background: var(--success-tint); color: var(--success-ink); }
+                    .ds-alert--danger  .konsinyir-alert__ikon { background: var(--danger-tint);  color: var(--danger-ink); }
+                    .konsinyir-alert__judul { font-size: 13px; font-weight: 800; color: var(--ink-900); }
+                    .konsinyir-alert__pesan { font-size: 12px; font-weight: 500; color: var(--ink-700); margin-top: 1px; }
+
+                    /* Form tambah — teks sedikit dinaikkan agar mudah dibaca */
+                    .konsinyir-form { background: var(--glass-card); }
+                    .konsinyir-form .ds-card__desc { font-size: 12px; line-height: 16px; }
+                    .konsinyir-form .ds-label { font-size: 11px; color: var(--ink-900); }
+                    .konsinyir-form .ds-input, .konsinyir-form .ds-textarea { font-size: 13px; line-height: 18px; background: var(--glass-solid); }
+                    .konsinyir-form .ds-textarea { resize: vertical; }
+                </style>
 
                 {{-- Alerts --}}
                 @if(session('success'))
-                <div class="rounded-2xl bg-emerald-100/90 border border-emerald-300 p-4 text-emerald-800 text-xs font-bold mb-5 flex items-center gap-2 shadow-sm backdrop-blur-md">
-                    <i class="fa-solid fa-circle-check text-emerald-600 text-base"></i>
-                    <span>{{ session('success') }}</span>
+                <div class="ds-alert ds-alert--success konsinyir-alert" role="status">
+                    <span class="konsinyir-alert__ikon"><i class="fa-solid fa-circle-check"></i></span>
+                    <div>
+                        <div class="konsinyir-alert__judul">Berhasil</div>
+                        <div class="konsinyir-alert__pesan">{{ session('success') }}</div>
+                    </div>
                 </div>
                 @endif
                 @if($errors->any())
-                <div class="rounded-2xl bg-rose-100/90 border border-rose-300 p-4 text-rose-800 text-xs font-bold mb-5 shadow-sm backdrop-blur-md">
-                    <div class="flex items-center gap-2 mb-1">
-                        <i class="fa-solid fa-circle-exclamation text-rose-600 text-base"></i>
-                        <span>Terdapat kendala validasi:</span>
+                <div class="ds-alert ds-alert--danger konsinyir-alert" role="alert">
+                    <span class="konsinyir-alert__ikon"><i class="fa-solid fa-circle-exclamation"></i></span>
+                    <div>
+                        <div class="konsinyir-alert__judul">Data konsinyir belum tersimpan</div>
+                        @foreach($errors->all() as $e)<div class="konsinyir-alert__pesan">{{ $e }}</div>@endforeach
                     </div>
-                    <ul class="list-disc list-inside text-xs font-normal">
-                        @foreach($errors->all() as $e)<li>{{ $e }}</li>@endforeach
-                    </ul>
                 </div>
                 @endif
 
                 @unless(auth()->user()->hasTarunaAccess())
                 {{-- Form Tambah Konsinyir --}}
-                <div class="rounded-2xl bg-white/50 backdrop-blur-xl border border-white/60 p-5 sm:p-6 mb-6 shadow-lg">
-                    <div class="pb-3.5 mb-4 border-b border-white/30">
-                        <h2 class="text-sm font-extrabold text-slate-900 flex items-center gap-2">
-                            <i class="fa-solid fa-user-plus text-rose-500"></i>
-                            <span>Tambah Data Konsinyir Baru</span>
-                        </h2>
-                        <p class="text-[11px] text-slate-500 mt-0.5">Ketik nama taruna — program studi &amp; tingkat akan terisi otomatis.</p>
+                <div class="ds-card konsinyir-form mb-6">
+                    <div class="ds-card__head">
+                        <h2 class="ds-card__title"><i class="fa-solid fa-user-plus ds-icon"></i> Tambah Data Konsinyir Baru</h2>
+                        <p class="ds-card__desc">Ketik nama taruna lalu pilih dari saran — program studi &amp; tingkat akan terisi otomatis.</p>
                     </div>
 
                     <form method="POST" action="{{ route('konsinyir.store') }}" id="konsinyirForm">
                         @csrf
-                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
-                            <div class="sm:col-span-1">
-                                <label for="namaTaruna" class="text-[10px] font-bold uppercase tracking-wider text-slate-700 mb-1.5 block">Nama Taruna</label>
-                                <input type="text" id="namaTaruna" list="daftarTaruna" class="w-full px-3.5 py-2.5 rounded-xl bg-white/70 focus:bg-white border border-white/80 text-xs font-semibold text-slate-800 outline-none"
-                                       placeholder="Ketik nama taruna..." value="{{ old('nama') }}" autocomplete="off" required>
+                        <div class="ds-form-grid ds-form-grid--3 mb-4">
+                            <div>
+                                <label for="namaTaruna" class="ds-label">Nama Taruna <span style="color:var(--danger-ink)">*</span></label>
+                                <input type="text" id="namaTaruna" list="daftarTaruna"
+                                       class="ds-input @error('mahasiswa_id') ds-input--invalid @enderror"
+                                       placeholder="Ketik nama taruna..." value="{{ $daftarTaruna->firstWhere('id', old('mahasiswa_id'))?->nama }}" autocomplete="off" required>
                                 <input type="hidden" name="mahasiswa_id" id="mahasiswaId" value="{{ old('mahasiswa_id') }}">
+                                @error('mahasiswa_id')<div class="ds-error">{{ $message }}</div>@enderror
                                 <div class="flex items-center gap-2 mt-2" id="infoTaruna" style="display:none;">
-                                    <span class="px-2 py-0.5 rounded-full bg-indigo-100 text-indigo-700 font-bold text-[10px]" id="infoProdi"></span>
-                                    <span class="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-700 font-bold text-[10px]" id="infoTingkat"></span>
+                                    <span class="ds-badge ds-badge--info" id="infoProdi"></span>
+                                    <span class="ds-badge ds-badge--success" id="infoTingkat"></span>
                                 </div>
                             </div>
                             <div>
-                                <label for="tanggalMulai" class="text-[10px] font-bold uppercase tracking-wider text-slate-700 mb-1.5 block">Tanggal Mulai</label>
-                                <input type="date" name="tanggal_mulai" id="tanggalMulai" class="w-full px-3.5 py-2.5 rounded-xl bg-white/70 focus:bg-white border border-white/80 text-xs font-semibold text-slate-800 outline-none"
+                                <label for="tanggalMulai" class="ds-label">Tanggal Mulai <span style="color:var(--danger-ink)">*</span></label>
+                                <input type="date" name="tanggal_mulai" id="tanggalMulai"
+                                       class="ds-input @error('tanggal_mulai') ds-input--invalid @enderror"
                                        value="{{ old('tanggal_mulai', date('Y-m-d')) }}" required>
+                                @error('tanggal_mulai')<div class="ds-error">{{ $message }}</div>@enderror
                             </div>
                             <div>
-                                <label for="lamaHari" class="text-[10px] font-bold uppercase tracking-wider text-slate-700 mb-1.5 block">Lama Konsinyir (Hari)</label>
-                                <input type="number" name="lama_hari" id="lamaHari" class="w-full px-3.5 py-2.5 rounded-xl bg-white/70 focus:bg-white border border-white/80 text-xs font-semibold text-slate-800 outline-none"
+                                <label for="lamaHari" class="ds-label">Lama Konsinyir (Hari) <span style="color:var(--danger-ink)">*</span></label>
+                                <input type="number" name="lama_hari" id="lamaHari"
+                                       class="ds-input @error('lama_hari') ds-input--invalid @enderror"
                                        min="1" max="365" placeholder="Contoh: 3" value="{{ old('lama_hari') }}" required>
+                                @error('lama_hari')<div class="ds-error">{{ $message }}</div>@enderror
                             </div>
-                            <div class="sm:col-span-3">
-                                <label for="keterangan" class="text-[10px] font-bold uppercase tracking-wider text-slate-700 mb-1.5 block">Keterangan / Alasan Konsinyir</label>
-                                <textarea name="keterangan" id="keterangan" rows="2" class="w-full px-3.5 py-2.5 rounded-xl bg-white/70 focus:bg-white border border-white/80 text-xs font-medium text-slate-800 outline-none"
+                            <div class="ds-span-all">
+                                <label for="keterangan" class="ds-label">Keterangan / Alasan Konsinyir</label>
+                                <textarea name="keterangan" id="keterangan" rows="3"
+                                          class="ds-textarea @error('keterangan') ds-input--invalid @enderror"
                                           placeholder="Tuliskan rincian alasan konsinyir...">{{ old('keterangan') }}</textarea>
+                                @error('keterangan')<div class="ds-error">{{ $message }}</div>@enderror
                             </div>
                         </div>
 
@@ -91,49 +116,47 @@
                             @endforeach
                         </datalist>
 
-                        <button type="submit" class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-rose-600 to-orange-500 hover:from-rose-700 hover:to-orange-600 text-white font-extrabold text-xs shadow-md transition flex items-center gap-2">
-                            <i class="fa-solid fa-floppy-disk"></i>
-                            <span>Simpan Konsinyir</span>
+                        <button type="submit" class="ds-btn ds-btn--primary">
+                            <i class="fa-solid fa-floppy-disk"></i> Simpan Konsinyir
                         </button>
                     </form>
                 </div>
                 @endunless
 
                 {{-- Sedang Konsinyir Section --}}
-                <div class="mb-6">
-                    <div class="flex items-center gap-2 mb-3">
-                        <i class="fa-solid fa-user-clock text-rose-500 text-sm"></i>
-                        <h3 class="text-xs font-extrabold uppercase tracking-wider text-slate-800">Sedang Menjalani Konsinyir ({{ $aktif->count() }})</h3>
-                    </div>
-                    <div class="rounded-2xl bg-white/45 backdrop-blur-xl border border-white/60 p-4 sm:p-5 shadow-lg overflow-hidden">
-                        @if($aktif->isEmpty())
-                        <div class="text-center py-8 text-slate-500">
-                            <i class="fa-solid fa-circle-check text-3xl text-emerald-500 mb-2 block"></i>
-                            <span class="font-semibold text-xs">Tidak ada taruna yang sedang menjalani konsinyir saat ini.</span>
+                <div class="ds-table-wrap konsinyir-wrap mb-6">
+                    <div class="konsinyir-head">
+                        <div>
+                            <h3 class="konsinyir-head__judul"><i class="fa-solid fa-user-lock" style="color:var(--danger-ink)"></i> Sedang Menjalani Konsinyir</h3>
+                            <p class="konsinyir-head__desc">Per {{ now()->locale('id')->isoFormat('dddd, D MMMM Y') }}</p>
                         </div>
-                        @else
-                        @include('konsinyir._tabel', ['daftar' => $aktif])
-                        @endif
+                        <span class="ds-badge {{ $aktif->isEmpty() ? 'ds-badge--success' : 'ds-badge--danger' }} konsinyir-head__jumlah">{{ $aktif->count() }} taruna</span>
                     </div>
+                    @if($aktif->isEmpty())
+                    <div class="ds-empty">
+                        <i class="fa-solid fa-circle-check ds-icon" style="color:var(--success)"></i>
+                        Tidak ada taruna yang sedang menjalani konsinyir saat ini.
+                    </div>
+                    @else
+                    @include('konsinyir._tabel', ['daftar' => $aktif])
+                    @endif
                 </div>
 
                 {{-- Riwayat Konsinyir Section — taruna hanya lihat yang sedang aktif --}}
                 @unless(auth()->user()->hasTarunaAccess())
-                <div>
-                    <div class="flex items-center gap-2 mb-3">
-                        <i class="fa-solid fa-clock-rotate-left text-slate-500 text-sm"></i>
-                        <h3 class="text-xs font-extrabold uppercase tracking-wider text-slate-700">Riwayat Konsinyir Selesai ({{ $riwayat->count() }})</h3>
+                <div class="ds-table-wrap konsinyir-wrap">
+                    <div class="konsinyir-head">
+                        <h3 class="konsinyir-head__judul"><i class="fa-solid fa-clock-rotate-left" style="color:var(--ink-600)"></i> Riwayat Konsinyir Selesai</h3>
+                        <span class="ds-badge konsinyir-head__jumlah">{{ $riwayat->count() }} data</span>
                     </div>
-                    <div class="rounded-2xl bg-white/45 backdrop-blur-xl border border-white/60 p-4 sm:p-5 shadow-lg overflow-hidden">
-                        @if($riwayat->isEmpty())
-                        <div class="text-center py-8 text-slate-400">
-                            <i class="fa-solid fa-inbox text-3xl mb-2 block"></i>
-                            <span class="font-semibold text-xs">Belum ada riwayat konsinyir terdahulu.</span>
-                        </div>
-                        @else
-                        @include('konsinyir._tabel', ['daftar' => $riwayat])
-                        @endif
+                    @if($riwayat->isEmpty())
+                    <div class="ds-empty">
+                        <i class="fa-solid fa-inbox ds-icon"></i>
+                        Belum ada riwayat konsinyir terdahulu.
                     </div>
+                    @else
+                    @include('konsinyir._tabel', ['daftar' => $riwayat])
+                    @endif
                 </div>
                 @endunless
 
@@ -142,13 +165,14 @@
 
 @unless(auth()->user()->hasTarunaAccess())
 {{-- Modal Konfirmasi Hapus --}}
-<div class="modal-overlay" id="hapusModal">
-    <div class="modal-box">
-        <h3 class="text-rose-600 mb-2"><i class="fa-solid fa-triangle-exclamation text-2xl"></i></h3>
-        <p id="hapusModalNama" class="text-xs font-bold text-slate-800 mb-4"></p>
-        <div class="flex items-center justify-center gap-2">
-            <button type="button" class="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs transition" onclick="tutupHapusModal()">Batal</button>
-            <button type="button" class="px-4 py-2 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs shadow-md transition" onclick="submitHapus()">Ya, Hapus</button>
+<div class="ds-modal-overlay" id="hapusModal" style="display:none;" role="dialog" aria-modal="true" aria-labelledby="hapusModalJudul">
+    <div class="ds-modal">
+        <div class="ds-modal__icon"><i class="fa-solid fa-triangle-exclamation"></i></div>
+        <h3 class="ds-modal__title" id="hapusModalJudul">Hapus Data Konsinyir?</h3>
+        <p class="ds-modal__body" id="hapusModalNama"></p>
+        <div class="ds-modal__actions">
+            <button type="button" class="ds-btn" onclick="tutupHapusModal()">Batal</button>
+            <button type="button" class="ds-btn ds-btn--primary" style="background:var(--danger);" onclick="submitHapus()"><i class="fa-solid fa-trash"></i> Ya, Hapus</button>
         </div>
     </div>
 </div>
@@ -187,11 +211,11 @@ document.getElementById('konsinyirForm').addEventListener('submit', function(e) 
 let hapusFormId = null;
 function bukaHapusModal(formId, nama) {
     hapusFormId = formId;
-    document.getElementById('hapusModalNama').textContent = 'Hapus data konsinyir ' + nama + '?';
-    document.getElementById('hapusModal').classList.add('open');
+    document.getElementById('hapusModalNama').textContent = 'Data konsinyir ' + nama + ' akan dihapus permanen.';
+    document.getElementById('hapusModal').style.display = 'flex';
 }
 function tutupHapusModal() {
-    document.getElementById('hapusModal').classList.remove('open');
+    document.getElementById('hapusModal').style.display = 'none';
     hapusFormId = null;
 }
 function submitHapus() {
