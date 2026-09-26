@@ -9,32 +9,12 @@
 
                 
                 {{-- Header — sama dengan header tab poin & log gerbang --}}
-                <x-page-banner title="Data Konsinyir Taruna"
+                <x-page-banner title="Data Konsinyir Taruna" icon="fa-user-lock"
                     :subtitle="auth()->user()->hasTarunaAccess()
                         ? 'Daftar taruna yang sedang menjalani masa konsinyir kampus.'
                         : 'Pencatatan taruna yang menjalani masa konsinyir kampus — sinkron otomatis ke database mahasiswa.'" />
                 <style>
-                    .konsinyir-head {
-                        padding: var(--space-4) var(--space-5); border-bottom: 1px solid var(--border-glass);
-                        display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); flex-wrap: wrap;
-                    }
-                    .konsinyir-head__judul { margin: 0; font-size: 16px; line-height: 22px; font-weight: 800; color: var(--ink-900); display: flex; align-items: center; gap: var(--space-2); }
-                    .konsinyir-head__desc { margin: 2px 0 0; font-size: 12px; font-weight: 500; color: var(--ink-600); }
-                    .konsinyir-head__jumlah { font-size: 12px; padding: var(--space-1) var(--space-3); }
-                    .konsinyir-wrap .ds-table { font-size: 13px; line-height: 18px; }
-                    .konsinyir-wrap .ds-table thead th { font-size: 11px; color: var(--ink-900); }
-                    .konsinyir-wrap .ds-badge { font-size: 11px; }
-                    .konsinyir-wrap .ds-empty { font-size: 13px; color: var(--ink-600); }
-                    .konsinyir-wrap tr.konsinyir-saya { background: var(--accent-tint); }
-
-                    /* Notifikasi */
-                    .konsinyir-alert { align-items: center; gap: var(--space-3); }
-                    .ds-alert--success.konsinyir-alert { border-color: var(--success-border); }
-                    .konsinyir-alert__ikon { width: 36px; height: 36px; border-radius: var(--radius-pill); flex-shrink: 0; display: grid; place-items: center; font-size: 16px; }
-                    .ds-alert--success .konsinyir-alert__ikon { background: var(--success-tint); color: var(--success-ink); }
-                    .ds-alert--danger  .konsinyir-alert__ikon { background: var(--danger-tint);  color: var(--danger-ink); }
-                    .konsinyir-alert__judul { font-size: 13px; font-weight: 800; color: var(--ink-900); }
-                    .konsinyir-alert__pesan { font-size: 12px; font-weight: 500; color: var(--ink-700); margin-top: 1px; }
+                    .ds-table tr.konsinyir-saya { background: var(--accent-tint); }
 
                     /* Form tambah — teks sedikit dinaikkan agar mudah dibaca */
                     .konsinyir-form { background: var(--glass-card); }
@@ -46,22 +26,12 @@
 
                 {{-- Alerts --}}
                 @if(session('success'))
-                <div class="ds-alert ds-alert--success konsinyir-alert" role="status">
-                    <span class="konsinyir-alert__ikon"><i class="fa-solid fa-circle-check"></i></span>
-                    <div>
-                        <div class="konsinyir-alert__judul">Berhasil</div>
-                        <div class="konsinyir-alert__pesan">{{ session('success') }}</div>
-                    </div>
-                </div>
+                <x-glass-alert type="success" title="Berhasil">{{ session('success') }}</x-glass-alert>
                 @endif
                 @if($errors->any())
-                <div class="ds-alert ds-alert--danger konsinyir-alert" role="alert">
-                    <span class="konsinyir-alert__ikon"><i class="fa-solid fa-circle-exclamation"></i></span>
-                    <div>
-                        <div class="konsinyir-alert__judul">Data konsinyir belum tersimpan</div>
-                        @foreach($errors->all() as $e)<div class="konsinyir-alert__pesan">{{ $e }}</div>@endforeach
-                    </div>
-                </div>
+                <x-glass-alert type="danger" title="Data konsinyir belum tersimpan">
+                    @foreach($errors->all() as $e)<div>{{ $e }}</div>@endforeach
+                </x-glass-alert>
                 @endif
 
                 @unless(auth()->user()->hasTarunaAccess())
@@ -124,17 +94,17 @@
                 @endunless
 
                 {{-- Sedang Konsinyir Section --}}
-                <div class="ds-table-wrap konsinyir-wrap mb-6">
-                    <div class="konsinyir-head">
+                <div class="ds-card mb-6">
+                    <div class="ds-card__head tbl-head">
                         <div>
-                            <h3 class="konsinyir-head__judul"><i class="fa-solid fa-user-lock" style="color:var(--danger-ink)"></i> Sedang Menjalani Konsinyir</h3>
-                            <p class="konsinyir-head__desc">Per {{ now()->locale('id')->isoFormat('dddd, D MMMM Y') }}</p>
+                            <h3 class="ds-card__title"><i class="fa-solid fa-user-lock ds-icon"></i> Sedang Menjalani Konsinyir</h3>
+                            <p class="ds-card__desc">Per {{ now()->locale('id')->isoFormat('dddd, D MMMM Y') }}</p>
                         </div>
-                        <span class="ds-badge {{ $aktif->isEmpty() ? 'ds-badge--success' : 'ds-badge--danger' }} konsinyir-head__jumlah">{{ $aktif->count() }} taruna</span>
+                        <span class="ds-badge {{ $aktif->isEmpty() ? 'ds-badge--success' : 'ds-badge--danger' }}">{{ $aktif->count() }} taruna</span>
                     </div>
                     @if($aktif->isEmpty())
                     <div class="ds-empty">
-                        <i class="fa-solid fa-circle-check ds-icon" style="color:var(--success)"></i>
+                        <i class="fa-solid fa-circle-check ds-icon"></i>
                         Tidak ada taruna yang sedang menjalani konsinyir saat ini.
                     </div>
                     @else
@@ -144,10 +114,13 @@
 
                 {{-- Riwayat Konsinyir Section — taruna hanya lihat yang sedang aktif --}}
                 @unless(auth()->user()->hasTarunaAccess())
-                <div class="ds-table-wrap konsinyir-wrap">
-                    <div class="konsinyir-head">
-                        <h3 class="konsinyir-head__judul"><i class="fa-solid fa-clock-rotate-left" style="color:var(--ink-600)"></i> Riwayat Konsinyir Selesai</h3>
-                        <span class="ds-badge konsinyir-head__jumlah">{{ $riwayat->count() }} data</span>
+                <div class="ds-card">
+                    <div class="ds-card__head tbl-head">
+                        <div>
+                            <h3 class="ds-card__title"><i class="fa-solid fa-clock-rotate-left ds-icon"></i> Riwayat Konsinyir Selesai</h3>
+                            <p class="ds-card__desc">Konsinyir yang masa berlakunya sudah berakhir</p>
+                        </div>
+                        <span class="ds-badge">{{ $riwayat->count() }} data</span>
                     </div>
                     @if($riwayat->isEmpty())
                     <div class="ds-empty">

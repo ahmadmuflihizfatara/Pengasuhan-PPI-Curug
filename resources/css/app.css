@@ -741,3 +741,14 @@ th.tt-desc .tt-ind::after { content:'▼'; letter-spacing:0; }
     .tt-search-wrap { flex-basis:100%; max-width:none; }
     .tt-right { margin-left:0; width:100%; justify-content:space-between; }
 }
+
+/* =====================================================================
+   TABEL KARTU — pola tabel tab dashboard & poin:
+   .ds-card > .ds-card__head.tbl-head > .ds-table-wrap > .ds-scroll > table.ds-table.tbl-table
+   ===================================================================== */
+.tbl-head { display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:var(--space-3); }
+.tbl-table .ds-badge { font-size:11px; padding:3px 10px; box-shadow:var(--shadow-glass-sm); }
+.ds-table td.tbl-date { white-space:nowrap; font-weight:600; color:var(--ink-700) !important; }
+.ds-table td.tbl-muted { font-weight:600; color:var(--ink-700) !important; }
+.tbl-title { font-size:13px; line-height:18px; font-weight:700; color:var(--ink-900); }
+.tbl-sub { margin-top:2px; font-size:11px; line-height:16px; font-weight:500; color:var(--ink-600); }

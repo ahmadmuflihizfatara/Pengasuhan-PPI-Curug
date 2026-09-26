@@ -4,106 +4,93 @@
 <x-island-navbar />
 
 <main class="max-w-7xl mx-auto px-4 sm:px-6 pb-12 pt-2">
-    <div class="spatial-workspace-window rounded-3xl bg-white/30 backdrop-blur-2xl border border-white/50 shadow-2xl p-4 sm:p-7 relative overflow-hidden">
-        
+    <div class="barak-page spatial-workspace-window rounded-3xl bg-white/30 backdrop-blur-2xl border border-white/50 shadow-2xl p-4 sm:p-7 relative overflow-hidden">
 
-                
-                {{-- Page Header Glass Banner --}}
-                <div class="rounded-2xl bg-gradient-to-r from-blue-900/90 via-indigo-900/85 to-slate-900/90 backdrop-blur-xl border border-white/30 p-6 text-white mb-6 shadow-xl relative overflow-hidden flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-                    <div class="relative z-10">
-                        <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/15 backdrop-blur-md border border-white/20 text-[10px] font-bold tracking-widest uppercase text-pink-200 mb-2">
-                            <span>✦</span>
-                            <span>Fasilitas &amp; Asrama</span>
-                        </div>
-                        <h1 class="text-xl sm:text-2xl font-extrabold tracking-tight text-white mb-1 flex items-center gap-2">
-                            <i class="fa-solid fa-door-open text-pink-400"></i>
-                            <span>Keluhan Barak Saya</span>
-                        </h1>
-                        <p class="text-xs text-pink-100/80">Pantau status pengajuan perbaikan fasilitas dan kendala barak Anda secara real-time</p>
-                    </div>
+                {{-- Header — sama dengan header tab dashboard & poin --}}
+                <x-page-banner title="Keluhan Barak Saya" icon="fa-door-open"
+                    subtitle="Pantau status pengajuan perbaikan fasilitas dan kendala barak Anda secara real-time" />
 
-                    <div class="relative z-10">
-                        <a href="{{ route('keluhan-barak.create') }}" class="px-4 py-2 rounded-xl bg-white hover:bg-slate-50 text-slate-900 font-extrabold text-xs shadow-md transition flex items-center gap-2 no-underline">
-                            <i class="fa-solid fa-plus text-rose-500"></i>
-                            <span>Ajukan Keluhan Baru</span>
-                        </a>
-                    </div>
+                <style>
+                    .barak-aksi { display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); flex-wrap: wrap; }
+                    .barak-aksi__teks { font-size: 13px; font-weight: 600; color: var(--ink-700); }
+                    .barak-aksi__teks i { color: var(--accent); margin-right: var(--space-1-5); }
+                    .barak-ket { max-width: 300px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+                    .barak-baru { width: 8px; height: 8px; border-radius: 50%; background: var(--danger); box-shadow: 0 0 0 3px var(--danger-tint); }
+                </style>
 
-                    <div class="absolute -right-10 -top-10 w-40 h-40 bg-pink-500/20 rounded-full blur-3xl pointer-events-none"></div>
+                {{-- Tombol ajukan — di bawah header --}}
+                <div class="ds-card barak-aksi mb-4">
+                    <span class="barak-aksi__teks"><i class="fa-solid fa-screwdriver-wrench"></i>Ada kerusakan sarana atau kendala fasilitas di barak Anda?</span>
+                    <a href="{{ route('keluhan-barak.create') }}" class="ds-btn ds-btn--primary"><i class="fa-solid fa-plus"></i> Ajukan Keluhan Baru</a>
                 </div>
 
-                {{-- Alerts --}}
                 @if(session('success'))
-                <div class="rounded-2xl bg-emerald-100/90 border border-emerald-300 p-4 text-emerald-800 text-xs font-bold mb-5 flex items-center gap-2 shadow-sm backdrop-blur-md">
-                    <i class="fa-solid fa-circle-check text-emerald-600 text-base"></i>
-                    <span>{{ session('success') }}</span>
-                </div>
+                <x-glass-alert type="success" title="Berhasil">{{ session('success') }}</x-glass-alert>
                 @endif
 
-                @if($daftarKeluhan->isEmpty())
-                <div class="rounded-2xl bg-white/50 backdrop-blur-xl border border-white/60 p-10 text-center shadow-lg">
-                    <i class="fa-solid fa-door-open text-4xl text-slate-300 mb-3 block"></i>
-                    <h4 class="text-sm font-bold text-slate-800 mb-1">Belum Ada Riwayat Keluhan Barak</h4>
-                    <p class="text-xs text-slate-500 max-w-md mx-auto mb-4">Klik tombol di bawah untuk melaporkan kerusakan sarana atau kendala fasilitas di barak Anda.</p>
-                    <a href="{{ route('keluhan-barak.create') }}" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-pink-600 to-rose-600 text-white text-xs font-bold shadow-md transition no-underline">
-                        <i class="fa-solid fa-plus text-xs"></i>
-                        <span>Ajukan Keluhan Pertama</span>
-                    </a>
-                </div>
-                @else
-                <div class="rounded-2xl bg-white/45 backdrop-blur-xl border border-white/60 p-4 sm:p-5 shadow-lg">
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-left border-collapse text-xs">
-                            <thead>
-                                <tr class="bg-white/60 backdrop-blur-md text-[10px] font-bold uppercase tracking-wider text-slate-700 border-b border-white/40">
-                                    <th class="py-3 px-3">#</th>
-                                    <th class="py-3 px-3">Lokasi Barak</th>
-                                    <th class="py-3 px-3">Tanggal</th>
-                                    <th class="py-3 px-3">Keterangan</th>
-                                    <th class="py-3 px-3 text-center">Status</th>
-                                    <th class="py-3 px-3 text-center">Aksi</th>
-                                </tr>
-                            </thead>
-                            <tbody class="divide-y divide-white/30">
-                                @foreach($daftarKeluhan as $i => $k)
-                                <tr class="hover:bg-white/60 transition">
-                                    <td class="py-3 px-3 text-slate-400 font-bold">{{ $i + 1 }}</td>
-                                    <td class="py-3 px-3">
-                                        <span class="px-2 py-0.5 rounded-full bg-pink-100 text-pink-800 font-bold text-[10px] border border-pink-200">
-                                            {{ $k->asrama }}
-                                        </span>
-                                        <div class="font-bold text-slate-900 mt-1">
-                                            {{ $k->lorong }} &bull; No. {{ $k->nomor_barak }}
-                                        </div>
-                                    </td>
-                                    <td class="py-3 px-3 text-slate-600 font-medium whitespace-nowrap">
-                                        <i class="fa-solid fa-calendar text-pink-500 mr-1"></i>
-                                        {{ $k->tanggal_pengajuan->locale('id')->isoFormat('D MMM Y') }}
-                                    </td>
-                                    <td class="py-3 px-3 max-w-[260px]">
-                                        <div class="text-slate-800 font-medium truncate">{{ $k->keterangan }}</div>
-                                    </td>
-                                    <td class="py-3 px-3 text-center">
-                                        <span class="px-2.5 py-0.5 rounded-full font-bold text-[10px] inline-flex items-center gap-1.5" style="background:{{ $k->status_bg_color }}; color:{{ $k->status_badge_color }};">
-                                            <span>{{ $k->status }}</span>
-                                            @if(!$k->taruna_baca && in_array($k->status, ['Diproses', 'Selesai', 'Ditolak']))
-                                            <span class="w-2 h-2 rounded-full bg-rose-500 animate-ping"></span>
-                                            @endif
-                                        </span>
-                                    </td>
-                                    <td class="py-3 px-3 text-center">
-                                        <a href="{{ route('keluhan-barak.show', $k->id) }}" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-pink-50 hover:bg-pink-100 text-pink-700 font-bold text-xs border border-pink-200 shadow-sm transition no-underline">
-                                            <i class="fa-solid fa-eye text-[10px]"></i>
-                                            <span>Detail</span>
-                                        </a>
-                                    </td>
-                                </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
+                <div class="ds-card">
+                    <div class="ds-card__head tbl-head">
+                        <div>
+                            <h3 class="ds-card__title"><i class="fa-solid fa-clipboard-list ds-icon"></i> Daftar Keluhan Saya</h3>
+                            <p class="ds-card__desc">Keluhan terbaru tampil paling atas — klik baris untuk melihat detail</p>
+                        </div>
+                        <span class="ds-badge ds-badge--accent">{{ $daftarKeluhan->count() }} keluhan</span>
                     </div>
+
+                    @if($daftarKeluhan->isEmpty())
+                    <div class="ds-empty">
+                        <i class="fa-solid fa-door-open ds-icon"></i>
+                        Belum ada riwayat keluhan barak.
+                    </div>
+                    @else
+                    @php
+                        $varianStatus = ['Diajukan' => 'warning', 'Diproses' => 'info', 'Selesai' => 'success', 'Ditolak' => 'danger'];
+                    @endphp
+                    <div class="ds-table-wrap">
+                        <div class="ds-scroll">
+                            <table class="ds-table tbl-table">
+                                <thead>
+                                    <tr>
+                                        <th>Lokasi Barak</th>
+                                        <th>Tanggal</th>
+                                        <th>Keterangan</th>
+                                        <th data-filter>Status</th>
+                                        <th class="ds-right" data-no-sort>Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach($daftarKeluhan as $k)
+                                    <tr onclick="window.location='{{ route('keluhan-barak.show', $k->id) }}'" style="cursor:pointer;">
+                                        <td>
+                                            <div class="ds-cell-person">
+                                                <span class="ds-avatar ds-avatar--sq"><i class="fa-solid fa-door-open"></i></span>
+                                                <div>
+                                                    <div class="tbl-title">{{ $k->lorong }} &bull; No. {{ $k->nomor_barak }}</div>
+                                                    <div class="tbl-sub">Asrama {{ $k->asrama }}</div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="tbl-date" data-sort="{{ $k->tanggal_pengajuan->format('Y-m-d') }}">{{ $k->tanggal_pengajuan->locale('id')->isoFormat('D MMM Y') }}</td>
+                                        <td><div class="tbl-sub barak-ket" style="margin:0;" title="{{ $k->keterangan }}">{{ $k->keterangan }}</div></td>
+                                        <td>
+                                            <span class="ds-badge ds-badge--{{ $varianStatus[$k->status] ?? 'dark' }}">
+                                                {{ $k->status }}
+                                                @if(!$k->taruna_baca && in_array($k->status, ['Diproses', 'Selesai', 'Ditolak']))
+                                                <span class="barak-baru" title="Pembaruan status baru"></span>
+                                                @endif
+                                            </span>
+                                        </td>
+                                        <td class="ds-right">
+                                            <a href="{{ route('keluhan-barak.show', $k->id) }}" class="ds-btn ds-btn--sm ds-btn--pill">Detail <i class="fa-solid fa-arrow-right"></i></a>
+                                        </td>
+                                    </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    @endif
                 </div>
-                @endif
 
     </div>
 </main>

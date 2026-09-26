@@ -1,15 +1,18 @@
 {{-- Header halaman — sama dengan header tab poin: judul, subjudul, kartu nama akun di kanan --}}
-@props(['title', 'subtitle' => null])
+@props(['title', 'subtitle' => null, 'icon' => null])
 @php
     $akun     = auth()->user();
     $isTaruna = $akun?->hasTarunaAccess();
 @endphp
 <div class="greeting-banner rounded-2xl bg-gradient-to-r from-blue-900/90 via-indigo-900/85 to-slate-900/90 backdrop-blur-xl border border-white/30 p-6 sm:p-8 text-white mb-4 shadow-xl relative overflow-hidden flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-    <div class="relative z-10 max-w-xl">
-        <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight text-white mb-0">{{ $title }}</h1>
-        @if($subtitle)
-        <p class="text-xs sm:text-sm text-sky-100/80 leading-relaxed mt-1.5">{{ $subtitle }}</p>
-        @endif
+    <div class="relative z-10 max-w-xl flex items-center gap-4">
+        @if($icon)<x-header-icon :icon="$icon" />@endif
+        <div>
+            <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight text-white mb-0">{{ $title }}</h1>
+            @if($subtitle)
+            <p class="text-xs sm:text-sm text-sky-100/80 leading-relaxed mt-1.5">{{ $subtitle }}</p>
+            @endif
+        </div>
     </div>
 
     @if($akun)

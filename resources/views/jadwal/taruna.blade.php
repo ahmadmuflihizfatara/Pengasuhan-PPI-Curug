@@ -21,11 +21,7 @@ body { font-family: 'Inter', sans-serif; background: transparent; }
 .hero-kosong i { font-size:40px; color:#e2e5ee; display:block; margin-bottom:12px; }
 .hero-kosong p { margin:0; font-size:14px; color:#98a0b3; font-weight:600; }
 
-/* Duty — PPI Curug Glass (ds-table-wrap, ds-table, ds-badge, ds-avatar, ds-empty) */
-.duty-head {
-    padding: var(--space-4) var(--space-5); border-bottom: 1px solid var(--border-glass);
-    display: flex; align-items: center; justify-content: space-between; gap: var(--space-2-5); flex-wrap: wrap;
-}
+/* Duty — tabel kartu (tbl-* di app.css, sama dengan dashboard & poin) */
 .ds-table tbody tr.duty-saya { background: var(--accent-tint); }
 </style>
 
@@ -35,7 +31,7 @@ body { font-family: 'Inter', sans-serif; background: transparent; }
 <main class="max-w-7xl mx-auto px-4 sm:px-6 pb-12 pt-2">
     <div class="spatial-workspace-window rounded-3xl bg-white/30 backdrop-blur-2xl border border-white/50 shadow-2xl p-4 sm:p-7 relative overflow-hidden">
 
-        <x-page-banner title="Jadwal" subtitle="Pengasuh yang bertugas hari ini dan daftar duty taruna minggu ini" />
+        <x-page-banner title="Jadwal" icon="fa-clock" subtitle="Pengasuh yang bertugas hari ini dan daftar duty taruna minggu ini" />
 
         {{-- Pengasuh bertugas hari ini --}}
         @if($petugas->isNotEmpty())
@@ -64,51 +60,52 @@ body { font-family: 'Inter', sans-serif; background: transparent; }
         @endif
 
         {{-- Duty taruna minggu ini --}}
-        <div class="ds-table-wrap">
-            <div class="duty-head">
-                <h2 class="ds-card__title"><i class="fas fa-user-group ds-icon"></i> Duty Taruna Minggu Ini</h2>
-                <span class="ds-badge ds-badge--success"><i class="fas fa-calendar-week"></i> {{ \App\Models\DutyTaruna::labelPeriode($mingguIni) }}</span>
+        <div class="ds-card">
+            <div class="ds-card__head tbl-head">
+                <div>
+                    <h3 class="ds-card__title"><i class="fa-solid fa-user-group ds-icon"></i> Duty Taruna Minggu Ini</h3>
+                    <p class="ds-card__desc">Periode {{ \App\Models\DutyTaruna::labelPeriode($mingguIni) }}</p>
+                </div>
+                <span class="ds-badge ds-badge--success">{{ $duty->count() }} taruna</span>
             </div>
 
             @if($duty->isEmpty())
             <div class="ds-empty">
-                <i class="fas fa-clipboard-list ds-icon"></i>
+                <i class="fa-solid fa-clipboard-list ds-icon"></i>
                 Belum ada duty taruna yang ditetapkan untuk minggu ini.
             </div>
             @else
-            <div class="ds-scroll">
-            <table class="ds-table">
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Nama Taruna</th>
-                        <th>NPM</th>
-                        <th>Prodi</th>
-                        <th>Tingkat</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @php $mahasiswaSaya = Auth::user()->mahasiswa?->id; @endphp
-                    @foreach($duty as $i => $d)
-                    @php $saya = $mahasiswaSaya && $d->mahasiswa_id === $mahasiswaSaya; @endphp
-                    <tr class="{{ $saya ? 'duty-saya' : '' }}">
-                        <td class="ds-num">{{ $i + 1 }}</td>
-                        <td>
-                            <div class="ds-cell-person">
-                                <span class="ds-avatar">{{ strtoupper(substr($d->mahasiswa->nama ?? '?', 0, 2)) }}</span>
-                                <span class="ds-name">{{ $d->mahasiswa->nama ?? '—' }}</span>
-                                @if($saya)
-                                <span class="ds-badge ds-badge--accent">Saya</span>
-                                @endif
-                            </div>
-                        </td>
-                        <td><span class="ds-mono">{{ $d->mahasiswa->npm ?? '-' }}</span></td>
-                        <td><span class="ds-badge ds-badge--info">{{ $d->mahasiswa->prodi ?? '-' }}</span></td>
-                        <td><span class="ds-badge ds-badge--success">{{ $d->mahasiswa->tingkat ?? '-' }}</span></td>
-                    </tr>
-                    @endforeach
-                </tbody>
-            </table>
+            <div class="ds-table-wrap">
+                <div class="ds-scroll">
+                    <table class="ds-table tbl-table">
+                        <thead>
+                            <tr>
+                                <th>Nama Taruna</th>
+                                <th data-filter>Prodi</th>
+                                <th class="ds-right" data-filter>Tingkat</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @php $mahasiswaSaya = Auth::user()->mahasiswa?->id; @endphp
+                            @foreach($duty as $d)
+                            @php $saya = $mahasiswaSaya && $d->mahasiswa_id === $mahasiswaSaya; @endphp
+                            <tr class="{{ $saya ? 'duty-saya' : '' }}">
+                                <td>
+                                    <div class="ds-cell-person">
+                                        <span class="ds-avatar">{{ strtoupper(substr($d->mahasiswa->nama ?? '?', 0, 2)) }}</span>
+                                        <div>
+                                            <div class="tbl-title">{{ $d->mahasiswa->nama ?? '—' }} @if($saya)<span class="ds-badge ds-badge--accent">Saya</span>@endif</div>
+                                            <div class="tbl-sub">NPM {{ $d->mahasiswa->npm ?? '-' }}</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td><span class="ds-badge ds-badge--info">{{ $d->mahasiswa->prodi ?? '-' }}</span></td>
+                                <td class="ds-right"><span class="ds-badge ds-badge--success">Tk. {{ $d->mahasiswa->tingkat ?? '-' }}</span></td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
             </div>
             @endif
         </div>

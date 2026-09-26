@@ -16,7 +16,9 @@
                 @endphp
                 <div class="greeting-banner rounded-2xl bg-gradient-to-r from-blue-900/90 via-indigo-900/85 to-slate-900/90 backdrop-blur-xl border border-white/30 p-6 sm:p-8 text-white mb-6 shadow-xl relative overflow-hidden flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                     @php $isTaruna = Auth::user()->hasTarunaAccess(); @endphp
-                    <div class="relative z-10 max-w-xl">
+                    <div class="relative z-10 max-w-xl flex items-center gap-4">
+                        <x-header-icon icon="fa-house-chimney" />
+                        <div>
                         @unless($isTaruna)
                         <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/15 backdrop-blur-md border border-white/20 text-[10px] font-bold tracking-widest uppercase text-sky-200 mb-2">
                             <span>✦</span>
@@ -34,6 +36,7 @@
                             Pusat Komando Pengasuhan & Karakter Taruna PPI Curug — Semua data disiplin, apel, dan perizinan tersaji secara presisi.
                         </p>
                         @endif
+                        </div>
                     </div>
 
                     <div class="relative z-10 flex-shrink-0 flex items-center gap-3 bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-3 sm:px-5 sm:py-3.5 shadow-inner">
