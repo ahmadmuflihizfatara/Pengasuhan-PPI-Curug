@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Traits\LogsActivity;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 
@@ -37,18 +38,34 @@ class ApelController extends Controller
     /**
      * Jadwal apel untuk taruna — hanya jadwal, pembina, dan lokasi.
      * Tidak menampilkan informasi/keterangan apel.
+     * Dipilih per tanggal (default hari ini), difilter per jenis sesi.
      */
     public function jadwalTaruna(Request $request): View
     {
-        $daftarApel = Apel::with('pembinaUser')->terbaru()->get();
+        $filter = $request->validate([
+            'tanggal' => ['nullable', 'date'],
+            'sesi'    => ['nullable', Rule::in([Apel::SESI_PAGI, Apel::SESI_MALAM, Apel::SESI_KHUSUS])],
+        ]);
 
-        $terpilih = $request->filled('apel')
-            ? $daftarApel->firstWhere('id', (int) $request->get('apel'))
-            : $daftarApel->first();
+        // Default: apel terdekat — hari ini/berikutnya, kalau tidak ada ambil apel terakhir
+        $tanggal = Carbon::parse(
+            $filter['tanggal']
+                ?? Apel::whereDate('tanggal', '>=', today())->min('tanggal')
+                ?? Apel::max('tanggal')
+                ?? today()
+        );
+        $sesi    = $filter['sesi'] ?? null;
+
+        $daftarApel = Apel::with('pembinaUser')
+            ->whereDate('tanggal', $tanggal)
+            ->when($sesi, fn ($q) => $q->where('sesi', $sesi))
+            ->orderBy('jam')
+            ->get();
 
         return view('apel.jadwal', [
             'daftarApel' => $daftarApel,
-            'terpilih'   => $terpilih,
+            'tanggal'    => $tanggal,
+            'sesi'       => $sesi,
         ]);
     }
 

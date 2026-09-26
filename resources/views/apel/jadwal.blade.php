@@ -5,12 +5,12 @@ body { font-family: 'Inter', sans-serif; background: transparent; }
 
 /* Kartu — PPI Curug Glass (ds-card, ds-label, ds-select, ds-btn--pill) */
 .selector-row { display: flex; gap: var(--space-3); flex-wrap: wrap; align-items: center; }
-.select-wrap { position: relative; flex: 1; min-width: 260px; }
-.select-wrap .ds-select { appearance: none; padding-right: 40px; cursor: pointer; }
-.select-wrap i { position: absolute; right: 15px; top: 50%; transform: translateY(-50%); color: var(--ink-500); pointer-events: none; font-size: 12px; }
+.selector-row { align-items: flex-end; }
+.date-wrap { flex: 0 1 260px; min-width: 200px; }
+.date-wrap .ds-input { cursor: pointer; }
 .filter-chips { display: flex; gap: var(--space-2); flex-wrap: wrap; }
 .chip {
-    display: inline-flex; align-items: center;
+    display: inline-flex; align-items: center; text-decoration: none;
     padding: var(--space-2) var(--space-4); border-radius: var(--radius-pill);
     background: var(--glass-card); border: 1px solid var(--border-glass-glow);
     backdrop-filter: blur(var(--blur-subtle)); -webkit-backdrop-filter: blur(var(--blur-subtle));
@@ -70,107 +70,78 @@ body { font-family: 'Inter', sans-serif; background: transparent; }
             <div class="absolute right-32 -bottom-20 w-48 h-48 bg-sky-500/20 rounded-full blur-3xl pointer-events-none"></div>
         </div>
 
-        @if($daftarApel->isEmpty())
-        <div class="ds-card">
-            <div class="ds-empty">
-                <i class="fas fa-flag ds-icon"></i>
-                Belum ada jadwal apel yang tercatat.
-            </div>
-        </div>
-        @else
+        @php
+            $jenisApel = ['' => 'Semua', 'pagi' => 'Pagi', 'malam' => 'Malam', 'khusus' => 'Khusus'];
+            $tanggalLabel = $tanggal->locale('id')->isoFormat('dddd, D MMMM Y');
+        @endphp
 
-        {{-- Dropdown pemilih apel --}}
+        {{-- Pilih tanggal + filter jenis apel --}}
         <div class="ds-card mb-4">
-            <label class="ds-label" for="apelSelect">Pilih Apel</label>
-            <div class="selector-row">
-                <div class="select-wrap">
-                    <select id="apelSelect" class="ds-select" onchange="bukaApel(this.value)">
-                        @foreach($daftarApel as $item)
-                        <option value="{{ $item->id }}"
-                                data-sesi="{{ $item->sesi }}"
-                                @selected($terpilih && $terpilih->id === $item->id)>
-                            {{ $item->label_dropdown }}@if($item->jam) · {{ \Carbon\Carbon::parse($item->jam)->format('H:i') }}@endif
-                        </option>
+            <form method="GET" action="{{ route('apel.jadwal') }}" class="selector-row">
+                <div class="date-wrap">
+                    <label class="ds-label" for="tanggalApel">Tanggal Apel</label>
+                    <input type="date" id="tanggalApel" name="tanggal" class="ds-input"
+                           value="{{ $tanggal->format('Y-m-d') }}" onchange="this.form.submit()">
+                    @if($sesi)<input type="hidden" name="sesi" value="{{ $sesi }}">@endif
+                </div>
+                <div>
+                    <span class="ds-label">Jenis Apel</span>
+                    <div class="filter-chips">
+                        @foreach($jenisApel as $nilai => $label)
+                        <a href="{{ route('apel.jadwal', array_filter(['tanggal' => $tanggal->format('Y-m-d'), 'sesi' => $nilai])) }}"
+                           class="chip {{ ($sesi ?? '') === $nilai ? 'active' : '' }}">{{ $label }}</a>
                         @endforeach
-                    </select>
-                    <i class="fas fa-chevron-down"></i>
+                    </div>
                 </div>
-                <div class="filter-chips">
-                    <div class="chip active" data-filter="all" onclick="filterSesi('all', this)">Semua</div>
-                    <div class="chip" data-filter="pagi" onclick="filterSesi('pagi', this)">Pagi</div>
-                    <div class="chip" data-filter="malam" onclick="filterSesi('malam', this)">Malam</div>
-                    <div class="chip" data-filter="khusus" onclick="filterSesi('khusus', this)">Khusus</div>
-                </div>
-            </div>
+            </form>
         </div>
 
-        {{-- Detail apel terpilih — hanya jadwal, pembina, lokasi --}}
-        @if($terpilih)
-        <div class="ds-card">
+        @forelse($daftarApel as $apel)
+        {{-- Detail apel — hanya jadwal, pembina, lokasi --}}
+        <div class="ds-card mb-4">
             <div class="ds-card__head detail-head">
-                <div class="ikon" style="background:linear-gradient(135deg,{{ $terpilih->warna }},var(--accent));"><i class="fas {{ $terpilih->ikon }}"></i></div>
+                <div class="ikon" style="background:linear-gradient(135deg,{{ $apel->warna }},var(--accent));"><i class="fas {{ $apel->ikon }}"></i></div>
                 <div>
-                    <h2>{{ $terpilih->judul }}</h2>
+                    <h2>{{ $apel->judul }}</h2>
                     <div class="meta">
-                        <span><i class="fas fa-calendar-day"></i>
-                            {{ $terpilih->tanggal->locale('id')->isoFormat('dddd, D MMMM Y') }}</span>
-                        @if($terpilih->jam)
-                        <span><i class="fas fa-clock"></i> {{ \Carbon\Carbon::parse($terpilih->jam)->format('H:i') }} WIB</span>
+                        <span><i class="fas fa-calendar-day"></i> {{ $tanggalLabel }}</span>
+                        @if($apel->jam)
+                        <span><i class="fas fa-clock"></i> {{ \Carbon\Carbon::parse($apel->jam)->format('H:i') }} WIB</span>
                         @endif
                     </div>
                 </div>
             </div>
 
-            <div>
-                <div class="info-grid">
-                    <div class="info-item">
-                        <div class="label"><i class="fas fa-user-tie"></i> Pembina Apel</div>
-                        <div class="value">
-                            {{ $terpilih->pembina }}
-                            @if($terpilih->pembinaUser?->jabatan)
-                            <small>{{ $terpilih->pembinaUser->jabatan }}</small>
-                            @endif
-                        </div>
+            <div class="info-grid">
+                <div class="info-item">
+                    <div class="label"><i class="fas fa-user-tie"></i> Pembina Apel</div>
+                    <div class="value">
+                        {{ $apel->pembina }}
+                        @if($apel->pembinaUser?->jabatan)
+                        <small>{{ $apel->pembinaUser->jabatan }}</small>
+                        @endif
                     </div>
-                    <div class="info-item">
-                        <div class="label"><i class="fas fa-location-dot"></i> Lokasi Apel</div>
-                        <div class="value">{{ $terpilih->lokasi }}</div>
-                    </div>
-                    <div class="info-item">
-                        <div class="label"><i class="fas fa-flag"></i> Sesi</div>
-                        <div class="value">{{ $terpilih->judul }}
-                            <small>{{ ucfirst($terpilih->sesi) }}</small>
-                        </div>
+                </div>
+                <div class="info-item">
+                    <div class="label"><i class="fas fa-location-dot"></i> Lokasi Apel</div>
+                    <div class="value">{{ $apel->lokasi }}</div>
+                </div>
+                <div class="info-item">
+                    <div class="label"><i class="fas fa-flag"></i> Jenis</div>
+                    <div class="value">{{ $apel->judul }}
+                        <small>{{ ucfirst($apel->sesi) }}</small>
                     </div>
                 </div>
             </div>
         </div>
-        @endif
-
-        @endif
+        @empty
+        <div class="ds-card">
+            <div class="ds-empty">
+                <i class="fas fa-flag ds-icon"></i>
+                Tidak ada apel{{ $sesi ? ' ' . strtolower($jenisApel[$sesi]) : '' }} pada {{ $tanggalLabel }}.
+            </div>
+        </div>
+        @endforelse
     </div>
 </main>
-
-<script>
-function bukaApel(id) {
-    window.location = '{{ route('apel.jadwal') }}?apel=' + id;
-}
-
-function filterSesi(sesi, chipEl) {
-    document.querySelectorAll('.chip').forEach(c => c.classList.toggle('active', c === chipEl));
-
-    const select = document.getElementById('apelSelect');
-    let pertamaCocok = null;
-
-    [...select.options].forEach(opt => {
-        const cocok = sesi === 'all' || opt.dataset.sesi === sesi;
-        opt.hidden = !cocok;
-        if (cocok && pertamaCocok === null) pertamaCocok = opt;
-    });
-
-    if (pertamaCocok && select.selectedOptions[0].hidden) {
-        bukaApel(pertamaCocok.value);
-    }
-}
-</script>
 </x-app-layout>
