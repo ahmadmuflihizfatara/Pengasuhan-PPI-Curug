@@ -3,85 +3,88 @@
 * { box-sizing: border-box; }
 body { font-family: 'Inter', sans-serif; background: transparent; }
 
-.app-layout { display: block; min-height: 100vh; }
-.main-content { padding: 28px 30px; min-width: 0; max-width: 80rem; margin: 0 auto; width: 100%; }
-
-/* Header */
-.page-header {
-    background: linear-gradient(135deg, #1baf7a 0%, #2a78d6 100%);
-    border-radius: 18px; padding: 30px 34px;
-    color: white; margin-bottom: 24px;
-    position: relative; overflow: hidden;
-}
-.page-header::before { content:''; position:absolute; right:-60px; top:-60px; width:220px; height:220px; background:rgba(255,255,255,.1); border-radius:50%; }
-.page-header::after  { content:''; position:absolute; right:70px; bottom:-80px; width:180px; height:180px; background:rgba(255,255,255,.07); border-radius:50%; }
-.page-header h1 { margin:0 0 4px; font-size:23px; font-weight:800; position:relative; z-index:1; }
-.page-header p  { margin:0; opacity:.88; font-size:13px; position:relative; z-index:1; }
-
-/* Selector */
-.selector-card { background:white; border-radius:16px; padding:20px 22px; box-shadow:0 2px 12px rgba(0,0,0,.05); margin-bottom:20px; }
-.selector-label { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.06em; color:#8a93b0; margin-bottom:8px; display:block; }
-.selector-row { display:flex; gap:12px; flex-wrap:wrap; align-items:center; }
-.select-wrap { position:relative; flex:1; min-width:260px; }
-.select-wrap select {
-    width:100%; appearance:none; padding:12px 40px 12px 15px;
-    border:2px solid #e8ebf5; border-radius:11px; background:#fafbff;
-    font-size:14px; font-family:'Inter',sans-serif; color:#333; font-weight:600;
-    cursor:pointer; outline:none; transition:border-color .15s;
-}
-.select-wrap select:focus { border-color:#1baf7a; background:white; }
-.select-wrap i { position:absolute; right:15px; top:50%; transform:translateY(-50%); color:#98a0b3; pointer-events:none; font-size:13px; }
-.filter-chips { display:flex; gap:7px; flex-wrap:wrap; }
+/* Kartu — PPI Curug Glass (ds-card, ds-label, ds-select, ds-btn--pill) */
+.selector-row { display: flex; gap: var(--space-3); flex-wrap: wrap; align-items: center; }
+.select-wrap { position: relative; flex: 1; min-width: 260px; }
+.select-wrap .ds-select { appearance: none; padding-right: 40px; cursor: pointer; }
+.select-wrap i { position: absolute; right: 15px; top: 50%; transform: translateY(-50%); color: var(--ink-500); pointer-events: none; font-size: 12px; }
+.filter-chips { display: flex; gap: var(--space-2); flex-wrap: wrap; }
 .chip {
-    padding:7px 14px; border-radius:50px; font-size:12px; font-weight:600;
-    cursor:pointer; border:2px solid #e2e5ee; background:white; color:#666; transition:all .15s;
+    display: inline-flex; align-items: center;
+    padding: var(--space-2) var(--space-4); border-radius: var(--radius-pill);
+    background: var(--glass-card); border: 1px solid var(--border-glass-glow);
+    backdrop-filter: blur(var(--blur-subtle)); -webkit-backdrop-filter: blur(var(--blur-subtle));
+    box-shadow: var(--shadow-glass-sm);
+    font-size: 12px; line-height: 16px; font-weight: 700; color: var(--ink-700); cursor: pointer;
+    transition: background-color .15s, color .15s, transform .1s;
 }
-.chip:hover { border-color:#1baf7a; color:#1baf7a; }
-.chip.active { background:#1baf7a; color:white; border-color:#1baf7a; }
+.chip:hover { background: var(--glass-solid); color: var(--ink-900); }
+.chip:active { transform: scale(.97); }
+.chip.active { background: var(--accent); border-color: transparent; color: var(--ink-on-dark); }
 
-/* Detail */
-.detail-card { background:white; border-radius:16px; box-shadow:0 2px 12px rgba(0,0,0,.05); overflow:hidden; }
-.detail-head { padding:22px 26px; color:white; display:flex; align-items:center; gap:16px; flex-wrap:wrap; }
-.detail-head .ikon { width:52px; height:52px; border-radius:14px; background:rgba(255,255,255,.22); display:flex; align-items:center; justify-content:center; font-size:21px; flex-shrink:0; }
-.detail-head h2 { margin:0 0 3px; font-size:19px; font-weight:800; }
-.detail-head .meta { font-size:13px; opacity:.9; display:flex; gap:14px; flex-wrap:wrap; }
+.detail-head { display: flex; align-items: center; gap: var(--space-4); flex-wrap: wrap; }
+.detail-head .ikon {
+    width: 48px; height: 48px; border-radius: var(--radius-md); flex-shrink: 0;
+    display: grid; place-items: center; font-size: 20px; color: var(--ink-on-dark); box-shadow: var(--shadow-glass-sm);
+}
+.detail-head h2 { margin: 0 0 2px; font-size: 16px; line-height: 22px; font-weight: 800; color: var(--ink-900); }
+.detail-head .meta { font-size: 12px; font-weight: 600; color: var(--ink-600); display: flex; gap: var(--space-3-5); flex-wrap: wrap; }
+.detail-head .meta i { color: var(--accent); margin-right: 2px; }
 
-.detail-body { padding:24px 26px; }
-.info-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:16px; }
-.info-item { background:#fafbff; border:1px solid #eef0f7; border-radius:12px; padding:14px 16px; }
-.info-item .label { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.06em; color:#8a93b0; margin-bottom:5px; display:flex; align-items:center; gap:6px; }
-.info-item .value { font-size:14px; font-weight:700; color:#2b2b33; }
-.info-item .value small { display:block; font-size:11px; font-weight:500; color:#98a0b3; margin-top:2px; }
-
-/* Empty */
-.empty-state { background:white; border-radius:16px; box-shadow:0 2px 12px rgba(0,0,0,.05); text-align:center; padding:60px 24px; }
-.empty-state i { font-size:46px; color:#e2e5ee; display:block; margin-bottom:14px; }
-.empty-state p { font-size:14px; color:#98a0b3; margin:0; font-weight:600; }
+.info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: var(--space-4); }
+.info-item {
+    background: var(--glass-card); border: 1px solid var(--border-glass-glow);
+    border-radius: var(--radius-md); padding: var(--space-3-5) var(--space-4);
+}
+.info-item .label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: var(--ink-600); margin-bottom: var(--space-1-5); display: flex; align-items: center; gap: var(--space-1-5); }
+.info-item .label i { color: var(--accent); }
+.info-item .value { font-size: 14px; font-weight: 700; color: var(--ink-900); }
+.info-item .value small { display: block; font-size: 11px; font-weight: 500; color: var(--ink-500); margin-top: 2px; }
 </style>
 
-<div class="app-layout">
-    <x-island-navbar />
+<x-island-navbar />
 
-    <div class="main-content">
+<main class="max-w-7xl mx-auto px-4 sm:px-6 pb-12 pt-2">
+    <div class="spatial-workspace-window rounded-3xl bg-white/30 backdrop-blur-2xl border border-white/50 shadow-2xl p-4 sm:p-7 relative overflow-hidden">
 
-        <div class="page-header">
-            <h1><i class="fas fa-flag" style="margin-right:10px;"></i>Jadwal Apel</h1>
-            <p>Lihat waktu pelaksanaan, pembina, dan lokasi apel</p>
+        {{-- Header Banner — sama dengan header tab poin --}}
+        <div class="greeting-banner rounded-2xl bg-gradient-to-r from-blue-900/90 via-indigo-900/85 to-slate-900/90 backdrop-blur-xl border border-white/30 p-6 sm:p-8 text-white mb-4 shadow-xl relative overflow-hidden flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+            <div class="relative z-10 max-w-xl">
+                <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight text-white mb-0">Jadwal Apel</h1>
+                <p class="text-xs sm:text-sm text-sky-100/80 leading-relaxed mt-1.5">Lihat waktu pelaksanaan, pembina, dan lokasi apel</p>
+            </div>
+
+            @php $user = auth()->user(); @endphp
+            <div class="relative z-10 flex-shrink-0 flex items-center gap-3 bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-3 sm:px-5 sm:py-3.5 shadow-inner">
+                <div class="w-12 h-12 rounded-xl bg-gradient-to-tr from-amber-400 to-amber-600 text-slate-950 flex items-center justify-center font-black text-lg shadow-md">
+                    {{ strtoupper(substr($user->name, 0, 1)) }}
+                </div>
+                <div>
+                    <div class="text-xs font-bold text-white max-w-[140px] truncate">{{ $user->name }}</div>
+                    <div class="text-[10px] font-semibold text-amber-300">Taruna</div>
+                    <div class="text-[9px] text-slate-300 font-mono mt-0.5">NIT: {{ $user->mahasiswa?->npm ?? '-' }}</div>
+                </div>
+            </div>
+
+            <div class="absolute -right-16 -top-16 w-56 h-56 bg-indigo-500/20 rounded-full blur-3xl pointer-events-none"></div>
+            <div class="absolute right-32 -bottom-20 w-48 h-48 bg-sky-500/20 rounded-full blur-3xl pointer-events-none"></div>
         </div>
 
         @if($daftarApel->isEmpty())
-        <div class="empty-state">
-            <i class="fas fa-flag"></i>
-            <p>Belum ada jadwal apel yang tercatat.</p>
+        <div class="ds-card">
+            <div class="ds-empty">
+                <i class="fas fa-flag ds-icon"></i>
+                Belum ada jadwal apel yang tercatat.
+            </div>
         </div>
         @else
 
         {{-- Dropdown pemilih apel --}}
-        <div class="selector-card">
-            <label class="selector-label" for="apelSelect">Pilih Apel</label>
+        <div class="ds-card mb-4">
+            <label class="ds-label" for="apelSelect">Pilih Apel</label>
             <div class="selector-row">
                 <div class="select-wrap">
-                    <select id="apelSelect" onchange="bukaApel(this.value)">
+                    <select id="apelSelect" class="ds-select" onchange="bukaApel(this.value)">
                         @foreach($daftarApel as $item)
                         <option value="{{ $item->id }}"
                                 data-sesi="{{ $item->sesi }}"
@@ -103,9 +106,9 @@ body { font-family: 'Inter', sans-serif; background: transparent; }
 
         {{-- Detail apel terpilih — hanya jadwal, pembina, lokasi --}}
         @if($terpilih)
-        <div class="detail-card">
-            <div class="detail-head" style="background:linear-gradient(135deg,{{ $terpilih->warna }},#2a78d6);">
-                <div class="ikon"><i class="fas {{ $terpilih->ikon }}"></i></div>
+        <div class="ds-card">
+            <div class="ds-card__head detail-head">
+                <div class="ikon" style="background:linear-gradient(135deg,{{ $terpilih->warna }},var(--accent));"><i class="fas {{ $terpilih->ikon }}"></i></div>
                 <div>
                     <h2>{{ $terpilih->judul }}</h2>
                     <div class="meta">
@@ -118,7 +121,7 @@ body { font-family: 'Inter', sans-serif; background: transparent; }
                 </div>
             </div>
 
-            <div class="detail-body">
+            <div>
                 <div class="info-grid">
                     <div class="info-item">
                         <div class="label"><i class="fas fa-user-tie"></i> Pembina Apel</div>
@@ -146,7 +149,7 @@ body { font-family: 'Inter', sans-serif; background: transparent; }
 
         @endif
     </div>
-</div>
+</main>
 
 <script>
 function bukaApel(id) {

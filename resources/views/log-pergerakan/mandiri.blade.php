@@ -3,103 +3,56 @@
 * { box-sizing: border-box; }
 body { font-family: 'Inter', sans-serif; background: transparent; }
 
-.app-layout { display: block; min-height: 100vh; }
-.main-content { padding: 28px 30px; min-width: 0; max-width: 900px; margin: 0 auto; width: 100%; }
-
-/* === HEADER BANNER === */
-.tablet-banner {
-    background: linear-gradient(135deg, #4f46e5 0%, #4338ca 100%);
-    border-radius: 18px;
-    padding: 24px 30px;
-    color: white;
-    margin-bottom: 24px;
-    position: relative;
-    overflow: hidden;
+/* === STATUS AKTIF (SEDANG IZIN KELUAR) — ds-card + ds-alert/ds-badge === */
+.status-active-card { border-color: var(--danger-border); }
+.status-active-card .ds-card__head { display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); flex-wrap: wrap; }
+.status-active-card .ds-card__title .ds-icon { color: var(--danger); }
+.active-detail-list {
+    border-radius: var(--radius-md); background: var(--glass-card);
+    border: 1px solid var(--border-glass-glow); padding: 0 var(--space-4); margin-bottom: var(--space-5);
 }
-.tablet-banner::after {
-    content: ''; position: absolute; right: -40px; top: -40px; width: 180px; height: 180px;
-    background: rgba(255,255,255,.08); border-radius: 50%;
-}
-.banner-title { font-size: 21px; font-weight: 800; margin: 0 0 4px 0; display: flex; align-items: center; gap: 10px; }
-.banner-sub { font-size: 13px; opacity: 0.9; margin: 0; position: relative; z-index: 1; }
-
-/* === STATUS AKTIF CARD (SEDANG IZIN KELUAR) === */
-.status-active-card {
-    background: white;
-    border-radius: 18px;
-    padding: 26px 28px;
-    box-shadow: 0 4px 20px rgba(0,0,0,.06);
-    border: 2px solid #fecaca;
-}
-.status-active-badge {
-    background: #dc2626; color: white; padding: 6px 14px; border-radius: 20px;
-    font-size: 12px; font-weight: 800; letter-spacing: 0.5px;
-    display: inline-flex; align-items: center; gap: 6px; margin-bottom: 14px;
-    animation: pulseRed 2s infinite;
-}
-@keyframes pulseRed {
-    0%, 100% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.4); }
-    50% { box-shadow: 0 0 0 8px rgba(220, 38, 38, 0); }
-}
-.active-detail-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #f0f2f7; font-size: 13.5px; }
-.active-detail-row:last-of-type { border-bottom: none; }
-.active-detail-row .lbl { color: #888; font-weight: 600; }
-.active-detail-row .val { color: #333; font-weight: 700; text-align: right; }
-
-.validasi-pill { display: inline-flex; align-items: center; gap: 6px; font-size: 11.5px; font-weight: 700; padding: 4px 10px; border-radius: 20px; margin-top: 10px; }
-.validasi-pill.pending { background: #fef3c7; color: #92400e; }
-.validasi-pill.ok { background: #dcfce7; color: #15803d; }
+.active-detail-row { display: flex; justify-content: space-between; gap: var(--space-4); padding: var(--space-3) 0; border-bottom: 1px solid var(--border-glass-subtle); font-size: 12px; line-height: 16px; }
+.active-detail-row:last-child { border-bottom: none; }
+.active-detail-row .lbl { font-size: 10px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: var(--ink-600); }
+.active-detail-row .val { color: var(--ink-900); font-weight: 700; text-align: right; }
 
 .btn-kembali-mandiri {
-    background: #10b981; color: white; border: none; border-radius: 25px;
-    padding: 15px 28px; font-size: 15px; font-weight: 800; width: 100%; cursor: pointer;
-    margin-top: 20px; transition: transform 0.2s, box-shadow 0.2s;
-    display: flex; align-items: center; justify-content: center; gap: 10px;
+    display: flex; align-items: center; justify-content: center; gap: var(--space-2); width: 100%;
+    padding: var(--space-3-5) var(--space-6); border-radius: var(--radius-md);
+    background: var(--success); border: 1px solid transparent; color: var(--ink-on-dark);
+    box-shadow: var(--shadow-glass-sm);
+    font-family: inherit; font-size: 13px; line-height: 16px; font-weight: 800; letter-spacing: 0.03em;
+    cursor: pointer; transition: background-color .15s, transform .1s, box-shadow .15s;
 }
-.btn-kembali-mandiri:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(16,185,129,.35); }
-
-/* === IDENTITAS LOCKED BOX === */
-.identitas-box {
-    background: #f0f4ff; border: 1.5px dashed #a5b0f0; border-radius: 14px;
-    padding: 14px 18px; margin-bottom: 22px; display: flex; align-items: center; gap: 14px;
-}
-.identitas-avatar {
-    width: 42px; height: 42px; border-radius: 50%; background: #4f46e5; color: white;
-    display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 16px; flex-shrink: 0;
-}
-.identitas-name { font-weight: 800; color: #333; font-size: 14.5px; }
-.identitas-meta { font-size: 12px; color: #777; font-family: monospace; }
+.btn-kembali-mandiri:hover { background: var(--success-ink); box-shadow: var(--shadow-glass); }
+.btn-kembali-mandiri:active { transform: scale(.98); }
+.btn-kembali-mandiri:focus-visible { outline: none; box-shadow: var(--shadow-focus); }
 
 /* === FLOW CARDS: PILIH KATEGORI (3 CABANG) === */
-.category-selection-title {
-    font-size: 15px; font-weight: 700; color: #444; margin-bottom: 12px;
-    display: flex; align-items: center; gap: 8px;
-}
 .category-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 16px;
-    margin-bottom: 24px;
+    gap: var(--space-4);
 }
 .cat-card {
-    background: white;
-    border: 2px solid #edf0f7;
-    border-radius: 16px;
-    padding: 20px;
+    background: var(--glass-card);
+    border: 1px solid var(--border-glass-glow);
+    border-radius: var(--radius-lg);
+    padding: var(--space-5);
     cursor: pointer;
-    transition: all 0.25s ease;
+    transition: transform .25s cubic-bezier(.16,1,.3,1), box-shadow .25s, background-color .25s, border-color .25s;
     position: relative;
     overflow: hidden;
 }
 .cat-card:hover {
-    border-color: #a5b0f0;
-    transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(79,70,229, 0.1);
+    background: var(--glass-solid);
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-card-hover);
 }
 .cat-card.active {
-    border-color: #4f46e5;
-    background: #f8f9ff;
-    box-shadow: 0 8px 24px rgba(79,70,229, 0.15);
+    border-color: var(--accent);
+    background: var(--glass-solid);
+    box-shadow: 0 0 0 3px var(--focus-ring-glow), var(--shadow-glass-sm);
 }
 .cat-card.active::after {
     content: '\f00c';
@@ -110,104 +63,114 @@ body { font-family: 'Inter', sans-serif; background: transparent; }
     right: 14px;
     width: 24px;
     height: 24px;
-    background: #4f46e5;
-    color: white;
-    border-radius: 50%;
+    background: var(--accent);
+    color: var(--ink-on-dark);
+    border-radius: var(--radius-pill);
     font-size: 11px;
     display: flex;
     align-items: center;
     justify-content: center;
 }
 .cat-icon-wrapper {
-    width: 52px; height: 52px; border-radius: 14px;
+    width: 48px; height: 48px; border-radius: var(--radius-md);
     display: flex; align-items: center; justify-content: center;
-    font-size: 22px; margin-bottom: 14px;
+    font-size: 20px; margin-bottom: var(--space-3-5);
+    color: var(--ink-on-dark); box-shadow: var(--shadow-glass-sm);
 }
-.cat-1 .cat-icon-wrapper { background: #fee2e2; color: #dc2626; }
-.cat-2 .cat-icon-wrapper { background: #e0e7ff; color: #4338ca; }
-.cat-3 .cat-icon-wrapper { background: #dcfce7; color: #15803d; }
-.cat-num { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; opacity: 0.7; margin-bottom: 2px; }
-.cat-name { font-size: 17px; font-weight: 800; color: #333; margin-bottom: 4px; }
-.cat-desc { font-size: 12px; color: #888; line-height: 1.4; }
+.cat-1 .cat-icon-wrapper { background: linear-gradient(135deg, #f43f5e, var(--danger)); }
+.cat-2 .cat-icon-wrapper { background: linear-gradient(135deg, #2563eb, var(--accent)); }
+.cat-3 .cat-icon-wrapper { background: linear-gradient(135deg, #10b981, var(--success)); }
+.cat-num { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--ink-500); margin-bottom: 2px; }
+.cat-name { font-size: 16px; font-weight: 800; color: var(--ink-900); margin-bottom: var(--space-1); }
+.cat-desc { font-size: 12px; color: var(--ink-600); line-height: 1.45; }
 
-/* === FORM CONTAINER === */
+/* === FORM CONTAINER — PPI Curug Glass (ds-card / ds-label / ds-input / ds-btn) === */
 .form-card {
-    background: white;
-    border-radius: 16px;
-    padding: 28px;
-    box-shadow: 0 2px 16px rgba(0,0,0,.06);
+    background: var(--glass-panel);
+    backdrop-filter: blur(var(--blur-standard)) saturate(180%); -webkit-backdrop-filter: blur(var(--blur-standard)) saturate(180%);
+    border: 1px solid var(--border-glass);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-glass);
+    padding: var(--space-6);
+    color: var(--ink-900);
 }
 .form-section-title {
-    font-size: 16px; font-weight: 800; color: #333; margin-bottom: 18px;
-    padding-bottom: 10px; border-bottom: 1px solid #f0f2f7;
-    display: flex; align-items: center; justify-content: space-between;
+    font-size: 14px; line-height: 20px; font-weight: 800; color: var(--ink-900);
+    margin-bottom: var(--space-5); padding-bottom: var(--space-3-5);
+    border-bottom: 1px solid var(--border-glass-subtle);
+    display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); flex-wrap: wrap;
 }
-.form-group { margin-bottom: 18px; }
-.form-label { font-size: 13px; font-weight: 700; color: #444; margin-bottom: 6px; display: block; }
-.form-label .req { color: #ef4444; }
+.form-group { margin-bottom: var(--space-4); }
+.form-label {
+    display: block; margin-bottom: var(--space-1-5);
+    font-size: 10px; line-height: 14px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase;
+    color: var(--ink-700);
+}
+.form-label .req { color: var(--danger); }
 .form-control, .form-select {
-    border-radius: 10px;
-    border: 2px solid #edf0f7;
-    padding: 11px 14px;
-    font-size: 13px;
-    color: #333;
-    background: #fafbff;
-    width: 100%;
-    transition: border .15s;
+    display: block; width: 100%;
+    padding: var(--space-2-5) var(--space-3-5);
+    border-radius: var(--radius-md);
+    background-color: var(--glass-card);
+    backdrop-filter: blur(var(--blur-subtle)); -webkit-backdrop-filter: blur(var(--blur-subtle));
+    border: 1.5px solid var(--border-glass-glow);
+    font-family: inherit; font-size: 12px; line-height: 16px; font-weight: 600; color: var(--ink-900);
+    outline: none; transition: background-color .15s, border-color .15s, box-shadow .15s;
 }
+.form-control::placeholder { color: var(--ink-500); font-weight: 500; }
+.form-control:hover, .form-select:hover { background-color: rgba(255,255,255,0.85); }
 .form-control:focus, .form-select:focus {
-    border-color: #4f46e5;
-    background: white;
-    box-shadow: none;
-    outline: none;
+    background-color: var(--glass-solid); border-color: var(--focus-ring); box-shadow: var(--shadow-focus); outline: none;
 }
+/* Input file — tombol pilih file bergaya ds-btn--primary */
+.form-control[type="file"] { padding: var(--space-1-5); cursor: pointer; color: var(--ink-600); font-weight: 500; }
+.form-control[type="file"]::file-selector-button {
+    margin: 0 var(--space-3) 0 0; padding: var(--space-2) var(--space-4);
+    border: 1px solid transparent; border-radius: var(--radius-sm);
+    background: var(--accent); color: var(--ink-on-dark);
+    box-shadow: var(--shadow-glass-sm);
+    font-family: inherit; font-size: 12px; line-height: 16px; font-weight: 700;
+    cursor: pointer; transition: background-color .15s, transform .1s;
+}
+.form-control[type="file"]:hover:not(:disabled):not([readonly])::file-selector-button { background: var(--accent-hover); }
+.form-control[type="file"]:active::file-selector-button { transform: scale(.97); }
+.form-help { display: block; margin-top: var(--space-1-5); font-size: 11px; line-height: 14px; color: var(--ink-600); }
 
-/* Subcategory Pill Selectors */
-.subcat-pills { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; }
+/* Subcategory Pill Selectors — ds-btn--pill */
+.subcat-pills { display: flex; gap: var(--space-2); flex-wrap: wrap; margin-bottom: var(--space-1); }
 .subcat-pill {
-    padding: 8px 16px; border-radius: 20px; font-size: 13px; font-weight: 700;
-    border: 1.5px solid #edf0f7; background: white; color: #555; cursor: pointer;
-    transition: all 0.15s;
+    display: inline-flex; align-items: center; gap: var(--space-1-5);
+    padding: var(--space-2) var(--space-4); border-radius: var(--radius-pill);
+    background: var(--glass-card); border: 1px solid var(--border-glass-glow);
+    backdrop-filter: blur(var(--blur-subtle)); -webkit-backdrop-filter: blur(var(--blur-subtle));
+    box-shadow: var(--shadow-glass-sm);
+    font-size: 12px; line-height: 16px; font-weight: 700; color: var(--ink-700); cursor: pointer;
+    transition: background-color .15s, color .15s, transform .1s, box-shadow .15s;
 }
-.subcat-pill:hover { border-color: #aab; background: #fafbff; }
-.subcat-pill.active {
-    background: #4f46e5; border-color: #4f46e5; color: white;
-}
+.subcat-pill:hover { background: var(--glass-solid); color: var(--ink-900); }
+.subcat-pill:active { transform: scale(.97); }
+.subcat-pill:focus-visible { outline: none; box-shadow: var(--shadow-focus); }
+.subcat-pill.active { background: var(--accent); border-color: transparent; color: var(--ink-on-dark); }
 
-.status-awal-box {
-    background: #fef2f2;
-    border: 1.5px dashed #f87171;
-    border-radius: 12px;
-    padding: 14px 18px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-top: 20px;
-    margin-bottom: 24px;
-}
-.status-badge-berangkat {
-    background: #dc2626; color: white; padding: 6px 14px; border-radius: 20px;
-    font-size: 12px; font-weight: 800; letter-spacing: 0.5px;
-    display: inline-flex; align-items: center; gap: 6px; animation: pulseRed 2s infinite;
-}
+/* Status awal — komponen ds-alert--danger; di sini hanya layout */
+.status-awal-box { align-items: center; flex-wrap: wrap; margin: var(--space-5) 0 var(--space-6); }
+.status-awal-box__body { flex: 1; min-width: 180px; }
+.status-awal-box__title { font-weight: 800; }
+.status-awal-box__desc { font-size: 11px; font-weight: 500; color: var(--ink-600); margin-top: 2px; }
 
+/* Submit — ds-btn--primary ukuran penuh */
 .btn-submit-log {
-    background: linear-gradient(135deg, #4f46e5 0%, #4338ca 100%);
-    color: white; border: none; border-radius: 25px; padding: 14px 28px;
-    font-size: 14px; font-weight: 700; width: 100%; cursor: pointer;
-    transition: transform 0.2s, box-shadow 0.2s;
-    display: flex; align-items: center; justify-content: center; gap: 10px;
+    display: flex; align-items: center; justify-content: center; gap: var(--space-2); width: 100%;
+    padding: var(--space-3-5) var(--space-6);
+    border-radius: var(--radius-md);
+    background: var(--accent); border: 1px solid transparent; color: var(--ink-on-dark);
+    box-shadow: var(--shadow-glass-sm);
+    font-family: inherit; font-size: 13px; line-height: 16px; font-weight: 800; letter-spacing: 0.03em;
+    cursor: pointer; transition: background-color .15s, transform .1s, box-shadow .15s;
 }
-.btn-submit-log:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(79,70,229, .4); }
-
-/* Riwayat */
-.riwayat-item {
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 12px 16px; border-radius: 12px; background: #fafbff; border: 1px solid #edf0f7; margin-bottom: 8px;
-}
-.riwayat-item .riwayat-info { font-size: 12.5px; }
-.riwayat-item .riwayat-info .cat { font-weight: 700; color: #333; }
-.riwayat-item .riwayat-info .waktu { color: #888; }
+.btn-submit-log:hover { background: var(--accent-hover); box-shadow: var(--shadow-glass); }
+.btn-submit-log:active { transform: scale(.98); }
+.btn-submit-log:focus-visible { outline: none; box-shadow: var(--shadow-focus); }
 
 @media (max-width: 768px) {
     .category-grid { grid-template-columns: 1fr; }
@@ -216,7 +179,8 @@ body { font-family: 'Inter', sans-serif; background: transparent; }
 
 <x-island-navbar />
 
-    <main class="main-content">
+<main class="max-w-7xl mx-auto px-4 sm:px-6 pb-12 pt-2">
+    <div class="spatial-workspace-window rounded-3xl bg-white/30 backdrop-blur-2xl border border-white/50 shadow-2xl p-4 sm:p-7 relative overflow-hidden">
 
         {{-- Top Notification --}}
         @if(session('success'))
@@ -235,29 +199,54 @@ body { font-family: 'Inter', sans-serif; background: transparent; }
         @endif
 
         {{-- Header Banner --}}
-        <div class="tablet-banner">
-            <h1 class="banner-title">
-                <i class="fas fa-right-from-bracket"></i> Izin Keluar & Kembali Mandiri
-            </h1>
-            <p class="banner-sub">
-                Catat sendiri keberangkatan &amp; kepulangan Anda. Data langsung tersimpan dan akan diperiksa (divalidasi) oleh pengasuh.
-            </p>
+        {{-- Header Banner — sama dengan header tab poin --}}
+        <div class="greeting-banner rounded-2xl bg-gradient-to-r from-blue-900/90 via-indigo-900/85 to-slate-900/90 backdrop-blur-xl border border-white/30 p-6 sm:p-8 text-white mb-4 shadow-xl relative overflow-hidden flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+            <div class="relative z-10 max-w-xl">
+                <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight text-white mb-0">Izin Keluar &amp; Kembali Mandiri</h1>
+                <p class="text-xs sm:text-sm text-sky-100/80 leading-relaxed mt-1.5">Catat sendiri keberangkatan &amp; kepulangan Anda. Data langsung tersimpan dan akan diperiksa (divalidasi) oleh pengasuh.</p>
+            </div>
+
+            {{-- Kartu nama taruna — sama dengan header tab poin --}}
+            <div class="relative z-10 flex-shrink-0 flex items-center gap-3 bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-3 sm:px-5 sm:py-3.5 shadow-inner">
+                <div class="w-12 h-12 rounded-xl bg-gradient-to-tr from-amber-400 to-amber-600 text-slate-950 flex items-center justify-center font-black text-lg shadow-md">
+                    {{ strtoupper(substr($identitas['nama'], 0, 1)) }}
+                </div>
+                <div>
+                    <div class="text-xs font-bold text-white max-w-[140px] truncate">{{ $identitas['nama'] }}</div>
+                    <div class="text-[10px] font-semibold text-amber-300">Taruna</div>
+                    <div class="text-[9px] text-slate-300 font-mono mt-0.5">NIT: {{ $identitas['npm'] ?? '-' }}</div>
+                </div>
+            </div>
+
+            <div class="absolute -right-16 -top-16 w-56 h-56 bg-indigo-500/20 rounded-full blur-3xl pointer-events-none"></div>
+            <div class="absolute right-32 -bottom-20 w-48 h-48 bg-sky-500/20 rounded-full blur-3xl pointer-events-none"></div>
         </div>
 
         @if($activeLog)
         {{-- ======================================================== --}}
         {{-- SEDANG IZIN KELUAR: TAMPILKAN STATUS + TOMBOL KEMBALI --}}
         {{-- ======================================================== --}}
-        <div class="status-active-card">
-            <span class="status-active-badge"><i class="fas fa-dot-circle"></i> ANDA SEDANG DI LUAR ASRAMA</span>
+        <div class="ds-card status-active-card mb-4">
+            <div class="ds-card__head">
+                <div>
+                    <h2 class="ds-card__title"><i class="fas fa-person-walking-arrow-right ds-icon"></i> Anda sedang di luar asrama</h2>
+                    <p class="ds-card__desc">Tandai kembali setelah Anda tiba di asrama agar izin ditutup.</p>
+                </div>
+                @if($activeLog->is_validated)
+                <span class="ds-badge ds-badge--success"><i class="fas fa-user-check"></i> Sudah divalidasi pengasuh</span>
+                @else
+                <span class="ds-badge ds-badge--warning"><i class="fas fa-hourglass-half"></i> Menunggu validasi pengasuh</span>
+                @endif
+            </div>
 
+            <div class="active-detail-list">
             <div class="active-detail-row">
                 <span class="lbl">Kategori</span>
-                <span class="val">{!! $activeLog->getKategoriBadgeHtml() !!} {{ $activeLog->subkategori }}</span>
+                <span class="val">{!! $activeLog->getKategoriBadgeHtml() !!} &middot; {{ $activeLog->subkategori }}</span>
             </div>
             <div class="active-detail-row">
                 <span class="lbl">Waktu Berangkat</span>
-                <span class="val">{{ $activeLog->waktu_berangkat->format('d/m/Y H:i') }} ({{ $activeLog->getDurasiFormatted() }} lalu)</span>
+                <span class="val">{{ $activeLog->waktu_berangkat->format('d/m/Y H:i') }} <span class="ds-mono">({{ $activeLog->getDurasiFormatted() }} lalu)</span></span>
             </div>
             @if($activeLog->kategori === 'perizinan')
             <div class="active-detail-row">
@@ -275,19 +264,12 @@ body { font-family: 'Inter', sans-serif; background: transparent; }
                 <span class="val">{{ $activeLog->rute }}</span>
             </div>
             @endif
-
-            <div>
-                @if($activeLog->is_validated)
-                <span class="validasi-pill ok"><i class="fas fa-user-check"></i> Sudah divalidasi pengasuh</span>
-                @else
-                <span class="validasi-pill pending"><i class="fas fa-hourglass-half"></i> Menunggu validasi pengasuh</span>
-                @endif
             </div>
 
             <form action="{{ route('log-pergerakan.kembali', $activeLog->id) }}" method="POST" enctype="multipart/form-data" onsubmit="return confirm('Konfirmasi bahwa Anda SUDAH KEMBALI ke asrama?')">
                 @csrf
                 @method('PATCH')
-                <div class="form-group mt-3">
+                <div class="form-group">
                     <label class="form-label">Catatan Kepulangan (Opsional)</label>
                     <textarea class="form-control" name="catatan_kembali" rows="2" placeholder="Contoh: Sudah selesai kontrol kesehatan di klinik..."></textarea>
                 </div>
@@ -296,7 +278,7 @@ body { font-family: 'Inter', sans-serif; background: transparent; }
                     <input type="file" class="form-control" name="foto_kembali" accept="image/*">
                 </div>
                 <button type="submit" class="btn-kembali-mandiri">
-                    <i class="fas fa-check-circle"></i> SAYA SUDAH KEMBALI KE ASRAMA
+                    <i class="fas fa-house-circle-check"></i> SAYA SUDAH KEMBALI KE ASRAMA
                 </button>
             </form>
         </div>
@@ -306,17 +288,11 @@ body { font-family: 'Inter', sans-serif; background: transparent; }
         {{-- BELUM ADA IZIN AKTIF: TAMPILKAN FORM PENGAJUAN KELUAR --}}
         {{-- ======================================================== --}}
 
-        <div class="identitas-box">
-            <div class="identitas-avatar">{{ strtoupper(substr($identitas['nama'], 0, 1)) }}</div>
-            <div>
-                <div class="identitas-name">{{ $identitas['nama'] }}</div>
-                <div class="identitas-meta">{{ $identitas['npm'] ?? 'NPM -' }} &bull; {{ $identitas['prodi'] ?? 'Prodi -' }}</div>
+        <div class="ds-card mb-4">
+            <div class="ds-card__head">
+                <h2 class="ds-card__title"><i class="fa-solid fa-code-branch ds-icon"></i> Pilih Kategori Izin Keluar</h2>
+                <p class="ds-card__desc">Pilih salah satu kategori sesuai tujuan Anda keluar asrama, lalu lengkapi formulir di bawah.</p>
             </div>
-        </div>
-
-        <div class="category-selection-title">
-            <i class="fas fa-code-branch text-primary"></i> PILIH KATEGORI IZIN KELUAR:
-        </div>
 
         <div class="category-grid">
             <div class="cat-card cat-1 active" id="cardKatPerizinan" onclick="selectCategory('perizinan')">
@@ -340,6 +316,7 @@ body { font-family: 'Inter', sans-serif; background: transparent; }
                 <div class="cat-desc">Lari Luar Kampus, Gym, Olahraga Mandiri atau Terpimpin</div>
             </div>
         </div>
+        </div>
 
         <div class="form-card">
             <form action="{{ route('log-pergerakan.store') }}" method="POST" enctype="multipart/form-data" id="formLogMandiri">
@@ -349,8 +326,8 @@ body { font-family: 'Inter', sans-serif; background: transparent; }
 
                 <div class="form-section-title">
                     <span id="formTitleText"><i class="fas fa-notes-medical text-danger me-2"></i> Isi Form Izin & Dokumentasi</span>
-                    <span class="badge bg-light text-dark border px-3 py-2 fw-semibold">
-                        <i class="far fa-clock me-1"></i> Waktu: {{ \Carbon\Carbon::now()->format('d/m/Y H:i') }}
+                    <span class="ds-badge ds-badge--accent">
+                        <i class="far fa-clock"></i> Waktu: {{ \Carbon\Carbon::now()->format('d/m/Y H:i') }}
                     </span>
                 </div>
 
@@ -452,23 +429,19 @@ body { font-family: 'Inter', sans-serif; background: transparent; }
                 <div class="form-group">
                     <label class="form-label">Dokumentasi (Foto Surat Izin / Bukti / Foto Kegiatan)</label>
                     <input type="file" class="form-control" name="foto_keberangkatan" accept="image/*">
-                    <small class="text-muted"><i class="fas fa-camera"></i> Anda dapat langsung mengambil foto melalui kamera HP atau upload file gambar.</small>
+                    <small class="form-help"><i class="fas fa-camera"></i> Anda dapat langsung mengambil foto melalui kamera HP atau upload file gambar.</small>
                 </div>
 
-                <div class="status-awal-box">
-                    <div>
-                        <div class="fw-bold text-dark"><i class="fas fa-shield-alt text-danger me-1"></i> STATUS AWAL KELUAR:</div>
-                        <div class="small text-muted">Data akan otomatis ditandai <strong>BELUM KEMBALI</strong>.</div>
-                    </div>
-                    <div>
-                        <span class="status-badge-berangkat">
-                            <i class="fas fa-dot-circle"></i> BERANGKAT (BELUM KEMBALI)
-                        </span>
+                <div class="ds-alert ds-alert--danger status-awal-box">
+                    <i class="fas fa-shield-alt ds-icon"></i>
+                    <div class="status-awal-box__body">
+                        <div class="status-awal-box__title">Status Awal Keluar</div>
+                        <div class="status-awal-box__desc">Data akan otomatis ditandai <strong>BELUM KEMBALI</strong>.</div>
                     </div>
                 </div>
 
                 <button type="submit" class="btn-submit-log">
-                    <i class="fas fa-save fs-5"></i> AJUKAN IZIN KELUAR
+                    <i class="fas fa-paper-plane"></i> AJUKAN IZIN KELUAR
                 </button>
             </form>
         </div>
@@ -482,19 +455,43 @@ body { font-family: 'Inter', sans-serif; background: transparent; }
             <div class="form-section-title">
                 <span><i class="fas fa-clock-rotate-left text-secondary me-2"></i> Riwayat Izin Terakhir</span>
             </div>
-            @foreach($riwayat as $item)
-            <div class="riwayat-item">
-                <div class="riwayat-info">
-                    <div class="cat">{!! $item->getKategoriBadgeHtml() !!} {{ $item->subkategori }}</div>
-                    <div class="waktu">{{ $item->waktu_berangkat->format('d/m/Y H:i') }} &rarr; {{ $item->waktu_kembali ? $item->waktu_kembali->format('d/m/Y H:i') : 'Masih di luar' }}</div>
+            <div class="ds-table-wrap">
+                <div class="ds-scroll">
+                    <table class="ds-table">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Kategori</th>
+                                <th>Waktu Berangkat</th>
+                                <th>Waktu Kembali</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($riwayat as $item)
+                            <tr>
+                                <td class="ds-num">{{ $loop->iteration }}</td>
+                                <td>{!! $item->getKategoriBadgeHtml() !!} <span class="ds-mono">{{ $item->subkategori }}</span></td>
+                                <td class="ds-name">{{ $item->waktu_berangkat->format('d/m/Y H:i') }}</td>
+                                <td>@if($item->waktu_kembali)<span class="ds-name">{{ $item->waktu_kembali->format('d/m/Y H:i') }}</span>@else<span class="ds-mono">Masih di luar</span>@endif</td>
+                                <td>
+                                    @if($item->isBelumKembali())
+                                    <span class="ds-badge ds-badge--danger"><span class="ds-dot ds-dot--pulse" style="background:var(--danger)"></span> Belum Kembali</span>
+                                    @else
+                                    <span class="ds-badge ds-badge--success"><i class="fas fa-check-circle"></i> Sudah Kembali</span>
+                                    @endif
+                                </td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
                 </div>
-                <div>{!! $item->getStatusBadgeHtml() !!}</div>
             </div>
-            @endforeach
         </div>
         @endif
 
-    </main>
+    </div>
+</main>
 
 <script>
     function selectCategory(cat) {

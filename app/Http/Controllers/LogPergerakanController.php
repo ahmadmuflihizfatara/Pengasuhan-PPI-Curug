@@ -218,6 +218,11 @@ class LogPergerakanController extends Controller
             ]);
         }
 
+        // Taruna: tanpa notifikasi — kotak "Anda sedang di luar asrama" sudah jadi konfirmasi
+        if ($isTaruna) {
+            return redirect()->back();
+        }
+
         return redirect()->back()->with('success', 'Log keberangkatan berhasil disimpan! Status: 🔴 BELUM KEMBALI');
     }
 
@@ -268,6 +273,11 @@ class LogPergerakanController extends Controller
                 'message' => 'Status kepulangan berhasil dicatat! Status: 🟢 SUDAH KEMBALI',
                 'data'    => $log
             ]);
+        }
+
+        // Taruna: tanpa notifikasi — formulir pengajuan yang muncul lagi sudah jadi konfirmasi
+        if (auth()->user()->hasTarunaAccess()) {
+            return redirect()->back();
         }
 
         return redirect()->back()->with('success', "Taruna {$log->nama} telah ditandai: 🟢 SUDAH KEMBALI.");

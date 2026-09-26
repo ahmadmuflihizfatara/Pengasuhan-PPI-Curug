@@ -117,9 +117,9 @@ class LogPergerakan extends Model
     public function getStatusBadgeHtml(): string
     {
         if ($this->status === self::STATUS_BERANGKAT) {
-            return '<span class="badge-status-belum"><span class="pulse-dot"></span> BELUM KEMBALI</span>';
+            return '<span class="badge-status-belum"><span class="pulse-dot"></span> Belum Kembali</span>';
         }
-        return '<span class="badge-status-sudah"><i class="fas fa-check-circle me-1"></i> SUDAH KEMBALI</span>';
+        return '<span class="badge-status-sudah"><i class="fas fa-check-circle me-1"></i> Sudah Kembali</span>';
     }
 
     public function getKategoriBadgeHtml(): string
