@@ -6,10 +6,11 @@
 
     /* Artikel */
     .ar-card { padding: 0; overflow: hidden; }
-    .ar-hero { position: relative; height: 300px; display: grid; place-items: center; background: var(--ar-tint); color: var(--ar-ink); font-size: 64px; }
+    .ar-hero { position: relative; height: 300px; overflow: hidden; }
+    .ar-grad { position: absolute; inset: 0; display: grid; place-items: center; font-size: 72px; color: rgba(255,255,255,.75); }
     .ar-hero img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
-    .ar-hero--ikon { height: 170px; }
-    @media (max-width: 640px) { .ar-hero { height: 190px; font-size: 44px; } .ar-hero--ikon { height: 130px; } }
+    .ar-hero--ikon { height: 240px; }
+    @media (max-width: 640px) { .ar-hero { height: 190px; } .ar-hero--ikon { height: 170px; } .ar-grad { font-size: 52px; } }
     .ar-isi { padding: var(--space-6) var(--space-7, 28px); }
     @media (max-width: 640px) { .ar-isi { padding: var(--space-5) var(--space-4); } }
     .ar-meta { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-2) var(--space-3); margin-bottom: var(--space-3-5); }
@@ -33,7 +34,8 @@
     .rl-item { display: flex; align-items: center; gap: var(--space-3); padding: var(--space-2) var(--space-2-5); border-radius: var(--radius-md); background: var(--glass-card); border: 1px solid var(--border-glass-glow); color: inherit; text-decoration: none; transition: background-color .15s, box-shadow .15s; }
     .rl-item:hover { background: var(--glass-solid); box-shadow: var(--shadow-glass-sm); color: inherit; }
     .rl-item:focus-visible { outline: none; box-shadow: var(--shadow-focus); }
-    .rl-thumb { position: relative; width: 52px; height: 52px; flex-shrink: 0; overflow: hidden; border-radius: var(--radius-sm); display: grid; place-items: center; background: var(--rl-tint); color: var(--rl-ink); font-size: 18px; }
+    .rl-thumb { position: relative; width: 52px; height: 52px; flex-shrink: 0; overflow: hidden; border-radius: var(--radius-sm); }
+    .rl-grad { position: absolute; inset: 0; display: grid; place-items: center; font-size: 18px; color: rgba(255,255,255,.8); }
     .rl-thumb img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
     .rl-body { min-width: 0; }
     .rl-judul { font-size: 12px; line-height: 17px; font-weight: 800; color: var(--ink-900); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
@@ -60,11 +62,11 @@
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 items-start">
             {{-- Artikel --}}
             <article class="ds-card ar-card lg:col-span-2">
-                <div class="ar-hero {{ $beritum->gambar ? '' : 'ar-hero--ikon' }}" style="--ar-tint: var(--{{ $varian }}-tint); --ar-ink: var(--{{ $varian }}-ink);">
+                <div class="ar-hero {{ $beritum->gambar ? '' : 'ar-hero--ikon' }}">
                     @if($beritum->gambar)
                         <img src="{{ Storage::url($beritum->gambar) }}" alt="{{ $beritum->judul }}">
                     @else
-                        <i class="fa-solid {{ $beritum->kategori_icon }}" aria-hidden="true"></i>
+                        <div class="ar-grad" style="background: {{ $beritum->card_gradient }}" aria-hidden="true"><i class="fa-solid {{ $beritum->kategori_icon }}"></i></div>
                     @endif
                 </div>
 
@@ -129,11 +131,11 @@
                 <div class="rl-list">
                     @foreach($terkait as $r)
                     <a href="{{ route('berita.show', $r) }}" class="rl-item">
-                        <span class="rl-thumb" style="--rl-tint: var(--{{ $r->kategori_varian }}-tint); --rl-ink: var(--{{ $r->kategori_varian }}-ink);">
+                        <span class="rl-thumb">
                             @if($r->gambar)
                                 <img src="{{ Storage::url($r->gambar) }}" alt="" loading="lazy">
                             @else
-                                <i class="fa-solid {{ $r->kategori_icon }}"></i>
+                                <span class="rl-grad" style="background: {{ $r->card_gradient }}" aria-hidden="true"><i class="fa-solid {{ $r->kategori_icon }}"></i></span>
                             @endif
                         </span>
                         <span class="rl-body">

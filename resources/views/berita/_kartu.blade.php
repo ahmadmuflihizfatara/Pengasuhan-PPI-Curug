@@ -1,11 +1,12 @@
 {{-- Kartu berita (PPI Curug Glass) — dipakai section "Dipin" & "Semua Berita". Gaya .br-* ada di berita/index --}}
 @php $varian = $item->kategori_varian; @endphp
 <article class="br-card {{ $item->is_pinned ? 'br-card--pin' : '' }}">
-    <div class="br-thumb" style="--br-tint: var(--{{ $varian }}-tint); --br-ink: var(--{{ $varian }}-ink);">
+    <div class="br-thumb">
         @if($item->gambar)
             <img src="{{ Storage::url($item->gambar) }}" alt="" loading="lazy">
         @else
-            <i class="fa-solid {{ $item->kategori_icon }}"></i>
+            {{-- Gambar default: gradien warna kategori + ikon --}}
+            <div class="br-grad" style="background: {{ $item->card_gradient }}" aria-hidden="true"><i class="fa-solid {{ $item->kategori_icon }}"></i></div>
         @endif
         @if($item->is_pinned)
         <span class="ds-badge ds-badge--warning br-thumb__pin"><i class="fa-solid fa-thumbtack"></i> Dipin</span>

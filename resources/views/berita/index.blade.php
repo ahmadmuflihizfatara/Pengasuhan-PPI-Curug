@@ -37,9 +37,10 @@
     .br-card:hover { background: var(--glass-solid); box-shadow: var(--shadow-card-hover); transform: translateY(-2px); }
     .br-card:focus-within { box-shadow: var(--shadow-focus); }
     .br-card--pin { border-color: var(--warning-border); }
-    .br-thumb { position: relative; width: 200px; flex-shrink: 0; min-height: 190px; display: grid; place-items: center; background: var(--br-tint); color: var(--br-ink); font-size: 40px; }
+    .br-thumb { position: relative; width: 200px; flex-shrink: 0; min-height: 190px; overflow: hidden; }
     .br-thumb img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
-    .br-thumb__pin { position: absolute; top: var(--space-2-5); left: var(--space-2-5); background: var(--glass-solid); box-shadow: var(--shadow-glass-sm); }
+    .br-grad { position: absolute; inset: 0; display: grid; place-items: center; font-size: 38px; color: rgba(255,255,255,.8); }
+    .br-thumb__pin { position: absolute; z-index: 1; top: var(--space-2-5); left: var(--space-2-5); background: var(--glass-solid); box-shadow: var(--shadow-glass-sm); }
     .br-body { display: flex; flex-direction: column; flex: 1; min-width: 0; padding: var(--space-4) var(--space-5); }
     .br-meta { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-1-5) var(--space-2-5); margin-bottom: var(--space-2-5); }
     .br-waktu { font-size: 11px; line-height: 16px; font-weight: 600; color: var(--ink-600); }

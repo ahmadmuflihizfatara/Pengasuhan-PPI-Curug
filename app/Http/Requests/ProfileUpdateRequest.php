@@ -20,4 +20,17 @@ class ProfileUpdateRequest extends FormRequest
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', Rule::unique(User::class)->ignore($this->user()->id)],
         ];
     }
+
+    public function messages(): array
+    {
+        return [
+            'name.required'   => 'Nama lengkap wajib diisi.',
+            'name.max'        => 'Nama lengkap maksimal :max karakter.',
+            'email.required'  => 'Alamat email wajib diisi.',
+            'email.email'     => 'Format alamat email tidak valid.',
+            'email.lowercase' => 'Alamat email harus huruf kecil semua.',
+            'email.max'       => 'Alamat email maksimal :max karakter.',
+            'email.unique'    => 'Alamat email sudah dipakai akun lain.',
+        ];
+    }
 }
