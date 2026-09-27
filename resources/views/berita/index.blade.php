@@ -1,414 +1,180 @@
 <x-app-layout>
+<x-form-glass-style />
 <style>
-* { box-sizing: border-box; }
-body { font-family: 'Inter', sans-serif; background: transparent; }
-.app-layout { display: flex; min-height: 100vh; }
-.main-content { flex: 1; padding: 28px 28px 28px 24px; min-width: 0; }
+    /* Kartu aksi pengelola — pola kartu ajukan tab surat & barak */
+    .br-aksi-kartu { display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); flex-wrap: wrap; }
+    .br-aksi-kartu__teks { font-size: 13px; font-weight: 600; color: var(--ink-700); }
+    .br-aksi-kartu__teks i { color: var(--accent); margin-right: var(--space-1-5); }
 
-/* ── Page Header ── */
-.page-header {
-    background: linear-gradient(135deg, #4f46e5 0%, #4338ca 100%);
-    border-radius: 18px; padding: 28px 32px;
-    color: white; margin-bottom: 24px;
-    display: flex; align-items: center; justify-content: space-between;
-    position: relative; overflow: hidden;
-}
-.page-header::before { content:''; position:absolute; right:-50px; top:-50px; width:200px; height:200px; background:rgba(255,255,255,.07); border-radius:50%; }
-.page-header::after  { content:''; position:absolute; right:90px; bottom:-70px; width:160px; height:160px; background:rgba(255,255,255,.05); border-radius:50%; }
-.page-header-text    { position:relative; z-index:1; }
-.page-header-text h1 { font-size:22px; font-weight:800; margin:0 0 5px; }
-.page-header-text p  { font-size:13px; opacity:.85; margin:0; }
-.page-header-actions { position:relative; z-index:1; display:flex; gap:10px; align-items:center; }
+    /* Filter kategori + pencarian */
+    .br-filter { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--space-3); }
+    .br-chips { display: flex; flex-wrap: wrap; gap: var(--space-1-5); }
+    .br-chip {
+        display: inline-flex; align-items: center; gap: var(--space-1-5); padding: var(--space-1-5) var(--space-3);
+        border-radius: var(--radius-pill); border: 1px solid var(--border-glass-glow); background: var(--glass-card);
+        font-size: 12px; line-height: 16px; font-weight: 700; color: var(--ink-700); text-decoration: none;
+        transition: background-color .15s, color .15s, box-shadow .15s;
+    }
+    .br-chip:hover { background: var(--glass-solid); color: var(--ink-900); }
+    .br-chip:focus-visible { outline: none; box-shadow: var(--shadow-focus); }
+    .br-chip--aktif, .br-chip--aktif:hover { background: var(--accent); border-color: transparent; color: var(--ink-on-dark); box-shadow: var(--shadow-glass-sm); }
+    .br-chip__dot { width: 8px; height: 8px; border-radius: 50%; }
+    .br-chip__jml { font-family: var(--font-mono); font-size: 11px; opacity: .8; }
+    .br-cari { display: flex; gap: var(--space-2); flex: 1; min-width: 240px; max-width: 420px; }
+    .br-cari__input { position: relative; flex: 1; }
+    .br-cari__input i { position: absolute; left: var(--space-3); top: 50%; transform: translateY(-50%); font-size: 12px; color: var(--ink-500); pointer-events: none; }
+    .br-cari__input .form-control { padding-left: 34px; }
+    @media (max-width: 640px) { .br-cari { max-width: none; } }
 
-/* ── Stats Row ── */
-.stats-row {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 12px; margin-bottom: 22px;
-}
-.stat-pill {
-    background: white; border-radius: 12px;
-    padding: 14px 16px; text-align: center;
-    box-shadow: 0 2px 10px rgba(0,0,0,.05);
-    cursor: pointer; transition: transform .15s, box-shadow .15s;
-    text-decoration: none; display: block;
-    border: 2px solid transparent;
-}
-.stat-pill:hover          { transform: translateY(-2px); box-shadow: 0 5px 18px rgba(0,0,0,.1); }
-.stat-pill.active         { border-color: #4f46e5; }
-.stat-pill .sp-count      { font-size: 20px; font-weight: 800; color: #333; }
-.stat-pill .sp-label      { font-size: 11px; color: #888; font-weight: 500; margin-top: 2px; }
-.stat-pill .sp-dot        { width: 8px; height: 8px; border-radius: 50%; display: inline-block; margin-right: 5px; }
-
-/* ── Filter & Search Bar ── */
-.filter-bar {
-    background: white; border-radius: 14px;
-    padding: 14px 18px; margin-bottom: 22px;
-    display: flex; gap: 10px; align-items: center;
-    flex-wrap: wrap; box-shadow: 0 2px 10px rgba(0,0,0,.05);
-}
-.filter-bar .search-wrap { position: relative; flex: 1; min-width: 200px; }
-.filter-bar .search-wrap .fa-search { position:absolute; left:11px; top:50%; transform:translateY(-50%); color:#bbb; font-size:12px; }
-.filter-bar input[type=text] {
-    width:100%; padding:9px 12px 9px 32px;
-    border:1.5px solid #edf0f7; border-radius:9px;
-    font-size:13px; font-family:'Inter',sans-serif;
-    outline:none; color:#444; transition:border-color .15s;
-}
-.filter-bar input:focus { border-color:#4f46e5; }
-.filter-bar select {
-    padding:9px 32px 9px 12px; border:1.5px solid #edf0f7;
-    border-radius:9px; font-size:13px; color:#444;
-    font-family:'Inter',sans-serif; appearance:none;
-    background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%23999' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E") no-repeat right 10px center;
-    outline:none; cursor:pointer;
-}
-.filter-bar select:focus { border-color:#4f46e5; }
-.filter-btn {
-    padding:9px 18px; border-radius:9px; font-size:13px;
-    font-weight:600; border:none; cursor:pointer;
-    transition:background .15s;
-}
-.filter-btn.primary { background:linear-gradient(135deg,#4f46e5,#4338ca); color:white; }
-.filter-btn.secondary { background:#f0f1fb; color:#4f46e5; }
-
-/* ── Pinned Banner ── */
-.pinned-section { margin-bottom: 24px; }
-.pinned-banner {
-    background: linear-gradient(135deg,#fff7e6,#fff0f0);
-    border: 1.5px solid #fdd;
-    border-radius: 14px; padding: 14px 18px;
-    display: flex; align-items: center; gap: 10px; margin-bottom: 14px;
-}
-.pinned-banner i { color: #e07020; font-size: 15px; }
-.pinned-banner span { font-size: 13px; font-weight: 700; color: #c05020; }
-
-.pinned-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 16px;
-}
-@media (max-width: 1100px) { .pinned-grid { grid-template-columns: 1fr; } }
-
-/* ── Berita Cards Grid ── */
-.berita-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 18px;
-    margin-bottom: 28px;
-}
-@media (max-width: 1100px) { .berita-grid { grid-template-columns: 1fr; } }
-
-/* ── Card ── */
-.berita-card {
-    background: white; border-radius: 16px;
-    box-shadow: 0 2px 14px rgba(0,0,0,.06);
-    overflow: hidden; display: flex; flex-direction: row;
-    transition: transform .2s, box-shadow .2s;
-    text-decoration: none; color: inherit;
-}
-.berita-card:hover { transform: translateY(-4px); box-shadow: 0 8px 28px rgba(0,0,0,.12); }
-.berita-card.pinned-card { border: 2px solid #f6ad55; }
-
-.bc-img {
-    width: 240px; position: relative; flex-shrink: 0;
-}
-.bc-img img { width:100%; height:100%; object-fit:cover; }
-.bc-img .bc-gradient {
-    width:100%; height:100%; min-height: 180px;
-    display:flex; align-items:center; justify-content:center;
-    font-size:38px; color:rgba(255,255,255,.8);
-}
-.bc-img .bc-pin-badge {
-    position:absolute; top:10px; right:10px;
-    background:#e07020; color:white;
-    border-radius:20px; padding:3px 9px;
-    font-size:10px; font-weight:800; display:flex; align-items:center; gap:4px;
-}
-
-.bc-body { padding: 16px; flex: 1; display: flex; flex-direction: column; }
-.bc-meta  { display:flex; align-items:center; gap:8px; margin-bottom:10px; flex-wrap:wrap; }
-.kat-badge  {
-    display:inline-flex; align-items:center; gap:5px;
-    padding:3px 10px; border-radius:20px; font-size:10px; font-weight:700;
-}
-.bc-date  { font-size:11px; color:#aab; display:flex; align-items:center; gap:4px; }
-.bc-title { font-size:14px; font-weight:700; color:#2d3748; line-height:1.45; margin:0 0 8px; }
-.bc-desc  { font-size:12px; color:#718096; line-height:1.6; flex:1; }
-.bc-footer {
-    margin-top:14px; padding-top:12px; border-top:1px solid #f0f2f7;
-    display:flex; align-items:center; justify-content:space-between;
-}
-.bc-author { display:flex; align-items:center; gap:7px; }
-.bc-ava  { width:24px; height:24px; border-radius:50%; background:linear-gradient(135deg,#4f46e5,#4338ca); color:white; font-size:9px; font-weight:800; display:flex; align-items:center; justify-content:center; }
-.bc-author-name { font-size:11px; color:#888; }
-.bc-read-more   { font-size:11px; color:#4f46e5; font-weight:700; display:flex; align-items:center; gap:4px; }
-
-/* ── Staff Actions ── */
-.bc-staff-actions { display:flex; gap:6px; margin-top:8px; }
-.bc-action-btn {
-    padding:5px 10px; border-radius:7px; font-size:11px; font-weight:600;
-    border:none; cursor:pointer; display:inline-flex; align-items:center; gap:4px;
-    text-decoration:none; transition:opacity .15s;
-}
-.bc-action-btn:hover { opacity:.85; }
-.bc-action-btn.edit  { background:#eef0ff; color:#4f46e5; }
-.bc-action-btn.del   { background:#fff0f0; color:#e53e3e; }
-.bc-action-btn.pin   { background:#fff7e6; color:#e07020; }
-
-/* ── Empty State ── */
-.empty-state { text-align:center; padding:60px 20px; background:white; border-radius:16px; }
-.empty-state i   { font-size:48px; color:#e2e5ee; display:block; margin-bottom:14px; }
-.empty-state h3  { font-size:16px; color:#aab; font-weight:600; margin:0 0 6px; }
-.empty-state p   { font-size:13px; color:#bbb; margin:0; }
-
-@media (max-width: 768px) {
-    .berita-card { flex-direction: column; }
-    .bc-img { width: 100%; height: 180px; }
-}
-
-/* ── Pagination ── */
-.pagination-wrap { display:flex; justify-content:center; margin-top:8px; }
-.pagination-wrap nav { font-size:13px; }
-
-/* ── Alert ── */
-.alert { padding:12px 18px; border-radius:10px; margin-bottom:18px; font-size:13px; font-weight:600; display:flex; align-items:center; gap:9px; }
-.alert-success { background:#e6fff5; color:#276749; border:1px solid #b2f5ea; }
-.alert-error   { background:#fff0f0; color:#9b2c2c; border:1px solid #fed7d7; }
-
-/* ── Btn styles ── */
-.btn-create {
-    display:inline-flex; align-items:center; gap:8px;
-    background:rgba(255,255,255,.18); color:white;
-    padding:9px 18px; border-radius:10px; font-size:13px;
-    font-weight:700; text-decoration:none; border:1px solid rgba(255,255,255,.3);
-    backdrop-filter:blur(4px); transition:background .15s;
-}
-.btn-create:hover { background:rgba(255,255,255,.28); color:white; }
+    /* Kartu berita */
+    .br-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-4); }
+    @media (max-width: 1023px) { .br-grid { grid-template-columns: 1fr; } }
+    .br-card {
+        position: relative; display: flex; min-width: 0; overflow: hidden;
+        border-radius: var(--radius-lg); background: var(--glass-card); border: 1px solid var(--border-glass-glow);
+        transition: background-color .2s, box-shadow .2s, transform .2s;
+    }
+    .br-card:hover { background: var(--glass-solid); box-shadow: var(--shadow-card-hover); transform: translateY(-2px); }
+    .br-card:focus-within { box-shadow: var(--shadow-focus); }
+    .br-card--pin { border-color: var(--warning-border); }
+    .br-thumb { position: relative; width: 200px; flex-shrink: 0; min-height: 190px; display: grid; place-items: center; background: var(--br-tint); color: var(--br-ink); font-size: 40px; }
+    .br-thumb img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+    .br-thumb__pin { position: absolute; top: var(--space-2-5); left: var(--space-2-5); background: var(--glass-solid); box-shadow: var(--shadow-glass-sm); }
+    .br-body { display: flex; flex-direction: column; flex: 1; min-width: 0; padding: var(--space-4) var(--space-5); }
+    .br-meta { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-1-5) var(--space-2-5); margin-bottom: var(--space-2-5); }
+    .br-waktu { font-size: 11px; line-height: 16px; font-weight: 600; color: var(--ink-600); }
+    .br-judul { margin: 0 0 var(--space-1-5); font-size: 15px; line-height: 21px; font-weight: 800; color: var(--ink-900); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+    .br-link { color: inherit; text-decoration: none; }
+    .br-link:focus { outline: none; }
+    .br-link::after { content: ''; position: absolute; inset: 0; }
+    .br-ringkas { flex: 1; margin: 0; font-size: 12px; line-height: 18px; font-weight: 500; color: var(--ink-700); display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+    .br-foot { display: flex; align-items: center; justify-content: space-between; gap: var(--space-2); margin-top: var(--space-3-5); padding-top: var(--space-3); border-top: 1px solid var(--border-glass-subtle); }
+    .br-penulis { display: flex; align-items: center; gap: var(--space-2); min-width: 0; font-size: 11px; font-weight: 700; color: var(--ink-700); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .br-baca { flex-shrink: 0; font-size: 12px; font-weight: 800; color: var(--accent-ink); }
+    .br-baca i { font-size: 10px; margin-left: 2px; transition: transform .15s; }
+    .br-card:hover .br-baca i { transform: translateX(3px); }
+    .br-aksi { position: relative; z-index: 1; display: flex; flex-wrap: wrap; gap: var(--space-1-5); margin-top: var(--space-2-5); }
+    .br-aksi form { margin: 0; }
+    @media (max-width: 640px) {
+        .br-card { flex-direction: column; }
+        .br-thumb { width: 100%; min-height: 150px; }
+    }
+    .br-pagination { margin-top: var(--space-5); }
 </style>
 
 {{-- Top Floating Island Capsule Navbar --}}
 <x-island-navbar />
 
+@php
+    $kategoriAktif = request('kategori', 'semua');
+    $chips = [
+        'semua'      => ['Semua',      'var(--accent)',  $stats['total']],
+        'pengumuman' => ['Pengumuman', 'var(--danger)',  $stats['pengumuman']],
+        'prestasi'   => ['Prestasi',   'var(--warning)', $stats['prestasi']],
+        'kegiatan'   => ['Kegiatan',   'var(--success)', $stats['kegiatan']],
+        'informasi'  => ['Informasi',  'var(--info-ink)', $stats['informasi']],
+    ];
+@endphp
+
 <main class="max-w-7xl mx-auto px-4 sm:px-6 pb-12 pt-2">
     <div class="spatial-workspace-window rounded-3xl bg-white/30 backdrop-blur-2xl border border-white/50 shadow-2xl p-4 sm:p-7 relative overflow-hidden">
 
-        {{-- Alert --}}
-        @if(session('success'))
-        <div class="alert alert-success">
-            <i class="fas fa-check-circle"></i> {{ session('success') }}
+        {{-- Header — sama dengan header tab poin, surat & barak --}}
+        <x-page-banner title="Berita Taruna" icon="fa-newspaper"
+            subtitle="Artikel, pengumuman, dan informasi seputar kegiatan taruna" />
+
+        @unless(Auth::user()->hasTarunaAccess())
+        <div class="ds-card br-aksi-kartu mb-4">
+            <span class="br-aksi-kartu__teks"><i class="fa-solid fa-pen-nib"></i>Bagikan pengumuman, prestasi, atau kegiatan terbaru kepada taruna</span>
+            <a href="{{ route('berita.create') }}" class="ds-btn ds-btn--primary"><i class="fa-solid fa-plus"></i> Tulis Berita</a>
         </div>
+        @endunless
+
+        @if(session('success'))
+        <x-glass-alert type="success" title="Berhasil">{{ session('success') }}</x-glass-alert>
         @endif
         @if(session('error'))
-        <div class="alert alert-error">
-            <i class="fas fa-exclamation-circle"></i> {{ session('error') }}
-        </div>
+        <x-glass-alert type="danger" title="Gagal">{{ session('error') }}</x-glass-alert>
         @endif
 
-        {{-- Page Header --}}
-        <div class="page-header">
-            <div class="page-header-text">
-                <h1><i class="fas fa-newspaper" style="margin-right:10px;"></i>Berita Taruna</h1>
-                <p>Artikel, pengumuman, dan informasi seputar kegiatan taruna</p>
-            </div>
-            <div class="page-header-actions">
-                @if(!Auth::user()->hasTarunaAccess())
-                <a href="{{ route('berita.create') }}" class="btn-create">
-                    <i class="fas fa-plus"></i> Tulis Berita
+        {{-- Filter kategori & pencarian --}}
+        <div class="ds-card br-filter mb-4">
+            <nav class="br-chips" aria-label="Kategori berita">
+                @foreach($chips as $key => [$label, $warna, $jumlah])
+                <a href="{{ route('berita.index', array_filter(['kategori' => $key === 'semua' ? null : $key, 'search' => request('search')])) }}"
+                   class="br-chip {{ $kategoriAktif === $key ? 'br-chip--aktif' : '' }}" @if($kategoriAktif === $key) aria-current="page" @endif>
+                    @unless($kategoriAktif === $key)<span class="br-chip__dot" style="background: {{ $warna }}"></span>@endunless
+                    {{ $label }} <span class="br-chip__jml">{{ $jumlah }}</span>
                 </a>
-                @endif
-            </div>
-        </div>
+                @endforeach
+            </nav>
 
-        {{-- Stats Row --}}
-        <div class="stats-row">
-            <a href="{{ route('berita.index') }}" class="stat-pill {{ !request('kategori') || request('kategori') === 'semua' ? 'active' : '' }}">
-                <div class="sp-count">{{ $stats['total'] }}</div>
-                <div class="sp-label"><span class="sp-dot" style="background:#4f46e5;"></span>Semua</div>
-            </a>
-            <a href="{{ route('berita.index', ['kategori' => 'pengumuman']) }}" class="stat-pill {{ request('kategori') === 'pengumuman' ? 'active' : '' }}">
-                <div class="sp-count">{{ $stats['pengumuman'] }}</div>
-                <div class="sp-label"><span class="sp-dot" style="background:#e53e3e;"></span>Pengumuman</div>
-            </a>
-            <a href="{{ route('berita.index', ['kategori' => 'prestasi']) }}" class="stat-pill {{ request('kategori') === 'prestasi' ? 'active' : '' }}">
-                <div class="sp-count">{{ $stats['prestasi'] }}</div>
-                <div class="sp-label"><span class="sp-dot" style="background:#d69e2e;"></span>Prestasi</div>
-            </a>
-            <a href="{{ route('berita.index', ['kategori' => 'kegiatan']) }}" class="stat-pill {{ request('kategori') === 'kegiatan' ? 'active' : '' }}">
-                <div class="sp-count">{{ $stats['kegiatan'] }}</div>
-                <div class="sp-label"><span class="sp-dot" style="background:#38a169;"></span>Kegiatan</div>
-            </a>
-            <a href="{{ route('berita.index', ['kategori' => 'informasi']) }}" class="stat-pill {{ request('kategori') === 'informasi' ? 'active' : '' }}">
-                <div class="sp-count">{{ $stats['informasi'] }}</div>
-                <div class="sp-label"><span class="sp-dot" style="background:#3182ce;"></span>Informasi</div>
-            </a>
-        </div>
-
-        {{-- Filter Bar --}}
-        <form method="GET" action="{{ route('berita.index') }}">
-            @if(request('kategori'))
-                <input type="hidden" name="kategori" value="{{ request('kategori') }}">
-            @endif
-            <div class="filter-bar">
-                <div class="search-wrap">
-                    <i class="fas fa-search"></i>
-                    <input type="text" name="search" placeholder="Cari judul, isi berita..." value="{{ request('search') }}">
+            <form method="GET" action="{{ route('berita.index') }}" class="br-cari" role="search">
+                @if(request('kategori'))<input type="hidden" name="kategori" value="{{ request('kategori') }}">@endif
+                <div class="br-cari__input">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="search" name="search" class="form-control" placeholder="Cari berita..." value="{{ request('search') }}" aria-label="Cari berita">
                 </div>
-                <button type="submit" class="filter-btn primary"><i class="fas fa-search"></i> Cari</button>
+                <button type="submit" class="ds-btn ds-btn--primary">Cari</button>
                 @if(request('search') || request('kategori'))
-                <a href="{{ route('berita.index') }}" class="filter-btn secondary"><i class="fas fa-times"></i> Reset</a>
+                <a href="{{ route('berita.index') }}" class="ds-btn" title="Reset filter"><i class="fa-solid fa-xmark"></i></a>
                 @endif
-            </div>
-        </form>
+            </form>
+        </div>
 
-        {{-- Pinned Articles --}}
-        @if($pinned->isNotEmpty() && (!request('search')))
-        <div class="pinned-section">
-            <div class="pinned-banner">
-                <i class="fas fa-thumbtack"></i>
-                <span>Berita Dipin — Penting untuk dibaca</span>
-            </div>
-            <div class="pinned-grid">
-                @foreach($pinned as $item)
-                <div class="berita-card pinned-card" onclick="window.location='{{ route('berita.show', $item) }}'" style="cursor:pointer;">
-                    <div class="bc-img">
-                        @if($item->gambar)
-                            <img src="{{ Storage::url($item->gambar) }}" alt="{{ $item->judul }}">
-                        @else
-                            <div class="bc-gradient" style="background:{{ $item->card_gradient }};">
-                                <i class="fas {{ $item->kategori_icon }}"></i>
-                            </div>
-                        @endif
-                        <span class="bc-pin-badge"><i class="fas fa-thumbtack"></i> Pinned</span>
-                    </div>
-                    <div class="bc-body">
-                        <div class="bc-meta">
-                            <span class="kat-badge" style="background:{{ $item->kategori_bg_color }};color:{{ $item->kategori_color }};">
-                                <i class="fas {{ $item->kategori_icon }}" style="font-size:9px;"></i>
-                                {{ $item->kategori_label }}
-                            </span>
-                            <span class="bc-date"><i class="far fa-clock"></i> {{ $item->waktu_relatif }}</span>
-                        </div>
-                        <div class="bc-title">{{ $item->judul }}</div>
-                        <div class="bc-desc">{{ $item->ringkasan_auto }}</div>
-                        <div class="bc-footer">
-                            <div class="bc-author">
-                                <div class="bc-ava">{{ strtoupper(substr($item->penulis->name ?? 'A', 0, 2)) }}</div>
-                                <span class="bc-author-name">{{ $item->penulis->name ?? 'Admin' }}</span>
-                            </div>
-                            <span class="bc-read-more">Baca <i class="fas fa-arrow-right" style="font-size:9px;"></i></span>
-                        </div>
-                        @if(!Auth::user()->hasTarunaAccess())
-                        <div class="bc-staff-actions">
-                            <a href="{{ route('berita.edit', $item) }}" class="bc-action-btn edit" onclick="event.preventDefault(); event.stopPropagation(); window.location='{{ route('berita.edit', $item) }}';">
-                                <i class="fas fa-pen"></i> Edit
-                            </a>
-                            <form method="POST" action="{{ route('berita.toggle-pin', $item) }}" style="display:inline;" onclick="event.stopPropagation();">
-                                @csrf @method('PATCH')
-                                <button type="submit" class="bc-action-btn pin">
-                                    <i class="fas fa-thumbtack"></i> {{ $item->is_pinned ? 'Unpin' : 'Pin' }}
-                                </button>
-                            </form>
-                            <form method="POST" action="{{ route('berita.destroy', $item) }}" style="display:inline;" onclick="event.stopPropagation();" onsubmit="return confirm('Hapus berita ini?')">
-                                @csrf @method('DELETE')
-                                <button type="submit" class="bc-action-btn del"><i class="fas fa-trash"></i> Hapus</button>
-                            </form>
-                        </div>
-                        @endif
-                    </div>
+        {{-- Berita dipin --}}
+        @if($pinned->isNotEmpty() && !request('search'))
+        <div class="ds-card mb-4">
+            <div class="ds-card__head tbl-head">
+                <div>
+                    <h3 class="ds-card__title"><i class="fa-solid fa-thumbtack ds-icon"></i> Berita Dipin</h3>
+                    <p class="ds-card__desc">Penting untuk dibaca</p>
                 </div>
+                <span class="ds-badge ds-badge--warning">{{ $pinned->count() }} berita</span>
+            </div>
+            <div class="br-grid">
+                @foreach($pinned as $item)
+                    @include('berita._kartu', ['item' => $item])
                 @endforeach
             </div>
         </div>
         @endif
 
-        {{-- Main Grid --}}
-        @if($berita->isEmpty() && $pinned->isEmpty())
-        <div class="empty-state">
-            <i class="fas fa-newspaper"></i>
-            <h3>Belum ada berita</h3>
-            <p>
+        {{-- Semua berita --}}
+        <div class="ds-card">
+            <div class="ds-card__head tbl-head">
+                <div>
+                    <h3 class="ds-card__title"><i class="fa-solid fa-list ds-icon"></i> Semua Berita</h3>
+                    <p class="ds-card__desc">
+                        @if(request('search'))Hasil pencarian "{{ request('search') }}"@else Berita terbaru tampil paling atas @endif
+                    </p>
+                </div>
+                <span class="ds-badge ds-badge--accent">{{ $berita->total() }} artikel</span>
+            </div>
+
+            @if($berita->isEmpty())
+            <div class="ds-empty">
+                <i class="fa-solid fa-newspaper ds-icon"></i>
                 @if(request('search'))
-                    Tidak ada hasil untuk "<strong>{{ request('search') }}</strong>". Coba kata kunci lain.
-                @elseif(!Auth::user()->hasTarunaAccess())
-                    Mulai tulis berita pertama untuk taruna.
+                    Tidak ada hasil untuk "{{ request('search') }}". Coba kata kunci lain.
+                @elseif($pinned->isNotEmpty())
+                    Tidak ada berita lain selain berita yang dipin.
                 @else
                     Belum ada berita yang dipublikasikan.
                 @endif
-            </p>
-            @if(!Auth::user()->hasTarunaAccess())
-            <a href="{{ route('berita.create') }}" style="display:inline-flex;align-items:center;gap:8px;margin-top:16px;background:linear-gradient(135deg,#4f46e5,#4338ca);color:white;padding:10px 22px;border-radius:10px;text-decoration:none;font-weight:700;font-size:13px;">
-                <i class="fas fa-plus"></i> Tulis Berita Pertama
-            </a>
+            </div>
+            @else
+            <div class="br-grid">
+                @foreach($berita as $item)
+                    @include('berita._kartu', ['item' => $item])
+                @endforeach
+            </div>
+            @if($berita->hasPages())
+            <div class="br-pagination">{{ $berita->links() }}</div>
+            @endif
             @endif
         </div>
-        @elseif($berita->isNotEmpty())
-        <div class="section-header" style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
-            <h3 style="font-size:15px;font-weight:700;color:#333;margin:0;">
-                <i class="fas fa-list" style="color:#4f46e5;margin-right:8px;"></i>
-                Semua Berita
-                @if(request('search'))
-                <span style="font-size:12px;color:#888;font-weight:400;"> — hasil pencarian "{{ request('search') }}"</span>
-                @endif
-            </h3>
-            <span style="font-size:12px;color:#aab;">{{ $berita->total() }} artikel</span>
-        </div>
-        <div class="berita-grid">
-            @foreach($berita as $item)
-            <div class="berita-card" onclick="window.location='{{ route('berita.show', $item) }}'" style="cursor:pointer;">
-                <div class="bc-img">
-                    @if($item->gambar)
-                        <img src="{{ Storage::url($item->gambar) }}" alt="{{ $item->judul }}">
-                    @else
-                        <div class="bc-gradient" style="background:{{ $item->card_gradient }};">
-                            <i class="fas {{ $item->kategori_icon }}"></i>
-                        </div>
-                    @endif
-                </div>
-                <div class="bc-body">
-                    <div class="bc-meta">
-                        <span class="kat-badge" style="background:{{ $item->kategori_bg_color }};color:{{ $item->kategori_color }};">
-                            <i class="fas {{ $item->kategori_icon }}" style="font-size:9px;"></i>
-                            {{ $item->kategori_label }}
-                        </span>
-                        <span class="bc-date"><i class="far fa-clock"></i> {{ $item->waktu_relatif }}</span>
-                    </div>
-                    <div class="bc-title">{{ $item->judul }}</div>
-                    <div class="bc-desc">{{ $item->ringkasan_auto }}</div>
-                    <div class="bc-footer">
-                        <div class="bc-author">
-                            <div class="bc-ava">{{ strtoupper(substr($item->penulis->name ?? 'A', 0, 2)) }}</div>
-                            <span class="bc-author-name">{{ $item->penulis->name ?? 'Admin' }}</span>
-                        </div>
-                        <span class="bc-read-more">Baca <i class="fas fa-arrow-right" style="font-size:9px;"></i></span>
-                    </div>
-                    @if(!Auth::user()->hasTarunaAccess())
-                    <div class="bc-staff-actions">
-                        <a href="{{ route('berita.edit', $item) }}" class="bc-action-btn edit" onclick="event.preventDefault(); event.stopPropagation(); window.location='{{ route('berita.edit', $item) }}';">
-                            <i class="fas fa-pen"></i> Edit
-                        </a>
-                        <form method="POST" action="{{ route('berita.toggle-pin', $item) }}" style="display:inline;" onclick="event.stopPropagation();">
-                            @csrf @method('PATCH')
-                            <button type="submit" class="bc-action-btn pin">
-                                <i class="fas fa-thumbtack"></i> Pin
-                            </button>
-                        </form>
-                        <form method="POST" action="{{ route('berita.destroy', $item) }}" style="display:inline;" onclick="event.stopPropagation();" onsubmit="return confirm('Hapus berita ini?')">
-                            @csrf @method('DELETE')
-                            <button type="submit" class="bc-action-btn del"><i class="fas fa-trash"></i> Hapus</button>
-                        </form>
-                    </div>
-                    @endif
-                </div>
-            </div>
-            @endforeach
-        </div>
 
-        {{-- Pagination --}}
-        <div class="pagination-wrap">
-            {{ $berita->links() }}
-        </div>
-        @endif
     </div>
 </main>
 </x-app-layout>

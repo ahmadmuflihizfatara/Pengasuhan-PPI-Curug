@@ -124,6 +124,20 @@ class BeritaTaruna extends Model
         };
     }
 
+    /**
+     * Varian warna PPI Curug Glass (ds-badge--*, --{varian}-tint/ink) per kategori
+     */
+    public function getKategoriVarianAttribute(): string
+    {
+        return match ($this->kategori) {
+            'pengumuman' => 'danger',
+            'prestasi'   => 'warning',
+            'kegiatan'   => 'success',
+            'informasi'  => 'info',
+            default      => 'accent',
+        };
+    }
+
     public function getKategoriLabelAttribute(): string
     {
         return match ($this->kategori) {

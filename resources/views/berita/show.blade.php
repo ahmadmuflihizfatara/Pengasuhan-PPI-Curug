@@ -1,299 +1,152 @@
 <x-app-layout>
+@php $varian = $beritum->kategori_varian; @endphp
 <style>
-* { box-sizing: border-box; }
-body { font-family: 'Inter', sans-serif; background: transparent; }
-.app-layout   { display: flex; min-height: 100vh; }
-.main-content { flex: 1; padding: 28px 28px 28px 24px; min-width: 0; }
+    .br-kembali { font-size: 13px; background: var(--glass-solid); color: var(--ink-800); }
+    .br-kembali:hover { color: var(--accent-ink); }
 
-/* ── Breadcrumb ── */
-.bc-breadcrumb {
-    display:flex; align-items:center; gap:7px;
-    margin-bottom:20px; font-size:12px; color:#888;
-    list-style:none; padding:0; background:none;
-}
-.bc-breadcrumb a  { color:#4f46e5; text-decoration:none; font-weight:600; }
-.bc-breadcrumb a:hover { text-decoration:underline; }
-.bc-breadcrumb i  { font-size:10px; }
+    /* Artikel */
+    .ar-card { padding: 0; overflow: hidden; }
+    .ar-hero { position: relative; height: 300px; display: grid; place-items: center; background: var(--ar-tint); color: var(--ar-ink); font-size: 64px; }
+    .ar-hero img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+    .ar-hero--ikon { height: 170px; }
+    @media (max-width: 640px) { .ar-hero { height: 190px; font-size: 44px; } .ar-hero--ikon { height: 130px; } }
+    .ar-isi { padding: var(--space-6) var(--space-7, 28px); }
+    @media (max-width: 640px) { .ar-isi { padding: var(--space-5) var(--space-4); } }
+    .ar-meta { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-2) var(--space-3); margin-bottom: var(--space-3-5); }
+    .ar-meta__item { font-size: 12px; line-height: 16px; font-weight: 600; color: var(--ink-600); }
+    .ar-meta__item i { margin-right: var(--space-1); color: var(--accent); }
+    .ar-judul { margin: 0 0 var(--space-4); font-size: 26px; line-height: 34px; font-weight: 900; letter-spacing: -0.02em; color: var(--ink-900); }
+    @media (max-width: 640px) { .ar-judul { font-size: 21px; line-height: 28px; } }
+    .ar-ringkas { margin: 0 0 var(--space-5); padding: var(--space-3-5) var(--space-4); border-radius: var(--radius-md); border-left: 4px solid var(--accent); background: var(--glass-card); font-size: 14px; line-height: 22px; font-weight: 600; color: var(--ink-800); }
+    .ar-body { font-size: 14.5px; line-height: 1.85; font-weight: 500; color: var(--ink-800); overflow-wrap: anywhere; }
+    .ar-penulis { display: flex; align-items: center; gap: var(--space-3); margin-top: var(--space-6); padding: var(--space-3-5) var(--space-4); border-radius: var(--radius-md); background: var(--glass-card); border: 1px solid var(--border-glass-glow); }
+    .ar-penulis .ds-avatar { width: 44px; height: 44px; font-size: 15px; }
+    .ar-penulis__label { display: block; font-size: 10px; line-height: 14px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: var(--ink-600); }
+    .ar-penulis__nama { display: block; font-size: 14px; line-height: 20px; font-weight: 800; color: var(--ink-900); }
+    .ar-penulis__jabatan { display: block; font-size: 12px; line-height: 16px; font-weight: 500; color: var(--ink-600); }
+    .ar-kelola { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-2); margin-top: var(--space-4); padding-top: var(--space-4); border-top: 1px solid var(--border-glass-subtle); }
+    .ar-kelola form { margin: 0; }
+    .ar-kelola__label { font-size: 12px; font-weight: 700; color: var(--ink-600); margin-right: var(--space-1); }
 
-/* ── Article Layout ── */
-.article-wrap {
-    display: grid;
-    grid-template-columns: 1fr 300px;
-    gap: 24px;
-    align-items: start;
-}
-
-/* ── Main Article ── */
-.article-card {
-    background: white; border-radius: 20px;
-    box-shadow: 0 2px 20px rgba(0,0,0,.07); overflow: hidden;
-}
-.article-hero {
-    width:100%; height:320px; object-fit:cover;
-}
-.article-hero-gradient {
-    width:100%; height:240px;
-    display:flex; align-items:center; justify-content:center;
-    font-size:72px; color:rgba(255,255,255,.75);
-}
-.article-content-wrap { padding: 32px 36px; }
-
-.article-meta {
-    display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-bottom:18px;
-}
-.kat-badge {
-    display:inline-flex; align-items:center; gap:5px;
-    padding:4px 12px; border-radius:20px; font-size:11px; font-weight:700;
-}
-.bc-pin-badge {
-    display:inline-flex; align-items:center; gap:5px;
-    background:#fff7e6; color:#e07020;
-    padding:4px 12px; border-radius:20px; font-size:11px; font-weight:700;
-}
-.meta-date { font-size:12px; color:#aab; display:flex; align-items:center; gap:5px; }
-
-.article-title {
-    font-size:26px; font-weight:800; color:#1a202c;
-    line-height:1.35; margin:0 0 16px;
-}
-.article-summary {
-    font-size:15px; color:#718096; line-height:1.7;
-    border-left:4px solid #4f46e5; padding-left:16px;
-    margin-bottom:28px; font-style:italic;
-}
-
-/* ── Article body typography ── */
-.article-body { font-size:14px; color:#444; line-height:1.85; }
-.article-body p   { margin:0 0 16px; }
-.article-body h2  { font-size:18px; font-weight:700; color:#2d3748; margin:28px 0 12px; }
-.article-body h3  { font-size:15px; font-weight:700; color:#2d3748; margin:22px 0 10px; }
-.article-body ul, .article-body ol { padding-left:22px; margin:0 0 16px; }
-.article-body li  { margin-bottom:6px; }
-.article-body strong { color:#2d3748; }
-.article-body a   { color:#4f46e5; }
-.article-body blockquote {
-    border-left:4px solid #4f46e5; padding:12px 18px;
-    background:#f7f8ff; border-radius:0 10px 10px 0;
-    margin:18px 0; font-style:italic; color:#555;
-}
-
-/* ── Divider ── */
-.article-divider { border:none; border-top:1px solid #f0f2f7; margin:28px 0; }
-
-/* ── Author Section ── */
-.author-section {
-    display:flex; align-items:center; gap:14px;
-    background:#f8f9ff; border-radius:14px; padding:18px;
-}
-.author-big-ava {
-    width:48px; height:48px; border-radius:50%;
-    background:linear-gradient(135deg,#4f46e5,#4338ca);
-    color:white; font-size:18px; font-weight:800;
-    display:flex; align-items:center; justify-content:center; flex-shrink:0;
-}
-.author-info .author-role { font-size:11px; color:#aab; }
-.author-info .author-name { font-size:14px; font-weight:700; color:#333; }
-
-/* ── Staff Edit Bar ── */
-.staff-bar {
-    display:flex; align-items:center; gap:10px;
-    background:#f8f9ff; border-radius:14px; padding:14px 18px;
-    margin-top:28px; flex-wrap:wrap;
-}
-.staff-bar span { font-size:12px; color:#888; font-weight:600; margin-right:4px; }
-.bc-action-btn {
-    padding:8px 16px; border-radius:9px; font-size:12px; font-weight:600;
-    border:none; cursor:pointer; display:inline-flex; align-items:center; gap:6px;
-    text-decoration:none; transition:opacity .15s;
-}
-.bc-action-btn:hover { opacity:.85; }
-.bc-action-btn.edit  { background:#eef0ff; color:#4f46e5; }
-.bc-action-btn.del   { background:#fff0f0; color:#e53e3e; }
-.bc-action-btn.pin   { background:#fff7e6; color:#e07020; }
-
-/* ── Sidebar (related + nav) ── */
-.sidebar-right {}
-
-/* Back link */
-.back-btn {
-    display:flex; align-items:center; gap:8px;
-    background:white; border-radius:12px; padding:13px 16px;
-    text-decoration:none; font-size:13px; font-weight:600; color:#4f46e5;
-    box-shadow:0 2px 10px rgba(0,0,0,.06); margin-bottom:16px;
-    transition:background .15s;
-}
-.back-btn:hover { background:#f0f1fb; }
-
-/* Related articles */
-.related-card { background:white; border-radius:16px; box-shadow:0 2px 12px rgba(0,0,0,.06); overflow:hidden; }
-.related-header { padding:16px 18px 12px; border-bottom:1px solid #f0f2f7; }
-.related-header h3 { font-size:13px; font-weight:700; color:#333; margin:0; }
-
-.related-item {
-    display:flex; gap:10px; padding:12px 16px;
-    text-decoration:none; color:inherit;
-    border-bottom:1px solid #f7f8fc;
-    transition:background .1s;
-    align-items:flex-start;
-}
-.related-item:last-child { border-bottom:none; }
-.related-item:hover { background:#f8f9ff; }
-.related-thumb {
-    width:56px; height:56px; border-radius:10px; overflow:hidden; flex-shrink:0;
-}
-.related-thumb img { width:100%; height:100%; object-fit:cover; }
-.related-thumb .thumb-grad {
-    width:100%; height:100%; display:flex; align-items:center; justify-content:center;
-    color:rgba(255,255,255,.8); font-size:18px;
-}
-.related-info .rel-title { font-size:12px; font-weight:700; color:#333; line-height:1.4; margin-bottom:4px; }
-.related-info .rel-date  { font-size:10px; color:#aab; }
-
-/* ── Alert ── */
-.bc-alert { padding:12px 18px; border-radius:10px; margin-bottom:18px; font-size:13px; font-weight:600; display:flex; align-items:center; gap:9px; }
-.bc-alert-success { background:#e6fff5; color:#276749; border:1px solid #b2f5ea; }
+    /* Berita terkait */
+    .rl-list { display: flex; flex-direction: column; gap: var(--space-2); }
+    .rl-item { display: flex; align-items: center; gap: var(--space-3); padding: var(--space-2) var(--space-2-5); border-radius: var(--radius-md); background: var(--glass-card); border: 1px solid var(--border-glass-glow); color: inherit; text-decoration: none; transition: background-color .15s, box-shadow .15s; }
+    .rl-item:hover { background: var(--glass-solid); box-shadow: var(--shadow-glass-sm); color: inherit; }
+    .rl-item:focus-visible { outline: none; box-shadow: var(--shadow-focus); }
+    .rl-thumb { position: relative; width: 52px; height: 52px; flex-shrink: 0; overflow: hidden; border-radius: var(--radius-sm); display: grid; place-items: center; background: var(--rl-tint); color: var(--rl-ink); font-size: 18px; }
+    .rl-thumb img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+    .rl-body { min-width: 0; }
+    .rl-judul { font-size: 12px; line-height: 17px; font-weight: 800; color: var(--ink-900); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+    .rl-waktu { margin-top: 2px; font-size: 11px; line-height: 14px; font-weight: 600; color: var(--ink-600); }
 </style>
 
 {{-- Top Floating Island Capsule Navbar --}}
 <x-island-navbar />
 
-<div class="max-w-7xl mx-auto px-4 sm:px-6 pb-12 pt-2">
+<main class="max-w-7xl mx-auto px-4 sm:px-6 pb-12 pt-2">
     <div class="spatial-workspace-window rounded-3xl bg-white/30 backdrop-blur-2xl border border-white/50 shadow-2xl p-4 sm:p-7 relative overflow-hidden">
 
+        <x-page-banner title="Berita Taruna" icon="fa-newspaper"
+            subtitle="Artikel, pengumuman, dan informasi seputar kegiatan taruna" />
+
+        <a href="{{ route('berita.index') }}" class="ds-btn ds-btn--pill br-kembali mb-4">
+            <i class="fa-solid fa-arrow-left"></i> Kembali ke Daftar Berita
+        </a>
+
         @if(session('success'))
-        <div class="bc-alert bc-alert-success"><i class="fas fa-check-circle"></i> {{ session('success') }}</div>
+        <x-glass-alert type="success" title="Berhasil">{{ session('success') }}</x-glass-alert>
         @endif
 
-        {{-- Breadcrumb --}}
-        <div class="bc-breadcrumb">
-            <a href="{{ route('dashboard') }}"><i class="fas fa-home"></i> Dashboard</a>
-            <i class="fas fa-chevron-right"></i>
-            <a href="{{ route('berita.index') }}">Berita Taruna</a>
-            <i class="fas fa-chevron-right"></i>
-            <span style="color:#333;font-weight:600;">{{ Str::limit($beritum->judul, 40) }}</span>
-        </div>
-
-        <div class="article-wrap">
-
-            {{-- Main Article --}}
-            <div class="article-card">
-                {{-- Hero Image --}}
-                @if($beritum->gambar)
-                    <img src="{{ Storage::url($beritum->gambar) }}" alt="{{ $beritum->judul }}" class="article-hero">
-                @else
-                    <div class="article-hero-gradient" style="background:{{ $beritum->card_gradient }};">
-                        <i class="fas {{ $beritum->kategori_icon }}"></i>
-                    </div>
-                @endif
-
-                <div class="article-content-wrap">
-                    {{-- Meta --}}
-                    <div class="article-meta">
-                        <span class="kat-badge" style="background:{{ $beritum->kategori_bg_color }};color:{{ $beritum->kategori_color }};">
-                            <i class="fas {{ $beritum->kategori_icon }}" style="font-size:9px;"></i>
-                            {{ $beritum->kategori_label }}
-                        </span>
-                        @if($beritum->is_pinned)
-                        <span class="bc-pin-badge"><i class="fas fa-thumbtack" style="font-size:9px;"></i> Pinned</span>
-                        @endif
-                        <span class="meta-date">
-                            <i class="far fa-calendar-alt"></i>
-                            {{ $beritum->created_at->locale('id')->isoFormat('dddd, D MMMM Y') }}
-                        </span>
-                        <span class="meta-date">
-                            <i class="far fa-clock"></i>
-                            {{ $beritum->waktu_relatif }}
-                        </span>
-                    </div>
-
-                    {{-- Title --}}
-                    <h1 class="article-title">{{ $beritum->judul }}</h1>
-
-                    {{-- Summary --}}
-                    @if($beritum->ringkasan)
-                    <div class="article-summary">{{ $beritum->ringkasan }}</div>
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 items-start">
+            {{-- Artikel --}}
+            <article class="ds-card ar-card lg:col-span-2">
+                <div class="ar-hero {{ $beritum->gambar ? '' : 'ar-hero--ikon' }}" style="--ar-tint: var(--{{ $varian }}-tint); --ar-ink: var(--{{ $varian }}-ink);">
+                    @if($beritum->gambar)
+                        <img src="{{ Storage::url($beritum->gambar) }}" alt="{{ $beritum->judul }}">
+                    @else
+                        <i class="fa-solid {{ $beritum->kategori_icon }}" aria-hidden="true"></i>
                     @endif
-
-                    {{-- Body --}}
-                    <div class="article-body">
-                        {!! nl2br(e($beritum->konten)) !!}
-                    </div>
-
-                    <hr class="article-divider">
-
-                    {{-- Author --}}
-                    <div class="author-section">
-                        <div class="author-big-ava">{{ strtoupper(substr($beritum->penulis->name ?? 'A', 0, 2)) }}</div>
-                        <div class="author-info">
-                            <div class="author-role">Ditulis oleh</div>
-                            <div class="author-name">{{ $beritum->penulis->name ?? 'Admin' }}</div>
-                            <div class="author-role">{{ $beritum->penulis->jabatan ?? ($beritum->penulis->role_label ?? '') }}</div>
-                        </div>
-                    </div>
-
-                    {{-- Staff Actions --}}
-                    @if(!Auth::user()->hasTarunaAccess())
-                    <div class="staff-bar">
-                        <span><i class="fas fa-tools"></i> Kelola:</span>
-                        <a href="{{ route('berita.edit', $beritum) }}" class="bc-action-btn edit">
-                            <i class="fas fa-pen"></i> Edit Berita
-                        </a>
-                        <form method="POST" action="{{ route('berita.toggle-pin', $beritum) }}" style="display:inline;">
-                            @csrf @method('PATCH')
-                            <button type="submit" class="bc-action-btn pin">
-                                <i class="fas fa-thumbtack"></i> {{ $beritum->is_pinned ? 'Unpin' : 'Pin Berita' }}
-                            </button>
-                        </form>
-                        <form method="POST" action="{{ route('berita.destroy', $beritum) }}" style="display:inline;" onsubmit="return confirm('Yakin hapus berita ini? Tindakan tidak dapat dibatalkan.')">
-                            @csrf @method('DELETE')
-                            <button type="submit" class="bc-action-btn del"><i class="fas fa-trash"></i> Hapus</button>
-                        </form>
-                    </div>
-                    @endif
-
                 </div>
-            </div>
 
-            {{-- Sidebar Right --}}
-            <div class="sidebar-right">
-
-                <a href="{{ route('berita.index') }}" class="back-btn">
-                    <i class="fas fa-arrow-left"></i> Kembali ke Daftar
-                </a>
-
-                @if($terkait->isNotEmpty())
-                <div class="related-card">
-                    <div class="related-header">
-                        <h3><i class="fas fa-layer-group" style="color:#4f46e5;margin-right:7px;"></i>Berita Terkait</h3>
+                <div class="ar-isi">
+                    <div class="ar-meta">
+                        <span class="ds-badge ds-badge--{{ $varian }}"><i class="fa-solid {{ $beritum->kategori_icon }}"></i> {{ $beritum->kategori_label }}</span>
+                        @if($beritum->is_pinned)
+                        <span class="ds-badge ds-badge--warning"><i class="fa-solid fa-thumbtack"></i> Dipin</span>
+                        @endif
+                        <span class="ar-meta__item"><i class="fa-regular fa-calendar"></i>{{ $beritum->created_at->locale('id')->isoFormat('dddd, D MMMM Y') }}</span>
+                        <span class="ar-meta__item"><i class="fa-regular fa-clock"></i>{{ $beritum->waktu_relatif }}</span>
                     </div>
-                    @foreach($terkait as $r)
-                    <a href="{{ route('berita.show', $r) }}" class="related-item">
-                        <div class="related-thumb">
-                            @if($r->gambar)
-                                <img src="{{ Storage::url($r->gambar) }}" alt="{{ $r->judul }}">
-                            @else
-                                <div class="thumb-grad" style="background:{{ $r->card_gradient }};">
-                                    <i class="fas {{ $r->kategori_icon }}"></i>
-                                </div>
+
+                    <h1 class="ar-judul">{{ $beritum->judul }}</h1>
+
+                    @if($beritum->ringkasan)
+                    <p class="ar-ringkas">{{ $beritum->ringkasan }}</p>
+                    @endif
+
+                    <div class="ar-body">{!! nl2br(e($beritum->konten)) !!}</div>
+
+                    <div class="ar-penulis">
+                        <span class="ds-avatar">{{ strtoupper(substr($beritum->penulis->name ?? 'A', 0, 2)) }}</span>
+                        <div>
+                            <span class="ar-penulis__label">Ditulis oleh</span>
+                            <span class="ar-penulis__nama">{{ $beritum->penulis->name ?? 'Admin' }}</span>
+                            @if($beritum->penulis?->jabatan || $beritum->penulis?->role_label)
+                            <span class="ar-penulis__jabatan">{{ $beritum->penulis->jabatan ?? $beritum->penulis->role_label }}</span>
                             @endif
                         </div>
-                        <div class="related-info">
-                            <div class="rel-title">{{ Str::limit($r->judul, 60) }}</div>
-                            <div class="rel-date"><i class="far fa-clock"></i> {{ $r->waktu_relatif }}</div>
-                        </div>
+                    </div>
+
+                    @unless(Auth::user()->hasTarunaAccess())
+                    <div class="ar-kelola">
+                        <span class="ar-kelola__label"><i class="fa-solid fa-screwdriver-wrench"></i> Kelola:</span>
+                        <a href="{{ route('berita.edit', $beritum) }}" class="ds-btn ds-btn--sm"><i class="fa-solid fa-pen"></i> Edit Berita</a>
+                        <form method="POST" action="{{ route('berita.toggle-pin', $beritum) }}">
+                            @csrf @method('PATCH')
+                            <button type="submit" class="ds-btn ds-btn--sm"><i class="fa-solid fa-thumbtack"></i> {{ $beritum->is_pinned ? 'Lepas Pin' : 'Pin Berita' }}</button>
+                        </form>
+                        <form method="POST" action="{{ route('berita.destroy', $beritum) }}" onsubmit="return confirm('Yakin hapus berita ini? Tindakan tidak dapat dibatalkan.')">
+                            @csrf @method('DELETE')
+                            <button type="submit" class="ds-btn ds-btn--sm ds-btn--danger"><i class="fa-solid fa-trash"></i> Hapus</button>
+                        </form>
+                    </div>
+                    @endunless
+                </div>
+            </article>
+
+            {{-- Berita terkait --}}
+            <aside class="ds-card">
+                <div class="ds-card__head">
+                    <h3 class="ds-card__title"><i class="fa-solid fa-layer-group ds-icon"></i> Berita Terkait</h3>
+                    <p class="ds-card__desc">Berita lain dalam kategori {{ strtolower($beritum->kategori_label) }}</p>
+                </div>
+                @if($terkait->isEmpty())
+                <div class="ds-empty">
+                    <i class="fa-solid fa-newspaper ds-icon"></i>
+                    Tidak ada berita terkait lainnya.
+                </div>
+                @else
+                <div class="rl-list">
+                    @foreach($terkait as $r)
+                    <a href="{{ route('berita.show', $r) }}" class="rl-item">
+                        <span class="rl-thumb" style="--rl-tint: var(--{{ $r->kategori_varian }}-tint); --rl-ink: var(--{{ $r->kategori_varian }}-ink);">
+                            @if($r->gambar)
+                                <img src="{{ Storage::url($r->gambar) }}" alt="" loading="lazy">
+                            @else
+                                <i class="fa-solid {{ $r->kategori_icon }}"></i>
+                            @endif
+                        </span>
+                        <span class="rl-body">
+                            <span class="rl-judul">{{ $r->judul }}</span>
+                            <span class="rl-waktu d-block"><i class="fa-regular fa-clock"></i> {{ $r->waktu_relatif }}</span>
+                        </span>
                     </a>
                     @endforeach
                 </div>
-                @else
-                <div style="background:white;border-radius:14px;padding:24px;text-align:center;box-shadow:0 2px 12px rgba(0,0,0,.06);">
-                    <i class="fas fa-newspaper" style="font-size:28px;color:#e2e5ee;display:block;margin-bottom:10px;"></i>
-                    <p style="font-size:12px;color:#aab;margin:0;">Tidak ada berita terkait lainnya.</p>
-                </div>
                 @endif
-
-            </div>
+            </aside>
         </div>
 
     </div>
-</div>
+</main>
 </x-app-layout>

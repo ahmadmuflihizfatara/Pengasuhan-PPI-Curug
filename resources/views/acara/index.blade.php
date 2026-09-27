@@ -77,8 +77,9 @@
     .cal-cell--luar .cal-tgl { color: var(--ink-400); }
     .cal-cell--hariini { background: var(--accent-tint); }
     .cal-tgl { width: 26px; height: 26px; border-radius: var(--radius-pill); display: grid; place-items: center; flex-shrink: 0; font-size: 12px; font-weight: 800; color: var(--ink-800); transition: background-color .15s; }
-    .cal-cell--libur:not(.cal-cell--luar) .cal-tgl { color: var(--danger-ink); }
-    .cal-cell--hariini .cal-tgl, .cal-cell--hariini:hover .cal-tgl { background: var(--accent); color: var(--ink-on-dark); box-shadow: var(--shadow-glass-sm); }
+    .cal-cell--libur:not(.cal-cell--luar):not(.cal-cell--hariini) .cal-tgl { color: var(--danger-ink); }
+    /* Lingkaran hari ini: angka putih tebal di atas biru pekat — menang atas warna merah akhir pekan */
+    .cal-cell--hariini .cal-tgl, .cal-cell--hariini:hover .cal-tgl { width: 28px; height: 28px; background: var(--accent); color: #fff; font-size: 13px; font-weight: 900; box-shadow: 0 0 0 3px var(--focus-ring-glow), var(--shadow-glass-sm); }
     .cal-chip {
         display: block; padding: 2px 6px; border-radius: 5px; background: var(--accent); color: var(--ink-on-dark);
         font-size: 10px; line-height: 14px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
