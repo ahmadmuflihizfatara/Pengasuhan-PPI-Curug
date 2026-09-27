@@ -1,123 +1,121 @@
 <x-app-layout>
 <style>
-* { box-sizing: border-box; }
-body { font-family: 'Inter', sans-serif; background: transparent; }
-.app-layout { display: flex; min-height: 100vh; }
-.main-content { flex: 1; padding: 28px 28px 28px 24px; min-width: 0; }
-
-.topbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
-.back-link { display: inline-flex; align-items: center; gap: 7px; color: #d63384; text-decoration: none; font-size: 13px; font-weight: 600; }
-.back-link:hover { text-decoration: underline; }
-
-.detail-card { background: white; border-radius: 16px; overflow: hidden; box-shadow: 0 2px 16px rgba(0,0,0,.06); }
-.detail-header { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); padding: 28px 32px; color: white; position: relative; overflow: hidden; }
-.detail-header::before { content: ''; position: absolute; right: -30px; top: -30px; width: 140px; height: 140px; background: rgba(255,255,255,.08); border-radius: 50%; }
-.detail-header-inner { position: relative; z-index: 1; display: flex; align-items: flex-start; gap: 18px; }
-.doc-icon { width: 54px; height: 54px; border-radius: 14px; background: rgba(255,255,255,.2); display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 22px; }
-.detail-header .jenis-label { font-size: 11px; font-weight: 700; opacity: .75; margin-bottom: 6px; text-transform: uppercase; letter-spacing: .06em; }
-.detail-header h2 { margin: 0 0 6px 0; font-size: 20px; font-weight: 800; }
-.detail-header .nomor { font-size: 13px; opacity: .85; }
-.status-badge { display: inline-flex; align-items: center; padding: 6px 16px; border-radius: 20px; font-size: 12px; font-weight: 800; white-space: nowrap; margin-left: auto; flex-shrink: 0; }
-
-.detail-body { padding: 28px 32px; }
-.detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-.detail-field { background: #fafbff; border-radius: 12px; padding: 14px 18px; }
-.detail-field.full { grid-column: span 2; }
-.field-label { font-size: 10px; font-weight: 700; color: #aab; text-transform: uppercase; letter-spacing: .06em; margin-bottom: 6px; display: flex; align-items: center; gap: 5px; }
-.field-value { font-size: 14px; font-weight: 700; color: #333; }
-.file-attachment { background: #fdf0f9; border-radius: 12px; padding: 14px 18px; display: flex; align-items: center; justify-content: space-between; }
-.file-attachment-icon { width: 40px; height: 40px; border-radius: 10px; background: linear-gradient(135deg, #f093fb, #f5576c); display: flex; align-items: center; justify-content: center; margin-right: 12px; flex-shrink: 0; }
-.btn-download { background: linear-gradient(135deg, #f093fb, #f5576c); color: white; padding: 9px 20px; border-radius: 10px; text-decoration: none; font-size: 12px; font-weight: 700; display: inline-flex; align-items: center; gap: 6px; }
-
-.timestamps { margin-top: 18px; padding-top: 14px; border-top: 1px solid #f0f2f7; display: flex; gap: 20px; }
-.timestamps span { font-size: 11px; color: #ccc; display: flex; align-items: center; gap: 5px; }
+    .keluhan-kembali { font-size: 13px; background: var(--glass-solid); color: var(--ink-800); }
+    .keluhan-kembali:hover { color: var(--accent-ink); }
 </style>
 
-{{-- Top Floating Island Capsule Navbar --}}
 <x-island-navbar />
 
-<div class="max-w-7xl mx-auto px-4 sm:px-6 pb-12 pt-2">
+@php
+    // Varian sama dengan badge status di daftar keluhan
+    [$varian, $ikon, $desc] = match($keluhan->status) {
+        'Selesai'  => ['success', 'fa-circle-check',   'Keluhan Anda telah selesai ditangani oleh satuan pengasuhan.'],
+        'Ditolak'  => ['danger',  'fa-circle-xmark',   'Keluhan Anda ditolak. Lihat alasan pada respon pengasuhan.'],
+        'Diproses' => ['accent',  'fa-screwdriver-wrench', 'Keluhan Anda sedang ditangani oleh satuan pengasuhan.'],
+        default    => ['warning', 'fa-hourglass-half', 'Keluhan Anda sudah terkirim dan menunggu ditinjau satuan pengasuhan.'],
+    };
+    [$judulRespon, $pesanRespon] = match($keluhan->status) {
+        'Selesai'  => ['Keluhan Selesai', $keluhan->catatan_pengasuhan ?: 'Perbaikan atau penanganan keluhan telah selesai dilakukan.'],
+        'Ditolak'  => ['Alasan Penolakan', $keluhan->catatan_pengasuhan ?: 'Keluhan Anda tidak dapat diproses. Silakan hubungi satuan pengasuhan untuk informasi lebih lanjut.'],
+        'Diproses' => ['Sedang Ditangani', $keluhan->catatan_pengasuhan ?: 'Keluhan sedang ditindaklanjuti. Anda akan menerima notifikasi ketika statusnya berubah.'],
+        default    => ['Menunggu Tinjauan', 'Keluhan Anda belum ditinjau. Anda akan menerima notifikasi ketika statusnya berubah.'],
+    };
+@endphp
+
+<main class="max-w-7xl mx-auto px-4 sm:px-6 pb-12 pt-2">
     <div class="spatial-workspace-window rounded-3xl bg-white/30 backdrop-blur-2xl border border-white/50 shadow-2xl p-4 sm:p-7 relative overflow-hidden">
-        <div class="topbar">
-            <a href="{{ route('keluhan-barak.index') }}" class="back-link">
-                <i class="fas fa-arrow-left"></i> Kembali ke Daftar Keluhan
-            </a>
+
+        <x-page-banner title="Detail Keluhan Barak" icon="fa-door-open"
+            subtitle="Pantau status dan respon satuan pengasuhan atas keluhan barak Anda" />
+
+        <a href="{{ route('keluhan-barak.index') }}" class="ds-btn ds-btn--pill keluhan-kembali mb-4">
+            <i class="fa-solid fa-arrow-left"></i> Kembali ke Daftar Keluhan
+        </a>
+
+        {{-- Status keluhan --}}
+        <div class="ds-card dt-card mb-4">
+            <span class="ds-stat__icon {{ $varian !== 'accent' ? 'ds-stat__icon--'.$varian : '' }}"><i class="fa-solid {{ $ikon }}"></i></span>
+            <div class="dt-card__body">
+                <span class="dt-card__label">Status Keluhan</span>
+                <div class="dt-card__top">
+                    <span class="dt-card__value">{{ $keluhan->status }}</span>
+                    <span class="ds-badge ds-badge--info">{{ $keluhan->lorong }} · No. {{ $keluhan->nomor_barak }}</span>
+                </div>
+                <p class="dt-card__desc">{{ $desc }}</p>
+            </div>
         </div>
 
-        <div class="detail-card">
-            <div class="detail-header">
-                <div class="detail-header-inner">
-                    <div class="doc-icon"><i class="fas fa-door-open"></i></div>
-                    <div style="flex:1;">
-                        <div class="jenis-label">{{ $keluhan->asrama }}</div>
-                        <h2>{{ $keluhan->lorong }} · No. {{ $keluhan->nomor_barak }}</h2>
-                        <div class="nomor">Diajukan {{ $keluhan->tanggal_pengajuan->locale('id')->isoFormat('dddd, D MMMM Y') }}</div>
-                    </div>
-                    <span class="status-badge" style="background:{{ $keluhan->status_bg_color }}; color:{{ $keluhan->status_badge_color }};">
-                        {{ $keluhan->status }}
-                    </span>
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+            {{-- Informasi keluhan --}}
+            <div class="ds-card lg:col-span-2">
+                <div class="ds-card__head">
+                    <h3 class="ds-card__title"><i class="fa-solid fa-circle-info ds-icon"></i> Informasi Keluhan</h3>
+                    <p class="ds-card__desc">Data yang Anda kirim saat mengajukan keluhan</p>
                 </div>
-            </div>
 
-            <div class="detail-body">
-                <div class="detail-grid">
-                    <div class="detail-field">
-                        <div class="field-label"><i class="fas fa-user"></i> Nama Pengaju</div>
-                        <div class="field-value">{{ $keluhan->nama }}</div>
+                <dl class="dt-fields">
+                    <div class="dt-field">
+                        <dt><i class="fa-solid fa-building"></i> Lokasi Barak</dt>
+                        <dd>Asrama {{ $keluhan->asrama }} · {{ $keluhan->lorong }} · No. {{ $keluhan->nomor_barak }}</dd>
                     </div>
-                    <div class="detail-field">
-                        <div class="field-label"><i class="fas fa-envelope"></i> Email</div>
-                        <div class="field-value">{{ $keluhan->email }}</div>
+                    <div class="dt-field">
+                        <dt><i class="fa-solid fa-calendar"></i> Tanggal Pengajuan</dt>
+                        <dd>{{ $keluhan->tanggal_pengajuan->locale('id')->isoFormat('dddd, D MMMM Y') }}</dd>
                     </div>
-                    <div class="detail-field">
-                        <div class="field-label"><i class="fas fa-graduation-cap"></i> Program Studi</div>
-                        <div class="field-value">{{ $keluhan->prodi }} — {{ $keluhan->prodi_nama }}</div>
+                    <div class="dt-field">
+                        <dt><i class="fa-solid fa-user"></i> Nama Pengaju</dt>
+                        <dd>{{ $keluhan->nama }}</dd>
                     </div>
-                    <div class="detail-field">
-                        <div class="field-label"><i class="fas fa-building"></i> Asrama / Lorong</div>
-                        <div class="field-value">{{ $keluhan->asrama }} · {{ $keluhan->lorong }}</div>
+                    <div class="dt-field">
+                        <dt><i class="fa-solid fa-envelope"></i> Email</dt>
+                        <dd>{{ $keluhan->email }}</dd>
                     </div>
-
-                    <div class="detail-field full">
-                        <div class="field-label"><i class="fas fa-sticky-note"></i> Keterangan Keluhan</div>
-                        <div class="field-value" style="font-weight:400; font-size:13px; line-height:1.6; color:#555;">{{ $keluhan->keterangan }}</div>
+                    <div class="dt-field dt-field--full">
+                        <dt><i class="fa-solid fa-graduation-cap"></i> Program Studi</dt>
+                        <dd>{{ $keluhan->prodi }} — {{ $keluhan->prodi_nama }}</dd>
                     </div>
-
+                    <div class="dt-field dt-field--full">
+                        <dt><i class="fa-solid fa-note-sticky"></i> Keterangan Keluhan</dt>
+                        <dd class="dt-teks">{{ $keluhan->keterangan }}</dd>
+                    </div>
                     @if(!empty($keluhan->lampiran))
-                    <div class="detail-field full">
-                        <div class="field-label"><i class="fas fa-paperclip"></i> Lampiran ({{ count($keluhan->lampiran) }})</div>
+                    <div class="dt-field dt-field--full">
+                        <dt><i class="fa-solid fa-paperclip"></i> Lampiran ({{ count($keluhan->lampiran) }})</dt>
                         @foreach($keluhan->lampiran as $file)
-                        <div class="file-attachment" style="margin-bottom:10px;">
-                            <div style="display:flex; align-items:center; gap:12px;">
-                                <div class="file-attachment-icon">
-                                    <i class="fas fa-file" style="color:white; font-size:16px;"></i>
-                                </div>
-                                <div>
-                                    <div style="font-size:13px; font-weight:700; color:#333;">{{ basename($file) }}</div>
-                                </div>
-                            </div>
-                            <a href="{{ \Illuminate\Support\Facades\Storage::url($file) }}" target="_blank" class="btn-download">
-                                <i class="fas fa-download"></i> Download / Lihat
+                        <dd class="dt-file {{ !$loop->first ? 'mt-2' : '' }}">
+                            <span class="dt-file__nama"><span class="ds-avatar ds-avatar--sq"><i class="fa-solid fa-file"></i></span>{{ basename($file) }}</span>
+                            <a href="{{ \Illuminate\Support\Facades\Storage::url($file) }}" target="_blank" rel="noopener" class="ds-btn ds-btn--primary ds-btn--sm">
+                                <i class="fa-solid fa-download"></i> Lihat / Unduh
                             </a>
-                        </div>
+                        </dd>
                         @endforeach
                     </div>
                     @endif
+                </dl>
+            </div>
+
+            {{-- Respon satuan pengasuhan --}}
+            <div class="ds-card">
+                <div class="ds-card__head">
+                    <h3 class="ds-card__title"><i class="fa-solid fa-comment-dots ds-icon"></i> Respon Pengasuhan</h3>
+                    <p class="ds-card__desc">Tindak lanjut dan catatan dari satuan pengasuhan</p>
                 </div>
 
-                @if($keluhan->catatan_pengasuhan)
-                <div style="margin-top:16px; padding:16px 18px; background:{{ in_array($keluhan->status, ['Selesai', 'Diproses']) ? '#f0fff4' : '#fff5f5' }}; border-radius:12px; border-left:4px solid {{ in_array($keluhan->status, ['Selesai', 'Diproses']) ? '#38a169' : '#e53e3e' }};">
-                    <div class="field-label"><i class="fas fa-comment-dots"></i> Catatan Pengasuhan</div>
-                    <div style="font-size:13px; color:#333; line-height:1.6;">{{ $keluhan->catatan_pengasuhan }}</div>
+                <div class="ds-alert dt-respon dt-respon--{{ $varian }}" role="status">
+                    <span class="dt-respon__ikon"><i class="fa-solid {{ $ikon }}"></i></span>
+                    <div>
+                        <div class="dt-respon__judul">{{ $judulRespon }}</div>
+                        <div class="dt-respon__pesan">{{ $pesanRespon }}</div>
+                    </div>
                 </div>
-                @endif
 
-                <div class="timestamps">
-                    <span><i class="fas fa-clock"></i> Diajukan: {{ $keluhan->created_at->locale('id')->isoFormat('D MMM Y, HH:mm') }}</span>
-                    <span><i class="fas fa-sync"></i> Diperbarui: {{ $keluhan->updated_at->locale('id')->isoFormat('D MMM Y, HH:mm') }}</span>
+                <div class="dt-waktu">
+                    <span><i class="fa-solid fa-clock"></i>Diajukan {{ $keluhan->created_at->locale('id')->isoFormat('D MMM Y, HH:mm') }}</span>
+                    <span><i class="fa-solid fa-rotate"></i>Diperbarui {{ $keluhan->updated_at->locale('id')->isoFormat('D MMM Y, HH:mm') }}</span>
                 </div>
             </div>
         </div>
+
     </div>
-</div>
+</main>
 </x-app-layout>

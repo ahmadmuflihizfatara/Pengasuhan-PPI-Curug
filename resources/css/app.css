@@ -752,3 +752,44 @@ th.tt-desc .tt-ind::after { content:'▼'; letter-spacing:0; }
 .ds-table td.tbl-muted { font-weight:600; color:var(--ink-700) !important; }
 .tbl-title { font-size:13px; line-height:18px; font-weight:700; color:var(--ink-900); }
 .tbl-sub { margin-top:2px; font-size:11px; line-height:16px; font-weight:500; color:var(--ink-600); }
+
+
+/* =====================================================================
+   HALAMAN DETAIL — pola detail surat & keluhan barak taruna:
+   .ds-card.dt-card (status) · dl.dt-fields > .dt-field · .ds-alert.dt-respon--{varian} · .dt-waktu
+   ===================================================================== */
+/* Kartu status — pola kartu status kedisiplinan tab poin */
+.dt-card { display: flex; align-items: center; gap: var(--space-3-5); padding: var(--space-4) var(--space-5); }
+.dt-card .ds-stat__icon { flex-shrink: 0; width: 44px; height: 44px; font-size: 17px; }
+.dt-card__body { min-width: 0; flex: 1; }
+.dt-card__label { display: block; font-size: 11px; line-height: 16px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: var(--ink-600); }
+.dt-card__top { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-1) var(--space-2-5); margin-top: 2px; }
+.dt-card__value { font-size: 18px; line-height: 24px; font-weight: 900; color: var(--ink-900); }
+.dt-card__desc { margin: 3px 0 0; font-size: 12px; line-height: 17px; font-weight: 500; color: var(--ink-700); }
+
+/* Rincian permohonan */
+.dt-fields { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-3); margin: 0; }
+.dt-field { padding: var(--space-3) var(--space-3-5); border-radius: var(--radius-md); background: var(--glass-card); border: 1px solid var(--border-glass-glow); min-width: 0; }
+.dt-field--full { grid-column: 1 / -1; }
+.dt-field dt { display: flex; align-items: center; gap: var(--space-1-5); margin-bottom: var(--space-1); font-size: 10px; line-height: 14px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: var(--ink-600); }
+.dt-field dd { margin: 0; font-size: 13px; line-height: 18px; font-weight: 700; color: var(--ink-900); overflow-wrap: anywhere; }
+.dt-field dd.dt-teks { font-weight: 500; line-height: 20px; color: var(--ink-700); white-space: pre-line; }
+@media (max-width: 640px) { .dt-fields { grid-template-columns: 1fr; } }
+
+.dt-file { display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); flex-wrap: wrap; }
+.dt-file__nama { display: flex; align-items: center; gap: var(--space-2-5); min-width: 0; font-size: 13px; font-weight: 700; color: var(--ink-900); overflow-wrap: anywhere; }
+
+/* Respon pengasuhan */
+.dt-respon { align-items: flex-start; gap: var(--space-3); margin-bottom: 0; }
+.dt-respon--success { border-color: var(--success-border); }
+.dt-respon--danger  { border-color: var(--danger-border); }
+.dt-respon--warning { border-color: var(--warning-border); }
+.dt-respon__ikon { width: 36px; height: 36px; border-radius: var(--radius-pill); flex-shrink: 0; display: grid; place-items: center; font-size: 16px; }
+.dt-respon--success .dt-respon__ikon { background: var(--success-tint); color: var(--success-ink); }
+.dt-respon--danger  .dt-respon__ikon { background: var(--danger-tint);  color: var(--danger-ink); }
+.dt-respon--warning .dt-respon__ikon { background: var(--warning-tint); color: var(--warning-ink); }
+.dt-respon--accent  .dt-respon__ikon { background: var(--accent-tint);  color: var(--accent-ink); }
+.dt-respon__judul { font-size: 13px; font-weight: 800; color: var(--ink-900); }
+.dt-respon__pesan { margin-top: 2px; font-size: 12px; line-height: 18px; font-weight: 500; color: var(--ink-700); white-space: pre-line; }
+.dt-waktu { display: flex; flex-wrap: wrap; gap: var(--space-1-5) var(--space-4); margin-top: var(--space-4); padding-top: var(--space-3); border-top: 1px solid var(--border-glass-subtle); font-size: 11px; font-weight: 600; color: var(--ink-600); }
+.dt-waktu i { color: var(--accent); margin-right: var(--space-1); }

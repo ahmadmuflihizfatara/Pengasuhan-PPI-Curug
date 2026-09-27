@@ -1,137 +1,98 @@
 <x-app-layout>
+{{-- Form memakai gaya yang sama dengan form Log Gerbang & Keluhan Barak --}}
+<x-form-glass-style />
 <style>
-* { box-sizing: border-box; }
-body { font-family: 'Inter', sans-serif; background: transparent; }
-.app-layout { display: block; min-height: 100vh; }
-.main-content { padding: 28px 30px; min-width: 0; max-width: 820px; margin: 0 auto; width: 100%; }
-
-.back-link { display:inline-flex; align-items:center; gap:7px; color:#4f46e5; text-decoration:none; font-size:13px; font-weight:600; margin-bottom:20px; }
-.back-link:hover { text-decoration:underline; }
-
-.page-header {
-    background: linear-gradient(135deg, #4f46e5 0%, #4338ca 100%);
-    border-radius: 18px; padding: 28px 32px; color: white;
-    margin-bottom: 24px; position: relative; overflow: hidden;
-}
-.page-header::before { content:''; position:absolute; right:-50px; top:-50px; width:180px; height:180px; background:rgba(255,255,255,.08); border-radius:50%; }
-.page-header h1 { margin:0 0 4px; font-size:22px; font-weight:800; position:relative; z-index:1; }
-.page-header p  { margin:0; opacity:.85; font-size:13px; position:relative; z-index:1; }
-
-.card { background:white; border-radius:16px; padding:32px; box-shadow:0 2px 16px rgba(0,0,0,.06); }
-
-/* Info Banner */
-.info-banner { background:linear-gradient(135deg,#ebf4ff,#f0f4ff); border:1.5px solid #bee3f8; border-radius:12px; padding:16px 20px; margin-bottom:24px; display:flex; align-items:flex-start; gap:12px; }
-.info-banner i { color:#3182ce; font-size:18px; margin-top:2px; flex-shrink:0; }
-.info-banner-text .title { font-weight:700; color:#2b6cb0; font-size:13px; margin-bottom:4px; }
-.info-banner-text p { font-size:12px; color:#4a5568; margin:0; line-height:1.6; }
-
-.section-divider { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.08em; color:#aab; padding-bottom:10px; border-bottom:1px solid #f0f2f7; margin:0 0 20px; }
-
-.form-group { margin-bottom:20px; }
-.form-label { display:block; font-size:12px; font-weight:700; color:#555; margin-bottom:7px; text-transform:uppercase; letter-spacing:.04em; }
-.req { color:#e53e3e; }
-.opt { color:#aab; font-weight:400; text-transform:none; letter-spacing:0; }
-.form-control { width:100%; padding:11px 14px; border:2px solid #edf0f7; border-radius:10px; font-size:13px; font-family:'Inter',sans-serif; color:#333; background:#fafbff; outline:none; transition:border .15s; }
-.form-control:focus { border-color:#4f46e5; background:white; }
-.form-control[readonly] { background:#f3f4f6; color:#4b5563; cursor:not-allowed; }
-select.form-control { cursor:pointer; }
-textarea.form-control { resize:vertical; min-height:110px; }
-.file-input { width:100%; padding:10px 14px; border:2px dashed #c5c8e0; border-radius:10px; font-size:13px; font-family:'Inter',sans-serif; background:#fafbff; cursor:pointer; outline:none; }
-
-.btn-row { display:flex; gap:12px; justify-content:flex-end; margin-top:28px; padding-top:20px; border-top:1px solid #f0f2f7; }
-.btn-submit { background:linear-gradient(135deg,#4f46e5,#4338ca); color:white; border:none; padding:12px 32px; border-radius:25px; font-size:13px; font-weight:800; cursor:pointer; display:inline-flex; align-items:center; gap:8px; box-shadow:0 4px 15px rgba(79,70,229,.4); transition:opacity .15s; }
-.btn-submit:hover { opacity:.9; }
-.btn-cancel { background:#f4f5f9; color:#666; padding:12px 24px; border-radius:25px; text-decoration:none; font-size:13px; font-weight:700; display:inline-flex; align-items:center; gap:8px; border:2px solid #edf0f7; transition:border .15s; }
-.btn-cancel:hover { border-color:#4f46e5; color:#4f46e5; }
-
-.error-box { background:#fff0f0; border:1px solid #fc8181; border-radius:10px; padding:14px 18px; margin-bottom:22px; }
-.error-box p  { margin:0 0 8px; color:#e53e3e; font-weight:700; font-size:13px; }
-.error-box ul { margin:0; padding-left:18px; color:#e53e3e; font-size:13px; }
+    .surat-kembali { font-size: 13px; background: var(--glass-solid); color: var(--ink-800); }
+    .surat-kembali:hover { color: var(--accent-ink); }
+    .form-control[readonly] { color: var(--ink-600); cursor: not-allowed; }
+    .form-group .ds-error { font-size: 11px; }
+    .form-label .opt { color: var(--ink-500); font-weight: 600; text-transform: none; letter-spacing: 0; }
+    textarea.form-control { resize: vertical; min-height: 96px; }
 </style>
 
-<div class="app-layout">
-    <x-island-navbar />
+<x-island-navbar />
 
-    <div class="main-content">
-        <a href="{{ route('surat-taruna.index') }}" class="back-link">
-            <i class="fas fa-arrow-left"></i> Kembali ke Daftar Pengajuan
+<main class="max-w-7xl mx-auto px-4 sm:px-6 pb-12 pt-2">
+    <div class="spatial-workspace-window rounded-3xl bg-white/30 backdrop-blur-2xl border border-white/50 shadow-2xl p-4 sm:p-7 relative overflow-hidden">
+
+        <x-page-banner title="Ajukan Permohonan Surat" icon="fa-file-signature"
+            subtitle="Isi formulir berikut untuk mengajukan permohonan surat kepada satuan pengasuhan" />
+
+        <a href="{{ route('surat-taruna.index') }}" class="ds-btn ds-btn--pill surat-kembali mb-4">
+            <i class="fa-solid fa-arrow-left"></i> Kembali ke Daftar Pengajuan
         </a>
 
-        <div class="page-header">
-            <h1><i class="fas fa-file-signature" style="margin-right:10px;"></i>Ajukan Permohonan Surat</h1>
-            <p>Isi formulir berikut untuk mengajukan permohonan surat kepada satuan pengasuhan</p>
-        </div>
+        @if($errors->any())
+        <x-glass-alert type="danger" title="Permohonan belum terkirim">
+            @foreach($errors->all() as $e)<div>{{ $e }}</div>@endforeach
+        </x-glass-alert>
+        @endif
 
-        <div class="info-banner">
-            <i class="fas fa-info-circle"></i>
-            <div class="info-banner-text">
-                <div class="title">Cara Pengajuan Surat</div>
-                <p>Lengkapi formulir di bawah ini. Pengajuan Anda akan diproses oleh satuan pengasuhan dan Anda akan menerima notifikasi ketika surat disetujui atau ditolak.</p>
-            </div>
-        </div>
-
-        <div class="card">
-            @if($errors->any())
-            <div class="error-box">
-                <p><i class="fas fa-exclamation-triangle" style="margin-right:6px;"></i>Terdapat kesalahan:</p>
-                <ul>@foreach($errors->all() as $err)<li>{{ $err }}</li>@endforeach</ul>
-            </div>
-            @endif
-
+        <div class="form-card">
             <form method="POST" action="{{ route('surat-taruna.store') }}" enctype="multipart/form-data">
                 @csrf
 
-                <div class="section-divider">Identitas Pengaju</div>
-                <div style="display:grid; grid-template-columns:1fr 1fr; gap:18px; margin-bottom:24px;">
-                    <div class="form-group">
-                        <label class="form-label">Nama Pengaju</label>
-                        <input type="text" class="form-control" value="{{ Auth::user()->name }}" readonly>
+                <div class="form-section-title">
+                    <span><i class="fas fa-file-signature me-2" style="color:var(--accent)"></i> Isi Form Permohonan Surat</span>
+                    <span class="ds-badge ds-badge--accent">
+                        <i class="far fa-clock"></i> Waktu: {{ now()->format('d/m/Y H:i') }}
+                    </span>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-4 form-group">
+                        <label class="form-label" for="namaPengaju">Nama Pengaju</label>
+                        <input type="text" id="namaPengaju" class="form-control" value="{{ Auth::user()->name }}" readonly>
                     </div>
-                    <div class="form-group">
-                        <label class="form-label">Ditujukan Kepada</label>
-                        <input type="text" class="form-control" value="Satuan Pengasuhan" readonly>
+                    <div class="col-md-4 form-group">
+                        <label class="form-label" for="ditujukan">Ditujukan Kepada</label>
+                        <input type="text" id="ditujukan" class="form-control" value="Satuan Pengasuhan" readonly>
+                    </div>
+                    <div class="col-md-4 form-group">
+                        <label class="form-label" for="tanggalPengajuan">Tanggal Pengajuan</label>
+                        <input type="text" id="tanggalPengajuan" class="form-control" value="{{ now()->locale('id')->isoFormat('dddd, D MMMM Y') }}" readonly>
                     </div>
                 </div>
 
-                <div class="section-divider">Detail Permohonan Surat</div>
-                <div style="display:grid; grid-template-columns:1fr 1fr; gap:18px; margin-bottom:24px;">
-                    <div class="form-group" style="grid-column:span 1;">
-                        <label class="form-label">Jenis Surat <span class="req">*</span></label>
-                        <select name="jenis_surat" required class="form-control">
+                <div class="row">
+                    <div class="col-md-4 form-group">
+                        <label class="form-label" for="jenisSurat">Jenis Surat <span class="req">*</span></label>
+                        <select id="jenisSurat" name="jenis_surat" class="form-select" required>
                             <option value="">-- Pilih Jenis Surat --</option>
                             @foreach($jenisList as $j)
                                 <option value="{{ $j }}" {{ old('jenis_surat') === $j ? 'selected' : '' }}>{{ $j }}</option>
                             @endforeach
                         </select>
-                        @error('jenis_surat')<div style="color:#e53e3e; font-size:11px; margin-top:5px;">{{ $message }}</div>@enderror
+                        @error('jenis_surat')<div class="ds-error">{{ $message }}</div>@enderror
                     </div>
-                    <div class="form-group">
-                        <label class="form-label">Tanggal Pengajuan</label>
-                        <input type="text" class="form-control" value="{{ now()->locale('id')->isoFormat('dddd, D MMMM Y') }}" readonly>
-                    </div>
-                    <div class="form-group" style="grid-column:span 2;">
-                        <label class="form-label">Perihal / Subjek Surat <span class="req">*</span></label>
-                        <input type="text" name="perihal" value="{{ old('perihal') }}" required
+                    <div class="col-md-8 form-group">
+                        <label class="form-label" for="perihal">Perihal / Subjek Surat <span class="req">*</span></label>
+                        <input type="text" id="perihal" name="perihal" value="{{ old('perihal') }}" required
                                placeholder="Contoh: Permohonan Izin Kegiatan Luar Komplek" class="form-control">
-                        @error('perihal')<div style="color:#e53e3e; font-size:11px; margin-top:5px;">{{ $message }}</div>@enderror
-                    </div>
-                    <div class="form-group" style="grid-column:span 2;">
-                        <label class="form-label">Keterangan / Alasan Pengajuan <span class="opt">(opsional)</span></label>
-                        <textarea name="keterangan" class="form-control"
-                                  placeholder="Jelaskan keperluan dan alasan pengajuan surat secara singkat...">{{ old('keterangan') }}</textarea>
-                    </div>
-                    <div class="form-group" style="grid-column:span 2;">
-                        <label class="form-label">Dokumen Pendukung <span class="opt">(PDF/Word/Gambar, maks. 5MB, opsional)</span></label>
-                        <input type="file" name="file" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png" class="file-input">
+                        @error('perihal')<div class="ds-error">{{ $message }}</div>@enderror
                     </div>
                 </div>
 
-                <div class="btn-row">
-                    <a href="{{ route('surat-taruna.index') }}" class="btn-cancel"><i class="fas fa-times"></i> Batal</a>
-                    <button type="submit" class="btn-submit"><i class="fas fa-paper-plane"></i> Kirim Permohonan</button>
+                <div class="form-group">
+                    <label class="form-label" for="keterangan">Keterangan / Alasan Pengajuan <span class="opt">(opsional)</span></label>
+                    <textarea id="keterangan" name="keterangan" class="form-control" rows="3"
+                              placeholder="Jelaskan keperluan dan alasan pengajuan surat secara singkat...">{{ old('keterangan') }}</textarea>
+                    @error('keterangan')<div class="ds-error">{{ $message }}</div>@enderror
                 </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="file">Dokumen Pendukung <span class="opt">(opsional)</span></label>
+                    <input type="file" id="file" name="file" class="form-control" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png">
+                    <small class="form-help"><i class="fas fa-paperclip"></i> Maks. 5MB · PDF, DOC, DOCX, JPG, PNG. Pengajuan akan diproses pengasuhan dan Anda mendapat notifikasi saat surat disetujui atau ditolak.</small>
+                    @error('file')<div class="ds-error">{{ $message }}</div>@enderror
+                </div>
+
+                <button type="submit" class="btn-submit-log">
+                    <i class="fas fa-paper-plane"></i> KIRIM PERMOHONAN
+                </button>
             </form>
         </div>
+
     </div>
-</div>
+</main>
 </x-app-layout>
