@@ -3,58 +3,145 @@
 {{-- Top Floating Island Capsule Navbar --}}
 <x-island-navbar />
 
-@php $isTaruna = Auth::user()->hasTarunaAccess(); @endphp
+@php
+    $isTaruna = Auth::user()->hasTarunaAccess();
+
+    // Agenda mendatang (hari ini ke depan) — acara & apel digabung, 6 terdekat
+    $agendaMendatang = $acara->map(fn ($a) => [
+            'tipe' => 'acara', 'judul' => $a->nama_acara, 'tanggal' => $a->tanggal,
+            'jam'  => $a->jam ? \Carbon\Carbon::parse($a->jam)->format('H:i') : '',
+        ])
+        ->concat($apel->map(fn ($p) => [
+            'tipe' => 'apel', 'judul' => $p->judul, 'tanggal' => $p->tanggal,
+            'jam'  => $p->jam ? \Carbon\Carbon::parse($p->jam)->format('H:i') : '',
+        ]))
+        ->filter(fn ($e) => $e['tanggal']->gte(today()))
+        ->sortBy(fn ($e) => $e['tanggal']->format('Y-m-d') . ' ' . $e['jam'])
+        ->take(6)
+        ->values();
+
+    // Data kalender cukup judul, tanggal & jam — detail (termasuk informasi apel) ada di halaman per tanggal
+    $eventKalender = $acara->map(fn ($a) => [
+            'type'    => 'acara',
+            'judul'   => $a->nama_acara,
+            'tanggal' => $a->tanggal->format('Y-m-d'),
+            'jam'     => $a->jam ? \Carbon\Carbon::parse($a->jam)->format('H:i') : '',
+        ])
+        ->concat($apel->map(fn ($p) => [
+            'type'    => 'apel',
+            'judul'   => $p->judul,
+            'tanggal' => $p->tanggal->format('Y-m-d'),
+            'jam'     => $p->jam ? \Carbon\Carbon::parse($p->jam)->format('H:i') : '',
+        ]))
+        ->sortBy('jam')
+        ->values();
+@endphp
+
+<style>
+    /* Kartu aksi pengelola — pola kartu ajukan tab surat & barak */
+    .acara-aksi { display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); flex-wrap: wrap; }
+    .acara-aksi__teks { font-size: 13px; font-weight: 600; color: var(--ink-700); }
+    .acara-aksi__teks i { color: var(--accent); margin-right: var(--space-1-5); }
+    .acara-aksi__kanan { display: flex; align-items: center; gap: var(--space-2); flex-wrap: wrap; }
+    .acara-toggle { display: inline-flex; gap: var(--space-1); padding: var(--space-1); border-radius: var(--radius-pill); background: var(--glass-subtle); border: 1px solid var(--border-glass); }
+    .acara-toggle .toggle-btn { border: 1px solid transparent; border-radius: var(--radius-pill); background: transparent; padding: var(--space-1-5) var(--space-3); font-family: inherit; font-size: 12px; font-weight: 700; color: var(--ink-700); cursor: pointer; }
+    .acara-toggle .toggle-btn.active { background: var(--glass-solid); border-color: var(--border-glass-glow); color: var(--ink-900); box-shadow: var(--shadow-glass-sm); }
+
+    /* Kalender — bentuk kalender dinding klasik: satu bingkai kaca, garis tipis antar tanggal */
+    .cal-head { display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); flex-wrap: wrap; }
+    .cal-box { border-radius: var(--radius-lg); overflow: hidden; background: var(--glass-card); border: 1px solid var(--border-glass-glow); box-shadow: var(--shadow-glass-sm); }
+    .cal-bar { display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); padding: var(--space-3) var(--space-4); background: var(--glass-dark); color: var(--ink-on-dark); }
+    .cal-bar__btn {
+        width: 32px; height: 32px; flex-shrink: 0; display: grid; place-items: center; padding: 0;
+        border-radius: var(--radius-pill); border: 1px solid var(--border-on-dark); background: rgba(255,255,255,.12);
+        color: var(--ink-on-dark); font-size: 12px; cursor: pointer; transition: background-color .15s;
+    }
+    .cal-bar__btn:hover { background: rgba(255,255,255,.24); }
+    .cal-bar__btn:focus-visible { outline: none; box-shadow: var(--shadow-focus); }
+    .cal-judul { margin: 0; text-align: center; font-size: 16px; line-height: 22px; font-weight: 800; letter-spacing: -0.01em; white-space: nowrap; color: var(--ink-on-dark); }
+    .cal-hari { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); background: var(--glass-solid); border-bottom: 1px solid var(--border-glass-subtle); }
+    .cal-hari span { padding: var(--space-2) 0; text-align: center; font-size: 11px; line-height: 14px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-700); }
+    .cal-hari span.libur { color: var(--danger-ink); }
+    .cal-grid { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); }
+    .cal-cell {
+        display: flex; flex-direction: column; gap: 3px; min-width: 0; min-height: 96px; padding: var(--space-1-5) var(--space-2);
+        border-right: 1px solid var(--border-glass-subtle); border-bottom: 1px solid var(--border-glass-subtle);
+        color: inherit; text-decoration: none; transition: background-color .15s;
+    }
+    .cal-cell:nth-child(7n) { border-right: 0; }
+    .cal-cell:nth-last-child(-n+7) { border-bottom: 0; }
+    .cal-cell:hover { background: var(--glass-solid); color: inherit; }
+    .cal-cell:hover .cal-tgl { background: var(--glass-subtle); }
+    .cal-cell:focus-visible { outline: none; box-shadow: inset 0 0 0 2px var(--focus-ring); }
+    .cal-cell--luar { background: rgba(255,255,255,.12); }
+    .cal-cell--luar .cal-tgl { color: var(--ink-400); }
+    .cal-cell--hariini { background: var(--accent-tint); }
+    .cal-tgl { width: 26px; height: 26px; border-radius: var(--radius-pill); display: grid; place-items: center; flex-shrink: 0; font-size: 12px; font-weight: 800; color: var(--ink-800); transition: background-color .15s; }
+    .cal-cell--libur:not(.cal-cell--luar) .cal-tgl { color: var(--danger-ink); }
+    .cal-cell--hariini .cal-tgl, .cal-cell--hariini:hover .cal-tgl { background: var(--accent); color: var(--ink-on-dark); box-shadow: var(--shadow-glass-sm); }
+    .cal-chip {
+        display: block; padding: 2px 6px; border-radius: 5px; background: var(--accent); color: var(--ink-on-dark);
+        font-size: 10px; line-height: 14px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .cal-chip--apel { background: var(--success); }
+    .cal-cell--luar .cal-chip { opacity: .55; }
+    .cal-lagi { font-size: 10px; line-height: 14px; font-weight: 700; color: var(--accent-ink); padding-left: 2px; }
+    .cal-titik { display: none; gap: 3px; flex-wrap: wrap; }
+    .cal-titik i { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); }
+    .cal-titik i.apel { background: var(--success); }
+    @media (max-width: 640px) {
+        .cal-cell { min-height: 56px; align-items: center; padding: var(--space-1); }
+        .cal-chip, .cal-lagi { display: none; }
+        .cal-titik { display: flex; justify-content: center; }
+        .cal-hari span { font-size: 10px; letter-spacing: .02em; }
+    }
+    .cal-legend { display: flex; flex-wrap: wrap; gap: var(--space-2) var(--space-4); margin-top: var(--space-4); padding-top: var(--space-3); border-top: 1px solid var(--border-glass-subtle); font-size: 11px; font-weight: 600; color: var(--ink-700); }
+    .cal-legend span { display: inline-flex; align-items: center; gap: var(--space-1-5); }
+    .cal-legend i { width: 10px; height: 10px; border-radius: 3px; background: var(--accent); }
+    .cal-legend i.apel { background: var(--success); }
+    .cal-legend i.hariini { border-radius: 50%; }
+
+    /* Agenda mendatang */
+    .ag-list { display: flex; flex-direction: column; gap: var(--space-2); }
+    .ag-item {
+        display: flex; align-items: center; gap: var(--space-3); padding: var(--space-2-5) var(--space-3);
+        border-radius: var(--radius-md); background: var(--glass-card); border: 1px solid var(--border-glass-glow);
+        color: inherit; text-decoration: none; transition: background-color .15s, box-shadow .15s;
+    }
+    .ag-item:hover { background: var(--glass-solid); box-shadow: var(--shadow-glass-sm); color: inherit; }
+    .ag-item:focus-visible { outline: none; box-shadow: var(--shadow-focus); }
+    .ag-tgl { width: 42px; flex-shrink: 0; padding: var(--space-1) 0; border-radius: var(--radius-sm); text-align: center; background: var(--accent-tint); color: var(--accent-ink); }
+    .ag-tgl--apel { background: var(--success-tint); color: var(--success-ink); }
+    .ag-tgl b { display: block; font-family: var(--font-mono); font-size: 16px; line-height: 20px; font-weight: 900; }
+    .ag-tgl small { display: block; font-size: 9px; line-height: 12px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; }
+    .ag-body { display: block; min-width: 0; flex: 1; }
+    .ag-body .tbl-title, .ag-body .tbl-sub { display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .ag-panah { color: var(--ink-400); font-size: 11px; }
+</style>
 
 <main class="max-w-7xl mx-auto px-4 sm:px-6 pb-12 pt-2">
     <div class="spatial-workspace-window rounded-3xl bg-white/30 backdrop-blur-2xl border border-white/50 shadow-2xl p-4 sm:p-7 relative overflow-hidden">
-        
 
-                
-                {{-- Page Header Glass Banner --}}
-                <div class="rounded-2xl bg-gradient-to-r from-blue-900/90 via-indigo-900/85 to-slate-900/90 backdrop-blur-xl border border-white/30 p-6 text-white mb-6 shadow-xl relative overflow-hidden flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-                    <div class="relative z-10">
-                        <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/15 backdrop-blur-md border border-white/20 text-[10px] font-bold tracking-widest uppercase text-sky-200 mb-2">
-                            <span>✦</span>
-                            <span>Agenda &amp; Kegiatan Kampus</span>
+                {{-- Header — sama dengan header tab poin, surat & barak --}}
+                <x-page-banner :title="$isTaruna ? 'Kalender Kegiatan Taruna' : 'Kelola Acara & Agenda'" icon="fa-calendar-days"
+                    :subtitle="$isTaruna ? 'Pantau jadwal acara harian, kegiatan asrama, dan sesi apel. Klik tanggal untuk melihat agenda hari itu' : 'Daftar acara pengasuhan terintegrasi kalender dan presensi apel'" />
+
+                @unless($isTaruna)
+                {{-- Aksi pengelola — di bawah header --}}
+                <div class="ds-card acara-aksi mb-4">
+                    <span class="acara-aksi__teks"><i class="fa-solid fa-calendar-plus"></i>Jadwalkan acara baru atau lihat semua agenda di kalender</span>
+                    <div class="acara-aksi__kanan">
+                        <div class="acara-toggle">
+                            <button type="button" class="toggle-btn active" id="btnTableView" onclick="switchView('table')"><i class="fa-solid fa-list"></i> Tabel</button>
+                            <button type="button" class="toggle-btn" id="btnCalendarView" onclick="switchView('calendar')"><i class="fa-solid fa-calendar"></i> Kalender</button>
                         </div>
-                        <h1 class="text-xl sm:text-2xl font-extrabold tracking-tight text-white mb-1 flex items-center gap-2">
-                            <i class="fa-solid fa-calendar-days text-sky-400"></i>
-                            <span>{{ $isTaruna ? 'Kalender Kegiatan Taruna' : 'Kelola Acara &amp; Agenda' }}</span>
-                        </h1>
-                        <p class="text-xs text-sky-100/80">{{ $isTaruna ? 'Pantau jadwal acara harian, kegiatan asrama, dan sesi apel' : 'Daftar acara pengasuhan terintegrasi kalender dan presensi apel' }}</p>
+                        <a href="{{ route('acara.create') }}" class="ds-btn ds-btn--primary"><i class="fa-solid fa-plus"></i> Tambah Acara</a>
                     </div>
-
-                    <div class="relative z-10 flex items-center gap-2">
-                        @unless($isTaruna)
-                        <div class="flex items-center bg-white/20 backdrop-blur-md rounded-xl p-1 border border-white/30">
-                            <button class="px-3 py-1.5 rounded-lg text-xs font-bold text-slate-900 bg-white shadow-sm transition toggle-btn active" id="btnTableView" onclick="switchView('table')">
-                                <i class="fa-solid fa-list mr-1"></i> Tabel
-                            </button>
-                            <button class="px-3 py-1.5 rounded-lg text-xs font-bold text-white hover:text-sky-200 transition toggle-btn" id="btnCalendarView" onclick="switchView('calendar')">
-                                <i class="fa-solid fa-calendar mr-1"></i> Kalender
-                            </button>
-                        </div>
-                        <a href="{{ route('acara.create') }}" class="px-4 py-2 rounded-xl bg-white hover:bg-slate-50 text-slate-900 font-extrabold text-xs shadow-md transition flex items-center gap-2 no-underline">
-                            <i class="fa-solid fa-plus text-indigo-600"></i>
-                            <span>Tambah Acara</span>
-                        </a>
-                        @else
-                        <div class="px-3 py-1.5 rounded-xl bg-white/15 border border-white/20 text-white font-bold text-xs backdrop-blur-md flex items-center gap-1.5">
-                            <i class="fa-solid fa-eye text-sky-300 text-xs"></i>
-                            <span>Mode Kalender</span>
-                        </div>
-                        @endunless
-                    </div>
-
-                    <div class="absolute -right-10 -top-10 w-40 h-40 bg-sky-500/20 rounded-full blur-3xl pointer-events-none"></div>
                 </div>
+                @endunless
 
-                {{-- Alerts --}}
                 @if(session('success'))
-                <div class="rounded-2xl bg-emerald-100/90 border border-emerald-300 p-4 text-emerald-800 text-xs font-bold mb-5 flex items-center gap-2 shadow-sm backdrop-blur-md">
-                    <i class="fa-solid fa-circle-check text-emerald-600 text-base"></i>
-                    <span>{{ session('success') }}</span>
-                </div>
+                <x-glass-alert type="success" title="Berhasil">{{ session('success') }}</x-glass-alert>
                 @endif
 
                 {{-- TABLE VIEW (Non-Taruna) --}}
@@ -107,7 +194,7 @@
                                             </span>
                                         </td>
                                         <td class="py-3 px-3 max-w-[220px] text-slate-600">
-                                            {!! $a->keterangan ? Str::limit($a->keterangan, 70) : '<span class="text-slate-300">—</span>' !!}
+                                            {!! $a->keterangan ? e(Str::limit($a->keterangan, 70)) : '<span class="text-slate-300">—</span>' !!}
                                         </td>
                                         <td class="py-3 px-3 text-center">
                                             <div class="inline-flex items-center gap-1">
@@ -137,49 +224,64 @@
                 @endunless
 
                 {{-- CALENDAR VIEW --}}
-                <div id="calendarView" @if($isTaruna) style="display:block;" @else style="display:none;" @endif>
-                    <div class="rounded-2xl bg-white/50 backdrop-blur-xl border border-white/60 shadow-lg overflow-hidden">
-                        
-                        {{-- Calendar Navigation --}}
-                        <div class="p-4 sm:p-5 bg-gradient-to-r from-blue-900/90 via-indigo-900/85 to-slate-900/90 text-white flex items-center justify-between">
-                            <button class="w-8 h-8 rounded-full bg-white/20 hover:bg-white/30 text-white flex items-center justify-center text-xs transition" onclick="changeMonth(-1)">
-                                <i class="fa-solid fa-chevron-left"></i>
-                            </button>
-                            <h2 class="text-base font-extrabold tracking-tight" id="calendarTitle"></h2>
-                            <button class="w-8 h-8 rounded-full bg-white/20 hover:bg-white/30 text-white flex items-center justify-center text-xs transition" onclick="changeMonth(1)">
-                                <i class="fa-solid fa-chevron-right"></i>
-                            </button>
+                <div id="calendarView" class="grid grid-cols-1 lg:grid-cols-3 gap-4" @unless($isTaruna) style="display:none;" @endunless>
+                    <div class="ds-card lg:col-span-2">
+                        <div class="ds-card__head cal-head">
+                            <div>
+                                <h3 class="ds-card__title"><i class="fa-solid fa-calendar-days ds-icon"></i> Kalender Kegiatan</h3>
+                                <p class="ds-card__desc">Klik tanggal untuk membuka agenda hari itu</p>
+                            </div>
+                            <button type="button" class="ds-btn ds-btn--sm ds-btn--pill" onclick="goToday()"><i class="fa-solid fa-calendar-day"></i> Hari ini</button>
                         </div>
 
-                        {{-- Day Headers --}}
-                        <div class="grid grid-cols-7 border-b border-white/40 bg-white/60 text-[10px] font-extrabold uppercase tracking-wider text-slate-700 text-center py-2">
-                            <div class="text-rose-600">MIN</div>
-                            <div>SEN</div>
-                            <div>SEL</div>
-                            <div>RAB</div>
-                            <div>KAM</div>
-                            <div>JUM</div>
-                            <div class="text-rose-600">SAB</div>
+                        {{-- Kalender bulanan klasik: bar bulan, baris nama hari, lalu kisi tanggal bergaris --}}
+                        <div class="cal-box">
+                            <div class="cal-bar">
+                                <button type="button" class="cal-bar__btn" onclick="changeMonth(-1)" aria-label="Bulan sebelumnya"><i class="fa-solid fa-chevron-left"></i></button>
+                                <h4 class="cal-judul" id="calendarTitle" aria-live="polite"></h4>
+                                <button type="button" class="cal-bar__btn" onclick="changeMonth(1)" aria-label="Bulan berikutnya"><i class="fa-solid fa-chevron-right"></i></button>
+                            </div>
+                            <div class="cal-hari" aria-hidden="true">
+                                <span class="libur">Min</span><span>Sen</span><span>Sel</span><span>Rab</span><span>Kam</span><span>Jum</span><span class="libur">Sab</span>
+                            </div>
+                            <div class="cal-grid" id="calendarDays"></div>
                         </div>
 
-                        {{-- Calendar Grid Days --}}
-                        <div class="grid grid-cols-7" id="calendarDays"></div>
-
-                        {{-- Legend --}}
-                        <div class="p-4 bg-white/40 border-t border-white/40 flex items-center gap-4 text-xs font-semibold text-slate-700 flex-wrap">
-                            <div class="flex items-center gap-1.5">
-                                <span class="w-2.5 h-2.5 rounded-full bg-indigo-600"></span>
-                                <span>Acara Terjadwal</span>
-                            </div>
-                            <div class="flex items-center gap-1.5">
-                                <span class="w-2.5 h-2.5 rounded-full bg-emerald-600"></span>
-                                <span>Apel Taruna</span>
-                            </div>
-                            <div class="flex items-center gap-1.5">
-                                <span class="w-2.5 h-2.5 rounded-full bg-indigo-100 border border-indigo-600"></span>
-                                <span>Hari Ini</span>
-                            </div>
+                        <div class="cal-legend">
+                            <span><i></i> Acara Terjadwal</span>
+                            <span><i class="apel"></i> Apel Taruna</span>
+                            <span><i class="hariini"></i> Hari Ini</span>
                         </div>
+                    </div>
+
+                    {{-- Agenda mendatang --}}
+                    <div class="ds-card">
+                        <div class="ds-card__head">
+                            <h3 class="ds-card__title"><i class="fa-solid fa-clock ds-icon"></i> Agenda Mendatang</h3>
+                            <p class="ds-card__desc">Acara &amp; apel terdekat mulai hari ini</p>
+                        </div>
+                        @if($agendaMendatang->isEmpty())
+                        <div class="ds-empty">
+                            <i class="fa-solid fa-calendar-check ds-icon"></i>
+                            Belum ada agenda mendatang.
+                        </div>
+                        @else
+                        <div class="ag-list">
+                            @foreach($agendaMendatang as $e)
+                            <a href="{{ route('acara.tanggal', $e['tanggal']->format('Y-m-d')) }}" class="ag-item">
+                                <span class="ag-tgl {{ $e['tipe'] === 'apel' ? 'ag-tgl--apel' : '' }}">
+                                    <b>{{ $e['tanggal']->format('d') }}</b>
+                                    <small>{{ $e['tanggal']->locale('id')->isoFormat('MMM') }}</small>
+                                </span>
+                                <span class="ag-body">
+                                    <span class="tbl-title">{{ $e['judul'] }}</span>
+                                    <span class="tbl-sub">{{ $e['tanggal']->locale('id')->isoFormat('dddd') }}{{ $e['jam'] ? ' · '.$e['jam'].' WIB' : '' }} · {{ $e['tipe'] === 'apel' ? 'Apel' : 'Acara' }}</span>
+                                </span>
+                                <i class="fa-solid fa-chevron-right ag-panah"></i>
+                            </a>
+                            @endforeach
+                        </div>
+                        @endif
                     </div>
                 </div>
 
@@ -208,225 +310,108 @@
 </div>
 @endunless
 
-{{-- Calendar Popover --}}
-<div class="cal-popover" id="calPopover">
-    <h4 id="popTitle" class="font-extrabold text-slate-900 text-xs mb-2"></h4>
-    <div class="cal-popover-row text-[11px] text-slate-600 flex items-center gap-1.5 mb-1"><i class="fa-solid fa-calendar text-indigo-600 w-4 text-center"></i><span id="popDate"></span></div>
-    <div class="cal-popover-row text-[11px] text-slate-600 flex items-center gap-1.5 mb-1"><i class="fa-solid fa-clock text-indigo-600 w-4 text-center"></i><span id="popTime"></span></div>
-    <div class="cal-popover-row text-[11px] text-slate-600 flex items-center gap-1.5 mb-1" id="popPembinaRow" style="display:none;"><i class="fa-solid fa-user-tie text-indigo-600 w-4 text-center"></i><span id="popPembina"></span></div>
-    <div class="cal-popover-row text-[11px] text-slate-600 flex items-center gap-1.5 mb-1" id="popLokasiRow" style="display:none;"><i class="fa-solid fa-location-dot text-indigo-600 w-4 text-center"></i><span id="popLokasi"></span></div>
-    <div class="cal-popover-desc text-[11px] text-slate-500 mt-2 pt-2 border-t border-slate-100 leading-relaxed" id="popDesc" style="display:none;"></div>
-</div>
-
-@php
-$acara = $acara->map(function($a) {
-    return [
-        'type'       => 'acara',
-        'id'         => $a->id,
-        'judul'      => $a->nama_acara,
-        'tanggal'    => $a->tanggal->format('Y-m-d'),
-        'jam'        => \Carbon\Carbon::parse($a->jam)->format('H:i'),
-        'keterangan' => $a->keterangan,
-    ];
-})->toJson();
-
-$apel = $apel->map(function($p) {
-    return [
-        'type'    => 'apel',
-        'id'      => $p->id,
-        'judul'   => $p->judul,
-        'tanggal' => $p->tanggal->format('Y-m-d'),
-        'jam'     => $p->jam ? \Carbon\Carbon::parse($p->jam)->format('H:i') : '',
-        'pembina' => $p->pembina,
-        'lokasi'  => $p->lokasi,
-        'keterangan' => $p->informasi,
-    ];
-})->toJson();
-@endphp
-
 <script>
 const IS_TARUNA   = @json($isTaruna);
-const ACARA_DATA  = @json(json_decode($acara));
-const APEL_DATA   = @json(json_decode($apel));
-const ALL_EVENTS  = ACARA_DATA.concat(APEL_DATA);
+const ALL_EVENTS  = @json($eventKalender);
+const URL_TANGGAL = @json(url('acara/tanggal'));
 
 const BULAN_ID = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
-const HARI_ID  = ['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
 
-let viewDate = new Date();
+// Bulan awal bisa dari ?bulan=YYYY-MM (tombol kembali dari halaman per tanggal)
+const bulanParam = new URLSearchParams(location.search).get('bulan');
+let viewDate = /^\d{4}-\d{2}$/.test(bulanParam || '') ? new Date(bulanParam + '-01T00:00:00') : new Date();
+viewDate.setDate(1);
 
 function switchView(mode) {
+    const kalender = mode === 'calendar';
     const tbl = document.getElementById('tableView');
     const cal = document.getElementById('calendarView');
-    const btnTbl = document.getElementById('btnTableView');
-    const btnCal = document.getElementById('btnCalendarView');
-
-    if (mode === 'calendar') {
-        if (tbl) tbl.style.display = 'none';
-        if (cal) cal.style.display = 'block';
-        if (btnCal) { btnCal.classList.add('active', 'bg-white', 'text-slate-900'); btnCal.classList.remove('text-white'); }
-        if (btnTbl) { btnTbl.classList.remove('active', 'bg-white', 'text-slate-900'); btnTbl.classList.add('text-white'); }
-        renderCalendar();
-        sessionStorage.setItem('acaraView', 'calendar');
-    } else {
-        if (tbl) tbl.style.display = 'block';
-        if (cal) cal.style.display = 'none';
-        if (btnTbl) { btnTbl.classList.add('active', 'bg-white', 'text-slate-900'); btnTbl.classList.remove('text-white'); }
-        if (btnCal) { btnCal.classList.remove('active', 'bg-white', 'text-slate-900'); btnCal.classList.add('text-white'); }
-        sessionStorage.setItem('acaraView', 'table');
-    }
+    if (tbl) tbl.style.display = kalender ? 'none' : '';
+    if (cal) cal.style.display = kalender ? '' : 'none';
+    document.getElementById('btnCalendarView')?.classList.toggle('active', kalender);
+    document.getElementById('btnTableView')?.classList.toggle('active', !kalender);
+    if (kalender) renderCalendar();
+    try { sessionStorage.setItem('acaraView', mode); } catch (e) {}
 }
 
 function changeMonth(delta) {
     viewDate.setMonth(viewDate.getMonth() + delta);
     renderCalendar();
-    closePopover();
 }
+
+function goToday() {
+    viewDate = new Date();
+    viewDate.setDate(1);
+    renderCalendar();
+}
+
+const pad = n => String(n).padStart(2, '0');
+const isoTgl = d => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
 
 function renderCalendar() {
     const year  = viewDate.getFullYear();
     const month = viewDate.getMonth();
-
     document.getElementById('calendarTitle').textContent = BULAN_ID[month] + ' ' + year;
 
-    const firstDay = new Date(year, month, 1).getDay();
-    const totalDays = new Date(year, month + 1, 0).getDate();
-    const prevTotalDays = new Date(year, month, 0).getDate();
-
-    const today = new Date();
-    const isThisMonth = today.getFullYear() === year && today.getMonth() === month;
+    // Mulai hari Minggu pada minggu yang memuat tanggal 1, sampai akhir minggu terakhir bulan ini
+    const hariPertama = new Date(year, month, 1).getDay();
+    const totalSel = Math.ceil((hariPertama + new Date(year, month + 1, 0).getDate()) / 7) * 7;
+    const hariIni = isoTgl(new Date());
 
     const grid = document.getElementById('calendarDays');
     grid.innerHTML = '';
-
-    // Days from previous month
-    for (let i = firstDay - 1; i >= 0; i--) {
-        const d = prevTotalDays - i;
-        const cell = createCell(d, true, false, []);
-        grid.appendChild(cell);
-    }
-
-    // Days in current month
-    for (let d = 1; d <= totalDays; d++) {
-        const dateStr = `${year}-${String(month+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
-        const events = ALL_EVENTS.filter(e => e.tanggal === dateStr);
-        const isToday = isThisMonth && today.getDate() === d;
-        const cell = createCell(d, false, isToday, events, dateStr);
-        grid.appendChild(cell);
-    }
-
-    // Days in next month
-    const totalRendered = firstDay + totalDays;
-    const remaining = totalRendered % 7 === 0 ? 0 : 7 - (totalRendered % 7);
-    for (let d = 1; d <= remaining; d++) {
-        const cell = createCell(d, true, false, []);
-        grid.appendChild(cell);
+    for (let i = 0; i < totalSel; i++) {
+        const d = new Date(year, month, 1 - hariPertama + i);
+        grid.appendChild(createCell(d, d.getMonth() !== month, isoTgl(d) === hariIni));
     }
 }
 
-function createCell(dayNum, isOtherMonth, isToday, events, dateStr) {
-    const cell = document.createElement('div');
-    cell.className = 'cal-cell min-h-[90px] p-2 border-r border-b border-white/30 transition hover:bg-white/40' +
-        (isOtherMonth ? ' opacity-40' : '') +
-        (isToday ? ' bg-indigo-50/70' : '') +
-        (events.length > 0 ? ' has-event cursor-pointer' : '');
+function createCell(date, isOtherMonth, isToday) {
+    const tgl = isoTgl(date);
+    const events = ALL_EVENTS.filter(e => e.tanggal === tgl);
 
-    const dateEl = document.createElement('div');
-    dateEl.className = 'cal-date text-xs font-bold text-slate-700 mb-1 w-6 h-6 rounded-full flex items-center justify-center' +
-        (isToday ? ' bg-indigo-600 text-white' : '');
-    dateEl.textContent = dayNum;
+    // Tiap tanggal = link ke halaman agenda hari itu
+    const cell = document.createElement('a');
+    cell.href = `${URL_TANGGAL}/${tgl}`;
+    cell.className = 'cal-cell' + (isOtherMonth ? ' cal-cell--luar' : '') + (isToday ? ' cal-cell--hariini' : '')
+        + (events.length ? ' cal-cell--ada' : '') + ([0, 6].includes(date.getDay()) ? ' cal-cell--libur' : '');
+    cell.setAttribute('aria-label', `${date.getDate()} ${BULAN_ID[date.getMonth()]} ${date.getFullYear()}, `
+        + (events.length ? `${events.length} agenda` : 'tidak ada agenda'));
+    if (isToday) cell.setAttribute('aria-current', 'date');
+
+    const dateEl = document.createElement('span');
+    dateEl.className = 'cal-tgl';
+    dateEl.textContent = date.getDate();
     cell.appendChild(dateEl);
 
-    const maxDisplay = 2;
-    events.slice(0, maxDisplay).forEach(e => {
-        const ev = document.createElement('div');
-        ev.className = 'cal-event text-[9px] font-bold px-1.5 py-0.5 rounded text-white truncate mb-1 ' +
-            (e.type === 'apel' ? 'bg-emerald-600' : 'bg-indigo-600');
-        ev.textContent = (e.jam ? e.jam + ' ' : '') + e.judul;
-        ev.onclick = function(evClick) {
-            evClick.stopPropagation();
-            openPopover(e, ev);
-        };
-        cell.appendChild(ev);
+    const maks = 2;
+    events.slice(0, maks).forEach(e => {
+        const chip = document.createElement('span');
+        chip.className = 'cal-chip' + (e.type === 'apel' ? ' cal-chip--apel' : '');
+        chip.textContent = (e.jam ? e.jam + ' ' : '') + e.judul;
+        chip.title = chip.textContent;
+        cell.appendChild(chip);
     });
-
-    if (events.length > maxDisplay) {
-        const more = document.createElement('div');
-        more.className = 'text-[9px] font-bold text-indigo-700 text-center';
-        more.textContent = `+${events.length - maxDisplay} lainnya`;
-        cell.appendChild(more);
+    if (events.length > maks) {
+        const lagi = document.createElement('span');
+        lagi.className = 'cal-lagi';
+        lagi.textContent = `+${events.length - maks} lainnya`;
+        cell.appendChild(lagi);
     }
 
-    if (events.length > 0) {
-        cell.onclick = function() {
-            openPopover(events[0], cell);
-        };
+    // Layar kecil: titik warna menggantikan chip
+    if (events.length) {
+        const titik = document.createElement('span');
+        titik.className = 'cal-titik';
+        events.slice(0, 4).forEach(e => {
+            const i = document.createElement('i');
+            if (e.type === 'apel') i.className = 'apel';
+            titik.appendChild(i);
+        });
+        cell.appendChild(titik);
     }
-
     return cell;
 }
-
-let activePopoverEvent = null;
-
-function openPopover(eventData, targetEl) {
-    activePopoverEvent = eventData;
-    const pop = document.getElementById('calPopover');
-
-    document.getElementById('popTitle').textContent = eventData.judul;
-    document.getElementById('popDate').textContent = formatTglIndo(eventData.tanggal);
-    document.getElementById('popTime').textContent = eventData.jam ? eventData.jam + ' WIB' : 'Waktu belum diatur';
-
-    const pRow = document.getElementById('popPembinaRow');
-    const lRow = document.getElementById('popLokasiRow');
-    const dRow = document.getElementById('popDesc');
-
-    if (eventData.type === 'apel') {
-        pRow.style.display = eventData.pembina ? 'flex' : 'none';
-        document.getElementById('popPembina').textContent = eventData.pembina || '';
-        lRow.style.display = eventData.lokasi ? 'flex' : 'none';
-        document.getElementById('popLokasi').textContent = eventData.lokasi || '';
-    } else {
-        pRow.style.display = 'none';
-        lRow.style.display = 'none';
-    }
-
-    if (eventData.keterangan) {
-        dRow.style.display = 'block';
-        dRow.textContent = eventData.keterangan;
-    } else {
-        dRow.style.display = 'none';
-    }
-
-    const rect = targetEl.getBoundingClientRect();
-    let top = rect.bottom + 8;
-    let left = rect.left;
-
-    if (left + 260 > window.innerWidth) left = window.innerWidth - 270;
-    if (top + 220 > window.innerHeight) top = rect.top - 230;
-
-    pop.style.top = Math.max(10, top) + 'px';
-    pop.style.left = Math.max(10, left) + 'px';
-    pop.classList.add('show');
-}
-
-function closePopover() {
-    const pop = document.getElementById('calPopover');
-    if (pop) pop.classList.remove('show');
-    activePopoverEvent = null;
-}
-
-function formatTglIndo(tglStr) {
-    const [y, m, d] = tglStr.split('-').map(Number);
-    const date = new Date(y, m - 1, d);
-    return `${HARI_ID[date.getDay()]}, ${d} ${BULAN_ID[m - 1]} ${y}`;
-}
-
-document.addEventListener('click', function(e) {
-    const pop = document.getElementById('calPopover');
-    if (pop && pop.classList.contains('show') && !pop.contains(e.target) && !e.target.closest('.cal-cell')) {
-        closePopover();
-    }
-});
 
 let targetFormId = null;
 
@@ -447,16 +432,11 @@ function submitDeleteForm() {
 }
 
 (function init() {
-    if (IS_TARUNA) {
-        renderCalendar();
-    } else {
-        const saved = sessionStorage.getItem('acaraView');
-        if (saved === 'calendar') {
-            switchView('calendar');
-        } else {
-            renderCalendar();
-        }
-    }
+    let tersimpan = null;
+    try { tersimpan = sessionStorage.getItem('acaraView'); } catch (e) {}
+    // Pengelola yang kembali dari halaman per tanggal langsung ke tampilan kalender
+    if (!IS_TARUNA && (tersimpan === 'calendar' || bulanParam)) switchView('calendar');
+    else renderCalendar();
 })();
 </script>
 

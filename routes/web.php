@@ -92,6 +92,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/acara', [AcaraController::class, 'index'])
         ->middleware('auth')
         ->name('acara.index');
+    // Halaman acara & apel per tanggal (klik tanggal di kalender)
+    Route::get('/acara/tanggal/{tanggal}', [AcaraController::class, 'tanggal'])
+        ->where('tanggal', '\d{4}-\d{2}-\d{2}')
+        ->name('acara.tanggal');
     Route::get('/acara/create', [AcaraController::class, 'create'])
         ->middleware('role:pengasuh,admin')
         ->name('acara.create');

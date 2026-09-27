@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Acara;
 use App\Models\Apel;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Traits\LogsActivity;
@@ -23,6 +24,22 @@ class AcaraController extends Controller
         $apel  = Apel::with('pembinaUser')->orderBy('tanggal', 'asc')->orderBy('jam', 'asc')->get();
 
         return view('acara.index', compact('acara', 'apel'));
+    }
+
+    /**
+     * Acara & apel pada satu tanggal — dibuka dari klik tanggal di kalender.
+     */
+    public function tanggal(string $tanggal)
+    {
+        // Tolak tanggal tidak valid (mis. 2026-02-31 yang akan digeser Carbon ke Maret)
+        $tgl = Carbon::canBeCreatedFromFormat($tanggal, 'Y-m-d') ? Carbon::createFromFormat('!Y-m-d', $tanggal) : null;
+        abort_if(!$tgl || $tgl->format('Y-m-d') !== $tanggal, 404);
+        $tanggal = $tgl;
+
+        $acara = Acara::whereDate('tanggal', $tanggal)->orderBy('jam')->get();
+        $apel  = Apel::with('pembinaUser')->whereDate('tanggal', $tanggal)->orderBy('jam')->get();
+
+        return view('acara.tanggal', compact('tanggal', 'acara', 'apel'));
     }
 
     /**
