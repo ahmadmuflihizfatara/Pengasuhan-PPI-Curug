@@ -95,7 +95,7 @@
     </div>
 </main>
 
-<div class="toast-container" id="toastContainer"></div>
+<x-status-toast />
 
 <script>
 let knownStatuses = {};
@@ -105,28 +105,12 @@ knownStatuses[{{ $k->id }}] = "{{ $k->status }}";
 @endforeach
 
 function showToast(keluhan) {
-    const container = document.getElementById('toastContainer');
-    const icon = keluhan.status === 'Ditolak' ? 'fa-times' : keluhan.status === 'Selesai' ? 'fa-check' : 'fa-spinner';
-    const iconBg = keluhan.status === 'Ditolak' ? 'linear-gradient(135deg,#e53e3e,#fc5c7d)' : keluhan.status === 'Selesai' ? 'linear-gradient(135deg,#38a169,#48bb78)' : 'linear-gradient(135deg,#3182ce,#0bc5ea)';
-
-    const toastId = 'toast-' + Date.now();
-    const toast = document.createElement('div');
-    toast.className = 'toast';
-    toast.innerHTML = `
-        <div class="toast-icon" style="background:${iconBg}"><i class="fas ${icon}"></i></div>
-        <div class="toast-body">
-            <div class="toast-title">Status Keluhan Berubah</div>
-            <div class="toast-msg">Keluhan <strong>${keluhan.asrama} ${keluhan.lorong} No. ${keluhan.barak}</strong> sekarang <strong>${keluhan.status}</strong>.</div>
-        </div>
-        <button class="toast-close" onclick="document.getElementById('${toastId}').remove()">×</button>
-    `;
-    toast.id = toastId;
-    container.appendChild(toast);
-
-    setTimeout(() => {
-        const el = document.getElementById(toastId);
-        if (el) el.style.animation = 'none', el.style.opacity = '0', el.style.transition = 'opacity .4s', setTimeout(() => el.remove(), 400);
-    }, 8000);
+    showStatusToast({
+        judul: 'Status Keluhan Berubah',
+        pesan: `Keluhan Anda sekarang ${keluhan.status}.`,
+        sub: `${keluhan.asrama} · ${keluhan.lorong} · No. ${keluhan.barak}`,
+        varian: { Selesai: 'success', Ditolak: 'danger' }[keluhan.status] || 'info',
+    });
 }
 
 function pollNotifications() {
@@ -140,7 +124,7 @@ function pollNotifications() {
                         knownStatuses[k.id] = k.status;
                     }
                 });
-                setTimeout(() => location.reload(), 2000);
+                setTimeout(() => location.reload(), 4000);
             }
         })
         .catch(() => {});

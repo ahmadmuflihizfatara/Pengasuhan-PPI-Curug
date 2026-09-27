@@ -1,129 +1,135 @@
 <x-app-layout>
 <style>
-* { box-sizing: border-box; }
-body { font-family: 'Inter', sans-serif; background: transparent; }
-.app-layout { display: block; min-height: 100vh; }
-.main-content { flex: 1; padding: 28px 28px 28px 24px; min-width: 0; max-width: 80rem; margin: 0 auto; width: 100%; }
-
-.topbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
-.back-link { display: inline-flex; align-items: center; gap: 7px; color: #b45309; text-decoration: none; font-size: 13px; font-weight: 600; }
-.back-link:hover { text-decoration: underline; }
-
-.detail-card { background: white; border-radius: 16px; overflow: hidden; box-shadow: 0 2px 16px rgba(0,0,0,.06); }
-.detail-header { background: linear-gradient(135deg, #f7b733 0%, #fc4a1a 100%); padding: 28px 32px; color: white; position: relative; overflow: hidden; }
-.detail-header::before { content: ''; position: absolute; right: -30px; top: -30px; width: 140px; height: 140px; background: rgba(255,255,255,.08); border-radius: 50%; }
-.detail-header-inner { position: relative; z-index: 1; display: flex; align-items: flex-start; gap: 18px; }
-.doc-icon { width: 54px; height: 54px; border-radius: 14px; background: rgba(255,255,255,.2); display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 22px; }
-.detail-header .jenis-label { font-size: 11px; font-weight: 700; opacity: .75; margin-bottom: 6px; text-transform: uppercase; letter-spacing: .06em; }
-.detail-header h2 { margin: 0 0 6px 0; font-size: 20px; font-weight: 800; }
-.detail-header .nomor { font-size: 13px; opacity: .85; }
-.status-badge { display: inline-flex; align-items: center; padding: 6px 16px; border-radius: 20px; font-size: 12px; font-weight: 800; white-space: nowrap; margin-left: auto; flex-shrink: 0; }
-
-.detail-body { padding: 28px 32px; }
-.detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-.detail-field { background: #fafbff; border-radius: 12px; padding: 14px 18px; }
-.detail-field.full { grid-column: span 2; }
-.field-label { font-size: 10px; font-weight: 700; color: #aab; text-transform: uppercase; letter-spacing: .06em; margin-bottom: 6px; display: flex; align-items: center; gap: 5px; }
-.field-value { font-size: 14px; font-weight: 700; color: #333; }
-.file-attachment { background: #fef3e0; border-radius: 12px; padding: 14px 18px; display: flex; align-items: center; justify-content: space-between; }
-.file-attachment-icon { width: 40px; height: 40px; border-radius: 10px; background: linear-gradient(135deg, #f7b733, #fc4a1a); display: flex; align-items: center; justify-content: center; margin-right: 12px; flex-shrink: 0; }
-.btn-download { background: linear-gradient(135deg, #f7b733, #fc4a1a); color: white; padding: 9px 20px; border-radius: 10px; text-decoration: none; font-size: 12px; font-weight: 700; display: inline-flex; align-items: center; gap: 6px; }
-
-.timestamps { margin-top: 18px; padding-top: 14px; border-top: 1px solid #f0f2f7; display: flex; gap: 20px; }
-.timestamps span { font-size: 11px; color: #ccc; display: flex; align-items: center; gap: 5px; }
+    .reward-kembali { font-size: 13px; background: var(--glass-solid); color: var(--ink-800); }
+    .reward-kembali:hover { color: var(--accent-ink); }
 </style>
 
-<div class="app-layout">
-    <x-island-navbar />
+<x-island-navbar />
 
-    <div class="main-content">
-        <div class="topbar">
-            <a href="{{ route('reward.index') }}" class="back-link">
-                <i class="fas fa-arrow-left"></i> Kembali ke Daftar Reward
-            </a>
+@php
+    // Varian sama dengan badge status di daftar reward
+    [$varian, $ikon, $desc] = match($reward->status) {
+        'Disetujui' => ['success', 'fa-circle-check',  'Pengajuan reward Anda telah disetujui oleh satuan pengasuhan.'],
+        'Ditolak'   => ['danger',  'fa-circle-xmark',  'Pengajuan reward Anda ditolak. Lihat alasan pada respon pengasuhan.'],
+        'Diproses'  => ['accent',  'fa-spinner',       'Pengajuan reward Anda sedang ditinjau oleh satuan pengasuhan.'],
+        default     => ['warning', 'fa-hourglass-half', 'Pengajuan reward Anda sudah terkirim dan menunggu ditinjau satuan pengasuhan.'],
+    };
+    [$judulRespon, $pesanRespon] = match($reward->status) {
+        'Disetujui' => ['Reward Disetujui', $reward->catatan_pengasuhan ?: 'Prestasi Anda telah diakui dan reward disetujui oleh satuan pengasuhan.'],
+        'Ditolak'   => ['Alasan Penolakan', $reward->catatan_pengasuhan ?: 'Pengajuan reward Anda tidak dapat disetujui. Silakan hubungi satuan pengasuhan untuk informasi lebih lanjut.'],
+        'Diproses'  => ['Sedang Ditinjau', $reward->catatan_pengasuhan ?: 'Pengajuan sedang ditinjau. Anda akan menerima notifikasi ketika keputusan telah dibuat.'],
+        default     => ['Menunggu Tinjauan', 'Pengajuan reward Anda belum ditinjau. Anda akan menerima notifikasi ketika statusnya berubah.'],
+    };
+@endphp
+
+<main class="max-w-7xl mx-auto px-4 sm:px-6 pb-12 pt-2">
+    <div class="spatial-workspace-window rounded-3xl bg-white/30 backdrop-blur-2xl border border-white/50 shadow-2xl p-4 sm:p-7 relative overflow-hidden">
+
+        <x-page-banner title="Detail Reward Prestasi" icon="fa-award"
+            subtitle="Pantau status dan respon satuan pengasuhan atas pengajuan reward Anda" />
+
+        <a href="{{ route('reward.index') }}" class="ds-btn ds-btn--pill reward-kembali mb-4">
+            <i class="fa-solid fa-arrow-left"></i> Kembali ke Daftar Reward
+        </a>
+
+        {{-- Status pengajuan --}}
+        <div class="ds-card dt-card mb-4">
+            <span class="ds-stat__icon {{ $varian !== 'accent' ? 'ds-stat__icon--'.$varian : '' }}"><i class="fa-solid {{ $ikon }}"></i></span>
+            <div class="dt-card__body">
+                <span class="dt-card__label">Status Pengajuan</span>
+                <div class="dt-card__top">
+                    <span class="dt-card__value">{{ $reward->status }}</span>
+                    <span class="ds-badge ds-badge--info">{{ $reward->kategori }} · {{ ucfirst($reward->jenis) }}</span>
+                </div>
+                <p class="dt-card__desc">{{ $desc }}</p>
+            </div>
         </div>
 
-        <div class="detail-card">
-            <div class="detail-header">
-                <div class="detail-header-inner">
-                    <div class="doc-icon"><i class="fas fa-award"></i></div>
-                    <div style="flex:1;">
-                        <div class="jenis-label">{{ $reward->kategori }} · {{ ucfirst($reward->jenis) }}{{ $reward->jenis === 'kelompok' ? ' ('.$reward->jumlah_anggota.' orang)' : '' }}</div>
-                        <h2>{{ Str::limit($reward->keterangan, 60) }}</h2>
-                        <div class="nomor">Prestasi {{ $reward->tanggal_prestasi->locale('id')->isoFormat('dddd, D MMMM Y') }}</div>
-                    </div>
-                    <span class="status-badge" style="background:{{ $reward->status_bg_color }}; color:{{ $reward->status_badge_color }};">
-                        {{ $reward->status }}
-                    </span>
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+            {{-- Informasi pengajuan --}}
+            <div class="ds-card lg:col-span-2">
+                <div class="ds-card__head">
+                    <h3 class="ds-card__title"><i class="fa-solid fa-circle-info ds-icon"></i> Informasi Prestasi</h3>
+                    <p class="ds-card__desc">Data yang Anda kirim saat mengajukan reward</p>
                 </div>
-            </div>
 
-            <div class="detail-body">
-                <div class="detail-grid">
-                    <div class="detail-field">
-                        <div class="field-label"><i class="fas fa-user"></i> Nama Pengaju</div>
-                        <div class="field-value">{{ $reward->nama }}</div>
+                <dl class="dt-fields">
+                    <div class="dt-field">
+                        <dt><i class="fa-solid fa-medal"></i> Kategori Prestasi</dt>
+                        <dd>{{ $reward->kategori }}</dd>
                     </div>
-                    <div class="detail-field">
-                        <div class="field-label"><i class="fas fa-envelope"></i> Email</div>
-                        <div class="field-value">{{ $reward->email }}</div>
+                    <div class="dt-field">
+                        <dt><i class="fa-solid fa-calendar"></i> Tanggal Prestasi</dt>
+                        <dd>{{ $reward->tanggal_prestasi->locale('id')->isoFormat('dddd, D MMMM Y') }}</dd>
                     </div>
-                    <div class="detail-field">
-                        <div class="field-label"><i class="fas fa-id-card"></i> NPM</div>
-                        <div class="field-value">{{ $reward->npm ?? '-' }}</div>
+                    <div class="dt-field {{ $reward->jenis === 'kelompok' ? '' : 'dt-field--full' }}">
+                        <dt><i class="fa-solid {{ $reward->jenis === 'kelompok' ? 'fa-users' : 'fa-user' }}"></i> Jenis Pengajuan</dt>
+                        <dd>{{ ucfirst($reward->jenis) }}</dd>
                     </div>
-                    <div class="detail-field">
-                        <div class="field-label"><i class="fas fa-graduation-cap"></i> Program Studi</div>
-                        <div class="field-value">{{ $reward->prodi ?? '-' }} — {{ $reward->prodi_nama }}</div>
-                    </div>
-
                     @if($reward->jenis === 'kelompok')
-                    <div class="detail-field full">
-                        <div class="field-label"><i class="fas fa-users"></i> Jumlah Anggota Kelompok</div>
-                        <div class="field-value">{{ $reward->jumlah_anggota }} orang</div>
+                    <div class="dt-field">
+                        <dt><i class="fa-solid fa-people-group"></i> Jumlah Anggota</dt>
+                        <dd>{{ $reward->jumlah_anggota }} orang</dd>
                     </div>
                     @endif
-
-                    <div class="detail-field full">
-                        <div class="field-label"><i class="fas fa-sticky-note"></i> Keterangan Prestasi</div>
-                        <div class="field-value" style="font-weight:400; font-size:13px; line-height:1.6; color:#555;">{{ $reward->keterangan }}</div>
+                    <div class="dt-field">
+                        <dt><i class="fa-solid fa-user"></i> Nama Pengaju</dt>
+                        <dd>{{ $reward->nama }}</dd>
                     </div>
-
+                    <div class="dt-field">
+                        <dt><i class="fa-solid fa-id-card"></i> NPM</dt>
+                        <dd>{{ $reward->npm ?? '-' }}</dd>
+                    </div>
+                    <div class="dt-field">
+                        <dt><i class="fa-solid fa-envelope"></i> Email</dt>
+                        <dd>{{ $reward->email }}</dd>
+                    </div>
+                    <div class="dt-field">
+                        <dt><i class="fa-solid fa-graduation-cap"></i> Program Studi</dt>
+                        <dd>{{ $reward->prodi ?? '-' }} — {{ $reward->prodi_nama }}</dd>
+                    </div>
+                    <div class="dt-field dt-field--full">
+                        <dt><i class="fa-solid fa-note-sticky"></i> Keterangan Prestasi</dt>
+                        <dd class="dt-teks">{{ $reward->keterangan }}</dd>
+                    </div>
                     @if(!empty($reward->dokumen))
-                    <div class="detail-field full">
-                        <div class="field-label"><i class="fas fa-paperclip"></i> Dokumentasi ({{ count($reward->dokumen) }})</div>
+                    <div class="dt-field dt-field--full">
+                        <dt><i class="fa-solid fa-paperclip"></i> Dokumentasi ({{ count($reward->dokumen) }})</dt>
                         @foreach($reward->dokumen as $file)
-                        <div class="file-attachment" style="margin-bottom:10px;">
-                            <div style="display:flex; align-items:center; gap:12px;">
-                                <div class="file-attachment-icon">
-                                    <i class="fas fa-file" style="color:white; font-size:16px;"></i>
-                                </div>
-                                <div>
-                                    <div style="font-size:13px; font-weight:700; color:#333;">{{ basename($file) }}</div>
-                                </div>
-                            </div>
-                            <a href="{{ \Illuminate\Support\Facades\Storage::url($file) }}" target="_blank" class="btn-download">
-                                <i class="fas fa-download"></i> Download / Lihat
+                        <dd class="dt-file {{ !$loop->first ? 'mt-2' : '' }}">
+                            <span class="dt-file__nama"><span class="ds-avatar ds-avatar--sq"><i class="fa-solid fa-file"></i></span>{{ basename($file) }}</span>
+                            <a href="{{ \Illuminate\Support\Facades\Storage::url($file) }}" target="_blank" rel="noopener" class="ds-btn ds-btn--primary ds-btn--sm">
+                                <i class="fa-solid fa-download"></i> Lihat / Unduh
                             </a>
-                        </div>
+                        </dd>
                         @endforeach
                     </div>
                     @endif
+                </dl>
+            </div>
+
+            {{-- Respon satuan pengasuhan --}}
+            <div class="ds-card">
+                <div class="ds-card__head">
+                    <h3 class="ds-card__title"><i class="fa-solid fa-comment-dots ds-icon"></i> Respon Pengasuhan</h3>
+                    <p class="ds-card__desc">Keputusan dan catatan reward dari satuan pengasuhan</p>
                 </div>
 
-                @if($reward->catatan_pengasuhan)
-                <div style="margin-top:16px; padding:16px 18px; background:{{ $reward->status === 'Disetujui' ? '#f0fff4' : ($reward->status === 'Ditolak' ? '#fff5f5' : '#fffaf0') }}; border-radius:12px; border-left:4px solid {{ $reward->status === 'Disetujui' ? '#38a169' : ($reward->status === 'Ditolak' ? '#e53e3e' : '#f5b301') }};">
-                    <div class="field-label"><i class="fas fa-comment-dots"></i> Catatan Reward dari Pengasuhan</div>
-                    <div style="font-size:13px; color:#333; line-height:1.6;">{{ $reward->catatan_pengasuhan }}</div>
+                <div class="ds-alert dt-respon dt-respon--{{ $varian }}" role="status">
+                    <span class="dt-respon__ikon"><i class="fa-solid {{ $ikon }}"></i></span>
+                    <div>
+                        <div class="dt-respon__judul">{{ $judulRespon }}</div>
+                        <div class="dt-respon__pesan">{{ $pesanRespon }}</div>
+                    </div>
                 </div>
-                @endif
 
-                <div class="timestamps">
-                    <span><i class="fas fa-clock"></i> Diajukan: {{ $reward->created_at->locale('id')->isoFormat('D MMM Y, HH:mm') }}</span>
-                    <span><i class="fas fa-sync"></i> Diperbarui: {{ $reward->updated_at->locale('id')->isoFormat('D MMM Y, HH:mm') }}</span>
+                <div class="dt-waktu">
+                    <span><i class="fa-solid fa-clock"></i>Diajukan {{ $reward->created_at->locale('id')->isoFormat('D MMM Y, HH:mm') }}</span>
+                    <span><i class="fa-solid fa-rotate"></i>Diperbarui {{ $reward->updated_at->locale('id')->isoFormat('D MMM Y, HH:mm') }}</span>
                 </div>
             </div>
         </div>
+
     </div>
-</div>
+</main>
 </x-app-layout>

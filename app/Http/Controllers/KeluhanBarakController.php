@@ -128,6 +128,7 @@ class KeluhanBarakController extends Controller
             ->map(fn ($k) => [
                 'id'      => $k->id,
                 'asrama'  => $k->asrama,
+                'lorong'  => $k->lorong,
                 'barak'   => $k->nomor_barak,
                 'status'  => $k->status,
             ]);

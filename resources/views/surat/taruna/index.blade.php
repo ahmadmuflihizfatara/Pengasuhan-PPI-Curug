@@ -9,18 +9,6 @@
 .notif-dot { width:8px; height:8px; background:var(--danger); border-radius:50%; display:inline-block; margin-left:2px; animation:pulse 1.5s infinite; }
 @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.3} }
 
-/* Toast notification */
-.toast-container { position:fixed; bottom:24px; right:24px; z-index:9999; display:flex; flex-direction:column; gap:10px; }
-.toast { background:white; border-radius:14px; padding:16px 20px; box-shadow:0 8px 30px rgba(0,0,0,.15); display:flex; align-items:flex-start; gap:12px; min-width:320px; max-width:400px; animation:slideIn .3s ease; border-left:4px solid #4f46e5; }
-.toast.toast-disetujui { border-left-color:#38a169; }
-.toast.toast-ditolak   { border-left-color:#e53e3e; }
-@keyframes slideIn { from{transform:translateX(120%);opacity:0} to{transform:translateX(0);opacity:1} }
-.toast-icon { width:36px; height:36px; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:16px; color:white; flex-shrink:0; }
-.toast.toast-disetujui .toast-icon { background:linear-gradient(135deg,#38a169,#48bb78); }
-.toast.toast-ditolak   .toast-icon { background:linear-gradient(135deg,#fc5c7d,#e53e3e); }
-.toast-body .toast-title { font-weight:700; font-size:13px; color:#333; margin-bottom:3px; }
-.toast-body .toast-msg   { font-size:12px; color:#888; }
-.toast-close { margin-left:auto; background:none; border:none; color:#aab; cursor:pointer; font-size:16px; padding:0; }
 </style>
 
 <x-island-navbar />
@@ -110,8 +98,7 @@
     </div>
 </main>
 
-<!-- Toast Notification Container -->
-<div class="toast-container" id="toastContainer"></div>
+<x-status-toast />
 
 <script>
 let knownStatuses = {};
@@ -121,35 +108,14 @@ let knownStatuses = {};
 knownStatuses[{{ $s->id }}] = "{{ $s->status }}";
 @endforeach
 
-function showToast(perihal, status, suratId) {
-    const container = document.getElementById('toastContainer');
-    const isApproved = status === 'Disetujui';
-    const toastClass = isApproved ? 'toast-disetujui' : 'toast-ditolak';
-    const icon = isApproved ? 'fa-check' : 'fa-times';
-    const msg = isApproved
-        ? 'Pengajuan surat Anda telah <strong>disetujui</strong> oleh pengasuhan.'
-        : 'Pengajuan surat Anda <strong>ditolak</strong>. Buka detail untuk melihat alasan.';
-
-    const toastId = 'toast-' + Date.now();
-    const toast = document.createElement('div');
-    toast.className = `toast ${toastClass}`;
-    toast.id = toastId;
-    toast.innerHTML = `
-        <div class="toast-icon"><i class="fas ${icon}"></i></div>
-        <div class="toast-body">
-            <div class="toast-title">${isApproved ? '✅ Surat Disetujui' : '❌ Surat Ditolak'}</div>
-            <div class="toast-msg">${msg}</div>
-            <div style="font-size:11px; color:#4f46e5; margin-top:4px; font-weight:600;">${perihal}</div>
-        </div>
-        <button class="toast-close" onclick="document.getElementById('${toastId}').remove()">×</button>
-    `;
-    container.appendChild(toast);
-
-    // Auto-remove after 8s
-    setTimeout(() => {
-        const el = document.getElementById(toastId);
-        if (el) el.style.animation = 'none', el.style.opacity = '0', el.style.transition = 'opacity .4s', setTimeout(() => el.remove(), 400);
-    }, 8000);
+function showToast(perihal, status) {
+    const disetujui = status === 'Disetujui';
+    showStatusToast({
+        judul: disetujui ? 'Surat Disetujui' : 'Surat Ditolak',
+        pesan: disetujui ? 'Pengajuan surat Anda telah disetujui oleh pengasuhan.' : 'Pengajuan surat Anda ditolak. Buka detail untuk melihat alasan.',
+        sub: perihal,
+        varian: disetujui ? 'success' : 'danger',
+    });
 }
 
 function pollNotifications() {
@@ -165,7 +131,7 @@ function pollNotifications() {
                     }
                 });
                 // Reload tabel setelah 2 detik untuk memperbarui tampilan status
-                setTimeout(() => location.reload(), 2000);
+                setTimeout(() => location.reload(), 4000);
             }
         })
         .catch(() => {});
