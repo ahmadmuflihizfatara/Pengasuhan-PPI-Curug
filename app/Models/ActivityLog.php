@@ -36,106 +36,54 @@ class ActivityLog extends Model
     }
 
     // =====================
-    // Accessor Tampilan
+    // Tampilan (PPI Curug Glass)
     // =====================
 
-    /**
-     * Warna badge berdasarkan modul
-     */
-    public function getModulColorAttribute(): string
+    /** [label, ikon, varian ds-badge] per modul yang dicatat sistem */
+    const MODUL = [
+        'poin'           => ['Poin', 'fa-scale-balanced', 'accent'],
+        'acara'          => ['Acara', 'fa-calendar-days', 'success'],
+        'apel'           => ['Apel', 'fa-clipboard-check', 'success'],
+        'surat'          => ['Surat', 'fa-envelope-open-text', 'warning'],
+        'berita'         => ['Berita', 'fa-newspaper', 'info'],
+        'reward'         => ['Reward', 'fa-award', 'warning'],
+        'keluhan-barak'  => ['Keluhan Barak', 'fa-door-open', 'danger'],
+        'konsinyir'      => ['Konsinyir', 'fa-user-lock', 'danger'],
+        'laporan_duty'   => ['Laporan Duty', 'fa-notes-medical', 'danger'],
+        'log pergerakan' => ['Log Gerbang', 'fa-person-walking', 'warning'],
+        'nilai_taruna'   => ['Nilai Taruna', 'fa-chart-line', 'accent'],
+        'jadwal'         => ['Jadwal', 'fa-calendar-week', 'info'],
+        'duty'           => ['Duty Taruna', 'fa-user-group', 'info'],
+        'akses'          => ['Hak Akses', 'fa-shield-halved', 'dark'],
+        'akses_khusus'   => ['Akses Khusus', 'fa-key', 'dark'],
+    ];
+
+    /** Label rapi untuk kode modul/aksi apa pun (dipakai juga di dropdown filter) */
+    public static function labelModul(string $modul): string
     {
-        return match ($this->modul) {
-            'poin'   => '#764ba2',
-            'acara'  => '#38a169',
-            'surat'  => '#e07020',
-            'berita' => '#3182ce',
-            default  => '#667eea',
-        };
+        return self::MODUL[$modul][0] ?? ucwords(str_replace(['_', '-'], ' ', $modul));
     }
 
-    public function getModulBgColorAttribute(): string
+    public static function labelAksi(string $aksi): string
     {
-        return match ($this->modul) {
-            'poin'   => '#f3eeff',
-            'acara'  => '#e6fff5',
-            'surat'  => '#fff4e6',
-            'berita' => '#ebf8ff',
-            default  => '#eef0ff',
-        };
+        return ucwords(str_replace('_', ' ', $aksi));
     }
 
-    /**
-     * Warna badge berdasarkan aksi
-     */
-    public function getAksiColorAttribute(): string
+    /** [label, ikon, varian] modul log ini */
+    public function modulMeta(): array
     {
-        return match ($this->aksi) {
-            'tambah', 'buat'  => '#38a169',
-            'hapus'           => '#e53e3e',
-            'ubah', 'update'  => '#3182ce',
-            'selesai'         => '#667eea',
-            'tolak'           => '#e53e3e',
-            'setujui'         => '#38a169',
-            default           => '#888',
-        };
+        return self::MODUL[$this->modul] ?? [self::labelModul($this->modul), 'fa-clock-rotate-left', 'accent'];
     }
 
-    public function getAksiBgColorAttribute(): string
+    /** Varian ds-badge aksi: hijau = membuat, merah = menghapus/menolak, biru = mengubah */
+    public function getAksiVarianAttribute(): string
     {
-        return match ($this->aksi) {
-            'tambah', 'buat'  => '#e6fff5',
-            'hapus'           => '#fff0f0',
-            'ubah', 'update'  => '#ebf4ff',
-            'selesai'         => '#eef0ff',
-            'tolak'           => '#fff0f0',
-            'setujui'         => '#e6fff5',
-            default           => '#f5f5f5',
-        };
-    }
-
-    /**
-     * Ikon Font Awesome berdasarkan modul
-     */
-    public function getModulIconAttribute(): string
-    {
-        return match ($this->modul) {
-            'poin'   => 'fa-star',
-            'acara'  => 'fa-calendar-alt',
-            'surat'  => 'fa-envelope',
-            'berita' => 'fa-newspaper',
-            default  => 'fa-history',
-        };
-    }
-
-    /**
-     * Label modul yang lebih rapi
-     */
-    public function getModulLabelAttribute(): string
-    {
-        return match ($this->modul) {
-            'poin'   => 'Poin',
-            'acara'  => 'Acara',
-            'surat'  => 'Surat',
-            'berita' => 'Berita',
-            default  => ucfirst($this->modul),
-        };
-    }
-
-    /**
-     * Label aksi yang lebih rapi
-     */
-    public function getAksiLabelAttribute(): string
-    {
-        return match ($this->aksi) {
-            'tambah'  => 'Tambah',
-            'hapus'   => 'Hapus',
-            'ubah'    => 'Ubah',
-            'buat'    => 'Buat',
-            'update'  => 'Update',
-            'selesai' => 'Selesai',
-            'tolak'   => 'Tolak',
-            'setujui' => 'Setujui',
-            default   => ucfirst($this->aksi),
+        return match (true) {
+            in_array($this->aksi, ['tambah', 'buat', 'isi', 'ajukan'])            => 'success',
+            in_array($this->aksi, ['hapus', 'tolak', 'validasi_tolak'])           => 'danger',
+            in_array($this->aksi, ['ubah', 'update', 'proses'])                   => 'info',
+            in_array($this->aksi, ['setujui', 'validasi', 'validasi_setujui', 'selesai']) => 'accent',
+            default                                                               => '',
         };
     }
 }

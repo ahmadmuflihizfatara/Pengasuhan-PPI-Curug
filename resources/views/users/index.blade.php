@@ -1,148 +1,124 @@
 <x-app-layout>
 <style>
-* { box-sizing: border-box; }
-body { font-family: 'Inter', sans-serif; background: transparent; }
-.app-layout { display: flex; min-height: 100vh; }
-
-.main-content { flex: 1; padding: 28px 28px 28px 24px; min-width: 0; }
-
-/* Page header */
-.page-header {
-    background: linear-gradient(135deg, #4f46e5 0%, #4338ca 100%);
-    border-radius: 18px; padding: 28px 32px; color: white;
-    margin-bottom: 24px; position: relative; overflow: hidden;
-    display: flex; align-items: center; justify-content: space-between;
-}
-.page-header::before { content:''; position:absolute; right:-50px; top:-50px; width:180px; height:180px; background:rgba(255,255,255,.08); border-radius:50%; }
-.page-header::after  { content:''; position:absolute; right:80px; bottom:-60px; width:140px; height:140px; background:rgba(255,255,255,.06); border-radius:50%; }
-.page-header-text { position: relative; z-index: 1; }
-.page-title { font-size: 22px; font-weight: 800; color: white; margin: 0 0 4px 0; }
-.page-subtitle { font-size: 13px; color: rgba(255,255,255,.85); margin: 0; }
-.btn-primary { position: relative; z-index: 1; background: white; color: #4f46e5; border: none; padding: 11px 22px; border-radius: 25px; font-size: 13px; font-weight: 800; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; white-space: nowrap; box-shadow: 0 4px 15px rgba(0,0,0,.15); transition: transform .15s, box-shadow .15s; }
-.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,.2); color: #4f46e5; }
-
-/* User cards */
-.role-section { margin-bottom: 32px; }
-.role-section-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: #888; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
-.role-badge { display: inline-block; padding: 2px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; }
-
-.users-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
-.user-card { background: white; border-radius: 16px; padding: 20px; box-shadow: 0 2px 12px rgba(0,0,0,.06); display: flex; align-items: center; gap: 16px; transition: transform .2s, box-shadow .2s; }
-.user-card:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(0,0,0,.1); }
-.user-avatar { width: 48px; height: 48px; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 800; color: white; flex-shrink: 0; }
-.user-info { flex: 1; min-width: 0; }
-.user-name { font-size: 14px; font-weight: 700; color: #333; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.user-email { font-size: 11px; color: #aab; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 2px; }
-.user-role { font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 20px; display: inline-block; margin-top: 4px; }
-.user-actions { display: flex; gap: 6px; }
-.btn-icon { width: 32px; height: 32px; border-radius: 8px; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 12px; transition: all .15s; }
-.btn-edit { background: #eef0ff; color: #4f46e5; }
-.btn-edit:hover { background: #4f46e5; color: white; }
-.btn-delete { background: #fff0f0; color: #e05252; }
-.btn-delete:hover { background: #e05252; color: white; }
-
-/* Flash messages */
-.flash-success { background: #f0fff4; border: 1px solid #c6f6d5; color: #276749; padding: 12px 18px; border-radius: 12px; margin-bottom: 20px; font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 8px; }
-.flash-error { background: #fff0f0; border: 1px solid #fed7d7; color: #c53030; padding: 12px 18px; border-radius: 12px; margin-bottom: 20px; font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 8px; }
-
-/* Empty state */
-.empty-state { text-align: center; padding: 48px; color: #bbb; }
-.empty-state i { font-size: 40px; display: block; margin-bottom: 12px; }
-.empty-state p { font-size: 14px; margin: 0; }
+    .us-aksi { display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); flex-wrap: wrap; }
+    .us-aksi__teks { font-size: 13px; font-weight: 600; color: var(--ink-700); }
+    .us-aksi__teks i { color: var(--accent); margin-right: var(--space-1-5); }
+    .us-table td { vertical-align: middle; }
+    .us-badges { display: flex; flex-wrap: wrap; gap: var(--space-1); }
+    .us-aksi-sel { display: inline-flex; gap: var(--space-1); }
+    .us-aksi-sel form { margin: 0; }
 </style>
 
-{{-- Top Floating Island Capsule Navbar --}}
 <x-island-navbar />
+
+@php
+    // [label, ikon, varian ds-badge / ikon stat]
+    $roleInfo = [
+        'admin'    => ['Admin', 'fa-crown', 'accent'],
+        'pengasuh' => ['Pengasuh', 'fa-chalkboard-user', 'info'],
+        'taruna'   => ['Taruna', 'fa-user-graduate', 'success'],
+    ];
+@endphp
 
 <main class="max-w-7xl mx-auto px-4 sm:px-6 pb-12 pt-2">
     <div class="spatial-workspace-window rounded-3xl bg-white/30 backdrop-blur-2xl border border-white/50 shadow-2xl p-4 sm:p-7 relative overflow-hidden">
-        <div class="page-header">
-            <div class="page-header-text">
-                <h1 class="page-title"><i class="fas fa-user-shield" style="margin-right:10px;"></i>Manajemen Akun</h1>
-                <p class="page-subtitle">Kelola akun Taruna, Pengasuh, dan Admin</p>
-            </div>
-            <a href="{{ route('users.create') }}" class="btn-primary">
-                <i class="fas fa-plus"></i> Tambah Akun
-            </a>
+
+        <x-page-banner title="Manajemen Akun" icon="fa-users-gear"
+            subtitle="Kelola akun Admin, Pengasuh, dan Taruna yang dapat masuk ke sistem" />
+
+        <div class="ds-card us-aksi mb-4">
+            <span class="us-aksi__teks"><i class="fa-solid fa-user-plus"></i>Buat akun baru untuk admin, pengasuh, atau taruna</span>
+            <a href="{{ route('users.create') }}" class="ds-btn ds-btn--primary"><i class="fa-solid fa-plus"></i> Tambah Akun</a>
         </div>
 
         @if(session('success'))
-        <div class="flash-success"><i class="fas fa-check-circle"></i> {{ session('success') }}</div>
+        <x-glass-alert type="success" title="Berhasil">{{ session('success') }}</x-glass-alert>
         @endif
         @if(session('error'))
-        <div class="flash-error"><i class="fas fa-exclamation-circle"></i> {{ session('error') }}</div>
+        <x-glass-alert type="danger" title="Gagal">{{ session('error') }}</x-glass-alert>
         @endif
 
-        @php
-            $roleGroups = [
-                'admin' => ['label' => 'Admin', 'color' => '#4338ca', 'bg' => '#f3eeff', 'icon' => 'fa-crown'],
-                'pengasuh'      => ['label' => 'Pengasuh',      'color' => '#3182ce', 'bg' => '#ebf4ff', 'icon' => 'fa-chalkboard-teacher'],
-                'taruna'        => ['label' => 'Taruna',         'color' => '#38a169', 'bg' => '#f0fff4', 'icon' => 'fa-user-graduate'],
-            ];
-            $avatarColors = ['#4f46e5','#4338ca','#f093fb','#f5576c','#38a169','#e07020','#3182ce','#d53f8c'];
-        @endphp
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3.5 mb-4">
+            @foreach($roleInfo as $role => [$label, $ikon, $varian])
+            <x-stat-card :title="$label" :value="$users->where('role', $role)->count()" :icon="'fa-solid ' . $ikon"
+                :varian="$varian" badge="akun" :badgeType="$varian" :description="'Akun ber-role ' . strtolower($label)" />
+            @endforeach
+        </div>
 
-        @foreach($roleGroups as $roleKey => $roleInfo)
-        @php $groupUsers = $users->where('role', $roleKey); @endphp
-        @if($groupUsers->isNotEmpty())
-        <div class="role-section">
-            <div class="role-section-title">
-                <i class="fas {{ $roleInfo['icon'] }}" style="color:{{ $roleInfo['color'] }};"></i>
-                {{ $roleInfo['label'] }}
-                <span class="role-badge" style="background:{{ $roleInfo['bg'] }}; color:{{ $roleInfo['color'] }};">
-                    {{ $groupUsers->count() }} akun
-                </span>
-            </div>
-            <div class="users-grid">
-                @foreach($groupUsers as $i => $user)
-                <div class="user-card">
-                    <div class="user-avatar" style="background: {{ $avatarColors[$i % count($avatarColors)] }};">
-                        {{ strtoupper(substr($user->name, 0, 2)) }}
-                    </div>
-                    <div class="user-info">
-                        <div class="user-name">{{ $user->name }}</div>
-                        <div class="user-email">{{ $user->email }}</div>
-                        <span class="user-role" style="background:{{ $roleInfo['bg'] }}; color:{{ $roleInfo['color'] }};">
-                            {{ $roleInfo['label'] }}
-                        </span>
-                        @foreach($user->akses_khusus ?? [] as $ak)
-                        @php $ai = \App\Models\User::DAFTAR_AKSES[$ak] ?? ['label' => $ak, 'ikon' => '', 'warna' => '#888']; @endphp
-                        <span class="user-role" style="background:{{ $ai['warna'] }}18; color:{{ $ai['warna'] }}; margin-left:4px;">
-                            <i class="fas {{ $ai['ikon'] }}"></i> {{ $ai['label'] }}
-                        </span>
-                        @endforeach
-                        @if($user->prodi)
-                        <span class="user-role" style="background: transparent; color:#555; margin-left:4px;">
-                            {{ $user->prodi }}
-                        </span>
-                        @endif
-                    </div>
-                    <div class="user-actions">
-                        <a href="{{ route('users.edit', $user) }}" class="btn-icon btn-edit" title="Edit">
-                            <i class="fas fa-pen"></i>
-                        </a>
-                        @if($user->id !== auth()->id())
-                        <button type="button" class="btn-icon btn-delete js-delete-user" title="Hapus"
-                                data-delete-url="{{ route('users.destroy', $user) }}"
-                                data-user-name="{{ $user->name }}">
-                            <i class="fas fa-trash"></i>
-                        </button>
-                        @endif
-                    </div>
+        <div class="ds-card">
+            <div class="ds-card__head tbl-head">
+                <div>
+                    <h3 class="ds-card__title"><i class="fa-solid fa-address-card ds-icon"></i> Daftar Akun</h3>
+                    <p class="ds-card__desc">Urut role lalu nama — gunakan kolom cari & filter role di bawah</p>
                 </div>
-                @endforeach
+                <span class="ds-badge ds-badge--accent">{{ $users->count() }} akun</span>
             </div>
-        </div>
-        @endif
-        @endforeach
 
-        @if($users->isEmpty())
-        <div class="empty-state">
-            <i class="fas fa-users"></i>
-            <p>Belum ada akun terdaftar.</p>
+            @if($users->isEmpty())
+            <div class="ds-empty"><i class="fa-solid fa-users-slash ds-icon"></i> Belum ada akun terdaftar.</div>
+            @else
+            <div class="ds-table-wrap">
+                <div class="ds-scroll">
+                    <table class="ds-table tbl-table us-table">
+                        <thead>
+                            <tr>
+                                <th>Akun</th>
+                                <th data-filter>Role</th>
+                                <th>Username</th>
+                                <th>Jabatan / Prodi</th>
+                                <th class="ds-center" data-no-sort data-no-filter>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($users as $user)
+                            @php [$rLabel, $rIkon, $rVarian] = $roleInfo[$user->role] ?? [ucfirst($user->role), 'fa-user', 'accent']; @endphp
+                            <tr>
+                                <td>
+                                    <div class="ds-cell-person">
+                                        <span class="ds-avatar">{{ strtoupper(substr($user->name, 0, 2)) }}</span>
+                                        <div>
+                                            <div class="tbl-title">{{ $user->name }} @if($user->id === auth()->id())<span class="ds-badge ds-badge--accent">Anda</span>@endif</div>
+                                            <div class="tbl-sub">{{ $user->email }}</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="us-badges">
+                                        <span class="ds-badge ds-badge--{{ $rVarian }}"><i class="fa-solid {{ $rIkon }}"></i> {{ $rLabel }}</span>
+                                        @foreach($user->akses_khusus ?? [] as $ak)
+                                        @php $ai = \App\Models\User::DAFTAR_AKSES[$ak] ?? ['label' => $ak, 'ikon' => 'fa-key']; @endphp
+                                        <span class="ds-badge ds-badge--warning"><i class="fa-solid {{ $ai['ikon'] }}"></i> {{ $ai['label'] }}</span>
+                                        @endforeach
+                                    </div>
+                                </td>
+                                <td class="tbl-muted">{{ $user->username ? '@' . $user->username : '—' }}</td>
+                                <td>
+                                    <div class="tbl-title">{{ $user->jabatan ?: '—' }}</div>
+                                    @if($user->prodi)<div class="tbl-sub">{{ $user->prodi }}</div>@endif
+                                </td>
+                                <td class="ds-center">
+                                    <div class="us-aksi-sel">
+                                        <a href="{{ route('users.edit', $user) }}" class="ds-btn ds-btn--icon" title="Ubah" aria-label="Ubah akun {{ $user->name }}"><i class="fa-solid fa-pen"></i></a>
+                                        @if($user->id !== auth()->id())
+                                        <form method="POST" action="{{ route('users.destroy', $user) }}"
+                                              data-konfirmasi="Akun {{ $user->name }} ({{ $user->email }}) akan dihapus permanen dan tidak dapat masuk lagi." data-konfirmasi-judul="Hapus Akun?" data-konfirmasi-tombol="Ya, Hapus Akun">
+                                            @csrf @method('DELETE')
+                                            <button type="submit" class="ds-btn ds-btn--icon ds-btn--danger" title="Hapus" aria-label="Hapus akun {{ $user->name }}"><i class="fa-solid fa-trash"></i></button>
+                                        </form>
+                                        @endif
+                                    </div>
+                                </td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            @endif
         </div>
-        @endif
+
     </div>
 </main>
-</x-app-layout>
 
+<x-konfirmasi-modal />
+</x-app-layout>

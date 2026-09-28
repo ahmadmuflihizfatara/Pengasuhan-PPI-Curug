@@ -7,12 +7,14 @@ use Illuminate\View\View;
 use Illuminate\Http\JsonResponse;
 use App\Helpers\DashboardHelper;
 use App\Models\Acara;
+use App\Models\ActivityLog;
 use App\Models\KeluhanBarak;
 use App\Models\Konsinyir;
 use App\Models\Mahasiswa;
 use App\Models\NilaiTaruna;
 use App\Models\PoinMahasiswa;
 use App\Models\Surat;
+use App\Models\User;
 
 class DashboardController extends Controller
 {
@@ -24,8 +26,9 @@ class DashboardController extends Controller
         $mahasiswaSidebar = Mahasiswa::orderBy('kelas')->orderBy('nama')->get();
         $totalMahasiswa   = $mahasiswaSidebar->count();
 
-        // Acara mendatang (urut tanggal + jam terdekat)
-        $acaraMendatang = Acara::orderBy('tanggal', 'asc')
+        // Acara mendatang: mulai hari ini (urut tanggal + jam terdekat)
+        $acaraMendatang = Acara::whereDate('tanggal', '>=', today())
+            ->orderBy('tanggal', 'asc')
             ->orderBy('jam', 'asc')
             ->get();
 
@@ -81,6 +84,16 @@ class DashboardController extends Controller
             $chartData = Mahasiswa::chartDataPerTingkat();
         }
 
+        // Panel administrasi — hanya admin
+        $adminStats = null;
+        if (auth()->user()->isAdmin()) {
+            $adminStats = [
+                'poinMenunggu'     => PoinMahasiswa::where('status_validasi', PoinMahasiswa::STATUS_MENUNGGU)->count(),
+                'totalAkun'        => User::count(),
+                'aktivitasHariIni' => ActivityLog::whereDate('created_at', today())->count(),
+            ];
+        }
+
         return view('dashboard', [
             'mahasiswaSidebar' => $mahasiswaSidebar,
             'totalMahasiswa'   => $totalMahasiswa,
@@ -94,6 +107,7 @@ class DashboardController extends Controller
             'konsinyirAktif'   => $konsinyirAktif,
             'nilaiSemester'    => $nilaiSemester,
             'student'          => $student,
+            'adminStats'       => $adminStats,
         ]);
     }
 

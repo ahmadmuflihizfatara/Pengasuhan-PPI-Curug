@@ -1,185 +1,131 @@
 <x-app-layout>
+<x-form-glass-style />
 <style>
-* { box-sizing: border-box; }
-body { font-family: 'Inter', sans-serif; background: transparent; }
+    [x-cloak] { display: none !important; }
 
-.flash-success { background:#f0fff4; border:1px solid #c6f6d5; color:#276749; padding:12px 18px; border-radius:12px; margin-bottom:18px; font-size:13px; font-weight:600; display:flex; align-items:center; gap:8px; }
-.flash-error { background:#fff5f5; border:1px solid #feb2b2; color:#c53030; padding:12px 18px; border-radius:12px; margin-bottom:18px; font-size:13px; font-weight:600; display:flex; align-items:center; gap:8px; }
-.flash-locked { background:#fff8ec; border:1px solid #fbd38d; color:#a06a0a; padding:12px 18px; border-radius:12px; margin-bottom:18px; font-size:13px; font-weight:600; display:flex; align-items:center; gap:8px; }
+    /* Petugas hari ini — kartu kaca dengan ikon aksen */
+    .jd-hari { display: flex; align-items: center; gap: var(--space-4); flex-wrap: wrap; }
+    .jd-hari .ds-stat__icon { width: 48px; height: 48px; font-size: 19px; flex-shrink: 0; }
+    .jd-hari__isi { flex: 1; min-width: 0; }
+    .jd-hari__label { font-size: 11px; line-height: 16px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: var(--ink-600); }
+    .jd-hari__tgl { font-size: 15px; line-height: 20px; font-weight: 900; color: var(--ink-900); }
+    .jd-orang-list { display: flex; gap: var(--space-2); flex-wrap: wrap; margin-top: var(--space-2-5); }
+    .jd-orang { display: inline-flex; align-items: center; gap: var(--space-2); padding: var(--space-1-5) var(--space-3) var(--space-1-5) var(--space-1-5); border-radius: var(--radius-pill); background: var(--glass-card); border: 1px solid var(--border-glass-glow); font-size: 12px; font-weight: 800; color: var(--ink-900); }
+    .jd-orang .ds-avatar { width: 26px; height: 26px; font-size: 10px; }
+    .jd-orang--saya { background: var(--accent-tint); border-color: var(--accent); }
 
-/* Sub-tab */
-.subtab-row { display:flex; gap:8px; margin-bottom:20px; flex-wrap:wrap; }
-.subtab {
-    padding:10px 18px; border-radius:11px; font-size:13px; font-weight:700;
-    text-decoration:none; background:white; color:#666; border:2px solid #e8ebf5;
-    display:inline-flex; align-items:center; gap:8px; transition:all .15s;
-}
-.subtab:hover { border-color:#4a3aa7; color:#4a3aa7; }
-.subtab.active { background:linear-gradient(135deg,#4a3aa7,#2a78d6); color:white; border-color:transparent; }
+    /* Alokasi mingguan */
+    .jd-roster { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: var(--space-2-5); }
+    .jd-roster__hari { padding: var(--space-3); border-radius: var(--radius-md); background: var(--glass-card); border: 1px solid var(--border-glass-glow); }
+    .jd-roster__hari--ini { background: var(--accent-tint); border-color: var(--accent); }
+    .jd-roster__nama-hari { display: block; margin-bottom: var(--space-1-5); font-size: 10px; line-height: 14px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; color: var(--accent-ink); }
+    .jd-roster__orang { display: block; font-size: 12px; line-height: 18px; font-weight: 700; color: var(--ink-900); }
+    .jd-roster__kosong { font-size: 12px; font-style: italic; color: var(--ink-500); }
 
-/* Hero: petugas hari ini (tiga pengasuh) */
-.hero-card {
-    background:linear-gradient(135deg,#4a3aa7,#2a78d6); border-radius:18px; padding:24px 28px;
-    color:white; margin-bottom:22px; display:flex; align-items:center; gap:20px; flex-wrap:wrap;
-    box-shadow:0 6px 20px rgba(74,58,167,.25);
-}
-.hero-label { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.08em; opacity:.8; margin-bottom:3px; }
-.hero-sub { font-size:12.5px; opacity:.85; }
-.hero-petugas { display:flex; gap:10px; flex-wrap:wrap; margin-top:10px; }
-.hero-orang { display:flex; align-items:center; gap:8px; background:rgba(255,255,255,.12); border:1px solid rgba(255,255,255,.2); border-radius:12px; padding:6px 12px 6px 6px; }
-.hero-avatar { width:32px; height:32px; border-radius:50%; background:rgba(255,255,255,.22); display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:800; flex-shrink:0; }
-.hero-name { font-size:13px; font-weight:700; }
-.hero-badge { margin-left:auto; background:rgba(255,255,255,.2); border-radius:20px; padding:7px 16px; font-size:12px; font-weight:700; display:flex; align-items:center; gap:6px; }
+    /* Bar bulan */
+    .jd-bar { display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); flex-wrap: wrap; }
+    .jd-bulan { display: flex; align-items: center; gap: var(--space-2); }
+    .jd-bulan__judul { min-width: 150px; text-align: center; font-size: 15px; line-height: 20px; font-weight: 900; color: var(--ink-900); }
+    .jd-bar__kanan { display: flex; align-items: center; gap: var(--space-2); flex-wrap: wrap; }
+    .jd-bar__kanan form { margin: 0; }
+    .jd-filter.aktif { background: var(--accent); border-color: transparent; color: var(--ink-on-dark); }
 
-/* Roster mingguan */
-.roster-card { background:white; border-radius:16px; padding:18px 22px; box-shadow:0 2px 12px rgba(0,0,0,.05); margin-bottom:22px; }
-.roster-title { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.06em; color:#8a93b0; margin-bottom:12px; }
-.roster-row { display:grid; grid-template-columns:repeat(auto-fill,minmax(180px,1fr)); gap:10px; }
-.roster-chip { background:#fafbff; border:1px solid #eef0f7; border-radius:11px; padding:8px 12px; }
-.roster-chip .day { font-size:10px; font-weight:800; color:#4a3aa7; text-transform:uppercase; display:block; margin-bottom:2px; }
-.roster-chip .nm  { font-size:12px; font-weight:600; color:#333; display:block; }
-.roster-chip .kosong { font-size:12px; color:#b0b6c5; font-style:italic; }
+    /* Timeline */
+    .timeline { position: relative; padding-left: 40px; display: flex; flex-direction: column; gap: var(--space-2-5); }
+    .timeline::before { content: ''; position: absolute; left: 15px; top: 10px; bottom: 10px; width: 2px; border-radius: 2px; background: var(--border-glass-glow); }
+    .tl-item { position: relative; }
+    .tl-dot { position: absolute; left: -40px; top: 14px; z-index: 1; width: 32px; height: 32px; border-radius: 50%; display: grid; place-items: center; background: var(--glass-solid); border: 1.5px solid var(--border-glass-glow); font-family: var(--font-mono); font-size: 11px; font-weight: 800; color: var(--ink-600); box-shadow: var(--shadow-glass-sm); }
+    .tl-item.is-today .tl-dot { background: var(--accent); border-color: transparent; color: var(--ink-on-dark); box-shadow: 0 0 0 4px var(--focus-ring-glow); }
+    .tl-card { display: flex; align-items: flex-start; gap: var(--space-4); flex-wrap: wrap; padding: var(--space-3) var(--space-4); border-radius: var(--radius-md); background: var(--glass-card); border: 1px solid var(--border-glass-glow); transition: background-color .15s; }
+    .tl-card:hover { background: var(--glass-solid); }
+    .tl-item.is-today .tl-card { background: var(--accent-tint); border-color: var(--accent); }
+    .tl-date { min-width: 118px; padding-top: 4px; }
+    .tl-date .day-name { font-size: 10px; line-height: 14px; font-weight: 800; letter-spacing: .05em; text-transform: uppercase; color: var(--ink-600); }
+    .tl-date .day-full { font-size: 13px; line-height: 18px; font-weight: 800; color: var(--ink-900); }
+    .tl-petugas { flex: 1; min-width: 220px; display: flex; flex-direction: column; gap: var(--space-2); }
+    .tl-pengasuh { display: flex; align-items: center; gap: var(--space-2-5); }
+    .tl-pengasuh .ds-avatar { flex-shrink: 0; }
+    .tl-pengasuh-name { flex: 1; min-width: 0; font-size: 13px; line-height: 18px; font-weight: 800; color: var(--ink-900); }
+    .tl-catatan { margin-top: 1px; font-size: 11px; line-height: 15px; font-weight: 500; color: var(--ink-600); }
+    .tl-catatan i { color: var(--warning-ink); }
+    .tl-kosong { font-size: 12px; font-style: italic; color: var(--ink-500); }
+    .tl-status { margin-top: 4px; }
 
-/* Month nav + generate */
-.month-bar { display:flex; align-items:center; justify-content:space-between; margin-bottom:18px; flex-wrap:wrap; gap:12px; }
-.month-nav { display:flex; align-items:center; gap:10px; background:white; border-radius:12px; padding:8px 10px; box-shadow:0 2px 12px rgba(0,0,0,.05); }
-.month-nav-btn { width:32px; height:32px; border-radius:8px; border:none; background:#f4f3ff; color:#4a3aa7; cursor:pointer; display:flex; align-items:center; justify-content:center; transition:background .15s; text-decoration:none; }
-.month-nav-btn:hover { background:#e7e4ff; }
-.month-title { font-size:15px; font-weight:800; color:#333; min-width:150px; text-align:center; }
-.btn-generate {
-    background:linear-gradient(135deg,#4a3aa7,#2a78d6); color:white; border:none;
-    padding:10px 20px; border-radius:11px; font-size:13px; font-weight:700;
-    cursor:pointer; display:inline-flex; align-items:center; gap:8px; transition:opacity .15s;
-    font-family:'Inter',sans-serif;
-}
-.btn-generate:hover { opacity:.9; }
-.generated-badge { background:#f0fff4; color:#276749; border:1px solid #c6f6d5; border-radius:11px; padding:9px 16px; font-size:12.5px; font-weight:700; display:flex; align-items:center; gap:7px; }
-
-/* Timeline */
-.timeline { position:relative; padding-left:38px; }
-.timeline::before { content:''; position:absolute; left:14px; top:8px; bottom:8px; width:2px; background:#e8ebf5; }
-
-.tl-item { position:relative; margin-bottom:14px; }
-.tl-dot {
-    position:absolute; left:-38px; top:14px; width:30px; height:30px; border-radius:50%;
-    background:white; border:2px solid #e8ebf5; color:#98a0b3;
-    display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:800; z-index:1;
-}
-.tl-item.is-today .tl-dot { background:linear-gradient(135deg,#4a3aa7,#2a78d6); border-color:transparent; color:white; box-shadow:0 0 0 4px rgba(74,58,167,.15); }
-
-.tl-card {
-    background:white; border-radius:14px; padding:14px 18px; box-shadow:0 2px 10px rgba(0,0,0,.05);
-    display:flex; align-items:flex-start; gap:14px; flex-wrap:wrap; border:2px solid transparent; transition:border-color .15s;
-}
-.tl-item.is-today .tl-card { border-color:#4a3aa7; background:#f8f7ff; }
-.tl-date { min-width:120px; padding-top:6px; }
-.tl-date .day-name { font-size:11px; font-weight:700; color:#8a93b0; text-transform:uppercase; letter-spacing:.04em; }
-.tl-date .day-full  { font-size:13px; font-weight:700; color:#333; }
-
-.tl-petugas { flex:1; min-width:220px; display:flex; flex-direction:column; gap:8px; }
-.tl-pengasuh { display:flex; align-items:center; gap:10px; }
-.tl-avatar { width:32px; height:32px; border-radius:50%; background:linear-gradient(135deg,#4a3aa7,#2a78d6); color:white; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:800; flex-shrink:0; }
-.tl-pengasuh-name { font-size:13px; font-weight:700; color:#2b2b33; flex:1; }
-.tl-catatan { font-size:11.5px; color:#98a0b3; margin-top:1px; font-weight:500; }
-.dinas-saya { background:#e0e7ff; color:#3730a3; font-size:10.5px; font-weight:800; padding:2px 8px; border-radius:12px; margin-left:6px; }
-
-.tl-status { font-size:10.5px; font-weight:700; padding:3px 10px; border-radius:20px; white-space:nowrap; margin-top:6px; }
-.tl-status.saved   { background:#f0fff4; color:#276749; }
-.tl-status.default { background:#fff8ec; color:#a06a0a; }
-
-.btn-swap {
-    background:#f4f3ff; color:#4a3aa7; border:none; padding:5px 11px; border-radius:9px;
-    font-size:11px; font-weight:700; cursor:pointer; display:inline-flex; align-items:center; gap:5px; transition:background .15s; flex-shrink:0;
-}
-.btn-swap:hover { background:#e7e4ff; }
-
-.empty-roster { background:white; border-radius:16px; box-shadow:0 2px 12px rgba(0,0,0,.05); text-align:center; padding:60px 24px; }
-.empty-roster i { font-size:46px; color:#e2e5ee; display:block; margin-bottom:14px; }
-.empty-roster p { font-size:14px; color:#98a0b3; margin:0 0 6px; font-weight:600; }
-.empty-roster small { color:#c3c8d6; }
-
-/* Modal swap */
-.modal-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,.45); z-index:9999; align-items:center; justify-content:center; }
-.modal-overlay.open { display:flex; }
-.modal-box { background:white; border-radius:18px; padding:26px 26px 22px; max-width:380px; width:90%; box-shadow:0 20px 60px rgba(0,0,0,.2); animation:modalIn .15s ease; }
-@keyframes modalIn { from{transform:scale(.95);opacity:0} to{transform:scale(1);opacity:1} }
-.modal-box h3 { margin:0 0 4px; font-size:16px; font-weight:800; color:#333; }
-.modal-box .modal-sub { font-size:12px; color:#98a0b3; margin:0 0 18px; }
-.modal-box label { font-size:11.5px; font-weight:700; color:#555; display:block; margin-bottom:6px; }
-.modal-box select, .modal-box textarea {
-    width:100%; padding:10px 12px; border:2px solid #e8ebf5; border-radius:10px;
-    font-size:13px; font-family:'Inter',sans-serif; color:#333; outline:none; margin-bottom:14px; background:#fafbff;
-}
-.modal-box select:focus, .modal-box textarea:focus { border-color:#4a3aa7; background:white; }
-.modal-box textarea { resize:vertical; min-height:64px; }
-.modal-actions { display:flex; gap:10px; justify-content:flex-end; }
-.modal-cancel { background:#f4f5f9; color:#666; border:none; padding:10px 20px; border-radius:10px; font-size:13px; font-weight:700; cursor:pointer; }
-.modal-cancel:hover { background:#e8e9f0; }
-.modal-confirm { background:linear-gradient(135deg,#4a3aa7,#2a78d6); color:white; border:none; padding:10px 20px; border-radius:10px; font-size:13px; font-weight:700; cursor:pointer; }
-.modal-confirm:hover { opacity:.9; }
+    /* Modal tukar jaga */
+    #swapModal .form-group { text-align: left; }
+    #swapModal textarea.form-control { resize: vertical; min-height: 64px; }
 </style>
 
 {{-- Top Floating Island Capsule Navbar --}}
 <x-island-navbar />
 
-@php $userId = Auth::id(); @endphp
+@php
+    $userId = Auth::id();
+    $prev = \Carbon\Carbon::create($tahun, $bulan, 1)->subMonth();
+    $next = \Carbon\Carbon::create($tahun, $bulan, 1)->addMonth();
+    // Kunci hari sesuai Pengasuh::HARI (senin … minggu), Carbon dayOfWeekIso: 1 = Senin
+    $hariIniKey = array_keys(\App\Models\Pengasuh::HARI)[now()->dayOfWeekIso - 1];
+@endphp
 
 <main class="max-w-7xl mx-auto px-4 sm:px-6 pb-12 pt-2">
     <div class="spatial-workspace-window rounded-3xl bg-white/30 backdrop-blur-2xl border border-white/50 shadow-2xl p-4 sm:p-7 relative overflow-hidden">
 
-        <x-page-banner title="Jadwal Pengasuh"
+        <x-page-banner title="Jadwal Pengasuh" icon="fa-user-clock"
                        :subtitle="'Jadwal jaga pengasuh bulanan — ' . \App\Models\Pengasuh::PER_HARI . ' pengasuh bertugas setiap hari'" />
 
         @include('jadwal._tabs', ['aktif' => 'pengasuh'])
 
         @if(session('success'))
-        <div class="flash-success"><i class="fas fa-check-circle"></i> {{ session('success') }}</div>
+        <x-glass-alert type="success" title="Berhasil">{{ session('success') }}</x-glass-alert>
         @endif
         @if(session('error'))
-        <div class="flash-error"><i class="fas fa-exclamation-circle"></i> {{ session('error') }}</div>
+        <x-glass-alert type="danger" title="Gagal">{{ session('error') }}</x-glass-alert>
         @endif
-
         @unless($bolehIsi)
-        <div class="flash-locked">
-            <i class="fas fa-lock"></i>
-            Akses pengisian jadwal pengasuh sedang ditutup admin — halaman tetap dapat dilihat, tetapi tidak dapat diubah.
+        <div class="ds-alert ds-alert--warning" role="status">
+            <i class="fa-solid fa-lock ds-icon"></i>
+            <span>Akses pengisian jadwal pengasuh sedang ditutup admin — halaman tetap dapat dilihat, tetapi tidak dapat diubah.</span>
         </div>
         @endunless
 
         {{-- Petugas hari ini --}}
         @if($petugasHariIni && $petugasHariIni['petugas']->isNotEmpty())
-        <div class="hero-card">
-            <div>
-                <div class="hero-label">Bertugas Hari Ini</div>
-                <div class="hero-sub">{{ $petugasHariIni['tanggal']->locale('id')->isoFormat('dddd, D MMMM Y') }}</div>
-                <div class="hero-petugas">
+        <div class="ds-card jd-hari mb-4">
+            <span class="ds-stat__icon"><i class="fa-solid fa-user-shield"></i></span>
+            <div class="jd-hari__isi">
+                <div class="jd-hari__label">Bertugas Hari Ini</div>
+                <div class="jd-hari__tgl">{{ $petugasHariIni['tanggal']->locale('id')->isoFormat('dddd, D MMMM Y') }}</div>
+                <div class="jd-orang-list">
                     @foreach($petugasHariIni['petugas'] as $x)
-                    <div class="hero-orang">
-                        <div class="hero-avatar">{{ strtoupper(substr($x['pengasuh']->nama, 0, 2)) }}</div>
-                        <span class="hero-name">{{ $x['pengasuh']->nama }}</span>
-                    </div>
+                    <span class="jd-orang {{ $x['pengasuh']->user_id === $userId ? 'jd-orang--saya' : '' }}">
+                        <span class="ds-avatar">{{ strtoupper(substr($x['pengasuh']->nama, 0, 2)) }}</span>
+                        {{ $x['pengasuh']->nama }}
+                    </span>
                     @endforeach
                 </div>
             </div>
-            <div class="hero-badge">
-                <i class="fas {{ $petugasHariIni['tersimpan'] ? 'fa-check-circle' : 'fa-circle-info' }}"></i>
-                {{ $petugasHariIni['tersimpan'] ? 'Jadwal Tersimpan' : 'Jadwal Default Mingguan' }}
-            </div>
+            <span class="ds-badge ds-badge--{{ $petugasHariIni['tersimpan'] ? 'success' : 'warning' }}">
+                <i class="fa-solid {{ $petugasHariIni['tersimpan'] ? 'fa-circle-check' : 'fa-circle-info' }}"></i>
+                {{ $petugasHariIni['tersimpan'] ? 'Jadwal tersimpan' : 'Jadwal default mingguan' }}
+            </span>
         </div>
         @endif
 
         {{-- Alokasi mingguan default --}}
         @if($semuaPengasuh->isNotEmpty())
-        <div class="roster-card">
-            <div class="roster-title"><i class="fas fa-repeat" style="margin-right:5px;"></i>Alokasi Mingguan Default</div>
-            <div class="roster-row">
+        <div class="ds-card mb-4">
+            <div class="ds-card__head">
+                <h3 class="ds-card__title"><i class="fa-solid fa-repeat ds-icon"></i> Alokasi Mingguan Default</h3>
+                <p class="ds-card__desc">Pengasuh yang bertugas setiap hari bila jadwal bulan belum diubah</p>
+            </div>
+            <div class="jd-roster">
                 @foreach(\App\Models\Pengasuh::HARI as $hari => $label)
-                <div class="roster-chip">
-                    <span class="day">{{ $label }}</span>
+                <div class="jd-roster__hari {{ $hari === $hariIniKey ? 'jd-roster__hari--ini' : '' }}">
+                    <span class="jd-roster__nama-hari">{{ $label }}</span>
                     @forelse($pengasuhByHari->get($hari, collect()) as $p)
-                    <span class="nm">{{ $p->nama }}</span>
+                    <span class="jd-roster__orang">{{ $p->nama }}</span>
                     @empty
-                    <span class="kosong">Belum ada pengasuh</span>
+                    <span class="jd-roster__kosong">Belum ada pengasuh</span>
                     @endforelse
                 </div>
                 @endforeach
@@ -187,143 +133,135 @@ body { font-family: 'Inter', sans-serif; background: transparent; }
         </div>
         @endif
 
-        {{-- Navigasi bulan + generate --}}
-        <div class="month-bar">
-            <div class="month-nav">
-                @php
-                    $prev = \Carbon\Carbon::create($tahun, $bulan, 1)->subMonth();
-                    $next = \Carbon\Carbon::create($tahun, $bulan, 1)->addMonth();
-                @endphp
-                <a href="{{ route('jadwal.index', ['bulan' => $prev->month, 'tahun' => $prev->year]) }}" class="month-nav-btn">
-                    <i class="fas fa-chevron-left"></i>
-                </a>
-                <span class="month-title">{{ \Carbon\Carbon::create($tahun, $bulan, 1)->locale('id')->isoFormat('MMMM Y') }}</span>
-                <a href="{{ route('jadwal.index', ['bulan' => $next->month, 'tahun' => $next->year]) }}" class="month-nav-btn">
-                    <i class="fas fa-chevron-right"></i>
-                </a>
-            </div>
-
-            <div class="d-flex gap-2 align-items-center">
-                <button type="button" class="btn-generate" id="btnToggleHanyaSaya" onclick="toggleHanyaDinasSaya()" style="background:#f4f3ff; color:#4a3aa7; border:1px solid #4a3aa7;">
-                    <i class="fas fa-filter"></i> Hanya Jadwal Dinas Saya
-                </button>
-            </div>
-
-            @if($semuaPengasuh->isNotEmpty())
-                @if($bulanDepan)
-                {{-- Jadwal hanya diisi sampai bulan berjalan --}}
-                <div class="generated-badge" style="background:#fff8ec; color:#a06a0a; border-color:#fbd38d;">
-                    <i class="fas fa-hourglass-half"></i> Belum waktunya — jadwal hanya sampai bulan berjalan
+        {{-- Jadwal bulanan --}}
+        <div class="ds-card">
+            <div class="ds-card__head jd-bar">
+                <div class="jd-bulan">
+                    <a href="{{ route('jadwal.index', ['bulan' => $prev->month, 'tahun' => $prev->year]) }}" class="ds-btn ds-btn--icon" aria-label="Bulan sebelumnya"><i class="fa-solid fa-chevron-left"></i></a>
+                    <span class="jd-bulan__judul">{{ \Carbon\Carbon::create($tahun, $bulan, 1)->locale('id')->isoFormat('MMMM Y') }}</span>
+                    <a href="{{ route('jadwal.index', ['bulan' => $next->month, 'tahun' => $next->year]) }}" class="ds-btn ds-btn--icon" aria-label="Bulan berikutnya"><i class="fa-solid fa-chevron-right"></i></a>
                 </div>
-                @elseif($sudahDigenerate)
-                <div class="generated-badge"><i class="fas fa-check-circle"></i> Jadwal bulan ini sudah digenerate</div>
-                @elseif($bolehIsi)
-                <form method="POST" action="{{ route('jadwal.generate') }}">
-                    @csrf
-                    <input type="hidden" name="bulan" value="{{ $bulan }}">
-                    <input type="hidden" name="tahun" value="{{ $tahun }}">
-                    <button type="submit" class="btn-generate">
-                        <i class="fas fa-wand-magic-sparkles"></i> Generate Jadwal Bulan Ini
+
+                <div class="jd-bar__kanan">
+                    <button type="button" class="ds-btn ds-btn--sm ds-btn--pill jd-filter" id="btnToggleHanyaSaya" onclick="toggleHanyaDinasSaya()" aria-pressed="false">
+                        <i class="fa-solid fa-filter"></i> <span>Hanya dinas saya</span>
                     </button>
-                </form>
-                @endif
-            @endif
-        </div>
 
-        {{-- Timeline --}}
-        @if($semuaPengasuh->isEmpty())
-        <div class="empty-roster">
-            <i class="fas fa-user-clock"></i>
-            <p>Belum ada data pengasuh.</p>
-            <small>Jalankan seeder PengasuhSeeder untuk membuat 21 akun pengasuh (tiga per hari).</small>
-        </div>
-        @else
-        <div class="timeline">
-            @foreach($timeline as $item)
-            @php
-                $tglKey   = $item['tanggal']->format('Y-m-d');
-                $tglLabel = $item['tanggal']->locale('id')->isoFormat('dddd, D MMMM Y');
-                $dinasSaya = $item['petugas']->contains(fn ($x) => $x['pengasuh']->user_id === $userId);
-            @endphp
-            <div class="tl-item {{ $item['is_today'] ? 'is-today' : '' }}" data-saya="{{ $dinasSaya ? 1 : 0 }}">
-                <div class="tl-dot">{{ $item['tanggal']->format('d') }}</div>
-                <div class="tl-card">
-                    <div class="tl-date">
-                        <div class="day-name">{{ $item['tanggal']->locale('id')->isoFormat('dddd') }}</div>
-                        <div class="day-full">{{ $item['tanggal']->locale('id')->isoFormat('D MMM Y') }}</div>
-                    </div>
+                    @if($semuaPengasuh->isNotEmpty())
+                        @if($bulanDepan)
+                        <span class="ds-badge ds-badge--warning"><i class="fa-solid fa-hourglass-half"></i> Belum waktunya — jadwal hanya sampai bulan berjalan</span>
+                        @elseif($sudahDigenerate)
+                        <span class="ds-badge ds-badge--success"><i class="fa-solid fa-circle-check"></i> Jadwal bulan ini sudah digenerate</span>
+                        @elseif($bolehIsi)
+                        <form method="POST" action="{{ route('jadwal.generate') }}">
+                            @csrf
+                            <input type="hidden" name="bulan" value="{{ $bulan }}">
+                            <input type="hidden" name="tahun" value="{{ $tahun }}">
+                            <button type="submit" class="ds-btn ds-btn--primary ds-btn--sm"><i class="fa-solid fa-wand-magic-sparkles"></i> Generate Jadwal Bulan Ini</button>
+                        </form>
+                        @endif
+                    @endif
+                </div>
+            </div>
 
-                    <div class="tl-petugas">
-                        @forelse($item['petugas'] as $x)
-                        <div class="tl-pengasuh">
-                            <div class="tl-avatar">{{ strtoupper(substr($x['pengasuh']->nama, 0, 2)) }}</div>
-                            <div class="tl-pengasuh-name">
-                                {{ $x['pengasuh']->nama }}
-                                @if($x['pengasuh']->user_id === $userId)
-                                <span class="dinas-saya"><i class="fas fa-user-check"></i> DINAS SAYA</span>
-                                @endif
-                                @if($x['catatan'])
-                                <div class="tl-catatan"><i class="fas fa-note-sticky"></i> {{ $x['catatan'] }}</div>
+            @if($semuaPengasuh->isEmpty())
+            <div class="ds-empty">
+                <i class="fa-solid fa-user-clock ds-icon"></i>
+                Belum ada data pengasuh. Jalankan seeder PengasuhSeeder untuk membuat akun pengasuh.
+            </div>
+            @else
+            <div class="timeline">
+                @foreach($timeline as $item)
+                @php
+                    $tglKey    = $item['tanggal']->format('Y-m-d');
+                    $tglLabel  = $item['tanggal']->locale('id')->isoFormat('dddd, D MMMM Y');
+                    $dinasSaya = $item['petugas']->contains(fn ($x) => $x['pengasuh']->user_id === $userId);
+                @endphp
+                <div class="tl-item {{ $item['is_today'] ? 'is-today' : '' }}" data-saya="{{ $dinasSaya ? 1 : 0 }}">
+                    <div class="tl-dot">{{ $item['tanggal']->format('d') }}</div>
+                    <div class="tl-card">
+                        <div class="tl-date">
+                            <div class="day-name">{{ $item['is_today'] ? 'Hari ini · ' : '' }}{{ $item['tanggal']->locale('id')->isoFormat('dddd') }}</div>
+                            <div class="day-full">{{ $item['tanggal']->locale('id')->isoFormat('D MMM Y') }}</div>
+                        </div>
+
+                        <div class="tl-petugas">
+                            @forelse($item['petugas'] as $x)
+                            <div class="tl-pengasuh">
+                                <span class="ds-avatar">{{ strtoupper(substr($x['pengasuh']->nama, 0, 2)) }}</span>
+                                <div class="tl-pengasuh-name">
+                                    {{ $x['pengasuh']->nama }}
+                                    @if($x['pengasuh']->user_id === $userId)
+                                    <span class="ds-badge ds-badge--accent"><i class="fa-solid fa-user-check"></i> Dinas saya</span>
+                                    @endif
+                                    @if($x['catatan'])
+                                    <div class="tl-catatan"><i class="fa-solid fa-note-sticky"></i> {{ $x['catatan'] }}</div>
+                                    @endif
+                                </div>
+                                @if($bolehIsi && !$bulanDepan)
+                                <button type="button" class="ds-btn ds-btn--xs"
+                                        onclick="bukaSwapModal('{{ $tglKey }}', '{{ $tglLabel }}', {{ $x['pengasuh']->id }}, @js($x['pengasuh']->nama), @js($x['catatan'] ?? ''))">
+                                    <i class="fa-solid fa-right-left"></i> Tukar
+                                </button>
                                 @endif
                             </div>
-                            @if($bolehIsi && !$bulanDepan)
-                            <button type="button" class="btn-swap"
-                                    onclick="bukaSwapModal('{{ $tglKey }}', '{{ $tglLabel }}', {{ $x['pengasuh']->id }}, @js($x['pengasuh']->nama), @js($x['catatan'] ?? ''))">
-                                <i class="fas fa-right-left"></i> Tukar
-                            </button>
+                            @empty
+                            <span class="tl-kosong">Belum ada pengasuh untuk hari ini</span>
+                            @endforelse
+
+                            @if($bolehIsi && !$bulanDepan && $item['petugas']->count() < \App\Models\Pengasuh::PER_HARI)
+                            <div>
+                                <button type="button" class="ds-btn ds-btn--xs" onclick="bukaSwapModal('{{ $tglKey }}', '{{ $tglLabel }}', null, null, '')">
+                                    <i class="fa-solid fa-plus"></i> Tambah Pengasuh
+                                </button>
+                            </div>
                             @endif
                         </div>
-                        @empty
-                        <span style="color:#ccc; font-size:12.5px;">Belum ada pengasuh untuk hari ini</span>
-                        @endforelse
 
-                        @if($bolehIsi && !$bulanDepan && $item['petugas']->count() < \App\Models\Pengasuh::PER_HARI)
-                        <div>
-                            <button type="button" class="btn-swap" onclick="bukaSwapModal('{{ $tglKey }}', '{{ $tglLabel }}', null, null, '')">
-                                <i class="fas fa-plus"></i> Tambah Pengasuh
-                            </button>
-                        </div>
-                        @endif
+                        <span class="ds-badge ds-badge--{{ $item['tersimpan'] ? 'success' : 'warning' }} tl-status">{{ $item['tersimpan'] ? 'Tersimpan' : 'Default' }}</span>
                     </div>
-
-                    <span class="tl-status {{ $item['tersimpan'] ? 'saved' : 'default' }}">
-                        {{ $item['tersimpan'] ? 'Tersimpan' : 'Default' }}
-                    </span>
                 </div>
+                @endforeach
             </div>
-            @endforeach
+            <div class="ds-empty" id="kosongDinasSaya" style="display:none;">
+                <i class="fa-solid fa-calendar-xmark ds-icon"></i>
+                Anda tidak memiliki jadwal dinas pada bulan ini.
+            </div>
+            @endif
         </div>
-        @endif
 
     </div>
 </main>
 
-{{-- Modal tukar jaga --}}
-<div class="modal-overlay" id="swapModal">
-    <div class="modal-box">
-        <h3><i class="fas fa-right-left" style="color:#4a3aa7; margin-right:6px;"></i>Tukar Jaga</h3>
-        <p class="modal-sub" id="swapTanggalLabel"></p>
-        <form method="POST" action="{{ route('jadwal.set') }}">
-            @csrf
-            <input type="hidden" name="tanggal" id="swapTanggal">
-            <input type="hidden" name="ganti_id" id="swapGanti">
+{{-- Modal tukar jaga (di luar panel kaca agar position:fixed tidak terkurung backdrop-filter) --}}
+<div class="ds-modal-overlay" id="swapModal" style="display:none;" role="dialog" aria-modal="true" aria-labelledby="swapJudul">
+    <form method="POST" action="{{ route('jadwal.set') }}" class="ds-modal">
+        @csrf
+        <input type="hidden" name="tanggal" id="swapTanggal">
+        <input type="hidden" name="ganti_id" id="swapGanti">
 
-            <label for="swapPengasuh">Pengasuh Bertugas</label>
-            <select name="pengasuh_id" id="swapPengasuh" required>
+        <div class="ds-modal__icon" style="background:var(--accent-tint); color:var(--accent);"><i class="fa-solid fa-right-left"></i></div>
+        <h3 class="ds-modal__title" id="swapJudul">Tukar Jaga</h3>
+        <p class="ds-modal__body" id="swapTanggalLabel"></p>
+
+        <div class="form-group">
+            <label class="form-label" for="swapPengasuh">Pengasuh Bertugas <span class="req">*</span></label>
+            <select name="pengasuh_id" id="swapPengasuh" class="form-select" required>
                 @foreach($semuaPengasuh as $p)
                 <option value="{{ $p->id }}">{{ $p->nama }} ({{ $p->hari_label }})</option>
                 @endforeach
             </select>
+        </div>
+        <div class="form-group">
+            <label class="form-label" for="swapCatatan">Catatan <span style="text-transform:none; letter-spacing:0; color:var(--ink-500);">(opsional)</span></label>
+            <textarea name="catatan" id="swapCatatan" class="form-control" placeholder="Contoh: tukar jaga dengan pengasuh hari Rabu"></textarea>
+        </div>
 
-            <label for="swapCatatan">Catatan <span style="font-weight:400; color:#b9bfcc;">(opsional)</span></label>
-            <textarea name="catatan" id="swapCatatan" placeholder="Contoh: tukar jaga dengan pengasuh hari Rabu"></textarea>
-
-            <div class="modal-actions">
-                <button type="button" class="modal-cancel" onclick="tutupSwapModal()">Batal</button>
-                <button type="submit" class="modal-confirm"><i class="fas fa-save"></i> Simpan</button>
-            </div>
-        </form>
-    </div>
+        <div class="ds-modal__actions">
+            <button type="button" class="ds-btn" onclick="tutupSwapModal()">Batal</button>
+            <button type="submit" class="ds-btn ds-btn--primary"><i class="fa-solid fa-floppy-disk"></i> Simpan</button>
+        </div>
+    </form>
 </div>
 
 <script>
@@ -335,15 +273,16 @@ function bukaSwapModal(tanggal, tanggalLabel, pengasuhId, pengasuhNama, catatan)
         : tanggalLabel + ' — tambah pengasuh bertugas';
     document.getElementById('swapCatatan').value = catatan || '';
     if (pengasuhId) document.getElementById('swapPengasuh').value = pengasuhId;
-    document.getElementById('swapModal').classList.add('open');
+    document.getElementById('swapModal').style.display = 'flex';
+    document.getElementById('swapPengasuh').focus();
 }
 function tutupSwapModal() {
-    document.getElementById('swapModal').classList.remove('open');
+    document.getElementById('swapModal').style.display = 'none';
 }
-document.getElementById('swapModal').addEventListener('click', function(e) {
+document.getElementById('swapModal').addEventListener('click', function (e) {
     if (e.target === this) tutupSwapModal();
 });
-document.addEventListener('keydown', function(e) {
+document.addEventListener('keydown', function (e) {
     if (e.key === 'Escape') tutupSwapModal();
 });
 
@@ -351,16 +290,19 @@ let hanyaDinasSaya = false;
 function toggleHanyaDinasSaya() {
     hanyaDinasSaya = !hanyaDinasSaya;
     const btn = document.getElementById('btnToggleHanyaSaya');
+    btn.classList.toggle('aktif', hanyaDinasSaya);
+    btn.setAttribute('aria-pressed', hanyaDinasSaya);
+    btn.querySelector('span').textContent = hanyaDinasSaya ? 'Menampilkan dinas saya' : 'Hanya dinas saya';
+    btn.querySelector('i').className = 'fa-solid ' + (hanyaDinasSaya ? 'fa-check' : 'fa-filter');
 
-    btn.style.background = hanyaDinasSaya ? 'linear-gradient(135deg,#4a3aa7,#2a78d6)' : '#f4f3ff';
-    btn.style.color = hanyaDinasSaya ? 'white' : '#4a3aa7';
-    btn.innerHTML = hanyaDinasSaya
-        ? '<i class="fas fa-check"></i> Menampilkan Dinas Saya Saja'
-        : '<i class="fas fa-filter"></i> Hanya Jadwal Dinas Saya';
-
+    let tampil = 0;
     document.querySelectorAll('.tl-item').forEach(item => {
-        item.style.display = !hanyaDinasSaya || item.dataset.saya === '1' ? 'block' : 'none';
+        const lihat = !hanyaDinasSaya || item.dataset.saya === '1';
+        item.style.display = lihat ? '' : 'none';
+        if (lihat) tampil++;
     });
+    const kosong = document.getElementById('kosongDinasSaya');
+    if (kosong) kosong.style.display = tampil ? 'none' : '';
 }
 </script>
 </x-app-layout>

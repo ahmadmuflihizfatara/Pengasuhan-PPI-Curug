@@ -37,9 +37,9 @@
                 @csrf @method('PATCH')
                 <button type="submit" class="ds-btn ds-btn--xs"><i class="fa-solid fa-thumbtack"></i> {{ $item->is_pinned ? 'Lepas Pin' : 'Pin' }}</button>
             </form>
-            <form method="POST" action="{{ route('berita.destroy', $item) }}" onsubmit="return confirm('Hapus berita ini?')">
+            <form method="POST" action="{{ route('berita.destroy', $item) }}">
                 @csrf @method('DELETE')
-                <button type="submit" class="ds-btn ds-btn--xs ds-btn--danger"><i class="fa-solid fa-trash"></i> Hapus</button>
+                <button type="button" class="ds-btn ds-btn--xs ds-btn--danger" onclick="bukaHapusBerita(this.form, @js($item->judul))"><i class="fa-solid fa-trash"></i> Hapus</button>
             </form>
         </div>
         @endunless

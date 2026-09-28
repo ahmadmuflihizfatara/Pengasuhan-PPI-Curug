@@ -1,108 +1,144 @@
 <x-app-layout>
+<x-form-glass-style />
+<style>
+    /* Legenda akses */
+    .ak-legenda { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: var(--space-3-5); }
+    .ak-legenda__item { display: flex; align-items: center; gap: var(--space-3); }
+    .ak-ikon { width: 44px; height: 44px; flex-shrink: 0; border-radius: var(--radius-md); display: grid; place-items: center; font-size: 17px; color: var(--ink-on-dark); box-shadow: var(--shadow-glass-sm); }
+    .ak-legenda__nama { font-size: 14px; line-height: 19px; font-weight: 800; color: var(--ink-900); }
+    .ak-legenda__ket { margin: 2px 0 var(--space-1-5); font-size: 12px; line-height: 16px; font-weight: 500; color: var(--ink-700); }
+
+    /* Pencarian — pola filter tab Surat */
+    .ak-cari { display: flex; gap: var(--space-2); flex-wrap: wrap; }
+    .ak-cari__input { position: relative; flex: 1; min-width: 220px; max-width: 460px; }
+    .ak-cari__input i { position: absolute; left: var(--space-3); top: 50%; transform: translateY(-50%); font-size: 12px; color: var(--ink-500); pointer-events: none; }
+    .ak-cari__input .form-control { padding-left: 34px; }
+    .ak-cari .ds-btn { height: 38px; }
+
+    /* Tabel */
+    .ak-table td { vertical-align: middle; }
+    .ak-table tr.ak-pegang td { background: var(--warning-tint) !important; }
+    .ak-table tr.ak-ubah td { background: var(--accent-tint) !important; }
+    .ak-cek { display: inline-flex; align-items: center; justify-content: center; }
+    /* Tailwind Forms menggambar checkbox pakai currentColor → warnai lewat color (accent-color untuk browser tanpa plugin) */
+    .ak-cek input { width: 18px; height: 18px; margin: 0; cursor: pointer; color: var(--ak-warna, var(--accent)); accent-color: var(--ak-warna, var(--accent)); border-radius: 5px; }
+    .ak-cek input:focus-visible { outline: none; box-shadow: var(--shadow-focus); border-radius: 4px; }
+    .ak-th { white-space: nowrap; }
+    .ak-th i { color: var(--ak-warna); margin-right: var(--space-1); }
+</style>
 
 <x-island-navbar />
 
 <main class="max-w-7xl mx-auto px-4 sm:px-6 pb-12 pt-2">
     <div class="spatial-workspace-window rounded-3xl bg-white/30 backdrop-blur-2xl border border-white/50 shadow-2xl p-4 sm:p-7 relative overflow-hidden">
 
-        {{-- Page Header --}}
-        <div class="rounded-2xl bg-gradient-to-r from-blue-900/90 via-indigo-900/85 to-slate-900/90 backdrop-blur-xl border border-white/30 p-6 text-white mb-6 shadow-xl relative overflow-hidden flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-            <div class="relative z-10">
-                <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/15 backdrop-blur-md border border-white/20 text-[10px] font-bold tracking-widest uppercase text-amber-300 mb-2">
-                    <span>✦</span>
-                    <span>Admin Sistem</span>
-                </div>
-                <h1 class="text-xl sm:text-2xl font-extrabold tracking-tight text-white mb-1 flex items-center gap-2">
-                    <i class="fa-solid fa-key text-amber-400"></i>
-                    <span>Pemberian Akses Khusus Taruna</span>
-                </h1>
-                <p class="text-xs text-indigo-100/80">Beri kewenangan Kepala Seksi Internal atau Polisi Taruna ke akun taruna tertentu</p>
-            </div>
-            <div class="absolute -right-10 -top-10 w-40 h-40 bg-amber-500/20 rounded-full blur-3xl pointer-events-none"></div>
-        </div>
+        <x-page-banner title="Akses Khusus Taruna" icon="fa-key"
+            subtitle="Beri kewenangan Kepala Seksi Internal atau Polisi Taruna ke akun taruna tertentu" />
 
         @if(session('success'))
-        <div class="rounded-2xl bg-emerald-100/90 border border-emerald-300 p-4 text-emerald-800 text-xs font-bold mb-5 flex items-center gap-2 shadow-sm backdrop-blur-md">
-            <i class="fa-solid fa-circle-check text-emerald-600 text-base"></i>
-            <span>{{ session('success') }}</span>
-        </div>
+        <x-glass-alert type="success" title="Berhasil">{{ session('success') }}</x-glass-alert>
         @endif
         @if($errors->any())
-        <div class="rounded-2xl bg-rose-100/90 border border-rose-300 p-4 text-rose-800 text-xs font-bold mb-5 shadow-sm backdrop-blur-md">
+        <x-glass-alert type="danger" title="Akses belum tersimpan">
             @foreach($errors->all() as $e)<div>{{ $e }}</div>@endforeach
-        </div>
+        </x-glass-alert>
         @endif
 
         {{-- Legenda akses --}}
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-6">
+        <div class="ak-legenda mb-4">
             @foreach($daftarAkses as $key => $a)
-            <div class="rounded-2xl bg-white/50 backdrop-blur-xl border border-white/60 p-4 shadow flex items-center gap-3">
-                <div class="w-10 h-10 rounded-xl flex items-center justify-center text-white text-base flex-shrink-0" style="background:{{ $a['warna'] }}">
-                    <i class="fas {{ $a['ikon'] }}"></i>
-                </div>
+            @php $pemegang = $taruna->filter(fn ($u) => in_array($key, $u->akses_khusus ?? []))->count(); @endphp
+            <div class="ds-card ak-legenda__item">
+                <span class="ak-ikon" style="background:linear-gradient(135deg,{{ $a['warna'] }},var(--accent));"><i class="fa-solid {{ $a['ikon'] }}"></i></span>
                 <div>
-                    <div class="text-xs font-extrabold text-slate-900">{{ $a['label'] }}</div>
-                    <div class="text-[11px] text-slate-500">{{ $a['ket'] }}</div>
-                    <div class="text-[10px] font-bold mt-0.5" style="color:{{ $a['warna'] }}">{{ $taruna->filter(fn ($u) => in_array($key, $u->akses_khusus ?? []))->count() }} taruna memegang akses ini</div>
+                    <div class="ak-legenda__nama">{{ $a['label'] }}</div>
+                    <p class="ak-legenda__ket">{{ $a['ket'] }}</p>
+                    <span class="ds-badge {{ $pemegang ? 'ds-badge--warning' : '' }}"><i class="fa-solid fa-user-check"></i> {{ $pemegang }} taruna memegang akses ini</span>
                 </div>
             </div>
             @endforeach
         </div>
 
         {{-- Pencarian --}}
-        <form method="GET" action="{{ route('akses-khusus.index') }}" class="flex items-center gap-2 mb-4">
-            <input type="text" name="q" value="{{ $q }}" placeholder="Cari nama / email taruna..."
-                   class="flex-1 sm:flex-none sm:w-80 px-3.5 py-2.5 rounded-xl bg-white/70 focus:bg-white border border-white/80 text-xs font-semibold text-slate-800 outline-none">
-            <button type="submit" class="px-4 py-2.5 rounded-xl bg-slate-900 text-white font-bold text-xs"><i class="fa-solid fa-magnifying-glass"></i></button>
-            @if($q)
-            <a href="{{ route('akses-khusus.index') }}" class="text-xs font-bold text-slate-500 hover:text-slate-800 no-underline">Reset</a>
-            @endif
-        </form>
+        <div class="ds-card mb-4">
+            <form method="GET" action="{{ route('akses-khusus.index') }}" class="ak-cari" role="search">
+                <div class="ak-cari__input">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="search" name="q" value="{{ $q }}" class="form-control" placeholder="Cari nama / email taruna..." aria-label="Cari taruna">
+                </div>
+                <button type="submit" class="ds-btn ds-btn--primary"><i class="fa-solid fa-magnifying-glass"></i> Cari</button>
+                @if($q)
+                <a href="{{ route('akses-khusus.index') }}" class="ds-btn" title="Reset pencarian" aria-label="Reset pencarian"><i class="fa-solid fa-xmark"></i></a>
+                @endif
+            </form>
+        </div>
 
         {{-- Tabel taruna --}}
-        <div class="rounded-2xl bg-white/45 backdrop-blur-xl border border-white/60 p-4 sm:p-5 shadow-lg overflow-x-auto">
-            @if($taruna->isEmpty())
-            <div class="text-center py-8 text-slate-400">
-                <i class="fa-solid fa-user-slash text-3xl mb-2 block"></i>
-                <span class="font-semibold text-xs">Tidak ada akun taruna ditemukan.</span>
+        <div class="ds-card">
+            <div class="ds-card__head tbl-head">
+                <div>
+                    <h3 class="ds-card__title"><i class="fa-solid fa-user-gear ds-icon"></i> Akun Taruna</h3>
+                    <p class="ds-card__desc">{{ $q ? 'Hasil pencarian "' . $q . '"' : 'Pemegang akses tampil paling atas' }} — centang akses lalu klik Simpan pada baris tersebut</p>
+                </div>
+                <span class="ds-badge ds-badge--accent">{{ $taruna->count() }} taruna</span>
             </div>
+
+            @if($taruna->isEmpty())
+            <div class="ds-empty"><i class="fa-solid fa-user-slash ds-icon"></i> Tidak ada akun taruna ditemukan.</div>
             @else
-            <table class="w-full text-xs">
-                <thead>
-                    <tr class="text-[10px] font-bold uppercase tracking-wider text-slate-500 border-b border-slate-200/70">
-                        <th class="text-left py-2 pr-3">Taruna</th>
-                        <th class="text-left py-2 px-3">Prodi / Tk</th>
-                        @foreach($daftarAkses as $a)
-                        <th class="text-center py-2 px-3" style="color:{{ $a['warna'] }}">{{ $a['label'] }}</th>
-                        @endforeach
-                        <th class="py-2 pl-3"></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach($taruna as $u)
-                    <tr class="border-b border-slate-100/70 hover:bg-white/40 {{ $u->akses_khusus ? 'bg-amber-50/40' : '' }}">
-                            <td class="py-2.5 pr-3">
-                                <div class="font-bold text-slate-800">{{ $u->name }}</div>
-                                <div class="text-[10px] text-slate-400">{{ $u->email }}</div>
-                            </td>
-                            <td class="py-2.5 px-3 text-slate-600">
-                                {{ $u->mahasiswa ? $u->mahasiswa->prodi . ' / ' . $u->mahasiswa->tingkat : '-' }}
-                            </td>
-                            @foreach($daftarAkses as $key => $a)
-                            <td class="py-2.5 px-3 text-center">
-                                <input type="checkbox" form="akses-{{ $u->id }}" name="akses[]" value="{{ $key }}" class="w-4 h-4 cursor-pointer" style="accent-color:{{ $a['warna'] }}"
-                                       @checked(in_array($key, $u->akses_khusus ?? []))>
-                            </td>
+            <div class="ds-table-wrap">
+                <div class="ds-scroll">
+                    {{-- data-no-tools: pencarian lewat server (form di atas) --}}
+                    <table class="ds-table tbl-table ak-table" data-no-tools>
+                        <thead>
+                            <tr>
+                                <th>Taruna</th>
+                                <th>Prodi / Tingkat</th>
+                                @foreach($daftarAkses as $a)
+                                <th class="ds-center ak-th" style="--ak-warna:{{ $a['warna'] }}"><i class="fa-solid {{ $a['ikon'] }}"></i>{{ $a['label'] }}</th>
+                                @endforeach
+                                <th class="ds-right">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($taruna as $u)
+                            <tr class="{{ $u->akses_khusus ? 'ak-pegang' : '' }}" data-baris="{{ $u->id }}">
+                                <td>
+                                    <div class="ds-cell-person">
+                                        <span class="ds-avatar">{{ strtoupper(substr($u->name, 0, 2)) }}</span>
+                                        <div>
+                                            <div class="tbl-title">{{ $u->name }}</div>
+                                            <div class="tbl-sub">{{ $u->email }}</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    @if($u->mahasiswa)
+                                    <span class="ds-badge ds-badge--info">{{ $u->mahasiswa->prodi }}</span>
+                                    <span class="ds-badge ds-badge--success">Tk. {{ $u->mahasiswa->tingkat }}</span>
+                                    @else
+                                    <span class="tbl-sub">—</span>
+                                    @endif
+                                </td>
+                                @foreach($daftarAkses as $key => $a)
+                                <td class="ds-center">
+                                    <label class="ak-cek" style="--ak-warna:{{ $a['warna'] }}">
+                                        <input type="checkbox" form="akses-{{ $u->id }}" name="akses[]" value="{{ $key }}"
+                                               aria-label="{{ $a['label'] }} untuk {{ $u->name }}" @checked(in_array($key, $u->akses_khusus ?? []))>
+                                    </label>
+                                </td>
+                                @endforeach
+                                <td class="ds-right">
+                                    <button type="submit" form="akses-{{ $u->id }}" class="ds-btn ds-btn--sm ds-btn--pill" disabled title="Ubah centang akses untuk menyimpan">
+                                        <i class="fa-solid fa-floppy-disk"></i> Simpan
+                                    </button>
+                                </td>
+                            </tr>
                             @endforeach
-                            <td class="py-2.5 pl-3 text-right">
-                                <button type="submit" form="akses-{{ $u->id }}" class="px-3 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-[10px] transition">
-                                    <i class="fa-solid fa-floppy-disk"></i> Simpan
-                                </button>
-                            </td>
-                    </tr>
-                    @endforeach
-                </tbody>
-            </table>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
             {{-- Form per baris di luar tabel (form di dalam tr tidak valid HTML) --}}
             @foreach($taruna as $u)
             <form method="POST" action="{{ route('akses-khusus.update', $u) }}" id="akses-{{ $u->id }}">
@@ -116,4 +152,19 @@
     </div>
 </main>
 
+<script>
+// Tombol Simpan per baris aktif hanya bila centang berubah — baris yang belum disimpan ikut disorot
+document.querySelectorAll('tr[data-baris]').forEach(function (baris) {
+    const cek = [...baris.querySelectorAll('input[type=checkbox]')];
+    const awal = cek.map(c => c.checked).join();
+    const tombol = baris.querySelector('button[type=submit]');
+    cek.forEach(c => c.addEventListener('change', function () {
+        const berubah = cek.map(x => x.checked).join() !== awal;
+        tombol.disabled = !berubah;
+        tombol.classList.toggle('ds-btn--primary', berubah);
+        tombol.title = berubah ? 'Simpan perubahan akses' : 'Ubah centang akses untuk menyimpan';
+        baris.classList.toggle('ak-ubah', berubah);
+    }));
+});
+</script>
 </x-app-layout>

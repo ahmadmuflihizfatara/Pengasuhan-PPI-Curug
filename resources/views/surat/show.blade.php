@@ -1,220 +1,182 @@
 <x-app-layout>
+<x-form-glass-style />
 <style>
-* { box-sizing: border-box; }
-body { font-family: 'Inter', sans-serif; background: transparent; }
-.app-layout { display: flex; min-height: 100vh; }
-.main-content { flex: 1; padding: 28px 28px 28px 24px; min-width: 0; }
+    .sr-kembali { font-size: 13px; background: var(--glass-solid); color: var(--ink-800); }
+    .sr-kembali:hover { color: var(--accent-ink); }
+    .sr-nav { display: flex; align-items: center; justify-content: space-between; gap: var(--space-2); flex-wrap: wrap; }
+    .sr-nav__kanan { display: flex; gap: var(--space-2); flex-wrap: wrap; }
+    .sr-nav__kanan form { margin: 0; }
 
-.topbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
-.back-link { display: inline-flex; align-items: center; gap: 7px; color: #4f46e5; text-decoration: none; font-size: 13px; font-weight: 600; }
-.back-link:hover { text-decoration: underline; }
-.action-btns { display: flex; gap: 8px; }
-.btn-edit-top { background: #eef0ff; color: #4f46e5; padding: 8px 18px; border-radius: 10px; text-decoration: none; font-size: 12px; font-weight: 700; display: inline-flex; align-items: center; gap: 6px; transition: background .1s; }
-.btn-edit-top:hover { background: #dde2ff; }
-.btn-delete-top { background: #fff0f0; color: #e53e3e; border: none; padding: 8px 18px; border-radius: 10px; font-size: 12px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; }
-.btn-delete-top:hover { background: #ffe0e0; }
+    .sr-tindakan { display: flex; flex-direction: column; gap: var(--space-2); margin-top: var(--space-3); }
+    .sr-tindakan .ds-btn { width: 100%; justify-content: center; padding-top: var(--space-2-5); padding-bottom: var(--space-2-5); }
+    .sr-btn--setuju { background: var(--success); border-color: transparent; color: var(--ink-on-dark); }
+    .sr-btn--setuju:hover { background: var(--success-ink); }
+    .sr-btn--tolak { color: var(--danger-ink); }
+    .sr-final { margin-top: var(--space-3); font-size: 11px; line-height: 16px; font-weight: 600; color: var(--ink-600); text-align: center; }
 
-/* Detail Card */
-.detail-card { background: white; border-radius: 16px; overflow: hidden; box-shadow: 0 2px 16px rgba(0,0,0,.06); }
-
-/* Card header banner */
-.detail-header { background: linear-gradient(135deg, #4f46e5 0%, #4338ca 100%); padding: 28px 32px; color: white; position: relative; overflow: hidden; }
-.detail-header::before { content: ''; position: absolute; right: -30px; top: -30px; width: 140px; height: 140px; background: rgba(255,255,255,.08); border-radius: 50%; }
-.detail-header-inner { position: relative; z-index: 1; display: flex; align-items: flex-start; gap: 18px; }
-.doc-icon { width: 54px; height: 54px; border-radius: 14px; background: rgba(255,255,255,.2); display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 22px; }
-.detail-header .jenis-label { font-size: 11px; font-weight: 700; opacity: .75; margin-bottom: 6px; text-transform: uppercase; letter-spacing: .06em; }
-.detail-header h2 { margin: 0 0 6px 0; font-size: 20px; font-weight: 800; }
-.detail-header .nomor { font-size: 13px; opacity: .85; }
-.status-badge { display: inline-flex; align-items: center; padding: 6px 16px; border-radius: 20px; font-size: 12px; font-weight: 800; white-space: nowrap; margin-left: auto; flex-shrink: 0; }
-
-/* Detail body */
-.detail-body { padding: 28px 32px; }
-.detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-.detail-field { background: #fafbff; border-radius: 12px; padding: 14px 18px; }
-.detail-field.full { grid-column: span 2; }
-.field-label { font-size: 10px; font-weight: 700; color: #aab; text-transform: uppercase; letter-spacing: .06em; margin-bottom: 6px; display: flex; align-items: center; gap: 5px; }
-.field-value { font-size: 14px; font-weight: 700; color: #333; }
-.file-attachment { background: #eef0ff; border-radius: 12px; padding: 14px 18px; display: flex; align-items: center; justify-content: space-between; }
-.file-attachment-icon { width: 40px; height: 40px; border-radius: 10px; background: linear-gradient(135deg, #4f46e5, #4338ca); display: flex; align-items: center; justify-content: center; margin-right: 12px; flex-shrink: 0; }
-.btn-download { background: linear-gradient(135deg, #4f46e5, #4338ca); color: white; padding: 9px 20px; border-radius: 10px; text-decoration: none; font-size: 12px; font-weight: 700; display: inline-flex; align-items: center; gap: 6px; }
-
-.timestamps { margin-top: 18px; padding-top: 14px; border-top: 1px solid #f0f2f7; display: flex; gap: 20px; }
-.timestamps span { font-size: 11px; color: #ccc; display: flex; align-items: center; gap: 5px; }
-.btn-approve { background: #e6fff5; color: #38a169; border: none; padding: 8px 18px; border-radius: 10px; font-size: 12px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; transition: background .1s; }
-.btn-approve:hover { background: #c6f6d5; }
-.btn-reject { background: #fff5f5; color: #e53e3e; border: none; padding: 8px 18px; border-radius: 10px; font-size: 12px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; transition: background .1s; }
-.btn-reject:hover { background: #fed7d7; }
-.alert-success { background: linear-gradient(135deg,#43e97b,#38f9d7); color: white; padding: 13px 18px; border-radius: 12px; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; font-weight: 600; font-size: 13px; }
-
-/* Modal styles */
-.modal-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,.45); z-index:9999; align-items:center; justify-content:center; }
-.modal-overlay.open { display:flex; }
-.modal-box { background:white; border-radius:20px; padding:32px; max-width:480px; width:90%; box-shadow:0 20px 60px rgba(0,0,0,.2); }
-.modal-box h3 { margin:0 0 8px; font-size:17px; font-weight:800; color:#333; }
-.modal-box p  { margin:0 0 18px; font-size:13px; color:#666; line-height:1.6; }
-.modal-textarea { width:100%; padding:12px 14px; border:2px solid #edf0f7; border-radius:10px; font-size:13px; font-family:'Inter',sans-serif; resize:vertical; min-height:90px; outline:none; }
-.modal-textarea:focus { border-color:#4f46e5; }
-.modal-actions { display:flex; gap:10px; justify-content:flex-end; margin-top:18px; }
-.modal-btn-cancel { background:#f4f5f9; color:#666; border:none; padding:10px 22px; border-radius:25px; font-size:13px; font-weight:700; cursor:pointer; }
-.modal-btn-confirm-approve { background:linear-gradient(135deg,#38a169,#48bb78); color:white; border:none; padding:10px 24px; border-radius:25px; font-size:13px; font-weight:800; cursor:pointer; }
-.modal-btn-confirm-reject  { background:linear-gradient(135deg,#e53e3e,#fc5c7d); color:white; border:none; padding:10px 24px; border-radius:25px; font-size:13px; font-weight:800; cursor:pointer; }
-
-/* Taruna submission info */
-.taruna-tag { background:#fff4e6; color:#c05621; border-radius:8px; padding:8px 14px; font-size:12px; font-weight:700; display:inline-flex; align-items:center; gap:6px; margin-bottom:16px; }
+    #modalOverlay textarea.form-control { resize: vertical; min-height: 90px; }
+    #modalOverlay .form-group { text-align: left; }
 </style>
 
-{{-- Top Floating Island Capsule Navbar --}}
 <x-island-navbar />
 
-<div class="max-w-7xl mx-auto px-4 sm:px-6 pb-12 pt-2">
+@php
+    $varian = $surat->status_varian;
+    $ikon = match($surat->status) {
+        'Disetujui' => 'fa-circle-check',
+        'Ditolak'   => 'fa-circle-xmark',
+        'Selesai'   => 'fa-flag-checkered',
+        default     => 'fa-hourglass-half',
+    };
+    $desc = match($surat->status) {
+        'Disetujui' => 'Surat sudah disetujui.',
+        'Ditolak'   => 'Surat ditolak.',
+        'Selesai'   => 'Surat sudah selesai diproses.',
+        default     => 'Surat masih diproses — setujui atau tolak permohonan ini.',
+    };
+@endphp
+
+<main class="max-w-7xl mx-auto px-4 sm:px-6 pb-12 pt-2">
     <div class="spatial-workspace-window rounded-3xl bg-white/30 backdrop-blur-2xl border border-white/50 shadow-2xl p-4 sm:p-7 relative overflow-hidden">
-        <!-- Top bar -->
-        <div class="topbar">
-            <a href="{{ route('surat.index') }}" class="back-link">
-                <i class="fas fa-arrow-left"></i> Kembali ke Daftar Surat
-            </a>
-            <div class="action-btns" style="display: flex; gap: 8px; align-items: center;">
-                @if($surat->status === 'Diproses')
-                    <button type="button" class="btn-approve" onclick="openModal('approve')">
-                        <i class="fas fa-check"></i> Setujui
-                    </button>
-                    <button type="button" class="btn-reject" onclick="openModal('reject')">
-                        <i class="fas fa-times"></i> Tolak
-                    </button>
-                @endif
-                <a href="{{ route('surat.edit', $surat->id) }}" class="btn-edit-top">
-                    <i class="fas fa-edit"></i> Edit
-                </a>
+
+        <x-page-banner title="Detail Surat" icon="fa-envelope-open-text"
+            subtitle="Tinjau isi surat, putuskan permohonan, dan kirim catatan untuk taruna" />
+
+        <div class="sr-nav mb-4">
+            <a href="{{ route('surat.index') }}" class="ds-btn ds-btn--pill sr-kembali"><i class="fa-solid fa-arrow-left"></i> Kembali ke Daftar Surat</a>
+            <div class="sr-nav__kanan">
+                <a href="{{ route('surat.edit', $surat->id) }}" class="ds-btn ds-btn--pill sr-kembali"><i class="fa-solid fa-pen"></i> Ubah</a>
                 <form method="POST" action="{{ route('surat.destroy', $surat->id) }}"
-                      onsubmit="return confirm('Hapus surat ini secara permanen?');" style="margin: 0;">
+                      data-konfirmasi="Surat &quot;{{ Str::limit($surat->perihal, 60) }}&quot; akan dihapus permanen dari sistem." data-konfirmasi-judul="Hapus Surat?" data-konfirmasi-tombol="Ya, Hapus">
                     @csrf @method('DELETE')
-                    <button type="submit" class="btn-delete-top">
-                        <i class="fas fa-trash"></i> Hapus
-                    </button>
+                    <button type="submit" class="ds-btn ds-btn--pill ds-btn--danger"><i class="fa-solid fa-trash"></i> Hapus</button>
                 </form>
             </div>
         </div>
 
         @if(session('success'))
-        <div class="alert-success">
-            <i class="fas fa-check-circle" style="font-size:17px;"></i> {{ session('success') }}
-        </div>
+        <x-glass-alert type="success" title="Berhasil">{{ session('success') }}</x-glass-alert>
         @endif
 
-        {{-- Taruna submission tag --}}
-        @if($surat->isDiajukanTaruna())
-        <div class="taruna-tag">
-            <i class="fas fa-user-graduate"></i>
-            Diajukan oleh Taruna: <strong>{{ $surat->diajukan_oleh ?? $surat->pengirim }}</strong>
-        </div>
-        @endif
-
-        <!-- Detail Card -->
-        <div class="detail-card">
-            <!-- Banner Header -->
-            <div class="detail-header">
-                <div class="detail-header-inner">
-                    <div class="doc-icon"><i class="fas fa-file-alt"></i></div>
-                    <div style="flex:1;">
-                        <div class="jenis-label">{{ $surat->jenis_surat }}</div>
-                        <h2>{{ $surat->perihal }}</h2>
-                        @if($surat->nomor_surat)
-                        <div class="nomor">No. {{ $surat->nomor_surat }}</div>
-                        @endif
-                    </div>
-                    <span class="status-badge"
-                          style="background:{{ $surat->status_bg_color }}; color:{{ $surat->status_badge_color }};">
-                        {{ $surat->status }}
-                    </span>
+        {{-- Status surat --}}
+        <div class="ds-card dt-card mb-4">
+            <span class="ds-stat__icon {{ $varian !== 'accent' ? 'ds-stat__icon--' . $varian : '' }}"><i class="fa-solid {{ $ikon }}"></i></span>
+            <div class="dt-card__body">
+                <span class="dt-card__label">Status Surat{{ $surat->nomor_surat ? ' · No. ' . $surat->nomor_surat : '' }}</span>
+                <div class="dt-card__top">
+                    <span class="dt-card__value">{{ $surat->status }}</span>
+                    <span class="ds-badge ds-badge--info">{{ $surat->jenis_surat }}</span>
+                    @if($surat->isDiajukanTaruna())
+                    <span class="ds-badge ds-badge--warning"><i class="fa-solid fa-user-graduate"></i> Diajukan taruna: {{ $surat->diajukan_oleh ?? $surat->pengirim }}</span>
+                    @endif
                 </div>
+                <p class="dt-card__desc">{{ $desc }}</p>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 items-start">
+            {{-- Informasi surat --}}
+            <div class="ds-card lg:col-span-2">
+                <div class="ds-card__head">
+                    <h3 class="ds-card__title"><i class="fa-solid fa-circle-info ds-icon"></i> Informasi Surat</h3>
+                    <p class="ds-card__desc">{{ $surat->jenis_surat }}</p>
+                </div>
+
+                <dl class="dt-fields">
+                    <div class="dt-field dt-field--full">
+                        <dt><i class="fa-solid fa-heading"></i> Perihal</dt>
+                        <dd>{{ $surat->perihal }}</dd>
+                    </div>
+                    <div class="dt-field">
+                        <dt><i class="fa-solid fa-paper-plane"></i> Pengirim</dt>
+                        <dd>{{ $surat->pengirim }}</dd>
+                    </div>
+                    <div class="dt-field">
+                        <dt><i class="fa-solid fa-inbox"></i> Penerima</dt>
+                        <dd>{{ $surat->penerima }}</dd>
+                    </div>
+                    <div class="dt-field">
+                        <dt><i class="fa-solid fa-calendar"></i> Tanggal Surat</dt>
+                        <dd>{{ $surat->tanggal_surat->locale('id')->isoFormat('dddd, D MMMM Y') }}</dd>
+                    </div>
+                    <div class="dt-field">
+                        <dt><i class="fa-solid fa-calendar-check"></i> Tanggal Diterima</dt>
+                        <dd>{{ $surat->tanggal_terima ? $surat->tanggal_terima->locale('id')->isoFormat('dddd, D MMMM Y') : '—' }}</dd>
+                    </div>
+                    @if($surat->keterangan)
+                    <div class="dt-field dt-field--full">
+                        <dt><i class="fa-solid fa-note-sticky"></i> Keterangan</dt>
+                        <dd class="dt-teks">{{ $surat->keterangan }}</dd>
+                    </div>
+                    @endif
+                    @if($surat->file_path)
+                    <div class="dt-field dt-field--full">
+                        <dt><i class="fa-solid fa-paperclip"></i> Dokumen Lampiran</dt>
+                        <dd class="dt-file">
+                            <span class="dt-file__nama"><span class="ds-avatar ds-avatar--sq"><i class="fa-solid fa-file"></i></span>{{ basename($surat->file_path) }}</span>
+                            <a href="{{ Storage::url($surat->file_path) }}" target="_blank" rel="noopener" class="ds-btn ds-btn--primary ds-btn--sm"><i class="fa-solid fa-download"></i> Lihat / Unduh</a>
+                        </dd>
+                    </div>
+                    @endif
+                </dl>
             </div>
 
-            <!-- Detail Body -->
-            <div class="detail-body">
-                <div class="detail-grid">
-                    <div class="detail-field">
-                        <div class="field-label"><i class="fas fa-paper-plane"></i> Pengirim</div>
-                        <div class="field-value">{{ $surat->pengirim }}</div>
-                    </div>
-                    <div class="detail-field">
-                        <div class="field-label"><i class="fas fa-inbox"></i> Penerima</div>
-                        <div class="field-value">{{ $surat->penerima }}</div>
-                    </div>
-                    <div class="detail-field">
-                        <div class="field-label"><i class="fas fa-calendar"></i> Tanggal Surat</div>
-                        <div class="field-value">{{ \Carbon\Carbon::parse($surat->tanggal_surat)->locale('id')->isoFormat('dddd, D MMMM Y') }}</div>
-                    </div>
-                    <div class="detail-field">
-                        <div class="field-label"><i class="fas fa-calendar-check"></i> Tanggal Diterima</div>
-                        <div class="field-value">
-                            @if($surat->tanggal_terima)
-                                {{ \Carbon\Carbon::parse($surat->tanggal_terima)->locale('id')->isoFormat('dddd, D MMMM Y') }}
-                            @else
-                                <span style="color:#ccc; font-weight:400;">—</span>
-                            @endif
-                        </div>
-                    </div>
-
-                    @if($surat->keterangan)
-                    <div class="detail-field full">
-                        <div class="field-label"><i class="fas fa-sticky-note"></i> Keterangan</div>
-                        <div class="field-value" style="font-weight:400; font-size:13px; line-height:1.6; color:#555;">{{ $surat->keterangan }}</div>
-                    </div>
-                    @endif
-
-                    @if($surat->file_path)
-                    <div class="detail-field full" style="background:#eef0ff; border-radius:12px;">
-                        <div style="display:flex; align-items:center; justify-content:space-between;">
-                            <div style="display:flex; align-items:center; gap:12px;">
-                                <div class="file-attachment-icon">
-                                    <i class="fas fa-paperclip" style="color:white; font-size:16px;"></i>
-                                </div>
-                                <div>
-                                    <div style="font-size:13px; font-weight:700; color:#333;">Dokumen Terlampir</div>
-                                    <div style="font-size:12px; color:#4f46e5;">{{ basename($surat->file_path) }}</div>
-                                </div>
-                            </div>
-                            <a href="{{ Storage::url($surat->file_path) }}" target="_blank" class="btn-download">
-                                <i class="fas fa-download"></i> Download / Lihat
-                            </a>
-                        </div>
-                    </div>
-                    @endif
+            {{-- Keputusan pengasuh --}}
+            <div class="ds-card">
+                <div class="ds-card__head">
+                    <h3 class="ds-card__title"><i class="fa-solid fa-user-shield ds-icon"></i> Keputusan</h3>
+                    <p class="ds-card__desc">{{ $surat->isDiajukanTaruna() ? 'Keputusan dikirim sebagai notifikasi ke taruna' : 'Perbarui status surat' }}</p>
                 </div>
 
-                @if($surat->catatan_pengasuhan)
-                <div style="margin-top:16px; padding:16px 18px; background:{{ in_array($surat->status,['Disetujui','Selesai']) ? '#f0fff4' : '#fff5f5' }}; border-radius:12px; border-left:4px solid {{ in_array($surat->status,['Disetujui','Selesai']) ? '#38a169' : '#e53e3e' }};">
-                    <div class="field-label"><i class="fas fa-comment-dots"></i> Catatan Pengasuhan</div>
-                    <div style="font-size:13px; color:#333; line-height:1.6;">{{ $surat->catatan_pengasuhan }}</div>
+                <div class="ds-alert dt-respon dt-respon--{{ $varian }}" role="status">
+                    <span class="dt-respon__ikon"><i class="fa-solid fa-comment-dots"></i></span>
+                    <div>
+                        <div class="dt-respon__judul">Catatan Pengasuhan</div>
+                        <div class="dt-respon__pesan">{{ $surat->catatan_pengasuhan ?: 'Belum ada catatan.' }}</div>
+                    </div>
                 </div>
+
+                @if($surat->status === 'Diproses')
+                <div class="sr-tindakan">
+                    <button type="button" class="ds-btn sr-btn--setuju" onclick="openModal('approve')"><i class="fa-solid fa-circle-check"></i> Setujui Surat</button>
+                    <button type="button" class="ds-btn sr-btn--tolak" onclick="openModal('reject')"><i class="fa-solid fa-circle-xmark"></i> Tolak Surat</button>
+                </div>
+                @else
+                <p class="sr-final"><i class="fa-solid fa-circle-info"></i> Status dapat diubah kembali melalui tombol Ubah.</p>
                 @endif
 
-                <!-- Timestamps -->
-                <div class="timestamps">
-                    <span><i class="fas fa-clock"></i> Dibuat: {{ $surat->created_at->locale('id')->isoFormat('D MMM Y, HH:mm') }}</span>
-                    <span><i class="fas fa-sync"></i> Diperbarui: {{ $surat->updated_at->locale('id')->isoFormat('D MMM Y, HH:mm') }}</span>
+                <div class="dt-waktu">
+                    <span><i class="fa-solid fa-clock"></i>Dibuat {{ $surat->created_at->locale('id')->isoFormat('D MMM Y, HH:mm') }}</span>
+                    <span><i class="fa-solid fa-rotate"></i>Diperbarui {{ $surat->updated_at->locale('id')->isoFormat('D MMM Y, HH:mm') }}</span>
                 </div>
             </div>
         </div>
-    </div>
-</div>
 
-{{-- Hidden form that the modal will submit --}}
+    </div>
+</main>
+
+<x-konfirmasi-modal />
+
+{{-- Form yang dikirim modal --}}
 <form method="POST" action="{{ route('surat.updateStatus', $surat->id) }}" id="statusForm" style="display:none;">
     @csrf @method('PATCH')
     <input type="hidden" name="status" id="statusInput">
     <input type="hidden" name="catatan_pengasuhan" id="catatanInput">
 </form>
 
-{{-- Approve Modal --}}
-<div class="modal-overlay" id="modalOverlay">
-    <div class="modal-box">
-        <h3 id="modalTitle">Konfirmasi</h3>
-        <p id="modalDesc">Tambahkan catatan untuk taruna (opsional):</p>
-        <textarea class="modal-textarea" id="modalCatatan" placeholder="Tulis catatan atau pesan untuk taruna..."></textarea>
-        <div class="modal-actions">
-            <button class="modal-btn-cancel" onclick="closeModal()">Batal</button>
-            <button class="modal-btn-confirm-approve" id="modalConfirmBtn" onclick="submitModal()">Konfirmasi</button>
+{{-- Modal keputusan (di luar panel kaca agar position:fixed tidak terkurung backdrop-filter) --}}
+<div class="ds-modal-overlay" id="modalOverlay" style="display:none;" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="ds-modal">
+        <div class="ds-modal__icon" id="modalIcon"><i class="fa-solid fa-circle-check"></i></div>
+        <h3 class="ds-modal__title" id="modalTitle">Konfirmasi</h3>
+        <p class="ds-modal__body" id="modalDesc"></p>
+        <div class="form-group">
+            <label class="form-label" for="modalCatatan">Catatan untuk Taruna <span style="text-transform:none; letter-spacing:0; color:var(--ink-500);">(opsional)</span></label>
+            <textarea class="form-control" id="modalCatatan" placeholder="Tulis catatan atau pesan untuk taruna..."></textarea>
+        </div>
+        <div class="ds-modal__actions">
+            <button type="button" class="ds-btn" onclick="closeModal()">Batal</button>
+            <button type="button" class="ds-btn ds-btn--primary" id="modalConfirmBtn" onclick="submitModal()">Konfirmasi</button>
         </div>
     </div>
 </div>
@@ -222,31 +184,34 @@ body { font-family: 'Inter', sans-serif; background: transparent; }
 <script>
 let currentAction = null;
 
+// [judul, deskripsi, tombol, ikon, warna token]
+const MODAL_AKSI = {
+    approve: ['Setujui Surat', 'Surat akan disetujui. Tambahkan catatan atau pesan untuk taruna bila perlu.', 'Ya, Setujui', 'fa-circle-check', 'success'],
+    reject:  ['Tolak Surat', 'Surat akan ditolak. Tuliskan alasan penolakan agar taruna memahami keputusan ini.', 'Ya, Tolak', 'fa-circle-xmark', 'danger'],
+};
+
 function openModal(action) {
+    const [judul, deskripsi, tombol, ikon, warna] = MODAL_AKSI[action];
     currentAction = action;
-    const overlay = document.getElementById('modalOverlay');
-    const title   = document.getElementById('modalTitle');
-    const desc    = document.getElementById('modalDesc');
-    const btn     = document.getElementById('modalConfirmBtn');
+    document.getElementById('modalTitle').textContent = judul;
+    document.getElementById('modalDesc').textContent = deskripsi;
     document.getElementById('modalCatatan').value = '';
 
-    if (action === 'approve') {
-        title.innerHTML = '<i class="fas fa-check-circle" style="color:#38a169; margin-right:8px;"></i> Setujui Surat';
-        desc.textContent  = 'Anda akan menyetujui surat ini. Tambahkan catatan atau pesan untuk taruna (opsional):';
-        btn.className     = 'modal-btn-confirm-approve';
-        btn.textContent   = 'Ya, Setujui';
-    } else {
-        title.innerHTML = '<i class="fas fa-times-circle" style="color:#e53e3e; margin-right:8px;"></i> Tolak Surat';
-        desc.textContent  = 'Anda akan menolak surat ini. Tambahkan alasan penolakan untuk taruna (opsional):';
-        btn.className     = 'modal-btn-confirm-reject';
-        btn.textContent   = 'Ya, Tolak';
-    }
+    const icon = document.getElementById('modalIcon');
+    icon.innerHTML = '<i class="fa-solid ' + ikon + '"></i>';
+    icon.style.background = 'var(--' + warna + '-tint)';
+    icon.style.color = 'var(--' + warna + '-ink)';
 
-    overlay.classList.add('open');
+    const btn = document.getElementById('modalConfirmBtn');
+    btn.textContent = tombol;
+    btn.style.background = 'var(--' + warna + ')';
+
+    document.getElementById('modalOverlay').style.display = 'flex';
+    document.getElementById('modalCatatan').focus();
 }
 
 function closeModal() {
-    document.getElementById('modalOverlay').classList.remove('open');
+    document.getElementById('modalOverlay').style.display = 'none';
     currentAction = null;
 }
 
@@ -257,9 +222,11 @@ function submitModal() {
     document.getElementById('statusForm').submit();
 }
 
-// Close on overlay click
-document.getElementById('modalOverlay').addEventListener('click', function(e) {
+document.getElementById('modalOverlay').addEventListener('click', function (e) {
     if (e.target === this) closeModal();
+});
+document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') closeModal();
 });
 </script>
 </x-app-layout>

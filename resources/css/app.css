@@ -106,7 +106,8 @@ html, body {
 .greeting-banner,
 .poin-header-banner,
 .hero-card {
-    background: linear-gradient(90deg, rgba(30, 58, 138, 0.90), rgba(49, 46, 129, 0.85), rgba(15, 23, 42, 0.90)) !important;
+    /* --banner-bg: warna unik per tab, diisi komponen x-page-banner; default = gradien biru lama */
+    background: var(--banner-bg, linear-gradient(90deg, rgba(30, 58, 138, 0.90), rgba(49, 46, 129, 0.85), rgba(15, 23, 42, 0.90))) !important;
     backdrop-filter: blur(var(--blur-standard)) saturate(180%) !important;
     -webkit-backdrop-filter: blur(var(--blur-standard)) saturate(180%) !important;
     border: 1px solid rgba(255, 255, 255, 0.30) !important;

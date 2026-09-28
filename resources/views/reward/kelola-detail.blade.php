@@ -1,182 +1,169 @@
 <x-app-layout>
+<x-form-glass-style />
 <style>
-* { box-sizing: border-box; }
-body { font-family: 'Inter', sans-serif; background: transparent; }
-.app-layout { display: block; min-height: 100vh; }
-.main-content { flex: 1; padding: 28px 28px 28px 24px; min-width: 0; max-width: 80rem; margin: 0 auto; width: 100%; }
+    .rw-kembali { font-size: 13px; background: var(--glass-solid); color: var(--ink-800); }
+    .rw-kembali:hover { color: var(--accent-ink); }
+    .ds-stat__icon--info { background: linear-gradient(135deg, #0ea5e9, var(--info)); }
 
-.topbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; flex-wrap: wrap; gap: 10px; }
-.back-link { display: inline-flex; align-items: center; gap: 7px; color: #b45309; text-decoration: none; font-size: 13px; font-weight: 600; }
-.back-link:hover { text-decoration: underline; }
-.action-btns { display: flex; gap: 8px; }
+    .rw-tindakan { display: flex; flex-direction: column; gap: var(--space-2); margin-top: var(--space-3); }
+    .rw-tindakan .ds-btn { width: 100%; justify-content: center; padding-top: var(--space-2-5); padding-bottom: var(--space-2-5); }
+    .rw-btn--proses  { background: var(--info-tint); border-color: transparent; color: var(--info-ink); }
+    .rw-btn--setuju  { background: var(--success); border-color: transparent; color: var(--ink-on-dark); }
+    .rw-btn--setuju:hover { background: var(--success-ink); }
+    .rw-btn--tolak   { color: var(--danger-ink); }
+    .rw-final { margin-top: var(--space-3); font-size: 11px; line-height: 16px; font-weight: 600; color: var(--ink-600); text-align: center; }
 
-.btn-process { background: #ebf4ff; color: #3182ce; border: none; padding: 8px 18px; border-radius: 10px; font-size: 12px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; }
-.btn-process:hover { background: #dbeafe; }
-.btn-done { background: #e6fff5; color: #38a169; border: none; padding: 8px 18px; border-radius: 10px; font-size: 12px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; }
-.btn-done:hover { background: #c6f6d5; }
-.btn-reject { background: #fff5f5; color: #e53e3e; border: none; padding: 8px 18px; border-radius: 10px; font-size: 12px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; }
-.btn-reject:hover { background: #fed7d7; }
-
-.detail-card { background: white; border-radius: 16px; overflow: hidden; box-shadow: 0 2px 16px rgba(0,0,0,.06); }
-.detail-header { background: linear-gradient(135deg, #f7b733 0%, #fc4a1a 100%); padding: 28px 32px; color: white; position: relative; overflow: hidden; }
-.detail-header::before { content: ''; position: absolute; right: -30px; top: -30px; width: 140px; height: 140px; background: rgba(255,255,255,.08); border-radius: 50%; }
-.detail-header-inner { position: relative; z-index: 1; display: flex; align-items: flex-start; gap: 18px; }
-.doc-icon { width: 54px; height: 54px; border-radius: 14px; background: rgba(255,255,255,.2); display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 22px; }
-.detail-header .jenis-label { font-size: 11px; font-weight: 700; opacity: .75; margin-bottom: 6px; text-transform: uppercase; letter-spacing: .06em; }
-.detail-header h2 { margin: 0 0 6px 0; font-size: 20px; font-weight: 800; }
-.detail-header .nomor { font-size: 13px; opacity: .85; }
-.status-badge { display: inline-flex; align-items: center; padding: 6px 16px; border-radius: 20px; font-size: 12px; font-weight: 800; white-space: nowrap; margin-left: auto; flex-shrink: 0; }
-
-.detail-body { padding: 28px 32px; }
-.detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-.detail-field { background: #fafbff; border-radius: 12px; padding: 14px 18px; }
-.detail-field.full { grid-column: span 2; }
-.field-label { font-size: 10px; font-weight: 700; color: #aab; text-transform: uppercase; letter-spacing: .06em; margin-bottom: 6px; display: flex; align-items: center; gap: 5px; }
-.field-value { font-size: 14px; font-weight: 700; color: #333; }
-.file-attachment { background: #fef3e0; border-radius: 12px; padding: 14px 18px; display: flex; align-items: center; justify-content: space-between; }
-.file-attachment-icon { width: 40px; height: 40px; border-radius: 10px; background: linear-gradient(135deg, #f7b733, #fc4a1a); display: flex; align-items: center; justify-content: center; margin-right: 12px; flex-shrink: 0; }
-.btn-download { background: linear-gradient(135deg, #f7b733, #fc4a1a); color: white; padding: 9px 20px; border-radius: 10px; text-decoration: none; font-size: 12px; font-weight: 700; display: inline-flex; align-items: center; gap: 6px; }
-
-.timestamps { margin-top: 18px; padding-top: 14px; border-top: 1px solid #f0f2f7; display: flex; gap: 20px; }
-.timestamps span { font-size: 11px; color: #ccc; display: flex; align-items: center; gap: 5px; }
-.alert-success { background: linear-gradient(135deg,#43e97b,#38f9d7); color: white; padding: 13px 18px; border-radius: 12px; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; font-weight: 600; font-size: 13px; }
-.alert-error   { background: linear-gradient(135deg,#fc5c7d,#e53e3e); color: white; padding: 13px 18px; border-radius: 12px; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; font-weight: 600; font-size: 13px; }
-
-.modal-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,.45); z-index:9999; align-items:center; justify-content:center; }
-.modal-overlay.open { display:flex; }
-.modal-box { background:white; border-radius:20px; padding:32px; max-width:480px; width:90%; box-shadow:0 20px 60px rgba(0,0,0,.2); }
-.modal-box h3 { margin:0 0 8px; font-size:17px; font-weight:800; color:#333; }
-.modal-box p  { margin:0 0 18px; font-size:13px; color:#666; line-height:1.6; }
-.modal-textarea { width:100%; padding:12px 14px; border:2px solid #edf0f7; border-radius:10px; font-size:13px; font-family:'Inter',sans-serif; resize:vertical; min-height:90px; outline:none; }
-.modal-textarea:focus { border-color:#f5b301; }
-.modal-actions { display:flex; gap:10px; justify-content:flex-end; margin-top:18px; }
-.modal-btn-cancel { background:#f4f5f9; color:#666; border:none; padding:10px 22px; border-radius:25px; font-size:13px; font-weight:700; cursor:pointer; }
-.modal-btn-confirm-process { background:linear-gradient(135deg,#3182ce,#0bc5ea); color:white; border:none; padding:10px 24px; border-radius:25px; font-size:13px; font-weight:800; cursor:pointer; }
-.modal-btn-confirm-done    { background:linear-gradient(135deg,#38a169,#48bb78); color:white; border:none; padding:10px 24px; border-radius:25px; font-size:13px; font-weight:800; cursor:pointer; }
-.modal-btn-confirm-reject  { background:linear-gradient(135deg,#e53e3e,#fc5c7d); color:white; border:none; padding:10px 24px; border-radius:25px; font-size:13px; font-weight:800; cursor:pointer; }
+    #modalOverlay textarea.form-control { resize: vertical; min-height: 90px; }
+    #modalOverlay .form-group { text-align: left; }
 </style>
 
-<div class="app-layout">
-    <x-island-navbar />
+<x-island-navbar />
 
-    <div class="main-content">
-        <div class="topbar">
-            <a href="{{ route('reward.kelola') }}" class="back-link">
-                <i class="fas fa-arrow-left"></i> Kembali ke Daftar Reward
-            </a>
-            <div class="action-btns">
-                @if($reward->status === 'Diajukan')
-                    <button type="button" class="btn-process" onclick="openModal('Diproses')">
-                        <i class="fas fa-play"></i> Proses
-                    </button>
-                    <button type="button" class="btn-reject" onclick="openModal('Ditolak')">
-                        <i class="fas fa-times"></i> Tolak
-                    </button>
-                @elseif($reward->status === 'Diproses')
-                    <button type="button" class="btn-done" onclick="openModal('Disetujui')">
-                        <i class="fas fa-check"></i> Setujui
-                    </button>
-                    <button type="button" class="btn-reject" onclick="openModal('Ditolak')">
-                        <i class="fas fa-times"></i> Tolak
-                    </button>
-                @endif
-            </div>
-        </div>
+@php
+    $varian = $reward->status_varian;
+    $ikon = match($reward->status) {
+        'Disetujui' => 'fa-circle-check',
+        'Ditolak'   => 'fa-circle-xmark',
+        'Diproses'  => 'fa-spinner',
+        default     => 'fa-hourglass-half',
+    };
+    $desc = match($reward->status) {
+        'Disetujui' => 'Reward sudah disetujui dan diberikan kepada taruna.',
+        'Ditolak'   => 'Pengajuan reward ditolak.',
+        'Diproses'  => 'Pengajuan sedang ditinjau — setujui bila prestasi sudah terverifikasi.',
+        default     => 'Pengajuan baru masuk — proses untuk mulai meninjau, atau tolak bila tidak memenuhi syarat.',
+    };
+    $respVarian = ['success' => 'success', 'danger' => 'danger', 'warning' => 'warning'][$varian] ?? 'accent';
+@endphp
+
+<main class="max-w-7xl mx-auto px-4 sm:px-6 pb-12 pt-2">
+    <div class="spatial-workspace-window rounded-3xl bg-white/30 backdrop-blur-2xl border border-white/50 shadow-2xl p-4 sm:p-7 relative overflow-hidden">
+
+        <x-page-banner title="Detail Reward Taruna" icon="fa-award"
+            subtitle="Tinjau prestasi, putuskan pengajuan, dan catat reward yang diberikan" />
+
+        <a href="{{ route('reward.kelola') }}" class="ds-btn ds-btn--pill rw-kembali mb-4">
+            <i class="fa-solid fa-arrow-left"></i> Kembali ke Daftar Reward
+        </a>
 
         @if(session('success'))
-        <div class="alert-success">
-            <i class="fas fa-check-circle" style="font-size:17px;"></i> {{ session('success') }}
-        </div>
+        <x-glass-alert type="success" title="Berhasil">{{ session('success') }}</x-glass-alert>
         @endif
         @if(session('error'))
-        <div class="alert-error">
-            <i class="fas fa-exclamation-circle" style="font-size:17px;"></i> {{ session('error') }}
-        </div>
+        <x-glass-alert type="danger" title="Gagal">{{ session('error') }}</x-glass-alert>
         @endif
 
-        <div class="detail-card">
-            <div class="detail-header">
-                <div class="detail-header-inner">
-                    <div class="doc-icon"><i class="fas fa-award"></i></div>
-                    <div style="flex:1;">
-                        <div class="jenis-label">{{ $reward->kategori }} · {{ ucfirst($reward->jenis) }}{{ $reward->jenis === 'kelompok' ? ' ('.$reward->jumlah_anggota.' orang)' : '' }}</div>
-                        <h2>{{ Str::limit($reward->keterangan, 60) }}</h2>
-                        <div class="nomor">Prestasi {{ $reward->tanggal_prestasi->locale('id')->isoFormat('dddd, D MMMM Y') }}</div>
-                    </div>
-                    <span class="status-badge" style="background:{{ $reward->status_bg_color }}; color:{{ $reward->status_badge_color }};">
-                        {{ $reward->status }}
-                    </span>
+        {{-- Status pengajuan --}}
+        <div class="ds-card dt-card mb-4">
+            <span class="ds-stat__icon ds-stat__icon--{{ $varian }}"><i class="fa-solid {{ $ikon }}"></i></span>
+            <div class="dt-card__body">
+                <span class="dt-card__label">Status Pengajuan · {{ $reward->nama }}</span>
+                <div class="dt-card__top">
+                    <span class="dt-card__value">{{ $reward->status }}</span>
+                    <span class="ds-badge ds-badge--info">{{ $reward->kategori }} · {{ ucfirst($reward->jenis) }}{{ $reward->jenis === 'kelompok' ? ' (' . $reward->jumlah_anggota . ' orang)' : '' }}</span>
                 </div>
+                <p class="dt-card__desc">{{ $desc }}</p>
             </div>
+        </div>
 
-            <div class="detail-body">
-                <div class="detail-grid">
-                    <div class="detail-field">
-                        <div class="field-label"><i class="fas fa-user"></i> Nama Pengaju</div>
-                        <div class="field-value">{{ $reward->nama }}</div>
-                    </div>
-                    <div class="detail-field">
-                        <div class="field-label"><i class="fas fa-envelope"></i> Email</div>
-                        <div class="field-value">{{ $reward->email }}</div>
-                    </div>
-                    <div class="detail-field">
-                        <div class="field-label"><i class="fas fa-id-card"></i> NPM</div>
-                        <div class="field-value">{{ $reward->npm ?? '-' }}</div>
-                    </div>
-                    <div class="detail-field">
-                        <div class="field-label"><i class="fas fa-graduation-cap"></i> Program Studi</div>
-                        <div class="field-value">{{ $reward->prodi ?? '-' }} — {{ $reward->prodi_nama }}</div>
-                    </div>
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 items-start">
+            {{-- Informasi prestasi --}}
+            <div class="ds-card lg:col-span-2">
+                <div class="ds-card__head">
+                    <h3 class="ds-card__title"><i class="fa-solid fa-circle-info ds-icon"></i> Informasi Prestasi</h3>
+                    <p class="ds-card__desc">Data yang dikirim taruna saat mengajukan reward</p>
+                </div>
 
+                <dl class="dt-fields">
+                    <div class="dt-field">
+                        <dt><i class="fa-solid fa-medal"></i> Kategori Prestasi</dt>
+                        <dd>{{ $reward->kategori }}</dd>
+                    </div>
+                    <div class="dt-field">
+                        <dt><i class="fa-solid fa-calendar"></i> Tanggal Prestasi</dt>
+                        <dd>{{ $reward->tanggal_prestasi->locale('id')->isoFormat('dddd, D MMMM Y') }}</dd>
+                    </div>
+                    <div class="dt-field {{ $reward->jenis === 'kelompok' ? '' : 'dt-field--full' }}">
+                        <dt><i class="fa-solid {{ $reward->jenis === 'kelompok' ? 'fa-users' : 'fa-user' }}"></i> Jenis Pengajuan</dt>
+                        <dd>{{ ucfirst($reward->jenis) }}</dd>
+                    </div>
                     @if($reward->jenis === 'kelompok')
-                    <div class="detail-field full">
-                        <div class="field-label"><i class="fas fa-users"></i> Jumlah Anggota Kelompok</div>
-                        <div class="field-value">{{ $reward->jumlah_anggota }} orang</div>
+                    <div class="dt-field">
+                        <dt><i class="fa-solid fa-people-group"></i> Jumlah Anggota</dt>
+                        <dd>{{ $reward->jumlah_anggota }} orang</dd>
                     </div>
                     @endif
-
-                    <div class="detail-field full">
-                        <div class="field-label"><i class="fas fa-sticky-note"></i> Keterangan Prestasi</div>
-                        <div class="field-value" style="font-weight:400; font-size:13px; line-height:1.6; color:#555;">{{ $reward->keterangan }}</div>
+                    <div class="dt-field">
+                        <dt><i class="fa-solid fa-user"></i> Nama Pengaju</dt>
+                        <dd>{{ $reward->nama }}</dd>
                     </div>
-
+                    <div class="dt-field">
+                        <dt><i class="fa-solid fa-id-card"></i> NPM</dt>
+                        <dd>{{ $reward->npm ?? '-' }}</dd>
+                    </div>
+                    <div class="dt-field">
+                        <dt><i class="fa-solid fa-envelope"></i> Email</dt>
+                        <dd>{{ $reward->email }}</dd>
+                    </div>
+                    <div class="dt-field">
+                        <dt><i class="fa-solid fa-graduation-cap"></i> Program Studi</dt>
+                        <dd>{{ $reward->prodi ?? '-' }} — {{ $reward->prodi_nama }}</dd>
+                    </div>
+                    <div class="dt-field dt-field--full">
+                        <dt><i class="fa-solid fa-note-sticky"></i> Keterangan Prestasi</dt>
+                        <dd class="dt-teks">{{ $reward->keterangan }}</dd>
+                    </div>
                     @if(!empty($reward->dokumen))
-                    <div class="detail-field full">
-                        <div class="field-label"><i class="fas fa-paperclip"></i> Dokumentasi ({{ count($reward->dokumen) }})</div>
+                    <div class="dt-field dt-field--full">
+                        <dt><i class="fa-solid fa-paperclip"></i> Dokumentasi ({{ count($reward->dokumen) }})</dt>
                         @foreach($reward->dokumen as $file)
-                        <div class="file-attachment" style="margin-bottom:10px;">
-                            <div style="display:flex; align-items:center; gap:12px;">
-                                <div class="file-attachment-icon">
-                                    <i class="fas fa-file" style="color:white; font-size:16px;"></i>
-                                </div>
-                                <div>
-                                    <div style="font-size:13px; font-weight:700; color:#333;">{{ basename($file) }}</div>
-                                </div>
-                            </div>
-                            <a href="{{ \Illuminate\Support\Facades\Storage::url($file) }}" target="_blank" class="btn-download">
-                                <i class="fas fa-download"></i> Download / Lihat
-                            </a>
-                        </div>
+                        <dd class="dt-file {{ !$loop->first ? 'mt-2' : '' }}">
+                            <span class="dt-file__nama"><span class="ds-avatar ds-avatar--sq"><i class="fa-solid fa-file"></i></span>{{ basename($file) }}</span>
+                            <a href="{{ \Illuminate\Support\Facades\Storage::url($file) }}" target="_blank" rel="noopener" class="ds-btn ds-btn--primary ds-btn--sm"><i class="fa-solid fa-download"></i> Lihat / Unduh</a>
+                        </dd>
                         @endforeach
                     </div>
                     @endif
+                </dl>
+            </div>
+
+            {{-- Keputusan pengasuh --}}
+            <div class="ds-card">
+                <div class="ds-card__head">
+                    <h3 class="ds-card__title"><i class="fa-solid fa-user-shield ds-icon"></i> Keputusan</h3>
+                    <p class="ds-card__desc">Keputusan dikirim sebagai notifikasi ke taruna</p>
                 </div>
 
-                @if($reward->catatan_pengasuhan)
-                <div style="margin-top:16px; padding:16px 18px; background:{{ $reward->status === 'Disetujui' ? '#f0fff4' : ($reward->status === 'Ditolak' ? '#fff5f5' : '#fffaf0') }}; border-radius:12px; border-left:4px solid {{ $reward->status === 'Disetujui' ? '#38a169' : ($reward->status === 'Ditolak' ? '#e53e3e' : '#f5b301') }};">
-                    <div class="field-label"><i class="fas fa-comment-dots"></i> Catatan Reward yang Diberikan</div>
-                    <div style="font-size:13px; color:#333; line-height:1.6;">{{ $reward->catatan_pengasuhan }}</div>
+                <div class="ds-alert dt-respon dt-respon--{{ $respVarian }}" role="status">
+                    <span class="dt-respon__ikon"><i class="fa-solid fa-gift"></i></span>
+                    <div>
+                        <div class="dt-respon__judul">Catatan Reward</div>
+                        <div class="dt-respon__pesan">{{ $reward->catatan_pengasuhan ?: 'Belum ada catatan reward untuk taruna.' }}</div>
+                    </div>
                 </div>
+
+                @if(in_array($reward->status, ['Diajukan', 'Diproses']))
+                <div class="rw-tindakan">
+                    @if($reward->status === 'Diajukan')
+                    <button type="button" class="ds-btn rw-btn--proses" onclick="openModal('Diproses')"><i class="fa-solid fa-spinner"></i> Proses Pengajuan</button>
+                    @else
+                    <button type="button" class="ds-btn rw-btn--setuju" onclick="openModal('Disetujui')"><i class="fa-solid fa-circle-check"></i> Setujui Reward</button>
+                    @endif
+                    <button type="button" class="ds-btn rw-btn--tolak" onclick="openModal('Ditolak')"><i class="fa-solid fa-circle-xmark"></i> Tolak Pengajuan</button>
+                </div>
+                @else
+                <p class="rw-final"><i class="fa-solid fa-lock"></i> Pengajuan sudah {{ strtolower($reward->status) }} — status tidak dapat diubah lagi.</p>
                 @endif
 
-                <div class="timestamps">
-                    <span><i class="fas fa-clock"></i> Diajukan: {{ $reward->created_at->locale('id')->isoFormat('D MMM Y, HH:mm') }}</span>
-                    <span><i class="fas fa-sync"></i> Diperbarui: {{ $reward->updated_at->locale('id')->isoFormat('D MMM Y, HH:mm') }}</span>
+                <div class="dt-waktu">
+                    <span><i class="fa-solid fa-clock"></i>Diajukan {{ $reward->created_at->locale('id')->isoFormat('D MMM Y, HH:mm') }}</span>
+                    <span><i class="fa-solid fa-rotate"></i>Diperbarui {{ $reward->updated_at->locale('id')->isoFormat('D MMM Y, HH:mm') }}</span>
                 </div>
             </div>
         </div>
+
     </div>
-</div>
+</main>
 
 <form method="POST" action="{{ route('reward.updateStatus', $reward->id) }}" id="statusForm" style="display:none;">
     @csrf @method('PATCH')
@@ -184,14 +171,19 @@ body { font-family: 'Inter', sans-serif; background: transparent; }
     <input type="hidden" name="catatan_pengasuhan" id="catatanInput">
 </form>
 
-<div class="modal-overlay" id="modalOverlay">
-    <div class="modal-box">
-        <h3 id="modalTitle">Konfirmasi</h3>
-        <p id="modalDesc">Tambahkan catatan reward untuk taruna (opsional):</p>
-        <textarea class="modal-textarea" id="modalCatatan" placeholder="Contoh: mendapatkan barang, jajan, atau tambahan poin pengasuhan..."></textarea>
-        <div class="modal-actions">
-            <button class="modal-btn-cancel" onclick="closeModal()">Batal</button>
-            <button class="modal-btn-confirm-process" id="modalConfirmBtn" onclick="submitModal()">Konfirmasi</button>
+{{-- Modal keputusan (di luar panel kaca agar position:fixed tidak terkurung backdrop-filter) --}}
+<div class="ds-modal-overlay" id="modalOverlay" style="display:none;" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="ds-modal">
+        <div class="ds-modal__icon" id="modalIcon"><i class="fa-solid fa-spinner"></i></div>
+        <h3 class="ds-modal__title" id="modalTitle">Konfirmasi</h3>
+        <p class="ds-modal__body" id="modalDesc"></p>
+        <div class="form-group">
+            <label class="form-label" for="modalCatatan">Catatan untuk Taruna <span style="text-transform:none; letter-spacing:0; color:var(--ink-500);">(opsional)</span></label>
+            <textarea class="form-control" id="modalCatatan" placeholder="Contoh: mendapatkan barang, jajan, atau tambahan poin pengasuhan..."></textarea>
+        </div>
+        <div class="ds-modal__actions">
+            <button type="button" class="ds-btn" onclick="closeModal()">Batal</button>
+            <button type="button" class="ds-btn ds-btn--primary" id="modalConfirmBtn" onclick="submitModal()">Konfirmasi</button>
         </div>
     </div>
 </div>
@@ -199,36 +191,35 @@ body { font-family: 'Inter', sans-serif; background: transparent; }
 <script>
 let currentStatus = null;
 
+// [judul, deskripsi, tombol, ikon, warna token]
+const MODAL_STATUS = {
+    Diproses:  ['Proses Pengajuan', 'Pengajuan reward akan mulai ditinjau. Tambahkan catatan untuk taruna bila perlu.', 'Ya, Proses', 'fa-spinner', 'info'],
+    Disetujui: ['Setujui Reward', 'Reward akan disetujui. Tuliskan reward yang didapatkan taruna, misalnya barang, jajan, atau tambahan poin pengasuhan.', 'Ya, Setujui', 'fa-circle-check', 'success'],
+    Ditolak:   ['Tolak Pengajuan', 'Pengajuan reward akan ditolak. Tuliskan alasan penolakan agar taruna memahami keputusan ini.', 'Ya, Tolak', 'fa-circle-xmark', 'danger'],
+};
+
 function openModal(status) {
+    const [judul, deskripsi, tombol, ikon, warna] = MODAL_STATUS[status];
     currentStatus = status;
-    const overlay = document.getElementById('modalOverlay');
-    const title   = document.getElementById('modalTitle');
-    const desc    = document.getElementById('modalDesc');
-    const btn     = document.getElementById('modalConfirmBtn');
+    document.getElementById('modalTitle').textContent = judul;
+    document.getElementById('modalDesc').textContent = deskripsi;
     document.getElementById('modalCatatan').value = '';
 
-    if (status === 'Diproses') {
-        title.innerHTML = '<i class="fas fa-play" style="color:#3182ce; margin-right:8px;"></i> Proses Reward';
-        desc.textContent = 'Anda akan memproses pengajuan reward ini. Tambahkan catatan (opsional):';
-        btn.className = 'modal-btn-confirm-process';
-        btn.textContent = 'Ya, Proses';
-    } else if (status === 'Disetujui') {
-        title.innerHTML = '<i class="fas fa-check-circle" style="color:#38a169; margin-right:8px;"></i> Setujui Reward';
-        desc.textContent = 'Anda akan menyetujui reward ini. Tulis catatan reward yang didapatkan taruna, misalnya mendapatkan barang, jajan, atau poin pengasuhan:';
-        btn.className = 'modal-btn-confirm-done';
-        btn.textContent = 'Ya, Setujui';
-    } else {
-        title.innerHTML = '<i class="fas fa-times-circle" style="color:#e53e3e; margin-right:8px;"></i> Tolak Reward';
-        desc.textContent = 'Anda akan menolak pengajuan reward ini. Tambahkan alasan penolakan untuk taruna (opsional):';
-        btn.className = 'modal-btn-confirm-reject';
-        btn.textContent = 'Ya, Tolak';
-    }
+    const icon = document.getElementById('modalIcon');
+    icon.innerHTML = '<i class="fa-solid ' + ikon + '"></i>';
+    icon.style.background = 'var(--' + warna + '-tint)';
+    icon.style.color = 'var(--' + warna + '-ink)';
 
-    overlay.classList.add('open');
+    const btn = document.getElementById('modalConfirmBtn');
+    btn.textContent = tombol;
+    btn.style.background = 'var(--' + warna + ')';
+
+    document.getElementById('modalOverlay').style.display = 'flex';
+    document.getElementById('modalCatatan').focus();
 }
 
 function closeModal() {
-    document.getElementById('modalOverlay').classList.remove('open');
+    document.getElementById('modalOverlay').style.display = 'none';
     currentStatus = null;
 }
 
@@ -239,8 +230,11 @@ function submitModal() {
     document.getElementById('statusForm').submit();
 }
 
-document.getElementById('modalOverlay').addEventListener('click', function(e) {
+document.getElementById('modalOverlay').addEventListener('click', function (e) {
     if (e.target === this) closeModal();
+});
+document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') closeModal();
 });
 </script>
 </x-app-layout>

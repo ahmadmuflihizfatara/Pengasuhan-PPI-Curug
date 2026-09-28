@@ -1,176 +1,157 @@
 <x-app-layout>
+<x-form-glass-style />
 <style>
-* { box-sizing: border-box; }
-body { font-family: 'Inter', sans-serif; background: transparent; }
-.app-layout { display: flex; min-height: 100vh; }
-.main-content { flex: 1; padding: 28px 28px 28px 24px; min-width: 0; }
+    .keluhan-kembali { font-size: 13px; background: var(--glass-solid); color: var(--ink-800); }
+    .keluhan-kembali:hover { color: var(--accent-ink); }
+    .ds-stat__icon--info { background: linear-gradient(135deg, #0ea5e9, var(--info)); }
 
-.topbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
-.back-link { display: inline-flex; align-items: center; gap: 7px; color: #d63384; text-decoration: none; font-size: 13px; font-weight: 600; }
-.back-link:hover { text-decoration: underline; }
-.action-btns { display: flex; gap: 8px; }
+    .kb-tindakan { display: flex; flex-direction: column; gap: var(--space-2); margin-top: var(--space-3); }
+    .kb-tindakan .ds-btn { width: 100%; justify-content: center; padding-top: var(--space-2-5); padding-bottom: var(--space-2-5); }
+    .kb-btn--proses  { background: var(--info-tint); border-color: transparent; color: var(--info-ink); }
+    .kb-btn--selesai { background: var(--success); border-color: transparent; color: var(--ink-on-dark); }
+    .kb-btn--selesai:hover { background: var(--success-ink); }
+    .kb-btn--tolak   { color: var(--danger-ink); }
+    .kb-final { margin-top: var(--space-3); font-size: 11px; line-height: 16px; font-weight: 600; color: var(--ink-600); text-align: center; }
 
-.btn-process { background: #ebf4ff; color: #3182ce; border: none; padding: 8px 18px; border-radius: 10px; font-size: 12px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; }
-.btn-process:hover { background: #dbeafe; }
-.btn-done { background: #e6fff5; color: #38a169; border: none; padding: 8px 18px; border-radius: 10px; font-size: 12px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; }
-.btn-done:hover { background: #c6f6d5; }
-.btn-reject { background: #fff5f5; color: #e53e3e; border: none; padding: 8px 18px; border-radius: 10px; font-size: 12px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; }
-.btn-reject:hover { background: #fed7d7; }
-
-.detail-card { background: white; border-radius: 16px; overflow: hidden; box-shadow: 0 2px 16px rgba(0,0,0,.06); }
-.detail-header { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); padding: 28px 32px; color: white; position: relative; overflow: hidden; }
-.detail-header::before { content: ''; position: absolute; right: -30px; top: -30px; width: 140px; height: 140px; background: rgba(255,255,255,.08); border-radius: 50%; }
-.detail-header-inner { position: relative; z-index: 1; display: flex; align-items: flex-start; gap: 18px; }
-.doc-icon { width: 54px; height: 54px; border-radius: 14px; background: rgba(255,255,255,.2); display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 22px; }
-.detail-header .jenis-label { font-size: 11px; font-weight: 700; opacity: .75; margin-bottom: 6px; text-transform: uppercase; letter-spacing: .06em; }
-.detail-header h2 { margin: 0 0 6px 0; font-size: 20px; font-weight: 800; }
-.detail-header .nomor { font-size: 13px; opacity: .85; }
-.status-badge { display: inline-flex; align-items: center; padding: 6px 16px; border-radius: 20px; font-size: 12px; font-weight: 800; white-space: nowrap; margin-left: auto; flex-shrink: 0; }
-
-.detail-body { padding: 28px 32px; }
-.detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-.detail-field { background: #fafbff; border-radius: 12px; padding: 14px 18px; }
-.detail-field.full { grid-column: span 2; }
-.field-label { font-size: 10px; font-weight: 700; color: #aab; text-transform: uppercase; letter-spacing: .06em; margin-bottom: 6px; display: flex; align-items: center; gap: 5px; }
-.field-value { font-size: 14px; font-weight: 700; color: #333; }
-.file-attachment { background: #fdf0f9; border-radius: 12px; padding: 14px 18px; display: flex; align-items: center; justify-content: space-between; }
-.file-attachment-icon { width: 40px; height: 40px; border-radius: 10px; background: linear-gradient(135deg, #f093fb, #f5576c); display: flex; align-items: center; justify-content: center; margin-right: 12px; flex-shrink: 0; }
-.btn-download { background: linear-gradient(135deg, #f093fb, #f5576c); color: white; padding: 9px 20px; border-radius: 10px; text-decoration: none; font-size: 12px; font-weight: 700; display: inline-flex; align-items: center; gap: 6px; }
-
-.timestamps { margin-top: 18px; padding-top: 14px; border-top: 1px solid #f0f2f7; display: flex; gap: 20px; }
-.timestamps span { font-size: 11px; color: #ccc; display: flex; align-items: center; gap: 5px; }
-.alert-success { background: linear-gradient(135deg,#43e97b,#38f9d7); color: white; padding: 13px 18px; border-radius: 12px; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; font-weight: 600; font-size: 13px; }
-.alert-error   { background: linear-gradient(135deg,#fc5c7d,#e53e3e); color: white; padding: 13px 18px; border-radius: 12px; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; font-weight: 600; font-size: 13px; }
-
-.modal-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,.45); z-index:9999; align-items:center; justify-content:center; }
-.modal-overlay.open { display:flex; }
-.modal-box { background:white; border-radius:20px; padding:32px; max-width:480px; width:90%; box-shadow:0 20px 60px rgba(0,0,0,.2); }
-.modal-box h3 { margin:0 0 8px; font-size:17px; font-weight:800; color:#333; }
-.modal-box p  { margin:0 0 18px; font-size:13px; color:#666; line-height:1.6; }
-.modal-textarea { width:100%; padding:12px 14px; border:2px solid #edf0f7; border-radius:10px; font-size:13px; font-family:'Inter',sans-serif; resize:vertical; min-height:90px; outline:none; }
-.modal-textarea:focus { border-color:#d63384; }
-.modal-actions { display:flex; gap:10px; justify-content:flex-end; margin-top:18px; }
-.modal-btn-cancel { background:#f4f5f9; color:#666; border:none; padding:10px 22px; border-radius:25px; font-size:13px; font-weight:700; cursor:pointer; }
-.modal-btn-confirm-process { background:linear-gradient(135deg,#3182ce,#0bc5ea); color:white; border:none; padding:10px 24px; border-radius:25px; font-size:13px; font-weight:800; cursor:pointer; }
-.modal-btn-confirm-done    { background:linear-gradient(135deg,#38a169,#48bb78); color:white; border:none; padding:10px 24px; border-radius:25px; font-size:13px; font-weight:800; cursor:pointer; }
-.modal-btn-confirm-reject  { background:linear-gradient(135deg,#e53e3e,#fc5c7d); color:white; border:none; padding:10px 24px; border-radius:25px; font-size:13px; font-weight:800; cursor:pointer; }
+    #modalOverlay textarea.form-control { resize: vertical; min-height: 90px; }
+    #modalOverlay .form-group { text-align: left; }
 </style>
 
-{{-- Top Floating Island Capsule Navbar --}}
 <x-island-navbar />
 
-<div class="max-w-7xl mx-auto px-4 sm:px-6 pb-12 pt-2">
+@php
+    $varian = $keluhan->status_varian;
+    $ikon = match($keluhan->status) {
+        'Selesai'  => 'fa-circle-check',
+        'Ditolak'  => 'fa-circle-xmark',
+        'Diproses' => 'fa-screwdriver-wrench',
+        default    => 'fa-hourglass-half',
+    };
+    $desc = match($keluhan->status) {
+        'Selesai'  => 'Keluhan sudah selesai ditangani.',
+        'Ditolak'  => 'Keluhan ditolak dan tidak diproses lebih lanjut.',
+        'Diproses' => 'Keluhan sedang ditangani — tandai selesai bila perbaikan sudah tuntas.',
+        default    => 'Keluhan baru masuk dan menunggu ditinjau — proses atau tolak keluhan ini.',
+    };
+    $respVarian = ['success' => 'success', 'danger' => 'danger', 'warning' => 'warning'][$varian] ?? 'accent';
+@endphp
+
+<main class="max-w-7xl mx-auto px-4 sm:px-6 pb-12 pt-2">
     <div class="spatial-workspace-window rounded-3xl bg-white/30 backdrop-blur-2xl border border-white/50 shadow-2xl p-4 sm:p-7 relative overflow-hidden">
-        <div class="topbar">
-            <a href="{{ route('keluhan-barak.kelola') }}" class="back-link">
-                <i class="fas fa-arrow-left"></i> Kembali ke Daftar Keluhan
-            </a>
-            <div class="action-btns">
-                @if($keluhan->status === 'Diajukan')
-                    <button type="button" class="btn-process" onclick="openModal('Diproses')">
-                        <i class="fas fa-play"></i> Proses
-                    </button>
-                    <button type="button" class="btn-reject" onclick="openModal('Ditolak')">
-                        <i class="fas fa-times"></i> Tolak
-                    </button>
-                @elseif($keluhan->status === 'Diproses')
-                    <button type="button" class="btn-done" onclick="openModal('Selesai')">
-                        <i class="fas fa-check"></i> Selesai
-                    </button>
-                    <button type="button" class="btn-reject" onclick="openModal('Ditolak')">
-                        <i class="fas fa-times"></i> Tolak
-                    </button>
-                @endif
-            </div>
-        </div>
+
+        <x-page-banner title="Detail Keluhan Barak" icon="fa-door-open"
+            subtitle="Tinjau keluhan, perbarui status penanganan, dan kirim catatan untuk taruna" />
+
+        <a href="{{ route('keluhan-barak.kelola') }}" class="ds-btn ds-btn--pill keluhan-kembali mb-4">
+            <i class="fa-solid fa-arrow-left"></i> Kembali ke Daftar Keluhan
+        </a>
 
         @if(session('success'))
-        <div class="alert-success">
-            <i class="fas fa-check-circle" style="font-size:17px;"></i> {{ session('success') }}
-        </div>
+        <x-glass-alert type="success" title="Berhasil">{{ session('success') }}</x-glass-alert>
         @endif
         @if(session('error'))
-        <div class="alert-error">
-            <i class="fas fa-exclamation-circle" style="font-size:17px;"></i> {{ session('error') }}
-        </div>
+        <x-glass-alert type="danger" title="Gagal">{{ session('error') }}</x-glass-alert>
         @endif
 
-        <div class="detail-card">
-            <div class="detail-header">
-                <div class="detail-header-inner">
-                    <div class="doc-icon"><i class="fas fa-door-open"></i></div>
-                    <div style="flex:1;">
-                        <div class="jenis-label">{{ $keluhan->asrama }}</div>
-                        <h2>{{ $keluhan->lorong }} · No. {{ $keluhan->nomor_barak }}</h2>
-                        <div class="nomor">Diajukan {{ $keluhan->tanggal_pengajuan->locale('id')->isoFormat('dddd, D MMMM Y') }}</div>
-                    </div>
-                    <span class="status-badge" style="background:{{ $keluhan->status_bg_color }}; color:{{ $keluhan->status_badge_color }};">
-                        {{ $keluhan->status }}
-                    </span>
+        {{-- Status keluhan --}}
+        <div class="ds-card dt-card mb-4">
+            <span class="ds-stat__icon ds-stat__icon--{{ $varian }}"><i class="fa-solid {{ $ikon }}"></i></span>
+            <div class="dt-card__body">
+                <span class="dt-card__label">Status Keluhan · {{ $keluhan->nama }}</span>
+                <div class="dt-card__top">
+                    <span class="dt-card__value">{{ $keluhan->status }}</span>
+                    <span class="ds-badge ds-badge--info">Asrama {{ $keluhan->asrama }} · {{ $keluhan->lorong }} · No. {{ $keluhan->nomor_barak }}</span>
                 </div>
+                <p class="dt-card__desc">{{ $desc }}</p>
             </div>
+        </div>
 
-            <div class="detail-body">
-                <div class="detail-grid">
-                    <div class="detail-field">
-                        <div class="field-label"><i class="fas fa-user"></i> Nama Pengaju</div>
-                        <div class="field-value">{{ $keluhan->nama }}</div>
-                    </div>
-                    <div class="detail-field">
-                        <div class="field-label"><i class="fas fa-envelope"></i> Email</div>
-                        <div class="field-value">{{ $keluhan->email }}</div>
-                    </div>
-                    <div class="detail-field">
-                        <div class="field-label"><i class="fas fa-graduation-cap"></i> Program Studi</div>
-                        <div class="field-value">{{ $keluhan->prodi }} — {{ $keluhan->prodi_nama }}</div>
-                    </div>
-                    <div class="detail-field">
-                        <div class="field-label"><i class="fas fa-building"></i> Asrama / Lorong</div>
-                        <div class="field-value">{{ $keluhan->asrama }} · {{ $keluhan->lorong }}</div>
-                    </div>
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 items-start">
+            {{-- Informasi keluhan --}}
+            <div class="ds-card lg:col-span-2">
+                <div class="ds-card__head">
+                    <h3 class="ds-card__title"><i class="fa-solid fa-circle-info ds-icon"></i> Informasi Keluhan</h3>
+                    <p class="ds-card__desc">Data yang dikirim taruna saat mengajukan keluhan</p>
+                </div>
 
-                    <div class="detail-field full">
-                        <div class="field-label"><i class="fas fa-sticky-note"></i> Keterangan Keluhan</div>
-                        <div class="field-value" style="font-weight:400; font-size:13px; line-height:1.6; color:#555;">{{ $keluhan->keterangan }}</div>
+                <dl class="dt-fields">
+                    <div class="dt-field">
+                        <dt><i class="fa-solid fa-user"></i> Nama Pengaju</dt>
+                        <dd>{{ $keluhan->nama }}</dd>
                     </div>
-
+                    <div class="dt-field">
+                        <dt><i class="fa-solid fa-envelope"></i> Email</dt>
+                        <dd>{{ $keluhan->email }}</dd>
+                    </div>
+                    <div class="dt-field">
+                        <dt><i class="fa-solid fa-graduation-cap"></i> Program Studi</dt>
+                        <dd>{{ $keluhan->prodi }} — {{ $keluhan->prodi_nama }}</dd>
+                    </div>
+                    <div class="dt-field">
+                        <dt><i class="fa-solid fa-calendar"></i> Tanggal Pengajuan</dt>
+                        <dd>{{ $keluhan->tanggal_pengajuan->locale('id')->isoFormat('dddd, D MMMM Y') }}</dd>
+                    </div>
+                    <div class="dt-field dt-field--full">
+                        <dt><i class="fa-solid fa-building"></i> Lokasi Barak</dt>
+                        <dd>Asrama {{ $keluhan->asrama }} · {{ $keluhan->lorong }} · No. {{ $keluhan->nomor_barak }}</dd>
+                    </div>
+                    <div class="dt-field dt-field--full">
+                        <dt><i class="fa-solid fa-note-sticky"></i> Keterangan Keluhan</dt>
+                        <dd class="dt-teks">{{ $keluhan->keterangan }}</dd>
+                    </div>
                     @if(!empty($keluhan->lampiran))
-                    <div class="detail-field full">
-                        <div class="field-label"><i class="fas fa-paperclip"></i> Lampiran ({{ count($keluhan->lampiran) }})</div>
+                    <div class="dt-field dt-field--full">
+                        <dt><i class="fa-solid fa-paperclip"></i> Lampiran ({{ count($keluhan->lampiran) }})</dt>
                         @foreach($keluhan->lampiran as $file)
-                        <div class="file-attachment" style="margin-bottom:10px;">
-                            <div style="display:flex; align-items:center; gap:12px;">
-                                <div class="file-attachment-icon">
-                                    <i class="fas fa-file" style="color:white; font-size:16px;"></i>
-                                </div>
-                                <div>
-                                    <div style="font-size:13px; font-weight:700; color:#333;">{{ basename($file) }}</div>
-                                </div>
-                            </div>
-                            <a href="{{ \Illuminate\Support\Facades\Storage::url($file) }}" target="_blank" class="btn-download">
-                                <i class="fas fa-download"></i> Download / Lihat
+                        <dd class="dt-file {{ !$loop->first ? 'mt-2' : '' }}">
+                            <span class="dt-file__nama"><span class="ds-avatar ds-avatar--sq"><i class="fa-solid fa-file"></i></span>{{ basename($file) }}</span>
+                            <a href="{{ \Illuminate\Support\Facades\Storage::url($file) }}" target="_blank" rel="noopener" class="ds-btn ds-btn--primary ds-btn--sm">
+                                <i class="fa-solid fa-download"></i> Lihat / Unduh
                             </a>
-                        </div>
+                        </dd>
                         @endforeach
                     </div>
                     @endif
+                </dl>
+            </div>
+
+            {{-- Tindak lanjut pengasuh --}}
+            <div class="ds-card">
+                <div class="ds-card__head">
+                    <h3 class="ds-card__title"><i class="fa-solid fa-user-shield ds-icon"></i> Tindak Lanjut</h3>
+                    <p class="ds-card__desc">Status baru akan dikirim sebagai notifikasi ke taruna</p>
                 </div>
 
-                @if($keluhan->catatan_pengasuhan)
-                <div style="margin-top:16px; padding:16px 18px; background:{{ in_array($keluhan->status, ['Selesai', 'Diproses']) ? '#f0fff4' : '#fff5f5' }}; border-radius:12px; border-left:4px solid {{ in_array($keluhan->status, ['Selesai', 'Diproses']) ? '#38a169' : '#e53e3e' }};">
-                    <div class="field-label"><i class="fas fa-comment-dots"></i> Catatan Pengasuhan</div>
-                    <div style="font-size:13px; color:#333; line-height:1.6;">{{ $keluhan->catatan_pengasuhan }}</div>
+                <div class="ds-alert dt-respon dt-respon--{{ $respVarian }}" role="status">
+                    <span class="dt-respon__ikon"><i class="fa-solid fa-comment-dots"></i></span>
+                    <div>
+                        <div class="dt-respon__judul">Catatan Pengasuhan</div>
+                        <div class="dt-respon__pesan">{{ $keluhan->catatan_pengasuhan ?: 'Belum ada catatan untuk taruna.' }}</div>
+                    </div>
                 </div>
+
+                @if(in_array($keluhan->status, ['Diajukan', 'Diproses']))
+                <div class="kb-tindakan">
+                    @if($keluhan->status === 'Diajukan')
+                    <button type="button" class="ds-btn kb-btn--proses" onclick="openModal('Diproses')"><i class="fa-solid fa-screwdriver-wrench"></i> Proses Keluhan</button>
+                    @else
+                    <button type="button" class="ds-btn kb-btn--selesai" onclick="openModal('Selesai')"><i class="fa-solid fa-circle-check"></i> Tandai Selesai</button>
+                    @endif
+                    <button type="button" class="ds-btn kb-btn--tolak" onclick="openModal('Ditolak')"><i class="fa-solid fa-circle-xmark"></i> Tolak Keluhan</button>
+                </div>
+                @else
+                <p class="kb-final"><i class="fa-solid fa-lock"></i> Keluhan sudah {{ strtolower($keluhan->status) }} — status tidak dapat diubah lagi.</p>
                 @endif
 
-                <div class="timestamps">
-                    <span><i class="fas fa-clock"></i> Diajukan: {{ $keluhan->created_at->locale('id')->isoFormat('D MMM Y, HH:mm') }}</span>
-                    <span><i class="fas fa-sync"></i> Diperbarui: {{ $keluhan->updated_at->locale('id')->isoFormat('D MMM Y, HH:mm') }}</span>
+                <div class="dt-waktu">
+                    <span><i class="fa-solid fa-clock"></i>Diajukan {{ $keluhan->created_at->locale('id')->isoFormat('D MMM Y, HH:mm') }}</span>
+                    <span><i class="fa-solid fa-rotate"></i>Diperbarui {{ $keluhan->updated_at->locale('id')->isoFormat('D MMM Y, HH:mm') }}</span>
                 </div>
             </div>
         </div>
+
     </div>
-</div>
+</main>
 
 <form method="POST" action="{{ route('keluhan-barak.updateStatus', $keluhan->id) }}" id="statusForm" style="display:none;">
     @csrf @method('PATCH')
@@ -178,14 +159,19 @@ body { font-family: 'Inter', sans-serif; background: transparent; }
     <input type="hidden" name="catatan_pengasuhan" id="catatanInput">
 </form>
 
-<div class="modal-overlay" id="modalOverlay">
-    <div class="modal-box">
-        <h3 id="modalTitle">Konfirmasi</h3>
-        <p id="modalDesc">Tambahkan catatan untuk taruna (opsional):</p>
-        <textarea class="modal-textarea" id="modalCatatan" placeholder="Tulis catatan atau keterangan penanganan..."></textarea>
-        <div class="modal-actions">
-            <button class="modal-btn-cancel" onclick="closeModal()">Batal</button>
-            <button class="modal-btn-confirm-process" id="modalConfirmBtn" onclick="submitModal()">Konfirmasi</button>
+{{-- Modal konfirmasi status (di luar panel kaca agar position:fixed tidak terkurung backdrop-filter) --}}
+<div class="ds-modal-overlay" id="modalOverlay" style="display:none;" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="ds-modal">
+        <div class="ds-modal__icon" id="modalIcon"><i class="fa-solid fa-screwdriver-wrench"></i></div>
+        <h3 class="ds-modal__title" id="modalTitle">Konfirmasi</h3>
+        <p class="ds-modal__body" id="modalDesc"></p>
+        <div class="form-group">
+            <label class="form-label" for="modalCatatan">Catatan untuk Taruna <span style="text-transform:none; letter-spacing:0; color:var(--ink-500);">(opsional)</span></label>
+            <textarea class="form-control" id="modalCatatan" placeholder="Tulis catatan atau keterangan penanganan..."></textarea>
+        </div>
+        <div class="ds-modal__actions">
+            <button type="button" class="ds-btn" onclick="closeModal()">Batal</button>
+            <button type="button" class="ds-btn ds-btn--primary" id="modalConfirmBtn" onclick="submitModal()">Konfirmasi</button>
         </div>
     </div>
 </div>
@@ -193,36 +179,35 @@ body { font-family: 'Inter', sans-serif; background: transparent; }
 <script>
 let currentStatus = null;
 
+// Tampilan modal per status: [judul, deskripsi, label tombol, ikon, warna token]
+const MODAL_STATUS = {
+    Diproses: ['Proses Keluhan', 'Keluhan akan ditandai sedang ditangani. Tambahkan catatan untuk taruna bila perlu.', 'Ya, Proses', 'fa-screwdriver-wrench', 'info'],
+    Selesai:  ['Selesaikan Keluhan', 'Keluhan akan ditandai selesai. Tambahkan catatan penanganan untuk taruna bila perlu.', 'Ya, Selesai', 'fa-circle-check', 'success'],
+    Ditolak:  ['Tolak Keluhan', 'Keluhan akan ditolak. Tuliskan alasan penolakan agar taruna memahami keputusan ini.', 'Ya, Tolak', 'fa-circle-xmark', 'danger'],
+};
+
 function openModal(status) {
+    const [judul, deskripsi, tombol, ikon, warna] = MODAL_STATUS[status];
     currentStatus = status;
-    const overlay = document.getElementById('modalOverlay');
-    const title   = document.getElementById('modalTitle');
-    const desc    = document.getElementById('modalDesc');
-    const btn     = document.getElementById('modalConfirmBtn');
+    document.getElementById('modalTitle').textContent = judul;
+    document.getElementById('modalDesc').textContent = deskripsi;
     document.getElementById('modalCatatan').value = '';
 
-    if (status === 'Diproses') {
-        title.innerHTML = '<i class="fas fa-play" style="color:#3182ce; margin-right:8px;"></i> Proses Keluhan';
-        desc.textContent = 'Anda akan memproses keluhan ini. Tambahkan catatan atau keterangan untuk taruna (opsional):';
-        btn.className = 'modal-btn-confirm-process';
-        btn.textContent = 'Ya, Proses';
-    } else if (status === 'Selesai') {
-        title.innerHTML = '<i class="fas fa-check-circle" style="color:#38a169; margin-right:8px;"></i> Selesaikan Keluhan';
-        desc.textContent = 'Anda akan menandai keluhan ini selesai. Tambahkan catatan penanganan untuk taruna (opsional):';
-        btn.className = 'modal-btn-confirm-done';
-        btn.textContent = 'Ya, Selesai';
-    } else {
-        title.innerHTML = '<i class="fas fa-times-circle" style="color:#e53e3e; margin-right:8px;"></i> Tolak Keluhan';
-        desc.textContent = 'Anda akan menolak keluhan ini. Tambahkan alasan penolakan untuk taruna (opsional):';
-        btn.className = 'modal-btn-confirm-reject';
-        btn.textContent = 'Ya, Tolak';
-    }
+    const icon = document.getElementById('modalIcon');
+    icon.innerHTML = '<i class="fa-solid ' + ikon + '"></i>';
+    icon.style.background = 'var(--' + warna + '-tint)';
+    icon.style.color = 'var(--' + warna + '-ink)';
 
-    overlay.classList.add('open');
+    const btn = document.getElementById('modalConfirmBtn');
+    btn.textContent = tombol;
+    btn.style.background = 'var(--' + warna + ')';
+
+    document.getElementById('modalOverlay').style.display = 'flex';
+    document.getElementById('modalCatatan').focus();
 }
 
 function closeModal() {
-    document.getElementById('modalOverlay').classList.remove('open');
+    document.getElementById('modalOverlay').style.display = 'none';
     currentStatus = null;
 }
 
@@ -233,8 +218,11 @@ function submitModal() {
     document.getElementById('statusForm').submit();
 }
 
-document.getElementById('modalOverlay').addEventListener('click', function(e) {
+document.getElementById('modalOverlay').addEventListener('click', function (e) {
     if (e.target === this) closeModal();
+});
+document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') closeModal();
 });
 </script>
 </x-app-layout>

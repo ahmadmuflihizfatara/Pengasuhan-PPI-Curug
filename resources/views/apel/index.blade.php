@@ -1,232 +1,227 @@
 <x-app-layout>
+<x-form-glass-style />
+<style>
+    /* Pola kartu sama dengan halaman Jadwal Apel taruna (apel/jadwal) */
+    .ap-aksi { display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); flex-wrap: wrap; }
+    .ap-aksi__teks { font-size: 13px; font-weight: 600; color: var(--ink-700); }
+    .ap-aksi__teks i { color: var(--accent); margin-right: var(--space-1-5); }
+
+    /* Pencarian berdasarkan tanggal */
+    .ap-cari { display: flex; align-items: flex-end; gap: var(--space-3); flex-wrap: wrap; }
+    .ap-cari .form-group { flex: 0 1 280px; margin: 0; }
+    .ap-cari .form-control { cursor: pointer; }
+    .ap-cari__nav { display: flex; align-items: center; gap: var(--space-2); flex-wrap: wrap; }
+    .ap-cari__nav .ds-btn { height: 38px; }
+    .ap-cari__info { margin-left: auto; }
+    @media (max-width: 640px) { .ap-cari .form-group { flex-basis: 100%; } .ap-cari__info { margin-left: 0; } }
+    .ap-daftar { display: flex; flex-direction: column; gap: var(--space-4); }
+    .filter-chips { display: flex; gap: var(--space-2); flex-wrap: wrap; }
+    .chip {
+        display: inline-flex; align-items: center; gap: var(--space-1-5); height: 38px; padding: 0 var(--space-4); border-radius: var(--radius-pill);
+        background: var(--glass-card); border: 1px solid var(--border-glass-glow); box-shadow: var(--shadow-glass-sm);
+        font-size: 12px; line-height: 16px; font-weight: 700; color: var(--ink-700); text-decoration: none;
+        transition: background-color .15s, color .15s, transform .1s;
+    }
+    .chip:hover { background: var(--glass-solid); color: var(--ink-900); }
+    .chip:active { transform: scale(.97); }
+    .chip:focus-visible { outline: none; box-shadow: var(--shadow-focus); }
+    .chip.active { background: var(--accent); border-color: transparent; color: var(--ink-on-dark); }
+
+    .detail-head { display: flex; align-items: center; justify-content: space-between; gap: var(--space-4); flex-wrap: wrap; }
+    .detail-head__kiri { display: flex; align-items: center; gap: var(--space-4); min-width: 0; }
+    .detail-head .ikon { width: 48px; height: 48px; border-radius: var(--radius-md); flex-shrink: 0; display: grid; place-items: center; font-size: 20px; color: var(--ink-on-dark); box-shadow: var(--shadow-glass-sm); }
+    .detail-head h2 { margin: 0 0 2px; font-size: 16px; line-height: 22px; font-weight: 800; color: var(--ink-900); }
+    .detail-head .meta { font-size: 12px; font-weight: 600; color: var(--ink-600); display: flex; gap: var(--space-3-5); flex-wrap: wrap; }
+    .detail-head .meta i { color: var(--accent); margin-right: 2px; }
+    .detail-head__aksi { display: flex; gap: var(--space-2); }
+
+    .info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: var(--space-4); }
+    .info-item { background: var(--glass-card); border: 1px solid var(--border-glass-glow); border-radius: var(--radius-md); padding: var(--space-3-5) var(--space-4); }
+    .info-item .label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: var(--ink-600); margin-bottom: var(--space-1-5); display: flex; align-items: center; gap: var(--space-1-5); }
+    .info-item .label i { color: var(--accent); }
+    .info-item .value { font-size: 14px; font-weight: 700; color: var(--ink-900); }
+    .info-item .value small { display: block; font-size: 11px; font-weight: 500; color: var(--ink-500); margin-top: 2px; }
+
+    .ap-kunci { align-items: center; flex-wrap: wrap; }
+    .ap-kunci__teks { flex: 1; min-width: 220px; }
+
+    .ap-blok { margin-top: var(--space-4); }
+    .ap-blok__judul { display: flex; align-items: center; gap: var(--space-1-5); margin: 0 0 var(--space-2); font-size: 10px; line-height: 14px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: var(--ink-600); }
+    .ap-blok__judul i { color: var(--accent); }
+    .ap-blok__isi { padding: var(--space-3-5) var(--space-4); border-radius: var(--radius-md); background: var(--glass-card); border: 1px solid var(--border-glass-glow); border-left: 4px solid var(--ap-garis, var(--accent)); font-size: 13px; line-height: 21px; font-weight: 500; color: var(--ink-800); white-space: pre-line; overflow-wrap: anywhere; }
+    .ap-blok__isi--kosong { color: var(--ink-500); font-style: italic; }
+</style>
 
 {{-- Top Floating Island Capsule Navbar --}}
 <x-island-navbar />
 
 <main class="max-w-7xl mx-auto px-4 sm:px-6 pb-12 pt-2">
     <div class="spatial-workspace-window rounded-3xl bg-white/30 backdrop-blur-2xl border border-white/50 shadow-2xl p-4 sm:p-7 relative overflow-hidden">
-        
 
-                
-                {{-- Page Header --}}
-                <div class="rounded-2xl bg-gradient-to-r from-blue-900/90 via-indigo-900/85 to-slate-900/90 backdrop-blur-xl border border-white/30 p-6 text-white mb-6 shadow-xl relative overflow-hidden flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-                    <div class="relative z-10">
-                        <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/15 backdrop-blur-md border border-white/20 text-[10px] font-bold tracking-widest uppercase text-emerald-300 mb-2">
-                            <span>✦</span>
-                            <span>Presensi &amp; Agenda Taruna</span>
-                        </div>
-                        <h1 class="text-xl sm:text-2xl font-extrabold tracking-tight text-white mb-1 flex items-center gap-2">
-                            <i class="fa-solid fa-flag text-emerald-400"></i>
-                            <span>Apel &amp; Presensi Taruna</span>
-                        </h1>
-                        <p class="text-xs text-emerald-100/80">Pilih apel berdasarkan tanggal dan sesi untuk melihat pembina, informasi instruksi, dan lokasi</p>
-                    </div>
+        {{-- Header — sama dengan header Jadwal Apel taruna & tab lain --}}
+        <x-page-banner title="Apel & Presensi Taruna" icon="fa-clipboard-check"
+            subtitle="Cari apel berdasarkan tanggal dan jenis apel untuk melihat pembina, lokasi, dan informasi apel" />
 
-                    @if($bolehIsi)
-                    <div class="relative z-10">
-                        <a href="{{ route('apel.create') }}" class="px-4 py-2 rounded-xl bg-white hover:bg-slate-50 text-slate-900 font-extrabold text-xs shadow-md transition flex items-center gap-2 no-underline">
-                            <i class="fa-solid fa-plus text-emerald-600"></i>
-                            <span>Isi Data Apel Baru</span>
+        @if($bolehIsi)
+        <div class="ds-card ap-aksi mb-4">
+            <span class="ap-aksi__teks"><i class="fa-solid fa-flag"></i>Catat pembina, lokasi, dan informasi apel pagi, malam, atau khusus</span>
+            <a href="{{ route('apel.create') }}" class="ds-btn ds-btn--primary"><i class="fa-solid fa-plus"></i> Isi Data Apel Baru</a>
+        </div>
+        @else
+        <div class="ds-alert ds-alert--warning ap-kunci mb-4" role="status">
+            <i class="fa-solid fa-lock ds-icon"></i>
+            @if(auth()->user()->isAdmin())
+            {{-- Admin yang mengatur kunci ini — beri jalan pintas untuk membukanya --}}
+            <span class="ap-kunci__teks">Akses pengisian data apel sedang <strong>ditutup</strong> di Akses Fitur — pengasuh maupun admin tidak dapat menambah, mengubah, atau menghapus apel.</span>
+            <a href="{{ route('akses.index') }}" class="ds-btn ds-btn--sm ds-btn--pill"><i class="fa-solid fa-key"></i> Buka di Akses Fitur</a>
+            @else
+            <span>Akses pengisian data apel sedang ditutup admin — data tetap dapat dilihat, tetapi tidak dapat diubah.</span>
+            @endif
+        </div>
+        @endif
+
+        @if(session('success'))
+        <x-glass-alert type="success" title="Berhasil">{{ session('success') }}</x-glass-alert>
+        @endif
+        @if(session('error'))
+        <x-glass-alert type="danger" title="Gagal">{{ session('error') }}</x-glass-alert>
+        @endif
+
+        @php
+            $tanggalLabel = $tanggal->locale('id')->isoFormat('dddd, D MMMM Y');
+        @endphp
+
+        @if($totalApel === 0)
+        <div class="ds-card">
+            <div class="ds-empty">
+                <i class="fa-solid fa-flag ds-icon"></i>
+                Belum ada data apel yang tercatat di sistem.
+            </div>
+        </div>
+        @else
+
+        {{-- Cari apel berdasarkan tanggal --}}
+        <div class="ds-card mb-4">
+            <form method="GET" action="{{ route('apel.index') }}" class="ap-cari" role="search">
+                <div class="form-group">
+                    <label class="form-label" for="tanggalApel">Tanggal Apel</label>
+                    <input type="date" id="tanggalApel" name="tanggal" class="form-control"
+                           value="{{ $tanggal->format('Y-m-d') }}" onchange="this.form.submit()">
+                    @if($sesi)<input type="hidden" name="sesi" value="{{ $sesi }}">@endif
+                </div>
+                <div>
+                    <span class="form-label">Jenis Apel</span>
+                    <div class="filter-chips" role="group" aria-label="Filter jenis apel">
+                        @foreach(['' => ['Semua', 'fa-layer-group'], 'pagi' => ['Pagi', 'fa-sun'], 'malam' => ['Malam', 'fa-moon'], 'khusus' => ['Khusus', 'fa-flag']] as $nilai => [$label, $ikon])
+                        <a href="{{ route('apel.index', array_filter(['tanggal' => $tanggal->format('Y-m-d'), 'sesi' => $nilai])) }}"
+                           class="chip {{ ($sesi ?? '') === $nilai ? 'active' : '' }}" @if(($sesi ?? '') === $nilai) aria-current="true" @endif>
+                            <i class="fa-solid {{ $ikon }}"></i> {{ $label }}
                         </a>
+                        @endforeach
                     </div>
-                    @endif
-
-                    <div class="absolute -right-10 -top-10 w-40 h-40 bg-emerald-500/20 rounded-full blur-3xl pointer-events-none"></div>
                 </div>
-
-                {{-- Alerts --}}
-                @if(session('success'))
-                <div class="rounded-2xl bg-emerald-100/90 border border-emerald-300 p-4 text-emerald-800 text-xs font-bold mb-5 flex items-center gap-2 shadow-sm backdrop-blur-md">
-                    <i class="fa-solid fa-circle-check text-emerald-600 text-base"></i>
-                    <span>{{ session('success') }}</span>
-                </div>
-                @endif
-                @if(session('error'))
-                <div class="rounded-2xl bg-rose-100/90 border border-rose-300 p-4 text-rose-800 text-xs font-bold mb-5 flex items-center gap-2 shadow-sm backdrop-blur-md">
-                    <i class="fa-solid fa-circle-exclamation text-rose-600 text-base"></i>
-                    <span>{{ session('error') }}</span>
-                </div>
-                @endif
-
-                @unless($bolehIsi)
-                <div class="rounded-2xl bg-amber-50/90 border border-amber-200 p-4 text-amber-900 text-xs font-semibold mb-5 flex items-center gap-2 shadow-sm backdrop-blur-md">
-                    <i class="fa-solid fa-lock text-amber-600"></i>
-                    <span>Akses pengisian data apel sedang ditutup admin — data tetap dapat dilihat, tetapi tidak dapat diubah.</span>
-                </div>
-                @endunless
-
-                @if($daftarApel->isEmpty())
-                <div class="rounded-2xl bg-white/50 backdrop-blur-xl border border-white/60 p-10 text-center shadow-lg">
-                    <i class="fa-solid fa-flag text-4xl text-slate-300 mb-3 block"></i>
-                    <p class="text-xs font-bold text-slate-600 mb-3">Belum ada data apel yang tercatat di sistem.</p>
-                    @if($bolehIsi)
-                    <a href="{{ route('apel.create') }}" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold shadow-md transition no-underline">
-                        <i class="fa-solid fa-plus text-xs"></i>
-                        <span>Isi Data Apel Pertama</span>
+                <div class="ap-cari__nav">
+                    @if($sebelumnya)
+                    <a href="{{ route('apel.index', array_filter(['tanggal' => $sebelumnya->format('Y-m-d'), 'sesi' => $sesi])) }}" class="ds-btn ds-btn--pill" title="{{ $sebelumnya->locale('id')->isoFormat('D MMM Y') }}">
+                        <i class="fa-solid fa-chevron-left"></i> Apel sebelumnya
                     </a>
                     @endif
+                    @if($berikutnya)
+                    <a href="{{ route('apel.index', array_filter(['tanggal' => $berikutnya->format('Y-m-d'), 'sesi' => $sesi])) }}" class="ds-btn ds-btn--pill" title="{{ $berikutnya->locale('id')->isoFormat('D MMM Y') }}">
+                        Apel berikutnya <i class="fa-solid fa-chevron-right"></i>
+                    </a>
+                    @endif
+                    @unless($tanggal->isToday())
+                    <a href="{{ route('apel.index', array_filter(['tanggal' => today()->format('Y-m-d'), 'sesi' => $sesi])) }}" class="ds-btn ds-btn--pill">Hari ini</a>
+                    @endunless
                 </div>
-                @else
+                <span class="ds-badge ds-badge--{{ $daftarApel->isEmpty() ? 'warning' : 'accent' }} ap-cari__info">{{ $daftarApel->count() }} {{ $sesi ? 'apel ' . $sesi : 'apel' }} · {{ $tanggalLabel }}</span>
+            </form>
+        </div>
 
-                {{-- Selector Card --}}
-                <div class="rounded-2xl bg-white/45 backdrop-blur-xl border border-white/60 p-4 sm:p-5 mb-5 shadow-sm">
-                    <label class="text-[10px] font-bold uppercase tracking-wider text-slate-500 mb-2 block" for="apelSelect">Pilih Sesi Apel</label>
-                    <div class="flex flex-col sm:flex-row gap-3 items-center">
-                        <div class="relative flex-1 w-full">
-                            <select id="apelSelect" onchange="bukaApel(this.value)" class="w-full px-4 py-2.5 rounded-xl bg-white/70 focus:bg-white border border-white/80 text-xs font-bold text-slate-800 outline-none cursor-pointer">
-                                @foreach($daftarApel as $item)
-                                <option value="{{ $item->id }}"
-                                        data-sesi="{{ $item->sesi }}"
-                                        @selected($terpilih && $terpilih->id === $item->id)>
-                                    {{ $item->label_dropdown }}@if($item->jam) · {{ \Carbon\Carbon::parse($item->jam)->format('H:i') }}@endif
-                                </option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="flex items-center gap-1.5 w-full sm:w-auto overflow-x-auto pb-1 sm:pb-0">
-                            <button type="button" class="px-3 py-1.5 rounded-full text-xs font-bold bg-emerald-600 text-white shadow-sm border border-emerald-600 transition chip active" data-filter="all" onclick="filterSesi('all', this)">Semua</button>
-                            <button type="button" class="px-3 py-1.5 rounded-full text-xs font-bold bg-white/60 hover:bg-white text-slate-700 border border-white transition chip" data-filter="pagi" onclick="filterSesi('pagi', this)">Pagi</button>
-                            <button type="button" class="px-3 py-1.5 rounded-full text-xs font-bold bg-white/60 hover:bg-white text-slate-700 border border-white transition chip" data-filter="malam" onclick="filterSesi('malam', this)">Malam</button>
-                            <button type="button" class="px-3 py-1.5 rounded-full text-xs font-bold bg-white/60 hover:bg-white text-slate-700 border border-white transition chip" data-filter="khusus" onclick="filterSesi('khusus', this)">Khusus</button>
-                        </div>
-                    </div>
-                </div>
-
-                {{-- Detail Apel Terpilih --}}
-                @if($terpilih)
-                <div class="rounded-2xl bg-white/50 backdrop-blur-xl border border-white/60 overflow-hidden shadow-lg">
-                    <div class="p-5 sm:p-6 text-white flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4" style="background:linear-gradient(135deg,{{ $terpilih->warna ?? '#059669' }},#1e3a8a);">
-                        <div class="flex items-center gap-3.5">
-                            <div class="w-12 h-12 rounded-xl bg-white/20 flex items-center justify-center text-xl flex-shrink-0 shadow-inner">
-                                <i class="fa-solid {{ $terpilih->ikon ?? 'fa-flag' }}"></i>
-                            </div>
-                            <div>
-                                <h2 class="text-base sm:text-lg font-extrabold text-white mb-0.5">{{ $terpilih->judul }}</h2>
-                                <div class="text-[11px] text-white/90 flex flex-wrap items-center gap-3 font-medium">
-                                    <span><i class="fa-solid fa-calendar-day mr-1"></i> {{ $terpilih->tanggal->locale('id')->isoFormat('dddd, D MMMM Y') }}</span>
-                                    @if($terpilih->jam)
-                                    <span><i class="fa-solid fa-clock mr-1"></i> {{ \Carbon\Carbon::parse($terpilih->jam)->format('H:i') }} WIB</span>
-                                    @endif
-                                </div>
-                            </div>
-                        </div>
-
-                        @if($bolehIsi)
-                        <div class="flex items-center gap-2">
-                            <a href="{{ route('apel.edit', $terpilih) }}" class="px-3 py-1.5 rounded-xl bg-white/20 hover:bg-white/30 text-white font-bold text-xs backdrop-blur-md transition flex items-center gap-1.5 no-underline">
-                                <i class="fa-solid fa-pen text-[10px]"></i>
-                                <span>Ubah</span>
-                            </a>
-                            <button type="button" class="px-3 py-1.5 rounded-xl bg-rose-500/20 hover:bg-rose-500/30 text-rose-200 border border-rose-400/40 font-bold text-xs backdrop-blur-md transition flex items-center gap-1.5" onclick="konfirmasiHapus()">
-                                <i class="fa-solid fa-trash text-[10px]"></i>
-                                <span>Hapus</span>
-                            </button>
-                        </div>
-                        @endif
-                    </div>
-
-                    <div class="p-5 sm:p-6">
-                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3.5 mb-5">
-                            <div class="rounded-xl bg-white/60 border border-white/80 p-3.5 shadow-sm">
-                                <div class="text-[10px] font-bold uppercase tracking-wider text-slate-500 mb-1 flex items-center gap-1.5">
-                                    <i class="fa-solid fa-user-tie text-indigo-600"></i>
-                                    <span>Pembina Apel</span>
-                                </div>
-                                <div class="text-xs font-black text-slate-900">{{ $terpilih->pembina }}</div>
-                                @if($terpilih->pembinaUser?->jabatan)
-                                <div class="text-[10px] text-slate-500 font-medium mt-0.5">{{ $terpilih->pembinaUser->jabatan }}</div>
+        @if($daftarApel->isEmpty())
+        <div class="ds-card">
+            <div class="ds-empty">
+                <i class="fa-solid fa-calendar-xmark ds-icon"></i>
+                Tidak ada {{ $sesi ? 'apel ' . $sesi : 'apel' }} pada {{ $tanggalLabel }}.
+                @if($bolehIsi)
+                <div class="mt-3"><a href="{{ route('apel.create') }}" class="ds-btn ds-btn--primary ds-btn--sm"><i class="fa-solid fa-plus"></i> Isi Data Apel</a></div>
+                @endif
+            </div>
+        </div>
+        @else
+        <div class="ap-daftar">
+            @foreach($daftarApel as $apel)
+            <div class="ds-card">
+                <div class="ds-card__head detail-head">
+                    <div class="detail-head__kiri">
+                        <div class="ikon" style="background:linear-gradient(135deg,{{ $apel->warna }},var(--accent));"><i class="fa-solid {{ $apel->ikon }}"></i></div>
+                        <div>
+                            <h2>{{ $apel->judul }}</h2>
+                            <div class="meta">
+                                <span><i class="fa-solid fa-calendar-day"></i> {{ $tanggalLabel }}</span>
+                                @if($apel->jam)
+                                <span><i class="fa-solid fa-clock"></i> {{ \Carbon\Carbon::parse($apel->jam)->format('H:i') }} WIB</span>
                                 @endif
                             </div>
-
-                            <div class="rounded-xl bg-white/60 border border-white/80 p-3.5 shadow-sm">
-                                <div class="text-[10px] font-bold uppercase tracking-wider text-slate-500 mb-1 flex items-center gap-1.5">
-                                    <i class="fa-solid fa-location-dot text-rose-500"></i>
-                                    <span>Lokasi Apel</span>
-                                </div>
-                                <div class="text-xs font-black text-slate-900">{{ $terpilih->lokasi }}</div>
-                            </div>
-
-                            <div class="rounded-xl bg-white/60 border border-white/80 p-3.5 shadow-sm">
-                                <div class="text-[10px] font-bold uppercase tracking-wider text-slate-500 mb-1 flex items-center gap-1.5">
-                                    <i class="fa-solid fa-flag text-emerald-600"></i>
-                                    <span>Sesi Apel</span>
-                                </div>
-                                <div class="text-xs font-black text-slate-900">{{ $terpilih->judul }}</div>
-                                <div class="text-[10px] text-slate-500 font-medium mt-0.5">{{ ucfirst($terpilih->sesi) }}</div>
-                            </div>
                         </div>
-
-                        <div class="mb-4">
-                            <h3 class="text-[11px] font-bold uppercase tracking-wider text-slate-700 mb-1.5 flex items-center gap-1.5">
-                                <i class="fa-solid fa-circle-info text-indigo-600"></i>
-                                <span>Informasi Apel</span>
-                            </h3>
-                            <div class="p-3.5 rounded-xl bg-white/60 border-l-4 border-emerald-500 text-xs text-slate-800 leading-relaxed whitespace-pre-line shadow-sm">
-                                {{ $terpilih->informasi ?: 'Belum ada informasi instruksi apel yang dicantumkan.' }}
-                            </div>
-                        </div>
-
-                        @if($terpilih->keterangan)
-                        <div class="mb-4">
-                            <h3 class="text-[11px] font-bold uppercase tracking-wider text-slate-700 mb-1.5 flex items-center gap-1.5">
-                                <i class="fa-solid fa-note-sticky text-amber-500"></i>
-                                <span>Keterangan Tambahan</span>
-                            </h3>
-                            <div class="p-3.5 rounded-xl bg-white/60 border-l-4 border-amber-400 text-xs text-slate-800 leading-relaxed shadow-sm">
-                                {{ $terpilih->keterangan }}
-                            </div>
-                        </div>
-                        @endif
                     </div>
+                    @if($bolehIsi)
+                    <div class="detail-head__aksi">
+                        <a href="{{ route('apel.edit', $apel) }}" class="ds-btn ds-btn--sm ds-btn--pill"><i class="fa-solid fa-pen"></i> Ubah</a>
+                        <form method="POST" action="{{ route('apel.destroy', $apel) }}" style="margin:0"
+                              data-konfirmasi="{{ $apel->judul }} {{ $tanggalLabel }} akan dihapus permanen." data-konfirmasi-judul="Hapus Data Apel?" data-konfirmasi-tombol="Ya, Hapus">
+                            @csrf @method('DELETE')
+                            <button type="submit" class="ds-btn ds-btn--sm ds-btn--pill ds-btn--danger"><i class="fa-solid fa-trash"></i> Hapus</button>
+                        </form>
+                    </div>
+                    @endif
+                </div>
 
-                    <div class="px-6 py-3 bg-white/30 border-t border-white/40 text-[11px] text-slate-500 flex flex-wrap justify-between items-center gap-2">
-                        <span><i class="fa-solid fa-user-pen mr-1"></i> Diisi oleh: {{ $terpilih->pembuat?->name ?? '—' }}</span>
-                        <span>Terakhir diperbarui: {{ $terpilih->updated_at->locale('id')->isoFormat('D MMM Y, HH:mm') }}</span>
+                <div class="info-grid">
+                    <div class="info-item">
+                        <div class="label"><i class="fa-solid fa-user-tie"></i> Pembina Apel</div>
+                        <div class="value">
+                            {{ $apel->pembina }}
+                            @if($apel->pembinaUser?->jabatan)<small>{{ $apel->pembinaUser->jabatan }}</small>@endif
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <div class="label"><i class="fa-solid fa-location-dot"></i> Lokasi Apel</div>
+                        <div class="value">{{ $apel->lokasi }}</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="label"><i class="fa-solid fa-flag"></i> Jenis</div>
+                        <div class="value">{{ $apel->judul }}<small>{{ ucfirst($apel->sesi) }}</small></div>
                     </div>
                 </div>
 
-                <form id="formHapus" method="POST" action="{{ route('apel.destroy', $terpilih) }}" style="display:none;">
-                    @csrf @method('DELETE')
-                </form>
+                <div class="ap-blok">
+                    <h3 class="ap-blok__judul"><i class="fa-solid fa-circle-info"></i> Informasi Apel</h3>
+                    <div class="ap-blok__isi {{ $apel->informasi ? '' : 'ap-blok__isi--kosong' }}">{{ $apel->informasi ?: 'Belum ada informasi apel yang dicantumkan.' }}</div>
+                </div>
+
+                @if($apel->keterangan)
+                <div class="ap-blok" style="--ap-garis: var(--warning)">
+                    <h3 class="ap-blok__judul"><i class="fa-solid fa-note-sticky"></i> Keterangan Tambahan</h3>
+                    <div class="ap-blok__isi">{{ $apel->keterangan }}</div>
+                </div>
                 @endif
 
-                @endif
+                <div class="dt-waktu">
+                    <span><i class="fa-solid fa-user-pen"></i>Diisi oleh {{ $apel->pembuat?->name ?? '—' }}</span>
+                    <span><i class="fa-solid fa-rotate"></i>Diperbarui {{ $apel->updated_at->locale('id')->isoFormat('D MMM Y, HH:mm') }}</span>
+                </div>
+            </div>
+            @endforeach
+        </div>
+        @endif
+
+        @endif
 
     </div>
 </main>
 
-<script>
-function bukaApel(id) {
-    window.location = '{{ route('apel.index') }}?apel=' + id;
-}
-
-function filterSesi(sesi, chipEl) {
-    document.querySelectorAll('.chip').forEach(c => {
-        c.classList.remove('bg-emerald-600', 'text-white');
-        c.classList.add('bg-white/60', 'text-slate-700');
-    });
-    chipEl.classList.remove('bg-white/60', 'text-slate-700');
-    chipEl.classList.add('bg-emerald-600', 'text-white');
-
-    const select = document.getElementById('apelSelect');
-    let pertamaCocok = null;
-
-    [...select.options].forEach(opt => {
-        const cocok = sesi === 'all' || opt.dataset.sesi === sesi;
-        opt.hidden = !cocok;
-        if (cocok && pertamaCocok === null) pertamaCocok = opt;
-    });
-
-    if (pertamaCocok && select.selectedOptions[0].hidden) {
-        bukaApel(pertamaCocok.value);
-    }
-}
-
-function konfirmasiHapus() {
-    if (confirm('Hapus data apel ini? Tindakan ini tidak dapat dibatalkan.')) {
-        document.getElementById('formHapus').submit();
-    }
-}
-</script>
+<x-konfirmasi-modal />
 
 </x-app-layout>

@@ -1,423 +1,198 @@
 <x-app-layout>
+<x-form-glass-style />
 <style>
-* { box-sizing: border-box; }
-body { font-family: 'Inter', sans-serif; background: transparent; }
+    /* Filter — pola filter tab Surat & Log Gerbang */
+    .al-filter { display: grid; grid-template-columns: minmax(0, 3fr) repeat(3, minmax(0, 2fr)) repeat(2, minmax(0, 1.6fr)) auto; gap: var(--space-2-5); align-items: end; }
+    @media (max-width: 1100px) { .al-filter { grid-template-columns: 1fr 1fr 1fr; } .al-filter__cari { grid-column: 1 / -1; } .al-filter__aksi { grid-column: 1 / -1; } }
+    @media (max-width: 640px) { .al-filter { grid-template-columns: 1fr 1fr; } }
+    .al-filter .form-group { margin: 0; }
+    .al-filter__cari { position: relative; }
+    .al-filter__cari i { position: absolute; left: var(--space-3); bottom: 12px; font-size: 12px; color: var(--ink-500); pointer-events: none; }
+    .al-filter__cari .form-control { padding-left: 34px; }
+    .al-filter__aksi { display: flex; gap: var(--space-2); }
+    .al-filter__aksi .ds-btn { height: 38px; }
+    .al-filter__aksi .ds-btn--primary { flex: 1; justify-content: center; }
 
-.app-layout {
-    display: flex;
-    min-height: 100vh;
-}
-
-/* ===== MAIN ===== */
-.main-content { flex: 1; padding: 28px 30px; min-width: 0; }
-
-/* Header Banner */
-.page-header {
-    background: linear-gradient(135deg, #4f46e5 0%, #4338ca 100%);
-    border-radius: 18px; padding: 28px 32px;
-    color: white; margin-bottom: 24px;
-    position: relative; overflow: hidden;
-    display: flex; align-items: center; justify-content: space-between;
-}
-.page-header::before { content:''; position:absolute; right:-50px; top:-50px; width:180px; height:180px; background:rgba(255,255,255,.08); border-radius:50%; }
-.page-header::after  { content:''; position:absolute; right:100px; bottom:-60px; width:120px; height:120px; background:rgba(255,255,255,.05); border-radius:50%; }
-.page-header-text { position:relative; z-index:1; }
-.page-header-text h1 { margin:0 0 4px; font-size:22px; font-weight:800; display:flex; align-items:center; gap:10px; }
-.page-header-text p  { margin:0; opacity:.85; font-size:13px; }
-.page-header-badge {
-    position:relative; z-index:1;
-    background:rgba(255,255,255,.15);
-    border:1px solid rgba(255,255,255,.25);
-    border-radius:14px; padding:14px 22px; text-align:center;
-}
-.page-header-badge .num  { font-size:28px; font-weight:800; color:white; line-height:1; }
-.page-header-badge .desc { font-size:11px; color:rgba(255,255,255,.8); margin-top:3px; }
-
-/* Stats row */
-.stats-grid { display:grid; grid-template-columns:repeat(5,1fr); gap:14px; margin-bottom:24px; }
-.stat-card {
-    background:white; border-radius:14px; padding:18px;
-    box-shadow:0 2px 12px rgba(0,0,0,.05);
-    display:flex; align-items:center; gap:14px;
-}
-.stat-icon { width:46px; height:46px; border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:19px; color:white; flex-shrink:0; }
-.stat-num   { font-size:24px; font-weight:800; color:#333; line-height:1.1; }
-.stat-label { font-size:12px; color:#888; margin-top:2px; }
-
-/* Filter panel */
-.filter-panel {
-    background:white; border-radius:14px;
-    padding:18px 22px; margin-bottom:20px;
-    box-shadow:0 2px 12px rgba(0,0,0,.05);
-}
-.filter-grid { display:grid; grid-template-columns:2fr 1fr 1fr 1fr 1fr auto; gap:10px; align-items:end; }
-.filter-label { font-size:11px; font-weight:700; color:#888; text-transform:uppercase; letter-spacing:.05em; display:block; margin-bottom:5px; }
-.filter-input, .filter-select {
-    width:100%; padding:9px 12px;
-    border:1.5px solid #edf0f7; border-radius:9px;
-    font-size:13px; font-family:'Inter',sans-serif;
-    outline:none; color:#444; background:#fafbff;
-    transition:border-color .15s;
-}
-.filter-input:focus, .filter-select:focus { border-color:#4f46e5; }
-.filter-search { position:relative; }
-.filter-search .fa-search { position:absolute; left:11px; top:50%; transform:translateY(-50%); color:#bbb; font-size:12px; pointer-events:none; }
-.filter-search .filter-input { padding-left:32px; }
-.btn-filter {
-    background:linear-gradient(135deg,#4f46e5,#4338ca);
-    color:white; border:none; border-radius:9px;
-    padding:9px 20px; font-size:13px; font-family:'Inter',sans-serif;
-    font-weight:700; cursor:pointer; white-space:nowrap;
-    display:flex; align-items:center; gap:6px;
-}
-.btn-reset {
-    background:#f4f5f9; color:#666; border:none; border-radius:9px;
-    padding:9px 14px; font-size:13px; font-family:'Inter',sans-serif;
-    font-weight:700; cursor:pointer; text-decoration:none;
-    display:flex; align-items:center;
-}
-
-/* Log table card */
-.log-card { background:white; border-radius:14px; overflow:hidden; box-shadow:0 2px 12px rgba(0,0,0,.05); }
-.log-card-header {
-    padding:16px 22px; border-bottom:1px solid #f0f2f7;
-    display:flex; align-items:center; justify-content:space-between;
-}
-.log-card-title { font-size:15px; font-weight:700; color:#333; display:flex; align-items:center; gap:8px; }
-.log-card-count { font-size:12px; color:#9aa0bc; }
-
-table { width:100%; border-collapse:collapse; }
-thead tr { background:linear-gradient(135deg,#4f46e5,#4338ca); }
-th { padding:12px 16px; text-align:left; font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.07em; color:white; white-space:nowrap; }
-td { padding:13px 16px; font-size:13px; color:#444; border-top:1px solid #f0f2f7; vertical-align:middle; }
-tbody tr { transition:background .1s; }
-tbody tr:hover { background:#fafbff; }
-
-/* Badge */
-.badge-pill {
-    display:inline-flex; align-items:center; gap:5px;
-    padding:4px 11px; border-radius:20px;
-    font-size:11px; font-weight:700; white-space:nowrap;
-}
-
-/* Pelaku */
-.pelaku-wrap { display:flex; align-items:center; gap:9px; }
-.pelaku-ava  {
-    width:32px; height:32px; border-radius:50%;
-    background:linear-gradient(135deg,#4f46e5,#4338ca);
-    color:white; font-size:12px; font-weight:800;
-    display:flex; align-items:center; justify-content:center; flex-shrink:0;
-}
-.pelaku-name { font-size:13px; font-weight:600; color:#333; }
-.pelaku-role { font-size:11px; color:#9aa0bc; text-transform:capitalize; }
-
-/* Detail button */
-.btn-detail {
-    background:#eef0ff; color:#4f46e5; border:none;
-    border-radius:20px; padding:5px 14px; font-size:11px;
-    font-family:'Inter',sans-serif; font-weight:700; cursor:pointer;
-    display:inline-flex; align-items:center; gap:5px; transition:background .1s;
-}
-.btn-detail:hover { background:#dde2ff; }
-
-/* Detail expanded row */
-.detail-row { background:#fafbff !important; }
-.detail-inner {
-    border-radius:10px; padding:14px 18px;
-    border-left:4px solid #4f46e5;
-    background:#f4f6ff; margin:4px 0;
-}
-.detail-label { font-size:11px; font-weight:700; color:#4f46e5; text-transform:uppercase; letter-spacing:.05em; margin-bottom:10px; }
-.detail-grid  { display:flex; flex-wrap:wrap; gap:8px; }
-.detail-chip  { background:white; border:1px solid #e5e7eb; border-radius:8px; padding:7px 12px; min-width:120px; }
-.detail-chip-key   { font-size:10px; color:#9aa0bc; font-weight:700; text-transform:uppercase; letter-spacing:.04em; margin-bottom:2px; }
-.detail-chip-value { font-size:13px; color:#333; font-weight:600; }
-
-/* Waktu */
-.time-main { font-size:13px; font-weight:600; color:#333; }
-.time-sub  { font-size:11px; color:#9aa0bc; margin-top:1px; }
-
-/* Empty state */
-.empty-state { text-align:center; padding:60px 20px; }
-.empty-icon  { width:72px; height:72px; background:#f3f4f6; border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 16px; }
-.empty-icon i { font-size:28px; color:#ccc; }
-.empty-state h4 { color:#888; margin:0 0 8px; font-size:16px; font-weight:700; }
-.empty-state p  { color:#9aa0bc; margin:0; font-size:13px; }
-
-/* Pagination */
-.pagination { display:flex; gap:4px; list-style:none; padding:0; margin:0; }
-.pagination .page-item .page-link { border-radius:8px !important; border:1.5px solid #e5e7eb; color:#4f46e5; font-size:13px; font-weight:600; padding:6px 12px; font-family:'Inter',sans-serif; }
-.pagination .page-item.active .page-link { background:linear-gradient(135deg,#4f46e5,#4338ca); border-color:transparent; color:white; }
-.pagination .page-item.disabled .page-link { color:#ccc; }
-
-/* Alert success */
-.alert-success-bar {
-    background:linear-gradient(135deg,#43e97b,#38f9d7);
-    color:white; padding:14px 20px; border-radius:12px;
-    margin-bottom:20px; display:flex; align-items:center; gap:10px;
-    font-weight:600; font-size:14px;
-}
+    /* Tabel */
+    .al-table td { vertical-align: top; }
+    .al-table td.al-no { color: var(--ink-500) !important; font-weight: 700; }
+    .al-desk { min-width: 260px; max-width: 420px; font-size: 12px; line-height: 18px; font-weight: 500; color: var(--ink-800); }
+    .al-table .ds-badge { white-space: nowrap; }
+    .al-detail-baris[hidden] { display: none; }
+    .al-detail-baris td { background: var(--glass-subtle) !important; padding-top: 0 !important; }
+    .al-detail { padding: var(--space-3) var(--space-3-5); border-radius: var(--radius-md); background: var(--glass-card); border: 1px solid var(--border-glass-glow); border-left: 4px solid var(--al-garis, var(--accent)); }
+    .al-detail__judul { display: flex; align-items: center; gap: var(--space-1-5); margin-bottom: var(--space-2-5); font-size: 10px; line-height: 14px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: var(--ink-600); }
+    .al-detail__grid { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+    .al-chip { min-width: 120px; max-width: 100%; padding: var(--space-1-5) var(--space-2-5); border-radius: var(--radius-sm); background: var(--glass-solid); border: 1px solid var(--border-glass-subtle); }
+    .al-chip dt { font-size: 10px; line-height: 14px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: var(--ink-500); }
+    .al-chip dd { margin: 0; font-size: 12px; line-height: 17px; font-weight: 700; color: var(--ink-900); overflow-wrap: anywhere; }
+    .al-pagination { margin-top: var(--space-4); }
 </style>
 
-{{-- Top Floating Island Capsule Navbar --}}
 <x-island-navbar />
+
+@php $adaFilter = request()->hasAny(['search', 'modul', 'aksi', 'user_id', 'dari', 'sampai']); @endphp
 
 <main class="max-w-7xl mx-auto px-4 sm:px-6 pb-12 pt-2">
     <div class="spatial-workspace-window rounded-3xl bg-white/30 backdrop-blur-2xl border border-white/50 shadow-2xl p-4 sm:p-7 relative overflow-hidden">
 
-        {{-- Flash message --}}
+        <x-page-banner title="Log Aktivitas" icon="fa-clock-rotate-left"
+            subtitle="Rekam jejak seluruh aktivitas sistem — siapa melakukan apa, kapan, dan di modul mana" />
+
         @if(session('success'))
-        <div class="alert-success-bar">
-            <i class="fas fa-check-circle" style="font-size:18px;"></i> {{ session('success') }}
-        </div>
+        <x-glass-alert type="success" title="Berhasil">{{ session('success') }}</x-glass-alert>
         @endif
 
-        {{-- ── HEADER ── --}}
-        <div class="page-header">
-            <div class="page-header-text">
-                <h1><i class="fas fa-history"></i> Log Aktivitas</h1>
-                <p>Rekam jejak seluruh aktivitas sistem — Poin, Acara, Surat &amp; Berita</p>
-            </div>
-            <div class="page-header-badge">
-                <div class="num">{{ $stats['hari_ini'] }}</div>
-                <div class="desc">Aktivitas Hari Ini</div>
-            </div>
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-3.5 mb-4">
+            <x-stat-card title="Total Log" :value="number_format($stats['total'], 0, ',', '.')" icon="fa-solid fa-list-check"
+                varian="accent" badge="Semua" badgeType="accent" description="Sejak sistem berjalan" />
+            <x-stat-card title="Hari Ini" :value="$stats['hari_ini']" icon="fa-solid fa-calendar-day"
+                varian="success" badge="Hari ini" badgeType="success" :href="route('activity-log.index', ['dari' => today()->toDateString()])" description="Aktivitas tercatat hari ini" />
+            <x-stat-card title="7 Hari Terakhir" :value="$stats['minggu_ini']" icon="fa-solid fa-calendar-week"
+                varian="info" badge="Mingguan" badgeType="info" :href="route('activity-log.index', ['dari' => today()->subDays(6)->toDateString()])" description="Termasuk hari ini" />
+            <x-stat-card title="Pelaku Hari Ini" :value="$stats['pelaku_hari']" icon="fa-solid fa-user-clock"
+                varian="warning" badge="Akun" badgeType="warning" description="Akun berbeda yang beraktivitas" />
         </div>
 
-        {{-- ── STATS ── --}}
-        <div class="stats-grid">
-            <div class="stat-card">
-                <div class="stat-icon" style="background:linear-gradient(135deg,#4f46e5,#4338ca);">
-                    <i class="fas fa-list-alt"></i>
+        {{-- Filter --}}
+        <div class="ds-card mb-4">
+            <form method="GET" action="{{ route('activity-log.index') }}" class="al-filter" role="search">
+                <div class="form-group al-filter__cari">
+                    <label class="form-label" for="alCari">Cari Aktivitas</label>
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="search" id="alCari" name="search" class="form-control" value="{{ request('search') }}" placeholder="Deskripsi atau nama pelaku...">
                 </div>
-                <div>
-                    <div class="stat-num">{{ number_format($stats['total']) }}</div>
-                    <div class="stat-label">Total Log</div>
+                <div class="form-group">
+                    <label class="form-label" for="alModul">Modul</label>
+                    <select id="alModul" name="modul" class="form-select">
+                        <option value="semua">Semua modul</option>
+                        @foreach($modulList as $m)
+                        <option value="{{ $m }}" @selected(request('modul') === $m)>{{ \App\Models\ActivityLog::labelModul($m) }}</option>
+                        @endforeach
+                    </select>
                 </div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-icon" style="background:linear-gradient(135deg,#9f7aea,#4338ca);">
-                    <i class="fas fa-star"></i>
+                <div class="form-group">
+                    <label class="form-label" for="alAksi">Aksi</label>
+                    <select id="alAksi" name="aksi" class="form-select">
+                        <option value="semua">Semua aksi</option>
+                        @foreach($aksiList as $a)
+                        <option value="{{ $a }}" @selected(request('aksi') === $a)>{{ \App\Models\ActivityLog::labelAksi($a) }}</option>
+                        @endforeach
+                    </select>
                 </div>
-                <div>
-                    <div class="stat-num">{{ number_format($stats['poin']) }}</div>
-                    <div class="stat-label">Aktivitas Poin</div>
+                <div class="form-group">
+                    <label class="form-label" for="alPelaku">Pelaku</label>
+                    <select id="alPelaku" name="user_id" class="form-select">
+                        <option value="semua">Semua pelaku</option>
+                        @foreach($users as $u)
+                        <option value="{{ $u->id }}" @selected((string) request('user_id') === (string) $u->id)>{{ $u->name }} ({{ $u->role }})</option>
+                        @endforeach
+                    </select>
                 </div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-icon" style="background:linear-gradient(135deg,#43e97b,#38a169);">
-                    <i class="fas fa-calendar-alt"></i>
+                <div class="form-group">
+                    <label class="form-label" for="alDari">Dari</label>
+                    <input type="date" id="alDari" name="dari" class="form-control" value="{{ request('dari') }}" max="{{ today()->toDateString() }}">
                 </div>
-                <div>
-                    <div class="stat-num">{{ number_format($stats['acara']) }}</div>
-                    <div class="stat-label">Aktivitas Acara</div>
+                <div class="form-group">
+                    <label class="form-label" for="alSampai">Sampai</label>
+                    <input type="date" id="alSampai" name="sampai" class="form-control" value="{{ request('sampai') }}" max="{{ today()->toDateString() }}">
                 </div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-icon" style="background:linear-gradient(135deg,#f093fb,#f5576c);">
-                    <i class="fas fa-envelope"></i>
-                </div>
-                <div>
-                    <div class="stat-num">{{ number_format($stats['surat']) }}</div>
-                    <div class="stat-label">Aktivitas Surat</div>
-                </div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-icon" style="background:linear-gradient(135deg,#63b3ed,#3182ce);">
-                    <i class="fas fa-newspaper"></i>
-                </div>
-                <div>
-                    <div class="stat-num">{{ number_format($stats['berita']) }}</div>
-                    <div class="stat-label">Aktivitas Berita</div>
-                </div>
-            </div>
-        </div>
-
-        {{-- ── FILTER ── --}}
-        <div class="filter-panel">
-            <form method="GET" action="{{ route('activity-log.index') }}">
-                <div class="filter-grid">
-                    <div>
-                        <label class="filter-label">Cari Aktivitas</label>
-                        <div class="filter-search">
-                            <i class="fas fa-search"></i>
-                            <input type="text" name="search" class="filter-input"
-                                   value="{{ request('search') }}"
-                                   placeholder="Cari deskripsi atau pelaku...">
-                        </div>
-                    </div>
-                    <div>
-                        <label class="filter-label">Modul</label>
-                        <select name="modul" class="filter-select">
-                            <option value="semua" {{ request('modul','semua')==='semua'?'selected':'' }}>Semua Modul</option>
-                            <option value="poin"  {{ request('modul')==='poin' ?'selected':'' }}>⭐ Poin</option>
-                            <option value="acara" {{ request('modul')==='acara'?'selected':'' }}>📅 Acara</option>
-                            <option value="surat" {{ request('modul')==='surat'?'selected':'' }}>✉️ Surat</option>
-                            <option value="berita" {{ request('modul')==='berita'?'selected':'' }}>📰 Berita</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="filter-label">Aksi</label>
-                        <select name="aksi" class="filter-select">
-                            <option value="semua"   {{ request('aksi','semua')==='semua'  ?'selected':'' }}>Semua Aksi</option>
-                            <option value="tambah"  {{ request('aksi')==='tambah' ?'selected':'' }}>➕ Tambah</option>
-                            <option value="buat"    {{ request('aksi')==='buat'   ?'selected':'' }}>🆕 Buat</option>
-                            <option value="ubah"    {{ request('aksi')==='ubah'   ?'selected':'' }}>✏️ Ubah</option>
-                            <option value="hapus"   {{ request('aksi')==='hapus'  ?'selected':'' }}>🗑️ Hapus</option>
-                            <option value="setujui" {{ request('aksi')==='setujui'?'selected':'' }}>✅ Setujui</option>
-                            <option value="tolak"   {{ request('aksi')==='tolak'  ?'selected':'' }}>❌ Tolak</option>
-                            <option value="selesai" {{ request('aksi')==='selesai'?'selected':'' }}>🏁 Selesai</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="filter-label">Dari Tanggal</label>
-                        <input type="date" name="dari" class="filter-input" value="{{ request('dari') }}">
-                    </div>
-                    <div>
-                        <label class="filter-label">Sampai Tanggal</label>
-                        <input type="date" name="sampai" class="filter-input" value="{{ request('sampai') }}">
-                    </div>
-                    <div style="display:flex;gap:6px;">
-                        <button type="submit" class="btn-filter">
-                            <i class="fas fa-filter"></i> Filter
-                        </button>
-                        @if(request()->hasAny(['search','modul','aksi','dari','sampai']))
-                        <a href="{{ route('activity-log.index') }}" class="btn-reset" title="Reset filter">
-                            <i class="fas fa-times"></i>
-                        </a>
-                        @endif
-                    </div>
+                <div class="al-filter__aksi">
+                    <button type="submit" class="ds-btn ds-btn--primary"><i class="fa-solid fa-filter"></i> Terapkan</button>
+                    @if($adaFilter)
+                    <a href="{{ route('activity-log.index') }}" class="ds-btn" title="Reset filter" aria-label="Reset filter"><i class="fa-solid fa-xmark"></i></a>
+                    @endif
                 </div>
             </form>
         </div>
 
-        {{-- ── TABEL LOG ── --}}
-        <div class="log-card">
-            <div class="log-card-header">
-                <div class="log-card-title">
-                    <i class="fas fa-history" style="color:#4f46e5;"></i>
-                    Riwayat Aktivitas
+        {{-- Riwayat --}}
+        <div class="ds-card">
+            <div class="ds-card__head tbl-head">
+                <div>
+                    <h3 class="ds-card__title"><i class="fa-solid fa-clock-rotate-left ds-icon"></i> Riwayat Aktivitas</h3>
+                    <p class="ds-card__desc">{{ $adaFilter ? 'Hasil sesuai filter' : 'Aktivitas terbaru tampil paling atas' }} — klik Detail untuk melihat data lengkap</p>
                 </div>
-                <div class="log-card-count">{{ $logs->total() }} entri ditemukan</div>
+                <span class="ds-badge ds-badge--accent">{{ number_format($logs->total(), 0, ',', '.') }} entri</span>
             </div>
 
-            @if($logs->count() > 0)
-            <div style="overflow-x:auto;">
-                <table data-server-sort>
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th data-sort="waktu">Waktu</th>
-                            <th data-sort="modul">Modul</th>
-                            <th data-sort="aksi">Aksi</th>
-                            <th>Deskripsi Aktivitas</th>
-                            <th data-sort="pelaku">Pelaku</th>
-                            <th style="text-align:center;">Detail</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach($logs as $index => $log)
-
-                        {{-- Baris utama --}}
-                        <tr>
-                            <td style="color:#bbb;font-weight:600;font-size:12px;">
-                                {{ $logs->firstItem() + $index }}
-                            </td>
-                            <td>
-                                <div class="time-main">{{ $log->created_at->format('d/m/Y') }}</div>
-                                <div class="time-sub">{{ $log->created_at->format('H:i:s') }}</div>
-                            </td>
-                            <td>
-                                <span class="badge-pill"
-                                      style="background:{{ $log->modul_bg_color }};color:{{ $log->modul_color }};">
-                                    <i class="fas {{ $log->modul_icon }}" style="font-size:10px;"></i>
-                                    {{ $log->modul_label }}
-                                </span>
-                            </td>
-                            <td>
-                                <span class="badge-pill"
-                                      style="background:{{ $log->aksi_bg_color }};color:{{ $log->aksi_color }};">
-                                    {{ $log->aksi_label }}
-                                </span>
-                            </td>
-                            <td style="max-width:340px;line-height:1.5;">
-                                {{ $log->deskripsi }}
-                            </td>
-                            <td>
-                                <div class="pelaku-wrap">
-                                    <div class="pelaku-ava">
-                                        {{ strtoupper(substr($log->user_name, 0, 1)) }}
-                                    </div>
-                                    <div>
-                                        <div class="pelaku-name">{{ $log->user_name }}</div>
-                                        <div class="pelaku-role">{{ $log->user_role }}</div>
-                                    </div>
-                                </div>
-                            </td>
-                            <td style="text-align:center;">
-                                @if($log->detail)
-                                <button class="btn-detail" onclick="toggleDetail({{ $log->id }}, this)">
-                                    <i class="fas fa-eye"></i> Lihat
-                                </button>
-                                @else
-                                <span style="color:#ddd;font-size:13px;">—</span>
-                                @endif
-                            </td>
-                        </tr>
-
-                        {{-- Baris detail (expand) --}}
-                        @if($log->detail)
-                        <tr id="detail-row-{{ $log->id }}" style="display:none;" class="detail-row">
-                            <td colspan="7" style="padding:6px 16px 14px;">
-                                <div class="detail-inner" style="border-left-color:{{ $log->modul_color }};">
-                                    <div class="detail-label">
-                                        <i class="fas fa-info-circle"></i> Detail Lengkap
-                                    </div>
-                                    <div class="detail-grid">
-                                        @foreach($log->detail as $key => $value)
-                                            @if($value !== null && $value !== '')
-                                            <div class="detail-chip">
-                                                <div class="detail-chip-key">{{ str_replace('_',' ',$key) }}</div>
-                                                <div class="detail-chip-value">
-                                                    {{ is_array($value) ? implode(', ', $value) : $value }}
-                                                </div>
-                                            </div>
-                                            @endif
-                                        @endforeach
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
-                        @endif
-
-                        @endforeach
-                    </tbody>
-                </table>
+            @if($logs->isEmpty())
+            <div class="ds-empty">
+                <i class="fa-solid fa-clock-rotate-left ds-icon"></i>
+                {{ $adaFilter ? 'Tidak ada aktivitas yang cocok dengan filter.' : 'Log akan muncul otomatis saat ada aktivitas pada sistem.' }}
             </div>
-
-            {{-- Pagination --}}
-            @if($logs->hasPages())
-            <div style="padding:16px 22px;border-top:1px solid #f0f2f7;display:flex;justify-content:flex-end;">
-                {{ $logs->links() }}
-            </div>
-            @endif
-
             @else
-
-            {{-- Empty state --}}
-            <div class="empty-state">
-                <div class="empty-icon"><i class="fas fa-history"></i></div>
-                <h4>Belum ada log aktivitas</h4>
-                <p>
-                    @if(request()->hasAny(['search','modul','aksi','dari','sampai']))
-                        Tidak ada hasil yang cocok dengan filter.
-                        <a href="{{ route('activity-log.index') }}" style="color:#4f46e5;font-weight:600;">Reset filter</a>
-                    @else
-                        Log akan muncul otomatis saat ada aktivitas pada sistem.
-                    @endif
-                </p>
+            <div class="ds-table-wrap">
+                <div class="ds-scroll">
+                    <table data-server-sort data-no-tools class="ds-table tbl-table al-table">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th data-sort="waktu">Waktu</th>
+                                <th data-sort="modul">Modul</th>
+                                <th data-sort="aksi">Aksi</th>
+                                <th>Deskripsi Aktivitas</th>
+                                <th data-sort="pelaku">Pelaku</th>
+                                <th class="ds-center">Detail</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($logs as $index => $log)
+                            @php [$modLabel, $modIkon, $modVarian] = $log->modulMeta(); @endphp
+                            <tr>
+                                <td class="al-no">{{ $logs->firstItem() + $index }}</td>
+                                <td class="tbl-date">
+                                    <div class="tbl-title">{{ $log->created_at->locale('id')->isoFormat('D MMM Y') }}</div>
+                                    <div class="tbl-sub">{{ $log->created_at->format('H:i:s') }} · {{ $log->created_at->locale('id')->diffForHumans() }}</div>
+                                </td>
+                                <td><span class="ds-badge ds-badge--{{ $modVarian }}"><i class="fa-solid {{ $modIkon }}"></i> {{ $modLabel }}</span></td>
+                                <td><span class="ds-badge {{ $log->aksi_varian ? 'ds-badge--' . $log->aksi_varian : '' }}">{{ \App\Models\ActivityLog::labelAksi($log->aksi) }}</span></td>
+                                <td class="al-desk">{{ $log->deskripsi }}</td>
+                                <td>
+                                    <div class="ds-cell-person">
+                                        <span class="ds-avatar">{{ strtoupper(substr($log->user_name, 0, 2)) }}</span>
+                                        <div>
+                                            <div class="tbl-title">{{ $log->user_name }}</div>
+                                            <div class="tbl-sub">{{ ucfirst($log->user_role) }}</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="ds-center">
+                                    @if($log->detail)
+                                    <button type="button" class="ds-btn ds-btn--xs ds-btn--pill" aria-expanded="false" aria-controls="detail-{{ $log->id }}" onclick="toggleDetail(this)">
+                                        <i class="fa-solid fa-eye"></i> <span>Detail</span>
+                                    </button>
+                                    @else
+                                    <span class="tbl-sub">—</span>
+                                    @endif
+                                </td>
+                            </tr>
+                            @if($log->detail)
+                            <tr class="al-detail-baris" id="detail-{{ $log->id }}" hidden>
+                                <td colspan="7">
+                                    <div class="al-detail" style="--al-garis: var(--{{ $modVarian === 'dark' ? 'ink-800' : $modVarian }})">
+                                        <div class="al-detail__judul"><i class="fa-solid fa-circle-info"></i> Detail lengkap</div>
+                                        <dl class="al-detail__grid" style="margin:0">
+                                            @foreach($log->detail as $key => $value)
+                                            @continue($value === null || $value === '')
+                                            <div class="al-chip">
+                                                <dt>{{ str_replace('_', ' ', $key) }}</dt>
+                                                <dd>{{ is_array($value) ? json_encode($value, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) : (is_bool($value) ? ($value ? 'Ya' : 'Tidak') : $value) }}</dd>
+                                            </div>
+                                            @endforeach
+                                        </dl>
+                                    </div>
+                                </td>
+                            </tr>
+                            @endif
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
             </div>
-
+            @if($logs->hasPages())
+            <div class="al-pagination">{{ $logs->links() }}</div>
+            @endif
             @endif
         </div>
 
@@ -425,13 +200,13 @@ tbody tr:hover { background:#fafbff; }
 </main>
 
 <script>
-function toggleDetail(id, btn) {
-    const row  = document.getElementById('detail-row-' + id);
-    const open = row.style.display !== 'none';
-    row.style.display = open ? 'none' : 'table-row';
-    btn.innerHTML = open
-        ? '<i class="fas fa-eye"></i> Lihat'
-        : '<i class="fas fa-eye-slash"></i> Tutup';
+function toggleDetail(btn) {
+    const baris = document.getElementById(btn.getAttribute('aria-controls'));
+    const buka = baris.hidden;
+    baris.hidden = !buka;
+    btn.setAttribute('aria-expanded', buka);
+    btn.querySelector('i').className = 'fa-solid ' + (buka ? 'fa-eye-slash' : 'fa-eye');
+    btn.querySelector('span').textContent = buka ? 'Tutup' : 'Detail';
 }
 </script>
 </x-app-layout>

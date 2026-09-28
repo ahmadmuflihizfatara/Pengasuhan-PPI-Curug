@@ -17,20 +17,43 @@ class ApelController extends Controller
     use LogsActivity;
 
     /**
-     * Daftar apel + detail apel terpilih.
-     * Apel dipilih lewat dropdown (tanggal + sesi).
+     * Daftar apel pada satu tanggal (dicari lewat tanggal saja).
+     * Default: apel terdekat — hari ini/berikutnya, kalau tidak ada ambil apel terakhir (sama dengan jadwalTaruna).
      */
     public function index(Request $request): View
     {
-        $daftarApel = Apel::with('pembinaUser')->terbaru()->get();
+        $filter = $request->validate([
+            'tanggal' => ['nullable', 'date'],
+            'sesi'    => ['nullable', Rule::in([Apel::SESI_PAGI, Apel::SESI_MALAM, Apel::SESI_KHUSUS])],
+        ]);
+        $sesi = $filter['sesi'] ?? null;
 
-        $terpilih = $request->filled('apel')
-            ? $daftarApel->firstWhere('id', (int) $request->get('apel'))
-            : $daftarApel->first();
+        // Semua pencarian (default tanggal, daftar, lompat tanggal) mengikuti filter jenis apel bila dipilih
+        $apel = fn () => Apel::query()->when($sesi, fn ($q) => $q->where('sesi', $sesi));
+
+        $tanggal = Carbon::parse(
+            $filter['tanggal']
+                ?? $apel()->whereDate('tanggal', '>=', today())->min('tanggal')
+                ?? $apel()->max('tanggal')
+                ?? today()
+        )->startOfDay();
+
+        $daftarApel = $apel()->with(['pembinaUser', 'pembuat'])
+            ->whereDate('tanggal', $tanggal)
+            ->orderBy('jam')
+            ->get();
+
+        // Lompat ke tanggal apel terdekat sebelum / sesudah tanggal yang dilihat
+        $sebelumnya = $apel()->whereDate('tanggal', '<', $tanggal)->max('tanggal');
+        $berikutnya = $apel()->whereDate('tanggal', '>', $tanggal)->min('tanggal');
 
         return view('apel.index', [
             'daftarApel' => $daftarApel,
-            'terpilih'   => $terpilih,
+            'tanggal'    => $tanggal,
+            'sesi'       => $sesi,
+            'sebelumnya' => $sebelumnya ? Carbon::parse($sebelumnya) : null,
+            'berikutnya' => $berikutnya ? Carbon::parse($berikutnya) : null,
+            'totalApel'  => Apel::count(),
             'bolehIsi'   => AksesFitur::diizinkan(AksesFitur::APEL),
         ]);
     }
@@ -99,7 +122,7 @@ class ApelController extends Controller
             subject: $apel
         );
 
-        return redirect()->route('apel.index', ['apel' => $apel->id])
+        return redirect()->route('apel.index', ['tanggal' => $apel->tanggal->format('Y-m-d')])
             ->with('success', 'Data apel berhasil disimpan.');
     }
 
@@ -133,7 +156,7 @@ class ApelController extends Controller
             subject: $apel
         );
 
-        return redirect()->route('apel.index', ['apel' => $apel->id])
+        return redirect()->route('apel.index', ['tanggal' => $apel->tanggal->format('Y-m-d')])
             ->with('success', 'Data apel berhasil diperbarui.');
     }
 
@@ -151,9 +174,10 @@ class ApelController extends Controller
             subject: $apel
         );
 
+        $tanggal = $apel->tanggal->format('Y-m-d');
         $apel->delete();
 
-        return redirect()->route('apel.index')->with('success', 'Data apel berhasil dihapus.');
+        return redirect()->route('apel.index', ['tanggal' => $tanggal])->with('success', 'Data apel berhasil dihapus.');
     }
 
     /**

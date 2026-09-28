@@ -1,4 +1,6 @@
 <x-app-layout>
+{{-- Form memakai gaya yang sama dengan form Surat, Reward & Apel --}}
+<x-form-glass-style />
 
 {{-- Top Floating Island Capsule Navbar --}}
 <x-island-navbar />
@@ -16,12 +18,13 @@
                 <style>
                     .ds-table tr.konsinyir-saya { background: var(--accent-tint); }
 
-                    /* Form tambah — teks sedikit dinaikkan agar mudah dibaca */
-                    .konsinyir-form { background: var(--glass-card); }
-                    .konsinyir-form .ds-card__desc { font-size: 12px; line-height: 16px; }
-                    .konsinyir-form .ds-label { font-size: 11px; color: var(--ink-900); }
-                    .konsinyir-form .ds-input, .konsinyir-form .ds-textarea { font-size: 13px; line-height: 18px; background: var(--glass-solid); }
-                    .konsinyir-form .ds-textarea { resize: vertical; }
+                    /* Form tambah */
+                    .konsinyir-form { margin-bottom: var(--space-4); }
+                    .konsinyir-form .ds-error { font-size: 11px; }
+                    .konsinyir-form .form-control.is-invalid { border-color: var(--danger); }
+                    .konsinyir-form textarea.form-control { resize: vertical; min-height: 84px; }
+                    .konsinyir-info { display: none; gap: var(--space-1-5); margin-top: var(--space-2); }
+                    .konsinyir-simpan { width: auto; padding-left: var(--space-8, 32px); padding-right: var(--space-8, 32px); }
                 </style>
 
                 {{-- Alerts --}}
@@ -36,48 +39,50 @@
 
                 @unless(auth()->user()->hasTarunaAccess())
                 {{-- Form Tambah Konsinyir --}}
-                <div class="ds-card konsinyir-form mb-6">
-                    <div class="ds-card__head">
-                        <h2 class="ds-card__title"><i class="fa-solid fa-user-plus ds-icon"></i> Tambah Data Konsinyir Baru</h2>
-                        <p class="ds-card__desc">Ketik nama taruna lalu pilih dari saran — program studi &amp; tingkat akan terisi otomatis.</p>
+                <div class="form-card konsinyir-form">
+                    <div class="form-section-title">
+                        <span><i class="fa-solid fa-user-plus me-2" style="color:var(--accent)"></i> Tambah Data Konsinyir Baru</span>
+                        <span class="ds-badge ds-badge--accent"><i class="fa-regular fa-clock"></i> Waktu: {{ now()->format('d/m/Y H:i') }}</span>
                     </div>
 
                     <form method="POST" action="{{ route('konsinyir.store') }}" id="konsinyirForm">
                         @csrf
-                        <div class="ds-form-grid ds-form-grid--3 mb-4">
-                            <div>
-                                <label for="namaTaruna" class="ds-label">Nama Taruna <span style="color:var(--danger-ink)">*</span></label>
+                        <div class="row">
+                            <div class="col-md-5 form-group">
+                                <label class="form-label" for="namaTaruna">Nama Taruna <span class="req">*</span></label>
                                 <input type="text" id="namaTaruna" list="daftarTaruna"
-                                       class="ds-input @error('mahasiswa_id') ds-input--invalid @enderror"
-                                       placeholder="Ketik nama taruna..." value="{{ $daftarTaruna->firstWhere('id', old('mahasiswa_id'))?->nama }}" autocomplete="off" required>
+                                       class="form-control @error('mahasiswa_id') is-invalid @enderror"
+                                       placeholder="Ketik nama lalu pilih dari saran" value="{{ $daftarTaruna->firstWhere('id', old('mahasiswa_id'))?->nama }}" autocomplete="off" required>
                                 <input type="hidden" name="mahasiswa_id" id="mahasiswaId" value="{{ old('mahasiswa_id') }}">
                                 @error('mahasiswa_id')<div class="ds-error">{{ $message }}</div>@enderror
-                                <div class="flex items-center gap-2 mt-2" id="infoTaruna" style="display:none;">
+                                <div class="ds-error" id="namaTarunaError" role="alert" hidden><i class="fa-solid fa-circle-exclamation"></i> Pilih nama taruna yang cocok dari daftar saran.</div>
+                                <div class="konsinyir-info" id="infoTaruna">
                                     <span class="ds-badge ds-badge--info" id="infoProdi"></span>
                                     <span class="ds-badge ds-badge--success" id="infoTingkat"></span>
                                 </div>
                             </div>
-                            <div>
-                                <label for="tanggalMulai" class="ds-label">Tanggal Mulai <span style="color:var(--danger-ink)">*</span></label>
+                            <div class="col-md-4 form-group">
+                                <label class="form-label" for="tanggalMulai">Tanggal Mulai <span class="req">*</span></label>
                                 <input type="date" name="tanggal_mulai" id="tanggalMulai"
-                                       class="ds-input @error('tanggal_mulai') ds-input--invalid @enderror"
+                                       class="form-control @error('tanggal_mulai') is-invalid @enderror"
                                        value="{{ old('tanggal_mulai', date('Y-m-d')) }}" required>
                                 @error('tanggal_mulai')<div class="ds-error">{{ $message }}</div>@enderror
                             </div>
-                            <div>
-                                <label for="lamaHari" class="ds-label">Lama Konsinyir (Hari) <span style="color:var(--danger-ink)">*</span></label>
+                            <div class="col-md-3 form-group">
+                                <label class="form-label" for="lamaHari">Lama (Hari) <span class="req">*</span></label>
                                 <input type="number" name="lama_hari" id="lamaHari"
-                                       class="ds-input @error('lama_hari') ds-input--invalid @enderror"
+                                       class="form-control @error('lama_hari') is-invalid @enderror"
                                        min="1" max="365" placeholder="Contoh: 3" value="{{ old('lama_hari') }}" required>
                                 @error('lama_hari')<div class="ds-error">{{ $message }}</div>@enderror
                             </div>
-                            <div class="ds-span-all">
-                                <label for="keterangan" class="ds-label">Keterangan / Alasan Konsinyir</label>
-                                <textarea name="keterangan" id="keterangan" rows="3"
-                                          class="ds-textarea @error('keterangan') ds-input--invalid @enderror"
-                                          placeholder="Tuliskan rincian alasan konsinyir...">{{ old('keterangan') }}</textarea>
-                                @error('keterangan')<div class="ds-error">{{ $message }}</div>@enderror
-                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="keterangan">Keterangan / Alasan Konsinyir</label>
+                            <textarea name="keterangan" id="keterangan" rows="3"
+                                      class="form-control @error('keterangan') is-invalid @enderror"
+                                      placeholder="Tuliskan rincian alasan konsinyir...">{{ old('keterangan') }}</textarea>
+                            <small class="form-help"><i class="fa-solid fa-circle-info"></i> Program studi &amp; tingkat terisi otomatis dari database mahasiswa setelah nama dipilih.</small>
+                            @error('keterangan')<div class="ds-error">{{ $message }}</div>@enderror
                         </div>
 
                         <datalist id="daftarTaruna">
@@ -86,8 +91,8 @@
                             @endforeach
                         </datalist>
 
-                        <button type="submit" class="ds-btn ds-btn--primary">
-                            <i class="fa-solid fa-floppy-disk"></i> Simpan Konsinyir
+                        <button type="submit" class="btn-submit-log konsinyir-simpan">
+                            <i class="fa-solid fa-floppy-disk"></i> SIMPAN KONSINYIR
                         </button>
                     </form>
                 </div>
@@ -137,18 +142,7 @@
 </main>
 
 @unless(auth()->user()->hasTarunaAccess())
-{{-- Modal Konfirmasi Hapus --}}
-<div class="ds-modal-overlay" id="hapusModal" style="display:none;" role="dialog" aria-modal="true" aria-labelledby="hapusModalJudul">
-    <div class="ds-modal">
-        <div class="ds-modal__icon"><i class="fa-solid fa-triangle-exclamation"></i></div>
-        <h3 class="ds-modal__title" id="hapusModalJudul">Hapus Data Konsinyir?</h3>
-        <p class="ds-modal__body" id="hapusModalNama"></p>
-        <div class="ds-modal__actions">
-            <button type="button" class="ds-btn" onclick="tutupHapusModal()">Batal</button>
-            <button type="button" class="ds-btn ds-btn--primary" style="background:var(--danger);" onclick="submitHapus()"><i class="fa-solid fa-trash"></i> Ya, Hapus</button>
-        </div>
-    </div>
-</div>
+<x-konfirmasi-modal />
 
 <script>
 const TARUNA = @json($daftarTaruna->mapWithKeys(fn($t) => [strtolower($t->nama) => ['id' => $t->id, 'prodi' => $t->prodi, 'tingkat' => $t->tingkat]]));
@@ -173,29 +167,16 @@ namaEl.addEventListener('input', cocokkanTaruna);
 namaEl.addEventListener('change', cocokkanTaruna);
 if (namaEl.value.trim()) cocokkanTaruna();
 
+// Nama harus cocok dengan database — tampilkan pesan di bawah kolom (bukan alert bawaan browser)
+const namaError = document.getElementById('namaTarunaError');
+namaEl.addEventListener('input', () => { namaError.hidden = true; namaEl.removeAttribute('aria-invalid'); });
 document.getElementById('konsinyirForm').addEventListener('submit', function(e) {
     if (!document.getElementById('mahasiswaId').value) {
         e.preventDefault();
+        namaError.hidden = false;
+        namaEl.setAttribute('aria-invalid', 'true');
         namaEl.focus();
-        alert('Pilih nama taruna yang cocok dari daftar (ketik lalu pilih dari saran).');
     }
-});
-
-let hapusFormId = null;
-function bukaHapusModal(formId, nama) {
-    hapusFormId = formId;
-    document.getElementById('hapusModalNama').textContent = 'Data konsinyir ' + nama + ' akan dihapus permanen.';
-    document.getElementById('hapusModal').style.display = 'flex';
-}
-function tutupHapusModal() {
-    document.getElementById('hapusModal').style.display = 'none';
-    hapusFormId = null;
-}
-function submitHapus() {
-    if (hapusFormId) document.getElementById(hapusFormId).submit();
-}
-document.getElementById('hapusModal').addEventListener('click', function(e) {
-    if (e.target === this) tutupHapusModal();
 });
 </script>
 @endunless

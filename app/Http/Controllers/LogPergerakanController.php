@@ -9,6 +9,7 @@ use App\Models\ActivityLog;
 use App\Traits\SortsQuery;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\Rule;
 use Carbon\Carbon;
 
 class LogPergerakanController extends Controller
@@ -137,10 +138,13 @@ class LogPergerakanController extends Controller
 
         $rules = [
             'kategori'           => 'required|in:perizinan,ekstrakurikuler,olahraga',
-            'subkategori'        => 'required|string|max:100',
+            // Perizinan: jenis izin harus dari daftar model (Unit Kesehatan, Izin Khusus, Izin Terstruktur, ...)
+            'subkategori'        => array_merge(['required', 'string', 'max:100'],
+                                        $request->kategori === LogPergerakan::KAT_PERIZINAN ? [Rule::in(array_keys(LogPergerakan::SUBKAT_PERIZINAN))] : []),
             'waktu_berangkat'    => 'required|date',
             'estimasi_kembali'   => 'nullable|date',
-            'keterangan_keluhan' => 'nullable|string',
+            // Wajib untuk perizinan — Izin Khusus tanpa surat, jadi alasan urgensi harus tertulis
+            'keterangan_keluhan' => 'nullable|string|required_if:kategori,' . LogPergerakan::KAT_PERIZINAN,
             'nama_ekskul'        => 'nullable|string|max:150',
             'jumlah_anggota'     => 'nullable|integer|min:1',
             'daftar_anggota'     => 'nullable|string',
@@ -156,7 +160,12 @@ class LogPergerakanController extends Controller
             $rules['prodi'] = 'nullable|string|max:100';
         }
 
-        $validated = $request->validate($rules);
+        $validated = $request->validate($rules, [
+            'subkategori.in'                 => 'Jenis izin tidak dikenal. Pilih salah satu jenis izin yang tersedia.',
+            'keterangan_keluhan.required_if' => $request->subkategori === LogPergerakan::SUBKAT_KHUSUS
+                ? 'Alasan urgensi wajib diisi untuk Izin Keluar Khusus (tanpa surat).'
+                : 'Keterangan izin wajib diisi.',
+        ]);
 
         if ($isTaruna) {
             // Taruna hanya boleh input untuk dirinya sendiri, satu izin aktif dalam satu waktu

@@ -54,19 +54,19 @@ class ActivityLogController extends Controller
 
         // Statistik ringkasan
         $stats = [
-            'total'   => ActivityLog::count(),
-            'poin'    => ActivityLog::where('modul', 'poin')->count(),
-            'acara'   => ActivityLog::where('modul', 'acara')->count(),
-            'surat'   => ActivityLog::where('modul', 'surat')->count(),
-            'berita'  => ActivityLog::where('modul', 'berita')->count(),
-            'hari_ini'=> ActivityLog::whereDate('created_at', today())->count(),
+            'total'       => ActivityLog::count(),
+            'hari_ini'    => ActivityLog::whereDate('created_at', today())->count(),
+            'minggu_ini'  => ActivityLog::where('created_at', '>=', today()->subDays(6))->count(),
+            'pelaku_hari' => ActivityLog::whereDate('created_at', today())->distinct()->count('user_id'),
         ];
 
-        // Daftar user untuk filter dropdown
-        $users = User::whereIn('role', ['pengasuh', 'admin'])
-                     ->orderBy('name')
-                     ->get(['id', 'name', 'role']);
+        // Pilihan filter diambil dari data yang benar-benar tercatat (semua modul & aksi, bukan daftar tetap)
+        $modulList = ActivityLog::distinct()->orderBy('modul')->pluck('modul');
+        $aksiList  = ActivityLog::distinct()->orderBy('aksi')->pluck('aksi');
+        $users     = User::whereIn('id', ActivityLog::whereNotNull('user_id')->distinct()->select('user_id'))
+                         ->orderBy('name')
+                         ->get(['id', 'name', 'role']);
 
-        return view('activity-log.index', compact('logs', 'stats', 'users'));
+        return view('activity-log.index', compact('logs', 'stats', 'users', 'modulList', 'aksiList'));
     }
 }

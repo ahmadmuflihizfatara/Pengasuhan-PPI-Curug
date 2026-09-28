@@ -1,92 +1,30 @@
 <x-app-layout>
+<x-form-glass-style />
 <style>
-* { box-sizing: border-box; }
-body { font-family: 'Inter', sans-serif; background: transparent; }
-.app-layout { display: flex; min-height: 100vh; }
-.main-content { flex: 1; padding: 28px 30px; min-width: 0; max-width: 760px; }
-
-.page-header {
-    background: linear-gradient(135deg, #4f46e5 0%, #4338ca 100%);
-    border-radius: 18px; padding: 28px 32px; color: white;
-    margin-bottom: 24px; position: relative; overflow: hidden;
-}
-.page-header::before { content: ''; position: absolute; right: -50px; top: -50px; width: 180px; height: 180px; background: rgba(255,255,255,.08); border-radius: 50%; }
-.page-header h1 { margin: 0 0 4px 0; font-size: 22px; font-weight: 800; position: relative; z-index: 1; }
-.page-header p { margin: 0; opacity: .85; font-size: 13px; position: relative; z-index: 1; }
-
-.back-link { display: inline-flex; align-items: center; gap: 7px; color: #4f46e5; text-decoration: none; font-size: 13px; font-weight: 600; margin-bottom: 20px; }
-.back-link:hover { text-decoration: underline; }
-
-.card { background: white; border-radius: 16px; padding: 32px; box-shadow: 0 2px 16px rgba(0,0,0,.06); }
-
-.form-group { margin-bottom: 20px; }
-.form-label { display: block; font-size: 13px; font-weight: 700; color: #444; margin-bottom: 8px; }
-.form-label i { color: #4f46e5; margin-right: 6px; }
-.form-control { width: 100%; padding: 11px 14px; border: 2px solid #e8ebf5; border-radius: 10px; font-size: 14px; font-family: 'Inter', sans-serif; color: #333; background: #fafbff; outline: none; transition: border .15s; }
-.form-control:focus { border-color: #4f46e5; background: white; }
-.form-control.error { border-color: #fc8181; }
-textarea.form-control { resize: vertical; min-height: 100px; }
-.form-hint { font-size: 12px; color: #e53e3e; margin-top: 5px; }
-.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-
-.btn-row { display: flex; gap: 12px; margin-top: 28px; padding-top: 20px; border-top: 1px solid #f0f2f7; }
-.btn-submit { flex: 1; background: linear-gradient(135deg, #4f46e5, #4338ca); color: white; border: none; padding: 13px; border-radius: 12px; font-size: 14px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 4px 15px rgba(79,70,229,.4); transition: opacity .15s; }
-.btn-submit:hover { opacity: .9; }
-.btn-cancel { background: #f5f6fa; color: #555; padding: 13px 24px; border-radius: 12px; font-size: 14px; font-weight: 700; text-decoration: none; display: flex; align-items: center; gap: 8px; border: 2px solid #e8ebf5; transition: border .15s; }
-.btn-cancel:hover { border-color: #f5576c; color: #f5576c; }
+    .ac-kembali { font-size: 13px; background: var(--glass-solid); color: var(--ink-800); }
+    .ac-kembali:hover { color: var(--accent-ink); }
 </style>
 
-{{-- Top Floating Island Capsule Navbar --}}
 <x-island-navbar />
 
-<div class="max-w-7xl mx-auto px-4 sm:px-6 pb-12 pt-2">
+<main class="max-w-7xl mx-auto px-4 sm:px-6 pb-12 pt-2">
     <div class="spatial-workspace-window rounded-3xl bg-white/30 backdrop-blur-2xl border border-white/50 shadow-2xl p-4 sm:p-7 relative overflow-hidden">
-        <a href="{{ route('acara.index') }}" class="back-link">
-            <i class="fas fa-arrow-left"></i> Kembali ke Daftar Acara
+
+        <x-page-banner title="Edit Acara" icon="fa-pen-to-square"
+            :subtitle="'Perbarui informasi acara: ' . $acara->nama_acara" />
+
+        <a href="{{ route('acara.index') }}" class="ds-btn ds-btn--pill ac-kembali mb-4">
+            <i class="fa-solid fa-arrow-left"></i> Kembali ke Daftar Acara
         </a>
 
-        <div class="page-header">
-            <h1><i class="fas fa-edit" style="margin-right:10px;"></i>Edit Acara</h1>
-            <p>Perbarui informasi acara: <strong>{{ $acara->nama_acara }}</strong></p>
-        </div>
+        @if($errors->any())
+        <x-glass-alert type="danger" title="Acara belum tersimpan">
+            @foreach($errors->all() as $e)<div>{{ $e }}</div>@endforeach
+        </x-glass-alert>
+        @endif
 
-        <div class="card">
-            <form method="POST" action="{{ route('acara.update', $acara->id) }}">
-                @csrf @method('PUT')
+        @include('acara._form', ['acara' => $acara])
 
-                <div class="form-group">
-                    <label class="form-label"><i class="fas fa-tag"></i>Nama Acara</label>
-                    <input type="text" name="nama_acara" value="{{ old('nama_acara', $acara->nama_acara) }}"
-                           class="form-control {{ $errors->has('nama_acara') ? 'error' : '' }}">
-                    @error('nama_acara')<p class="form-hint">{{ $message }}</p>@enderror
-                </div>
-
-                <div class="form-grid form-group">
-                    <div>
-                        <label class="form-label"><i class="fas fa-calendar"></i>Tanggal</label>
-                        <input type="date" name="tanggal" value="{{ old('tanggal', $acara->tanggal->format('Y-m-d')) }}"
-                               class="form-control {{ $errors->has('tanggal') ? 'error' : '' }}">
-                        @error('tanggal')<p class="form-hint">{{ $message }}</p>@enderror
-                    </div>
-                    <div>
-                        <label class="form-label"><i class="fas fa-clock"></i>Jam</label>
-                        <input type="time" name="jam" value="{{ old('jam', \Carbon\Carbon::parse($acara->jam)->format('H:i')) }}"
-                               class="form-control {{ $errors->has('jam') ? 'error' : '' }}">
-                        @error('jam')<p class="form-hint">{{ $message }}</p>@enderror
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label class="form-label"><i class="fas fa-align-left"></i>Keterangan <span style="color:#aab; font-weight:400;">(opsional)</span></label>
-                    <textarea name="keterangan" class="form-control">{{ old('keterangan', $acara->keterangan) }}</textarea>
-                </div>
-
-                <div class="btn-row">
-                    <button type="submit" class="btn-submit"><i class="fas fa-save"></i> Simpan Perubahan</button>
-                    <a href="{{ route('acara.index') }}" class="btn-cancel"><i class="fas fa-times"></i> Batal</a>
-                </div>
-            </form>
-        </div>
     </div>
-</div>
+</main>
 </x-app-layout>

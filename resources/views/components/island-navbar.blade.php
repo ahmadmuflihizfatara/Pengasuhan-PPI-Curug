@@ -16,6 +16,8 @@
     $logPergerakanUrl = $user && $user->hasTarunaAccess() ? route('log-pergerakan.mandiri') : route('log-pergerakan.index');
     $apelUrl = $user && $user->hasTarunaAccess() ? route('apel.jadwal') : route('apel.index');
     $jadwalUrl = $user && $user->hasTarunaAccess() ? route('jadwal.taruna') : route('jadwal.index');
+    // Duty Taruna (route duty.*) adalah sub-tab Jadwal bagi pengasuh & admin — tab Jadwal ikut aktif; Kasi Internal punya ikon Duty sendiri
+    $jadwalAktif = $isActive('jadwal') || ($isActive('duty') && !($user?->isKasiInternal()));
     $barakUrl = $user && $user->hasTarunaAccess() ? route('keluhan-barak.index') : route('keluhan-barak.kelola');
     $suratUrl = $user && $user->hasTarunaAccess() ? route('surat-taruna.index') : route('surat.index');
     $rewardUrl = $user && $user->hasTarunaAccess() ? route('reward.index') : route('reward.kelola');
@@ -86,16 +88,16 @@
 
             {{-- 5. Jadwal Pengasuhan --}}
             <a href="{{ $jadwalUrl }}" 
-               class="{{ $isActive('jadwal') ? 'bg-white text-slate-950 font-bold px-3.5 py-2 shadow-md' : 'text-white/70 hover:text-white hover:bg-white/10 p-2.5' }} rounded-full transition-all duration-200 flex items-center gap-2 no-underline text-xs flex-shrink-0" 
+               class="{{ $jadwalAktif ? 'bg-white text-slate-950 font-bold px-3.5 py-2 shadow-md' : 'text-white/70 hover:text-white hover:bg-white/10 p-2.5' }} rounded-full transition-all duration-200 flex items-center gap-2 no-underline text-xs flex-shrink-0" 
                title="Jadwal Pengasuh & Duty Taruna">
                 <i class="fa-solid fa-clock text-xs"></i>
-                @if($isActive('jadwal'))
+                @if($jadwalAktif)
                 <span class="text-xs font-bold">Jadwal</span>
                 @endif
             </a>
 
-            {{-- 5b. Duty Taruna (khusus Kepala Seksi Internal & Admin) --}}
-            @if($user && ($user->isKasiInternal() || $user->isAdmin()))
+            {{-- 5b. Duty Taruna (khusus Kepala Seksi Internal — admin & pengasuh membukanya lewat sub-tab Jadwal) --}}
+            @if($user && $user->isKasiInternal())
             <a href="{{ route('duty.index') }}"
                class="{{ $isActive('duty') ? 'bg-white text-slate-950 font-bold px-3.5 py-2 shadow-md' : 'text-white/70 hover:text-white hover:bg-white/10 p-2.5' }} rounded-full transition-all duration-200 flex items-center gap-2 no-underline text-xs flex-shrink-0"
                title="Jadwal Duty Taruna Mingguan">
@@ -450,12 +452,12 @@
                         <span>Apel & Presensi</span>
                     </a>
 
-                    <a href="{{ $jadwalUrl }}" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl font-semibold transition no-underline {{ $isActive('jadwal') ? 'bg-white text-slate-950 font-bold shadow-md' : 'text-white/80 hover:bg-white/10 hover:text-white' }}">
-                        <i class="fa-solid fa-clock w-4 text-center {{ $isActive('jadwal') ? 'text-indigo-600' : 'text-amber-400' }}"></i>
+                    <a href="{{ $jadwalUrl }}" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl font-semibold transition no-underline {{ $jadwalAktif ? 'bg-white text-slate-950 font-bold shadow-md' : 'text-white/80 hover:bg-white/10 hover:text-white' }}">
+                        <i class="fa-solid fa-clock w-4 text-center {{ $jadwalAktif ? 'text-indigo-600' : 'text-amber-400' }}"></i>
                         <span>Jadwal & Duty</span>
                     </a>
 
-                    @if($user && ($user->isKasiInternal() || $user->isAdmin()))
+                    @if($user && $user->isKasiInternal())
                     <a href="{{ route('duty.index') }}" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl font-semibold transition no-underline {{ $isActive('duty') ? 'bg-white text-slate-950 font-bold shadow-md' : 'text-white/80 hover:bg-white/10 hover:text-white' }}">
                         <i class="fa-solid fa-calendar-check w-4 text-center {{ $isActive('duty') ? 'text-indigo-600' : 'text-amber-400' }}"></i>
                         <span>Duty Taruna</span>

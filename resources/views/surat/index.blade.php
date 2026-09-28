@@ -1,288 +1,195 @@
 <x-app-layout>
+<x-form-glass-style />
+<style>
+    /* Kartu aksi */
+    .sr-aksi { display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); flex-wrap: wrap; }
+    .sr-aksi__teks { font-size: 13px; font-weight: 600; color: var(--ink-700); }
+    .sr-aksi__teks i { color: var(--accent); margin-right: var(--space-1-5); }
+
+    /* Filter — pola filter Log Gerbang & Barak */
+    .sr-filter { display: grid; grid-template-columns: minmax(0, 4fr) minmax(0, 3fr) minmax(0, 2fr) auto; gap: var(--space-2-5); align-items: end; }
+    @media (max-width: 1023px) { .sr-filter { grid-template-columns: 1fr 1fr; } .sr-filter__cari, .sr-filter__aksi { grid-column: 1 / -1; } }
+    .sr-filter .form-group { margin: 0; }
+    .sr-filter__cari { position: relative; }
+    .sr-filter__cari i { position: absolute; left: var(--space-3); bottom: 12px; font-size: 12px; color: var(--ink-500); pointer-events: none; }
+    .sr-filter__cari .form-control { padding-left: 34px; }
+    .sr-filter__aksi { display: flex; gap: var(--space-2); }
+    .sr-filter__aksi .ds-btn { height: 38px; }
+    .sr-filter__aksi .ds-btn--primary { flex: 1; justify-content: center; }
+
+    .sr-table td { vertical-align: top; }
+    .sr-table td:nth-child(2) { min-width: 180px; }
+    .sr-perihal { max-width: 240px; }
+    .sr-perihal .tbl-title, .sr-perihal .tbl-sub { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .sr-link { color: inherit; text-decoration: none; }
+    .sr-link:hover { color: var(--accent-ink); text-decoration: underline; }
+    .sr-nomor { font-family: var(--font-mono); font-size: 12px; font-weight: 800; color: var(--accent-ink); white-space: nowrap; }
+    .sr-aksi-sel { display: inline-flex; gap: var(--space-1); }
+    .sr-aksi-sel form { margin: 0; }
+    .sr-pagination { margin-top: var(--space-4); }
+</style>
 
 {{-- Top Floating Island Capsule Navbar --}}
 <x-island-navbar />
 
+@php $adaFilter = request()->hasAny(['search', 'jenis', 'status']); @endphp
+
 <main class="max-w-7xl mx-auto px-4 sm:px-6 pb-12 pt-2">
     <div class="spatial-workspace-window rounded-3xl bg-white/30 backdrop-blur-2xl border border-white/50 shadow-2xl p-4 sm:p-7 relative overflow-hidden">
-        
 
-                
-                {{-- Page Header Glass Banner --}}
-                <div class="rounded-2xl bg-gradient-to-r from-blue-900/90 via-indigo-900/85 to-slate-900/90 backdrop-blur-xl border border-white/30 p-6 text-white mb-6 shadow-xl relative overflow-hidden flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-                    <div class="relative z-10">
-                        <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/15 backdrop-blur-md border border-white/20 text-[10px] font-bold tracking-widest uppercase text-sky-200 mb-2">
-                            <span>✦</span>
-                            <span>Administrasi &amp; Perizinan</span>
-                        </div>
-                        <h1 class="text-xl sm:text-2xl font-extrabold tracking-tight text-white mb-1 flex items-center gap-2">
-                            <i class="fa-solid fa-envelope-open-text text-sky-400"></i>
-                            <span>Administrasi Surat Pengasuhan</span>
-                        </h1>
-                        <p class="text-xs text-sky-100/80">Kelola dan pantau seluruh permohonan surat izin, surat keterangan, dan disposisi pengasuhan</p>
-                    </div>
+        {{-- Header — sama dengan header tab lain --}}
+        <x-page-banner title="Administrasi Surat Pengasuhan" icon="fa-envelope-open-text"
+            subtitle="Kelola dan pantau permohonan surat izin, surat keterangan, dan disposisi pengasuhan" />
 
-                    <div class="relative z-10">
-                        <a href="{{ route('surat.create') }}" class="px-4 py-2 rounded-xl bg-white hover:bg-slate-50 text-slate-900 font-extrabold text-xs shadow-md transition flex items-center gap-2 no-underline">
-                            <i class="fa-solid fa-plus text-indigo-600"></i>
-                            <span>Tambah Surat Baru</span>
-                        </a>
-                    </div>
+        <div class="ds-card sr-aksi mb-4">
+            <span class="sr-aksi__teks"><i class="fa-solid fa-file-circle-plus"></i>Catat surat masuk, surat keluar, atau disposisi baru</span>
+            <a href="{{ route('surat.create') }}" class="ds-btn ds-btn--primary"><i class="fa-solid fa-plus"></i> Tambah Surat Baru</a>
+        </div>
 
-                    <div class="absolute -right-10 -top-10 w-40 h-40 bg-indigo-500/20 rounded-full blur-3xl pointer-events-none"></div>
+        @if(session('success'))
+        <x-glass-alert type="success" title="Berhasil">{{ session('success') }}</x-glass-alert>
+        @endif
+
+        {{-- Statistik — klik untuk menyaring status --}}
+        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3.5 mb-4">
+            <x-stat-card title="Total Surat" :value="$stats['total']" icon="fa-solid fa-envelope"
+                varian="accent" badge="Semua" badgeType="accent" :href="route('surat.index')" description="Seluruh surat tercatat" />
+            <x-stat-card title="Diproses" :value="$stats['diproses']" icon="fa-solid fa-hourglass-half"
+                varian="warning" badge="Menunggu" badgeType="warning" :href="route('surat.index', ['status' => 'Diproses'])" description="Perlu ditinjau" />
+            <x-stat-card title="Disetujui" :value="$stats['disetujui']" icon="fa-solid fa-circle-check"
+                varian="success" badge="Disetujui" badgeType="success" :href="route('surat.index', ['status' => 'Disetujui'])" description="Permohonan disetujui" />
+            <x-stat-card title="Ditolak" :value="$stats['ditolak']" icon="fa-solid fa-circle-xmark"
+                varian="danger" badge="Ditolak" badgeType="danger" :href="route('surat.index', ['status' => 'Ditolak'])" description="Permohonan ditolak" />
+            <x-stat-card title="Selesai" :value="$stats['selesai']" icon="fa-solid fa-flag-checkered"
+                varian="info" badge="Tuntas" badgeType="accent" :href="route('surat.index', ['status' => 'Selesai'])" description="Surat selesai diproses" />
+        </div>
+
+        {{-- Filter --}}
+        <div class="ds-card mb-4">
+            <form method="GET" action="{{ route('surat.index') }}" class="sr-filter" role="search">
+                <div class="form-group sr-filter__cari">
+                    <label class="form-label" for="srCari">Cari</label>
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="search" id="srCari" name="search" value="{{ request('search') }}" class="form-control" placeholder="Perihal, pengirim, nomor surat...">
                 </div>
-
-                {{-- Alerts --}}
-                @if(session('success'))
-                <div class="rounded-2xl bg-emerald-100/90 border border-emerald-300 p-4 text-emerald-800 text-xs font-bold mb-5 flex items-center gap-2 shadow-sm backdrop-blur-md">
-                    <i class="fa-solid fa-circle-check text-emerald-600 text-base"></i>
-                    <span>{{ session('success') }}</span>
+                <div class="form-group">
+                    <label class="form-label" for="srJenis">Jenis Surat</label>
+                    <select id="srJenis" name="jenis" class="form-select">
+                        <option value="">Semua jenis</option>
+                        @foreach(\App\Models\Surat::jenisSuratList() as $j)
+                        <option value="{{ $j }}" @selected(request('jenis') === $j)>{{ $j }}</option>
+                        @endforeach
+                    </select>
                 </div>
-                @endif
-
-                {{-- 5 KPI Stat Cards Grid --}}
-                <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3.5 mb-5">
-                    <div class="rounded-2xl bg-white/50 backdrop-blur-xl border border-white/60 p-4 shadow-md text-center">
-                        <div class="w-8 h-8 rounded-xl bg-indigo-100 text-indigo-700 flex items-center justify-center mx-auto mb-2 text-xs font-bold shadow-sm">
-                            <i class="fa-solid fa-envelope"></i>
-                        </div>
-                        <div class="text-2xl font-black text-slate-900 font-mono">{{ $stats['total'] }}</div>
-                        <div class="text-[10px] font-bold text-slate-500 uppercase tracking-wider mt-0.5">Total Surat</div>
-                    </div>
-
-                    <div class="rounded-2xl bg-white/50 backdrop-blur-xl border border-white/60 p-4 shadow-md text-center">
-                        <div class="w-8 h-8 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center mx-auto mb-2 text-xs font-bold shadow-sm">
-                            <i class="fa-solid fa-spinner"></i>
-                        </div>
-                        <div class="text-2xl font-black text-amber-600 font-mono">{{ $stats['diproses'] }}</div>
-                        <div class="text-[10px] font-bold text-slate-500 uppercase tracking-wider mt-0.5">Diproses</div>
-                    </div>
-
-                    <div class="rounded-2xl bg-white/50 backdrop-blur-xl border border-white/60 p-4 shadow-md text-center">
-                        <div class="w-8 h-8 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center mx-auto mb-2 text-xs font-bold shadow-sm">
-                            <i class="fa-solid fa-circle-check"></i>
-                        </div>
-                        <div class="text-2xl font-black text-emerald-600 font-mono">{{ $stats['disetujui'] }}</div>
-                        <div class="text-[10px] font-bold text-slate-500 uppercase tracking-wider mt-0.5">Disetujui</div>
-                    </div>
-
-                    <div class="rounded-2xl bg-white/50 backdrop-blur-xl border border-white/60 p-4 shadow-md text-center">
-                        <div class="w-8 h-8 rounded-xl bg-rose-100 text-rose-700 flex items-center justify-center mx-auto mb-2 text-xs font-bold shadow-sm">
-                            <i class="fa-solid fa-circle-xmark"></i>
-                        </div>
-                        <div class="text-2xl font-black text-rose-600 font-mono">{{ $stats['ditolak'] }}</div>
-                        <div class="text-[10px] font-bold text-slate-500 uppercase tracking-wider mt-0.5">Ditolak</div>
-                    </div>
-
-                    <div class="rounded-2xl bg-white/50 backdrop-blur-xl border border-white/60 p-4 shadow-md text-center">
-                        <div class="w-8 h-8 rounded-xl bg-sky-100 text-sky-700 flex items-center justify-center mx-auto mb-2 text-xs font-bold shadow-sm">
-                            <i class="fa-solid fa-flag-checkered"></i>
-                        </div>
-                        <div class="text-2xl font-black text-sky-600 font-mono">{{ $stats['selesai'] }}</div>
-                        <div class="text-[10px] font-bold text-slate-500 uppercase tracking-wider mt-0.5">Selesai</div>
-                    </div>
+                <div class="form-group">
+                    <label class="form-label" for="srStatus">Status</label>
+                    <select id="srStatus" name="status" class="form-select">
+                        <option value="">Semua status</option>
+                        @foreach(\App\Models\Surat::statusList() as $st)
+                        <option value="{{ $st }}" @selected(request('status') === $st)>{{ $st }}</option>
+                        @endforeach
+                    </select>
                 </div>
-
-                {{-- Filter Bar --}}
-                <div class="rounded-2xl bg-white/45 backdrop-blur-xl border border-white/60 p-4 mb-5 shadow-sm">
-                    <form method="GET" action="{{ route('surat.index') }}" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-2.5 items-center">
-                        <div class="lg:col-span-5">
-                            <input type="text" name="search" value="{{ request('search') }}"
-                                   placeholder="Cari perihal, pengirim, nomor surat..." 
-                                   class="w-full px-3.5 py-2 rounded-xl bg-white/70 focus:bg-white border border-white/80 text-xs font-medium text-slate-800 placeholder-slate-400 outline-none">
-                        </div>
-                        <div class="lg:col-span-3">
-                            <select name="jenis" class="w-full px-3.5 py-2 rounded-xl bg-white/70 focus:bg-white border border-white/80 text-xs font-semibold text-slate-700 outline-none">
-                                <option value="">Semua Jenis Surat</option>
-                                @foreach(\App\Models\Surat::jenisSuratList() as $j)
-                                    <option value="{{ $j }}" {{ request('jenis') === $j ? 'selected' : '' }}>{{ $j }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="lg:col-span-2">
-                            <select name="status" class="w-full px-3.5 py-2 rounded-xl bg-white/70 focus:bg-white border border-white/80 text-xs font-semibold text-slate-700 outline-none">
-                                <option value="">Semua Status</option>
-                                @foreach(\App\Models\Surat::statusList() as $s)
-                                    <option value="{{ $s }}" {{ request('status') === $s ? 'selected' : '' }}>{{ $s }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="lg:col-span-2 flex gap-1.5">
-                            <button type="submit" class="flex-1 py-2 px-3 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold text-xs shadow-md transition flex items-center justify-center gap-1.5">
-                                <i class="fa-solid fa-filter text-[10px]"></i>
-                                <span>Filter</span>
-                            </button>
-                            @if(request()->hasAny(['search','jenis','status']))
-                            <a href="{{ route('surat.index') }}" class="py-2 px-3 rounded-xl bg-white/80 hover:bg-white text-indigo-600 font-bold text-xs border border-white shadow-sm flex items-center justify-center transition">
-                                <i class="fa-solid fa-xmark"></i>
-                            </a>
-                            @endif
-                        </div>
-                    </form>
-                </div>
-
-                {{-- Table Card / Empty State --}}
-                @if($surat->isEmpty())
-                <div class="rounded-2xl bg-white/50 backdrop-blur-xl border border-white/60 p-10 text-center shadow-lg">
-                    <i class="fa-solid fa-inbox text-4xl text-slate-300 mb-2 block"></i>
-                    <h4 class="text-sm font-bold text-slate-800 mb-1">Belum Ada Data Surat</h4>
-                    <p class="text-xs text-slate-500 mb-3">Klik tombol di bawah untuk membuat dan mengajukan surat baru.</p>
-                    <a href="{{ route('surat.create') }}" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-indigo-600 text-white text-xs font-bold shadow-md transition no-underline">
-                        <i class="fa-solid fa-plus text-xs"></i>
-                        <span>Tambah Surat Pertama</span>
-                    </a>
-                </div>
-                @else
-                <div class="rounded-2xl bg-white/45 backdrop-blur-xl border border-white/60 p-4 sm:p-5 shadow-lg">
-                    <div class="overflow-x-auto">
-                        <table data-server-sort class="w-full text-left border-collapse text-xs">
-                            <thead>
-                                <tr class="bg-white/60 backdrop-blur-md text-[10px] font-bold uppercase tracking-wider text-slate-700 border-b border-white/40">
-                                    <th class="py-3 px-3">#</th>
-                                    <th data-sort="nomor" class="py-3 px-3">No. Surat</th>
-                                    <th data-sort="jenis" class="py-3 px-3">Jenis</th>
-                                    <th data-sort="perihal" class="py-3 px-3">Perihal</th>
-                                    <th data-sort="pengirim" class="py-3 px-3">Pengirim / Penerima</th>
-                                    <th data-sort="tanggal" class="py-3 px-3">Tanggal</th>
-                                    <th data-sort="status" class="py-3 px-3 text-center">Status</th>
-                                    <th class="py-3 px-3 text-center">Aksi</th>
-                                </tr>
-                            </thead>
-                            <tbody class="divide-y divide-white/30">
-                                @foreach($surat as $i => $s)
-                                <tr class="hover:bg-white/60 transition">
-                                    <td class="py-3 px-3 text-slate-400 font-bold">{{ ($surat->currentPage()-1)*$surat->perPage()+$i+1 }}</td>
-                                    <td class="py-3 px-3 font-mono font-bold text-indigo-700 whitespace-nowrap">{{ $s->nomor_surat ?: '—' }}</td>
-                                    <td class="py-3 px-3">
-                                        <span class="px-2 py-0.5 rounded-full bg-indigo-100 text-indigo-800 font-bold text-[10px] border border-indigo-200">
-                                            {{ $s->jenis_surat }}
-                                        </span>
-                                    </td>
-                                    <td class="py-3 px-3 max-w-[200px]">
-                                        <a href="{{ route('surat.show', $s->id) }}" class="no-underline">
-                                            <div class="font-bold text-slate-900 truncate">{{ $s->perihal }}</div>
-                                        </a>
-                                        @if($s->keterangan)
-                                            <div class="text-[10px] text-slate-500 truncate mt-0.5">{{ $s->keterangan }}</div>
-                                        @endif
-                                    </td>
-                                    <td class="py-3 px-3">
-                                        <div class="font-bold text-slate-800">{{ $s->pengirim }}</div>
-                                        <div class="text-[10px] text-slate-500 flex items-center gap-1 mt-0.5">
-                                            <i class="fa-solid fa-arrow-right text-[8px]"></i>
-                                            <span>{{ $s->penerima }}</span>
-                                        </div>
-                                        @if($s->isDiajukanTaruna())
-                                        <span class="px-2 py-0.2 rounded-md bg-amber-100 text-amber-800 text-[9px] font-bold inline-flex items-center gap-1 mt-1">
-                                            <i class="fa-solid fa-user-graduate text-[8px]"></i> Taruna
-                                        </span>
-                                        @endif
-                                    </td>
-                                    <td class="py-3 px-3 whitespace-nowrap text-slate-600">
-                                        <div class="font-medium">
-                                            <i class="fa-solid fa-calendar text-indigo-500 mr-1 text-[10px]"></i>
-                                            {{ \Carbon\Carbon::parse($s->tanggal_surat)->locale('id')->isoFormat('D MMM Y') }}
-                                        </div>
-                                        @if($s->tanggal_terima)
-                                        <div class="text-[10px] text-slate-400 mt-0.5">
-                                            Terima: {{ \Carbon\Carbon::parse($s->tanggal_terima)->locale('id')->isoFormat('D MMM Y') }}
-                                        </div>
-                                        @endif
-                                    </td>
-                                    <td class="py-3 px-3 text-center">
-                                        <span class="px-2.5 py-0.5 rounded-full font-bold text-[10px]" style="background:{{ $s->status_bg_color }}; color:{{ $s->status_badge_color }};">
-                                            {{ $s->status }}
-                                        </span>
-                                    </td>
-                                    <td class="py-3 px-3 text-center">
-                                        <div class="inline-flex items-center gap-1">
-                                            @if($s->status === 'Diproses')
-                                                <form method="POST" action="{{ route('surat.updateStatus', $s->id) }}" class="inline">
-                                                    @csrf @method('PATCH')
-                                                    <input type="hidden" name="status" value="Disetujui">
-                                                    <button type="submit" class="p-1.5 rounded-lg bg-emerald-100 hover:bg-emerald-200 text-emerald-800 transition" title="Setujui" onclick="return confirm('Setujui surat: {{ addslashes($s->perihal) }}?')">
-                                                        <i class="fa-solid fa-check text-xs"></i>
-                                                    </button>
-                                                </form>
-                                                <form method="POST" action="{{ route('surat.updateStatus', $s->id) }}" class="inline">
-                                                    @csrf @method('PATCH')
-                                                    <input type="hidden" name="status" value="Ditolak">
-                                                    <button type="submit" class="p-1.5 rounded-lg bg-rose-100 hover:bg-rose-200 text-rose-800 transition" title="Tolak" onclick="return confirm('Tolak surat: {{ addslashes($s->perihal) }}?')">
-                                                        <i class="fa-solid fa-xmark text-xs"></i>
-                                                    </button>
-                                                </form>
-                                            @endif
-                                            <a href="{{ route('surat.show', $s->id) }}" class="p-1.5 rounded-lg bg-sky-50 hover:bg-sky-100 text-sky-700 border border-sky-200 shadow-sm transition" title="Detail"><i class="fa-solid fa-eye text-xs"></i></a>
-                                            <a href="{{ route('surat.edit', $s->id) }}" class="p-1.5 rounded-lg bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-200 shadow-sm transition" title="Edit"><i class="fa-solid fa-pen text-xs"></i></a>
-                                            <button type="button" class="p-1.5 rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-600 border border-rose-200 shadow-sm transition" title="Hapus" onclick="showSuratDeleteModal('del-surat-{{ $s->id }}', '{{ addslashes(Str::limit($s->perihal, 50)) }}')">
-                                                <i class="fa-solid fa-trash text-xs"></i>
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div>
-
-                    @if($surat->hasPages())
-                    <div class="mt-4">
-                        {{ $surat->links() }}
-                    </div>
+                <div class="sr-filter__aksi">
+                    <button type="submit" class="ds-btn ds-btn--primary"><i class="fa-solid fa-filter"></i> Terapkan</button>
+                    @if($adaFilter)
+                    <a href="{{ route('surat.index') }}" class="ds-btn" title="Reset filter" aria-label="Reset filter"><i class="fa-solid fa-xmark"></i></a>
                     @endif
                 </div>
-                @endif
+            </form>
+        </div>
+
+        {{-- Tabel surat --}}
+        <div class="ds-card">
+            <div class="ds-card__head tbl-head">
+                <div>
+                    <h3 class="ds-card__title"><i class="fa-solid fa-envelope-open-text ds-icon"></i> Daftar Surat</h3>
+                    <p class="ds-card__desc">{{ $adaFilter ? 'Hasil sesuai filter' : 'Surat terbaru tampil paling atas' }} — setujui atau tolak surat yang masih diproses langsung dari tabel</p>
+                </div>
+                <span class="ds-badge ds-badge--accent">{{ $surat->total() }} surat</span>
+            </div>
+
+            @if($surat->isEmpty())
+            <div class="ds-empty">
+                <i class="fa-solid fa-inbox ds-icon"></i>
+                {{ $adaFilter ? 'Tidak ada surat yang cocok dengan filter.' : 'Belum ada data surat.' }}
+            </div>
+            @else
+            <div class="ds-table-wrap">
+                <div class="ds-scroll">
+                    <table data-server-sort class="ds-table tbl-table sr-table">
+                        <thead>
+                            <tr>
+                                <th data-sort="nomor">No. Surat</th>
+                                <th data-sort="perihal">Perihal</th>
+                                <th data-sort="jenis">Jenis</th>
+                                <th data-sort="pengirim">Pengirim / Penerima</th>
+                                <th data-sort="tanggal">Tanggal</th>
+                                <th data-sort="status">Status</th>
+                                <th class="ds-center">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($surat as $s)
+                            <tr>
+                                <td class="sr-nomor">{{ $s->nomor_surat ?: '—' }}</td>
+                                <td class="sr-perihal">
+                                    <div class="tbl-title"><a href="{{ route('surat.show', $s->id) }}" class="sr-link">{{ $s->perihal }}</a></div>
+                                    @if($s->keterangan)<div class="tbl-sub">{{ $s->keterangan }}</div>@endif
+                                </td>
+                                <td><span class="ds-badge ds-badge--info">{{ $s->jenis_surat }}</span></td>
+                                <td>
+                                    <div class="tbl-title">{{ $s->pengirim }}</div>
+                                    <div class="tbl-sub"><i class="fa-solid fa-arrow-right" style="font-size:9px"></i> {{ $s->penerima }}</div>
+                                    @if($s->isDiajukanTaruna())
+                                    <span class="ds-badge ds-badge--warning mt-1"><i class="fa-solid fa-user-graduate"></i> Taruna</span>
+                                    @endif
+                                </td>
+                                <td>
+                                    <div class="tbl-title" style="white-space:nowrap">{{ $s->tanggal_surat->locale('id')->isoFormat('D MMM Y') }}</div>
+                                    @if($s->tanggal_terima)<div class="tbl-sub" style="white-space:nowrap">Terima {{ $s->tanggal_terima->locale('id')->isoFormat('D MMM Y') }}</div>@endif
+                                </td>
+                                <td><span class="ds-badge ds-badge--{{ $s->status_varian }}">{{ $s->status }}</span></td>
+                                <td class="ds-center">
+                                    <div class="sr-aksi-sel">
+                                        @if($s->status === 'Diproses')
+                                        <form method="POST" action="{{ route('surat.updateStatus', $s->id) }}"
+                                              data-konfirmasi="Surat &quot;{{ Str::limit($s->perihal, 60) }}&quot; akan disetujui." data-konfirmasi-judul="Setujui Surat?" data-konfirmasi-varian="success" data-konfirmasi-tombol="Ya, Setujui">
+                                            @csrf @method('PATCH')
+                                            <input type="hidden" name="status" value="Disetujui">
+                                            <button type="submit" class="ds-btn ds-btn--icon ds-btn--success" title="Setujui" aria-label="Setujui surat {{ $s->perihal }}"><i class="fa-solid fa-check"></i></button>
+                                        </form>
+                                        <form method="POST" action="{{ route('surat.updateStatus', $s->id) }}"
+                                              data-konfirmasi="Surat &quot;{{ Str::limit($s->perihal, 60) }}&quot; akan ditolak. Tambahkan catatan untuk taruna lewat halaman detail bila perlu." data-konfirmasi-judul="Tolak Surat?" data-konfirmasi-tombol="Ya, Tolak">
+                                            @csrf @method('PATCH')
+                                            <input type="hidden" name="status" value="Ditolak">
+                                            <button type="submit" class="ds-btn ds-btn--icon ds-btn--danger" title="Tolak" aria-label="Tolak surat {{ $s->perihal }}"><i class="fa-solid fa-xmark"></i></button>
+                                        </form>
+                                        @endif
+                                        <a href="{{ route('surat.show', $s->id) }}" class="ds-btn ds-btn--icon" title="Detail" aria-label="Detail surat {{ $s->perihal }}"><i class="fa-solid fa-eye"></i></a>
+                                        <a href="{{ route('surat.edit', $s->id) }}" class="ds-btn ds-btn--icon" title="Ubah" aria-label="Ubah surat {{ $s->perihal }}"><i class="fa-solid fa-pen"></i></a>
+                                        <form method="POST" action="{{ route('surat.destroy', $s->id) }}"
+                                              data-konfirmasi="Surat &quot;{{ Str::limit($s->perihal, 60) }}&quot; akan dihapus permanen dari sistem." data-konfirmasi-judul="Hapus Surat?" data-konfirmasi-tombol="Ya, Hapus">
+                                            @csrf @method('DELETE')
+                                            <button type="submit" class="ds-btn ds-btn--icon ds-btn--danger" title="Hapus" aria-label="Hapus surat {{ $s->perihal }}"><i class="fa-solid fa-trash"></i></button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            @if($surat->hasPages())
+            <div class="sr-pagination">{{ $surat->links() }}</div>
+            @endif
+            @endif
+        </div>
 
     </div>
 </main>
 
-{{-- Hidden DELETE forms --}}
-@foreach($surat as $s)
-<form id="del-surat-{{ $s->id }}" method="POST" action="{{ route('surat.destroy', $s->id) }}" style="display:none;">
-    @csrf @method('DELETE')
-</form>
-@endforeach
-
-{{-- Modal Konfirmasi Hapus --}}
-<div class="modal-overlay" id="suratDeleteModal">
-    <div class="modal-box">
-        <div class="w-12 h-12 rounded-full bg-rose-100 text-rose-600 flex items-center justify-center text-xl mx-auto mb-3">
-            <i class="fa-solid fa-trash"></i>
-        </div>
-        <h3 class="text-sm font-bold text-slate-800 mb-1">Hapus Surat?</h3>
-        <p class="text-xs font-semibold text-slate-700 mb-1" id="suratModalPerihal"></p>
-        <p class="text-[11px] text-slate-400 mb-4">Surat ini akan dihapus secara permanen dari sistem.</p>
-        <div class="flex items-center justify-center gap-2">
-            <button class="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs transition" onclick="closeSuratDeleteModal()">
-                Batal
-            </button>
-            <button class="px-4 py-2 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs shadow-md transition" onclick="submitSuratDeleteForm()">
-                Ya, Hapus
-            </button>
-        </div>
-    </div>
-</div>
-
-<script>
-let suratTargetFormId = null;
-function showSuratDeleteModal(formId, perihal) {
-    suratTargetFormId = formId;
-    document.getElementById('suratModalPerihal').textContent = perihal;
-    document.getElementById('suratDeleteModal').classList.add('open');
-}
-function closeSuratDeleteModal() {
-    document.getElementById('suratDeleteModal').classList.remove('open');
-    suratTargetFormId = null;
-}
-function submitSuratDeleteForm() {
-    if (suratTargetFormId) document.getElementById(suratTargetFormId).submit();
-}
-document.getElementById('suratDeleteModal').addEventListener('click', function(e) {
-    if (e.target === this) closeSuratDeleteModal();
-});
-document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape') closeSuratDeleteModal();
-});
-</script>
+<x-konfirmasi-modal />
 
 </x-app-layout>

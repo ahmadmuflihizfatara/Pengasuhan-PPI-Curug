@@ -49,13 +49,13 @@
                     </td>
                     @unless($isTaruna)
                     <td class="ds-right">
-                        <button type="button" class="ds-btn ds-btn--icon ds-btn--danger"
-                                onclick="bukaHapusModal('del-konsinyir-{{ $k->id }}', '{{ addslashes($k->mahasiswa->nama ?? '') }}')"
-                                title="Hapus" aria-label="Hapus konsinyir {{ $k->mahasiswa->nama ?? '' }}">
-                            <i class="fa-solid fa-trash"></i>
-                        </button>
-                        <form id="del-konsinyir-{{ $k->id }}" method="POST" action="{{ route('konsinyir.destroy', $k) }}" class="hidden">
+                        <form method="POST" action="{{ route('konsinyir.destroy', $k) }}" style="margin:0"
+                              data-konfirmasi="Data konsinyir {{ $k->mahasiswa->nama ?? '' }} ({{ $k->tanggal_mulai->locale('id')->isoFormat('D MMM Y') }}, {{ $k->lama_hari }} hari) akan dihapus permanen."
+                              data-konfirmasi-judul="Hapus Data Konsinyir?" data-konfirmasi-tombol="Ya, Hapus">
                             @csrf @method('DELETE')
+                            <button type="submit" class="ds-btn ds-btn--icon ds-btn--danger" title="Hapus" aria-label="Hapus konsinyir {{ $k->mahasiswa->nama ?? '' }}">
+                                <i class="fa-solid fa-trash"></i>
+                            </button>
                         </form>
                     </td>
                     @endunless

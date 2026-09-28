@@ -19,9 +19,12 @@ class MonitoringTvController extends Controller
     public function index(): View
     {
         // Taruna yang sedang di luar (dinas/kegiatan/izin) dan belum kembali
+        // Izin Keluar Khusus (urgensi tinggi) di urutan teratas, sisanya terbaru dulu
         $izinKeluar = LogPergerakan::where('status', LogPergerakan::STATUS_BERANGKAT)
             ->latest('waktu_berangkat')
-            ->get();
+            ->get()
+            ->sortByDesc(fn ($log) => $log->isUrgensiTinggi())
+            ->values();
 
         $tarunaSakit = LaporanDuty::with('mahasiswa')
             ->whereDate('tanggal', Carbon::today())

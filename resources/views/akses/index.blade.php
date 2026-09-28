@@ -1,109 +1,80 @@
 <x-app-layout>
 <style>
-* { box-sizing: border-box; }
-body { font-family: 'Inter', sans-serif; background: transparent; }
-
-.app-layout { display: flex; min-height: 100vh; }
-.main-content { flex: 1; padding: 28px 30px; min-width: 0; }
-
-.page-header {
-    background: linear-gradient(135deg, #4338ca 0%, #4a3aa7 100%);
-    border-radius: 18px; padding: 28px 32px; color: white; margin-bottom: 22px;
-    position: relative; overflow: hidden;
-}
-.page-header::before { content:''; position:absolute; right:-60px; top:-60px; width:220px; height:220px; background:rgba(255,255,255,.1); border-radius:50%; }
-.page-header::after  { content:''; position:absolute; right:70px; bottom:-80px; width:180px; height:180px; background:rgba(255,255,255,.07); border-radius:50%; }
-.page-header h1 { margin:0 0 4px; font-size:22px; font-weight:800; position:relative; z-index:1; }
-.page-header p  { margin:0; opacity:.88; font-size:13px; position:relative; z-index:1; }
-
-.flash-success { background:#f0fff4; border:1px solid #c6f6d5; color:#276749; padding:12px 18px; border-radius:12px; margin-bottom:18px; font-size:13px; font-weight:600; display:flex; align-items:center; gap:8px; }
-
-.info-strip {
-    background:#f4f3ff; border:1px solid #ddd8ff; color:#4a3aa7;
-    padding:13px 18px; border-radius:12px; margin-bottom:20px;
-    font-size:12.5px; display:flex; gap:10px; align-items:flex-start; line-height:1.6;
-}
-
-.akses-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(320px,1fr)); gap:16px; }
-.akses-card { background:white; border-radius:16px; box-shadow:0 2px 12px rgba(0,0,0,.05); padding:22px; border:2px solid transparent; transition:border-color .15s; }
-.akses-card.aktif { border-color:#c6f6d5; }
-.akses-card.mati  { border-color:#fed7d7; }
-
-.akses-head { display:flex; align-items:center; gap:13px; margin-bottom:12px; }
-.akses-ikon { width:46px; height:46px; border-radius:13px; display:flex; align-items:center; justify-content:center; color:white; font-size:18px; flex-shrink:0; }
-.akses-nama { font-size:15px; font-weight:800; color:#2b2b33; }
-.akses-status { font-size:11px; font-weight:800; padding:3px 11px; border-radius:20px; display:inline-block; margin-top:3px; }
-.akses-status.on  { background:#f0fff4; color:#276749; }
-.akses-status.off { background:#fff5f5; color:#c53030; }
-
-.akses-ket { font-size:12.5px; color:#7b8194; line-height:1.6; margin-bottom:14px; }
-.akses-meta { font-size:11px; color:#b0b6c5; margin-bottom:14px; }
-
-.btn-toggle {
-    width:100%; border:none; padding:11px; border-radius:11px;
-    font-size:13px; font-weight:700; cursor:pointer;
-    display:flex; align-items:center; justify-content:center; gap:8px;
-    font-family:'Inter',sans-serif; transition:opacity .15s;
-}
-.btn-toggle:hover { opacity:.9; }
-.btn-tutup { background:#fff5f5; color:#c53030; }
-.btn-buka  { background:linear-gradient(135deg,#1baf7a,#2a78d6); color:white; }
+    .ak-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: var(--space-4); }
+    .ak-kartu { display: flex; flex-direction: column; gap: var(--space-3); }
+    .ak-kartu--buka  { border-color: var(--success-border); }
+    .ak-kartu--tutup { border-color: var(--danger-border); }
+    .ak-kepala { display: flex; align-items: center; gap: var(--space-3); }
+    .ak-ikon { width: 44px; height: 44px; flex-shrink: 0; border-radius: var(--radius-md); display: grid; place-items: center; font-size: 17px; color: var(--ink-on-dark); box-shadow: var(--shadow-glass-sm); }
+    .ak-nama { font-size: 15px; line-height: 20px; font-weight: 800; color: var(--ink-900); }
+    .ak-ket { flex: 1; margin: 0; font-size: 12px; line-height: 18px; font-weight: 500; color: var(--ink-700); }
+    .ak-meta { font-size: 11px; line-height: 15px; font-weight: 600; color: var(--ink-500); }
+    .ak-meta i { margin-right: var(--space-1); }
+    .ak-kartu form { margin: 0; }
+    .ak-kartu .ds-btn { width: 100%; justify-content: center; }
 </style>
 
-{{-- Top Floating Island Capsule Navbar --}}
 <x-island-navbar />
+
+@php $dibuka = $daftar->where('diizinkan', true)->count(); @endphp
 
 <main class="max-w-7xl mx-auto px-4 sm:px-6 pb-12 pt-2">
     <div class="spatial-workspace-window rounded-3xl bg-white/30 backdrop-blur-2xl border border-white/50 shadow-2xl p-4 sm:p-7 relative overflow-hidden">
 
-        <div class="page-header">
-            <h1><i class="fas fa-shield-alt" style="margin-right:10px;"></i>Akses Fitur Pengasuh</h1>
-            <p>Atur fitur mana yang boleh diisi dan digenerate oleh pengasuh</p>
-        </div>
+        <x-page-banner title="Hak Akses Pengasuh" icon="fa-shield-halved"
+            subtitle="Atur fitur mana yang boleh diisi, diubah, dan digenerate oleh pengasuh" />
 
         @if(session('success'))
-        <div class="flash-success"><i class="fas fa-check-circle"></i> {{ session('success') }}</div>
+        <x-glass-alert type="success" title="Berhasil">{{ session('success') }}</x-glass-alert>
         @endif
 
-        <div class="info-strip">
-            <i class="fas fa-circle-info" style="margin-top:2px;"></i>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5 mb-4">
+            <x-stat-card title="Fitur Dibuka" :value="$dibuka . '/' . $daftar->count()" icon="fa-solid fa-lock-open"
+                varian="success" badge="Diizinkan" badgeType="success" description="Pengasuh dapat mengisi & mengubah" />
+            <x-stat-card title="Fitur Ditutup" :value="$daftar->count() - $dibuka" icon="fa-solid fa-lock"
+                varian="danger" badge="Hanya lihat" badgeType="danger" description="Pengasuh hanya dapat melihat data" />
+        </div>
+
+        <div class="ds-alert ds-alert--info mb-4" role="status">
+            <i class="fa-solid fa-circle-info ds-icon"></i>
             <span>Saat akses ditutup, pengasuh <strong>tetap dapat membuka tab dan melihat data</strong> yang sudah ada,
                   tetapi tombol isi/generate/ubah hilang dan permintaan simpan ditolak server. Pengaturan berlaku untuk semua akun pengasuh.</span>
         </div>
 
-        <div class="akses-grid">
+        <div class="ak-grid">
             @foreach($daftar as $item)
-            <div class="akses-card {{ $item['diizinkan'] ? 'aktif' : 'mati' }}">
-                <div class="akses-head">
-                    <div class="akses-ikon" style="background:{{ $item['warna'] }};">
-                        <i class="fas {{ $item['ikon'] }}"></i>
-                    </div>
+            <div class="ds-card ak-kartu {{ $item['diizinkan'] ? 'ak-kartu--buka' : 'ak-kartu--tutup' }}">
+                <div class="ak-kepala">
+                    <span class="ak-ikon" style="background:linear-gradient(135deg,{{ $item['warna'] }},var(--accent));"><i class="fa-solid {{ $item['ikon'] }}"></i></span>
                     <div>
-                        <div class="akses-nama">{{ $item['label'] }}</div>
-                        <span class="akses-status {{ $item['diizinkan'] ? 'on' : 'off' }}">
-                            {{ $item['diizinkan'] ? 'DIIZINKAN' : 'DITUTUP' }}
+                        <div class="ak-nama">{{ $item['label'] }}</div>
+                        <span class="ds-badge ds-badge--{{ $item['diizinkan'] ? 'success' : 'danger' }}">
+                            <i class="fa-solid {{ $item['diizinkan'] ? 'fa-lock-open' : 'fa-lock' }}"></i> {{ $item['diizinkan'] ? 'Diizinkan' : 'Ditutup' }}
                         </span>
                     </div>
                 </div>
 
-                <div class="akses-ket">{{ $item['ket'] }}</div>
+                <p class="ak-ket">{{ $item['ket'] }}</p>
 
-                @if($item['diubah'])
-                <div class="akses-meta">
-                    <i class="fas fa-clock-rotate-left"></i>
-                    Diubah {{ $item['diubah']->locale('id')->isoFormat('D MMM Y, HH:mm') }}
-                    @if($item['pengubah']) oleh {{ $item['pengubah'] }} @endif
+                <div class="ak-meta">
+                    @if($item['diubah'])
+                    <i class="fa-solid fa-clock-rotate-left"></i>Diubah {{ $item['diubah']->locale('id')->isoFormat('D MMM Y, HH:mm') }}@if($item['pengubah']) oleh {{ $item['pengubah'] }}@endif
+                    @else
+                    <i class="fa-solid fa-circle-info"></i>Belum pernah diubah — terbuka secara default
+                    @endif
                 </div>
-                @endif
 
-                <form method="POST" action="{{ route('akses.update') }}">
+                {{-- Menutup akses berdampak ke semua pengasuh → minta konfirmasi; membuka langsung --}}
+                <form method="POST" action="{{ route('akses.update') }}"
+                      @if($item['diizinkan']) data-konfirmasi="Semua pengasuh tidak akan bisa mengisi atau mengubah {{ $item['label'] }} sampai akses dibuka kembali. Data tetap dapat dilihat." data-konfirmasi-judul="Tutup Akses {{ $item['label'] }}?" data-konfirmasi-varian="warning" data-konfirmasi-tombol="Ya, Tutup Akses" @endif>
                     @csrf
                     <input type="hidden" name="fitur" value="{{ $item['key'] }}">
                     <input type="hidden" name="diizinkan" value="{{ $item['diizinkan'] ? 0 : 1 }}">
-                    <button type="submit" class="btn-toggle {{ $item['diizinkan'] ? 'btn-tutup' : 'btn-buka' }}">
-                        <i class="fas {{ $item['diizinkan'] ? 'fa-lock' : 'fa-lock-open' }}"></i>
-                        {{ $item['diizinkan'] ? 'Tutup Akses' : 'Buka Akses' }}
-                    </button>
+                    @if($item['diizinkan'])
+                    <button type="submit" class="ds-btn ds-btn--danger"><i class="fa-solid fa-lock"></i> Tutup Akses</button>
+                    @else
+                    <button type="submit" class="ds-btn ds-btn--success"><i class="fa-solid fa-lock-open"></i> Buka Akses</button>
+                    @endif
                 </form>
             </div>
             @endforeach
@@ -111,4 +82,6 @@ body { font-family: 'Inter', sans-serif; background: transparent; }
 
     </div>
 </main>
+
+<x-konfirmasi-modal />
 </x-app-layout>

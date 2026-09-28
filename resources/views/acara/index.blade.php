@@ -45,7 +45,14 @@
     .acara-aksi__kanan { display: flex; align-items: center; gap: var(--space-2); flex-wrap: wrap; }
     .acara-toggle { display: inline-flex; gap: var(--space-1); padding: var(--space-1); border-radius: var(--radius-pill); background: var(--glass-subtle); border: 1px solid var(--border-glass); }
     .acara-toggle .toggle-btn { border: 1px solid transparent; border-radius: var(--radius-pill); background: transparent; padding: var(--space-1-5) var(--space-3); font-family: inherit; font-size: 12px; font-weight: 700; color: var(--ink-700); cursor: pointer; }
+    .acara-toggle .toggle-btn:focus-visible { outline: none; box-shadow: var(--shadow-focus); }
     .acara-toggle .toggle-btn.active { background: var(--glass-solid); border-color: var(--border-glass-glow); color: var(--ink-900); box-shadow: var(--shadow-glass-sm); }
+
+    /* Tabel acara */
+    .acara-table td { vertical-align: middle; }
+    .acara-ket { max-width: 260px; }
+    .acara-ket .tbl-sub { margin: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .acara-aksi-sel { display: inline-flex; gap: var(--space-1); }
 
     /* Kalender — bentuk kalender dinding klasik: satu bingkai kaca, garis tipis antar tanggal */
     .cal-head { display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); flex-wrap: wrap; }
@@ -145,67 +152,55 @@
                 <x-glass-alert type="success" title="Berhasil">{{ session('success') }}</x-glass-alert>
                 @endif
 
-                {{-- TABLE VIEW (Non-Taruna) --}}
+                {{-- TABLE VIEW (Non-Taruna) — pola tabel kartu tab surat & reward --}}
                 @unless($isTaruna)
-                <div id="tableView">
+                <div id="tableView" class="ds-card">
+                    <div class="ds-card__head tbl-head">
+                        <div>
+                            <h3 class="ds-card__title"><i class="fa-solid fa-list-check ds-icon"></i> Daftar Acara</h3>
+                            <p class="ds-card__desc">Urut tanggal terdekat — ubah atau hapus acara langsung dari tabel</p>
+                        </div>
+                        <span class="ds-badge ds-badge--accent">{{ $acara->count() }} acara</span>
+                    </div>
+
                     @if($acara->isEmpty())
-                    <div class="rounded-2xl bg-white/50 backdrop-blur-xl border border-white/60 p-10 text-center shadow-lg">
-                        <i class="fa-solid fa-calendar-xmark text-4xl text-slate-300 mb-2 block"></i>
-                        <h4 class="text-sm font-bold text-slate-800 mb-1">Belum Ada Acara Terjadwal</h4>
-                        <p class="text-xs text-slate-500 mb-4">Klik tombol di bawah untuk membuat jadwal kegiatan acara baru.</p>
-                        <a href="{{ route('acara.create') }}" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-indigo-600 text-white text-xs font-bold shadow-md transition no-underline">
-                            <i class="fa-solid fa-plus text-xs"></i>
-                            <span>Tambah Acara Pertama</span>
-                        </a>
+                    <div class="ds-empty">
+                        <i class="fa-solid fa-calendar-xmark ds-icon"></i>
+                        Belum ada acara terjadwal.
+                        <div class="mt-3"><a href="{{ route('acara.create') }}" class="ds-btn ds-btn--primary ds-btn--sm"><i class="fa-solid fa-plus"></i> Tambah Acara Pertama</a></div>
                     </div>
                     @else
-                    <div class="rounded-2xl bg-white/45 backdrop-blur-xl border border-white/60 p-4 sm:p-5 shadow-lg">
-                        <div class="overflow-x-auto">
-                            <table class="w-full text-left border-collapse text-xs">
+                    <div class="ds-table-wrap">
+                        <div class="ds-scroll">
+                            <table class="ds-table tbl-table acara-table">
                                 <thead>
-                                    <tr class="bg-white/60 backdrop-blur-md text-[10px] font-bold uppercase tracking-wider text-slate-700 border-b border-white/40">
-                                        <th class="py-3 px-3">#</th>
-                                        <th class="py-3 px-3">Nama Acara</th>
-                                        <th class="py-3 px-3">Tanggal</th>
-                                        <th class="py-3 px-3">Waktu</th>
-                                        <th class="py-3 px-3">Keterangan</th>
-                                        <th class="py-3 px-3 text-center">Aksi</th>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Nama Acara</th>
+                                        <th>Tanggal</th>
+                                        <th>Waktu</th>
+                                        <th>Keterangan</th>
+                                        <th class="ds-center">Aksi</th>
                                     </tr>
                                 </thead>
-                                <tbody class="divide-y divide-white/30">
+                                <tbody>
                                     @foreach($acara as $i => $a)
-                                    <tr class="hover:bg-white/60 transition">
-                                        <td class="py-3 px-3 text-slate-400 font-bold">{{ $i + 1 }}</td>
-                                        <td class="py-3 px-3">
-                                            <div class="flex items-center gap-3">
-                                                <div class="w-8 h-8 rounded-lg bg-indigo-600 text-white flex items-center justify-center text-xs shadow-sm flex-shrink-0">
-                                                    <i class="fa-solid fa-calendar-check"></i>
-                                                </div>
-                                                <span class="font-bold text-slate-900">{{ $a->nama_acara }}</span>
-                                            </div>
+                                    <tr>
+                                        <td class="tbl-muted">{{ $i + 1 }}</td>
+                                        <td><div class="tbl-title">{{ $a->nama_acara }}</div></td>
+                                        <td class="tbl-date">{{ $a->tanggal->locale('id')->isoFormat('dddd, D MMM Y') }}</td>
+                                        <td><span class="ds-badge ds-badge--accent"><i class="fa-regular fa-clock"></i> {{ \Carbon\Carbon::parse($a->jam)->format('H:i') }} WIB</span></td>
+                                        <td class="acara-ket">
+                                            @if($a->keterangan)<div class="tbl-sub" title="{{ $a->keterangan }}">{{ $a->keterangan }}</div>@else<span class="tbl-sub">—</span>@endif
                                         </td>
-                                        <td class="py-3 px-3 text-slate-700 font-medium whitespace-nowrap">
-                                            <i class="fa-solid fa-calendar text-indigo-500 mr-1 text-[10px]"></i>
-                                            {{ \Carbon\Carbon::parse($a->tanggal)->locale('id')->isoFormat('dddd, D MMMM Y') }}
-                                        </td>
-                                        <td class="py-3 px-3">
-                                            <span class="px-2.5 py-0.5 rounded-full bg-indigo-100 text-indigo-800 font-bold text-[10px] border border-indigo-200">
-                                                <i class="fa-solid fa-clock text-[9px] mr-1"></i>
-                                                {{ \Carbon\Carbon::parse($a->jam)->format('H:i') }} WIB
-                                            </span>
-                                        </td>
-                                        <td class="py-3 px-3 max-w-[220px] text-slate-600">
-                                            {!! $a->keterangan ? e(Str::limit($a->keterangan, 70)) : '<span class="text-slate-300">—</span>' !!}
-                                        </td>
-                                        <td class="py-3 px-3 text-center">
-                                            <div class="inline-flex items-center gap-1">
-                                                <a href="{{ route('acara.edit', $a->id) }}" class="p-1.5 rounded-lg bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-200 shadow-sm transition" title="Edit">
-                                                    <i class="fa-solid fa-pen text-xs"></i>
-                                                </a>
-                                                <button type="button" class="p-1.5 rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-600 border border-rose-200 shadow-sm transition" title="Hapus"
-                                                        onclick="showDeleteModal('delete-acara-{{ $a->id }}', '{{ addslashes($a->nama_acara) }}')">
-                                                    <i class="fa-solid fa-trash text-xs"></i>
-                                                </button>
+                                        <td class="ds-center">
+                                            <div class="acara-aksi-sel">
+                                                <a href="{{ route('acara.edit', $a->id) }}" class="ds-btn ds-btn--icon" title="Ubah" aria-label="Ubah acara {{ $a->nama_acara }}"><i class="fa-solid fa-pen"></i></a>
+                                                <form method="POST" action="{{ route('acara.destroy', $a->id) }}" style="margin:0"
+                                                      data-konfirmasi="Acara &quot;{{ $a->nama_acara }}&quot; ({{ $a->tanggal->locale('id')->isoFormat('D MMM Y') }}) akan dihapus permanen." data-konfirmasi-judul="Hapus Acara?" data-konfirmasi-tombol="Ya, Hapus">
+                                                    @csrf @method('DELETE')
+                                                    <button type="submit" class="ds-btn ds-btn--icon ds-btn--danger" title="Hapus" aria-label="Hapus acara {{ $a->nama_acara }}"><i class="fa-solid fa-trash"></i></button>
+                                                </form>
                                             </div>
                                         </td>
                                     </tr>
@@ -215,11 +210,6 @@
                         </div>
                     </div>
 
-                    @foreach($acara as $a)
-                    <form id="delete-acara-{{ $a->id }}" method="POST" action="{{ route('acara.destroy', $a->id) }}" style="display:none;">
-                        @csrf @method('DELETE')
-                    </form>
-                    @endforeach
                     @endif
                 </div>
                 @endunless
@@ -289,26 +279,8 @@
     </div>
 </main>
 
-{{-- Delete Modal --}}
 @unless($isTaruna)
-<div class="modal-overlay" id="deleteModal">
-    <div class="modal-box">
-        <div class="w-12 h-12 rounded-full bg-rose-100 text-rose-600 flex items-center justify-center text-xl mx-auto mb-3">
-            <i class="fa-solid fa-trash"></i>
-        </div>
-        <h3 class="text-sm font-bold text-slate-800 mb-1">Hapus Acara?</h3>
-        <p id="modalAcaraName" class="text-xs font-semibold text-slate-700 mb-1"></p>
-        <p class="text-[11px] text-slate-400 mb-4">Tindakan ini tidak dapat dibatalkan. Acara akan dihapus secara permanen.</p>
-        <div class="flex items-center justify-center gap-2">
-            <button class="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs transition" onclick="closeDeleteModal()">
-                Batal
-            </button>
-            <button class="px-4 py-2 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs shadow-md transition" onclick="submitDeleteForm()">
-                Ya, Hapus
-            </button>
-        </div>
-    </div>
-</div>
+<x-konfirmasi-modal />
 @endunless
 
 <script>
@@ -412,24 +384,6 @@ function createCell(date, isOtherMonth, isToday) {
         cell.appendChild(titik);
     }
     return cell;
-}
-
-let targetFormId = null;
-
-function showDeleteModal(formId, nama) {
-    targetFormId = formId;
-    const el = document.getElementById('modalAcaraName');
-    if (el) el.textContent = nama;
-    const modal = document.getElementById('deleteModal');
-    if (modal) modal.classList.add('open');
-}
-function closeDeleteModal() {
-    const modal = document.getElementById('deleteModal');
-    if (modal) modal.classList.remove('open');
-    targetFormId = null;
-}
-function submitDeleteForm() {
-    if (targetFormId) document.getElementById(targetFormId).submit();
 }
 
 (function init() {

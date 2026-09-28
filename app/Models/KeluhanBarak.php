@@ -54,6 +54,18 @@ class KeluhanBarak extends Model
         return ['Diajukan', 'Diproses', 'Selesai', 'Ditolak'];
     }
 
+    /** Varian warna PPI Curug Glass (ds-badge--*) per status — sama dengan daftar keluhan taruna */
+    public function getStatusVarianAttribute(): string
+    {
+        return match ($this->status) {
+            'Diajukan' => 'warning',
+            'Diproses' => 'info',
+            'Selesai'  => 'success',
+            'Ditolak'  => 'danger',
+            default    => 'dark',
+        };
+    }
+
     public function getStatusBadgeColorAttribute(): string
     {
         return match ($this->status) {

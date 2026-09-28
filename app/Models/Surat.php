@@ -64,6 +64,17 @@ class Surat extends Model
         return ['Diproses', 'Disetujui', 'Ditolak', 'Selesai'];
     }
 
+    /** Varian warna PPI Curug Glass (ds-badge--*) per status — sama dengan daftar surat taruna */
+    public function getStatusVarianAttribute(): string
+    {
+        return match ($this->status) {
+            'Disetujui' => 'success',
+            'Ditolak'   => 'danger',
+            'Selesai'   => 'accent',
+            default     => 'warning',
+        };
+    }
+
     public function getStatusBadgeColorAttribute(): string
     {
         return match ($this->status) {

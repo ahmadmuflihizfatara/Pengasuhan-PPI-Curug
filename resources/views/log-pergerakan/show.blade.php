@@ -1,242 +1,212 @@
 <x-app-layout>
 <style>
-    * { box-sizing: border-box; }
-    body { font-family: 'Inter', sans-serif; background: transparent; }
+    .lg-kembali { font-size: 13px; background: var(--glass-solid); color: var(--ink-800); }
+    .lg-kembali:hover { color: var(--accent-ink); }
+    .lg-nav { display: flex; flex-wrap: wrap; gap: var(--space-2); }
 
-    .app-layout { display: flex; min-height: 100vh; }
-    .main-content { flex: 1; padding: 24px 28px; min-width: 0; }
+    .lg-foto { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: var(--space-3); }
+    .lg-foto figure { margin: 0; padding: var(--space-2-5); border-radius: var(--radius-md); background: var(--glass-card); border: 1px solid var(--border-glass-glow); }
+    .lg-foto img { display: block; width: 100%; height: 220px; object-fit: cover; border-radius: var(--radius-sm); }
+    .lg-foto figcaption { margin-top: var(--space-2); font-size: 11px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: var(--ink-600); }
+    .lg-foto figcaption i { color: var(--accent); margin-right: var(--space-1); }
 
-    .detail-card {
-        background: white;
-        border-radius: 16px;
-        padding: 28px;
-        box-shadow: 0 2px 16px rgba(0,0,0,.06);
-    }
-    .detail-header {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        margin-bottom: 24px;
-        padding-bottom: 18px;
-        border-bottom: 1px solid #f0f2f7;
-        flex-wrap: wrap;
-        gap: 14px;
-    }
-    .detail-title { font-size: 22px; font-weight: 800; color: #333; margin: 0; }
-    
-    .info-grid {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 18px;
-        margin-bottom: 24px;
-    }
-    .info-item {
-        background: #fafbff;
-        border-radius: 12px;
-        padding: 14px 18px;
-        border: 1px solid #edf0f7;
-    }
-    .info-item .lbl { font-size: 11.5px; font-weight: 700; color: #888; text-transform: uppercase; margin-bottom: 4px; }
-    .info-item .val { font-size: 15px; font-weight: 700; color: #333; }
-
-    .doc-img {
-        max-width: 100%;
-        max-height: 320px;
-        border-radius: 12px;
-        border: 1px solid #edf0f7;
-        object-fit: cover;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-    }
-
-    /* Badges */
-    .badge-status-belum {
-        background: #fee2e2; color: #b91c1c; border: 1px solid #fca5a5;
-        padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 800;
-        display: inline-flex; align-items: center; gap: 6px;
-    }
-    .badge-status-sudah {
-        background: #dcfce7; color: #15803d; border: 1px solid #86efac;
-        padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 800;
-        display: inline-flex; align-items: center; gap: 6px;
-    }
-    .pulse-dot {
-        width: 8px; height: 8px; background: #dc2626; border-radius: 50%; display: inline-block;
-        animation: blink 1.2s infinite;
-    }
-    @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
-
-    .badge-validasi-ok {
-        background: #dcfce7; color: #15803d; border: 1px solid #86efac;
-        padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 800;
-        display: inline-flex; align-items: center; gap: 6px;
-    }
-    .badge-validasi-pending {
-        background: #fef3c7; color: #92400e; border: 1px solid #fcd34d;
-        padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 800;
-        display: inline-flex; align-items: center; gap: 6px;
-    }
+    .lg-tindakan { display: flex; flex-direction: column; gap: var(--space-3); }
+    .lg-tindakan .dt-respon { margin: 0; }
+    .lg-tindakan form { margin: 0; }
+    .lg-tindakan .ds-btn { width: 100%; justify-content: center; padding-top: var(--space-2-5); padding-bottom: var(--space-2-5); }
+    .lg-btn-kembali { background: var(--success); border-color: transparent; color: var(--ink-on-dark); }
+    .lg-btn-kembali:hover { background: var(--success-ink); }
 </style>
 
-{{-- Top Floating Island Capsule Navbar --}}
 <x-island-navbar />
 
-<div class="max-w-7xl mx-auto px-4 sm:px-6 pb-12 pt-2">
+@php
+    [$katLabel, $katIkon, $katVarian] = $log->kategoriMeta();
+    $belum = $log->isBelumKembali();
+@endphp
+
+<main class="max-w-7xl mx-auto px-4 sm:px-6 pb-12 pt-2">
     <div class="spatial-workspace-window rounded-3xl bg-white/30 backdrop-blur-2xl border border-white/50 shadow-2xl p-4 sm:p-7 relative overflow-hidden">
 
-        <div class="mb-3">
-            <a href="{{ route('log-pergerakan.index') }}" class="btn btn-outline-secondary btn-sm fw-bold rounded-3">
-                <i class="fas fa-arrow-left me-1"></i> Kembali ke Rekapitulasi
-            </a>
+        <x-page-banner title="Detail Log Pergerakan" icon="fa-person-walking"
+            subtitle="Rincian keberangkatan, kepulangan, dan validasi log pos jaga gerbang" />
+
+        <div class="lg-nav mb-4">
+            <a href="{{ route('log-pergerakan.index') }}" class="ds-btn ds-btn--pill lg-kembali"><i class="fa-solid fa-arrow-left"></i> Kembali ke Rekap Log</a>
             @if(auth()->user()->isAdmin())
-            <a href="{{ route('log-pergerakan.tablet') }}" class="btn btn-outline-primary btn-sm fw-bold rounded-3 ms-2">
-                <i class="fas fa-tablet-alt me-1"></i> Buka Mode Tablet
-            </a>
+            <a href="{{ route('log-pergerakan.tablet') }}" class="ds-btn ds-btn--pill lg-kembali"><i class="fa-solid fa-tablet-screen-button"></i> Mode Tablet Pos Jaga</a>
             @endif
         </div>
 
-        <div class="detail-card">
-            <div class="detail-header">
-                <div>
-                    <h2 class="detail-title">
-                        <i class="fas fa-id-card text-primary me-2"></i> Detail Log: {{ $log->nama }}
-                    </h2>
-                    <div class="text-muted small mt-1">
-                        Kategori: <strong>{{ ucfirst($log->kategori) }}</strong> &bull; Sub: <strong>{{ $log->subkategori }}</strong>
-                    </div>
+        @if(session('success'))
+        <x-glass-alert type="success" title="Berhasil">{{ session('success') }}</x-glass-alert>
+        @endif
+
+        {{-- Status pergerakan --}}
+        <div class="ds-card dt-card mb-4">
+            <span class="ds-stat__icon ds-stat__icon--{{ $belum ? 'danger' : 'success' }}"><i class="fa-solid {{ $belum ? 'fa-person-walking-arrow-right' : 'fa-house-circle-check' }}"></i></span>
+            <div class="dt-card__body">
+                <span class="dt-card__label">Status Pergerakan · {{ $log->nama }}</span>
+                <div class="dt-card__top">
+                    <span class="dt-card__value">{{ $belum ? 'Belum Kembali' : 'Sudah Kembali' }}</span>
+                    <span class="ds-badge ds-badge--{{ $katVarian }}"><i class="fa-solid {{ $katIkon }}"></i> {{ $katLabel }}</span>
+                    <x-badge-urgensi :log="$log" />
+                    <span class="ds-badge ds-badge--{{ $log->is_validated ? 'success' : 'warning' }}"><i class="fa-solid {{ $log->is_validated ? 'fa-user-check' : 'fa-hourglass-half' }}"></i> {{ $log->is_validated ? 'Tervalidasi' : 'Menunggu validasi' }}</span>
                 </div>
-                <div class="text-end">
-                    <div class="mb-2">{!! $log->getStatusBadgeHtml() !!}</div>
-                    <div>
-                        {!! $log->getValidasiBadgeHtml() !!}
-                        @if($log->is_validated && $log->validator)
-                        <div class="small text-muted mt-1">oleh {{ $log->validator->name }} &bull; {{ $log->validated_at->format('d/m/Y H:i') }}</div>
-                        @endif
-                    </div>
+                <p class="dt-card__desc">
+                    {{ $belum ? 'Taruna masih di luar asrama sejak ' . $log->getDurasiFormatted() . ' lalu.' : 'Taruna sudah kembali ke asrama. Durasi total ' . $log->getDurasiFormatted() . '.' }}
+                </p>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 items-start">
+            {{-- Informasi pergerakan --}}
+            <div class="ds-card lg:col-span-2">
+                <div class="ds-card__head">
+                    <h3 class="ds-card__title"><i class="fa-solid fa-circle-info ds-icon"></i> Informasi Pergerakan</h3>
+                    <p class="ds-card__desc">{{ $katLabel }}{{ $log->subkategori ? ' · ' . $log->subkategori_label : '' }}</p>
                 </div>
+
+                <dl class="dt-fields">
+                    <div class="dt-field">
+                        <dt><i class="fa-solid fa-user"></i> Nama Taruna / Koordinator</dt>
+                        <dd>{{ $log->nama }}</dd>
+                    </div>
+                    <div class="dt-field">
+                        <dt><i class="fa-solid fa-id-card"></i> NPM &amp; Program Studi</dt>
+                        <dd>{{ $log->npm ?? '-' }} · {{ $log->prodi ?? 'PPI Curug' }}</dd>
+                    </div>
+                    <div class="dt-field">
+                        <dt><i class="fa-solid fa-right-from-bracket"></i> Waktu Berangkat</dt>
+                        <dd>{{ $log->waktu_berangkat ? $log->waktu_berangkat->locale('id')->isoFormat('dddd, D MMMM Y · HH:mm') . ' WIB' : '—' }}</dd>
+                    </div>
+                    <div class="dt-field">
+                        <dt><i class="fa-solid fa-right-to-bracket"></i> Waktu Kembali</dt>
+                        <dd>
+                            @if($log->isSudahKembali())
+                            {{ $log->waktu_kembali ? $log->waktu_kembali->locale('id')->isoFormat('dddd, D MMMM Y · HH:mm') . ' WIB' : '—' }}
+                            @else
+                            <span style="color:var(--danger-ink)">Masih di luar ({{ $log->getDurasiFormatted() }} lalu)</span>
+                            @endif
+                        </dd>
+                    </div>
+
+                    @if($log->kategori === 'perizinan')
+                    <div class="dt-field dt-field--full">
+                        <dt><i class="fa-solid fa-note-sticky"></i> Alasan / Keterangan Keluhan</dt>
+                        <dd class="dt-teks">{{ $log->keterangan_keluhan ?? 'Tidak ada catatan tambahan.' }}</dd>
+                    </div>
+                    @elseif($log->kategori === 'ekstrakurikuler')
+                    <div class="dt-field">
+                        <dt><i class="fa-solid fa-people-group"></i> Nama Ekstrakurikuler</dt>
+                        <dd>{{ $log->nama_ekskul ?? '—' }}</dd>
+                    </div>
+                    <div class="dt-field">
+                        <dt><i class="fa-solid fa-users"></i> Jumlah Anggota</dt>
+                        <dd>{{ $log->jumlah_anggota ? $log->jumlah_anggota . ' orang' : '—' }}</dd>
+                    </div>
+                    <div class="dt-field dt-field--full">
+                        <dt><i class="fa-solid fa-location-dot"></i> Lokasi Kegiatan</dt>
+                        <dd>{{ $log->lokasi_kegiatan ?? '—' }}</dd>
+                    </div>
+                    @if($log->daftar_anggota)
+                    <div class="dt-field dt-field--full">
+                        <dt><i class="fa-solid fa-list"></i> Daftar Anggota yang Ikut</dt>
+                        <dd class="dt-teks">{{ $log->daftar_anggota }}</dd>
+                    </div>
+                    @endif
+                    @else
+                    <div class="dt-field">
+                        <dt><i class="fa-solid fa-route"></i> Rute Olahraga</dt>
+                        <dd>{{ $log->rute ?? '—' }}</dd>
+                    </div>
+                    <div class="dt-field">
+                        <dt><i class="fa-solid fa-user-group"></i> Pengikut / Teman Olahraga</dt>
+                        <dd>{{ $log->pengikut ?? '—' }}</dd>
+                    </div>
+                    @endif
+                </dl>
+
+                @if($log->foto_keberangkatan || $log->foto_kembali)
+                <div class="lg-foto mt-3">
+                    @if($log->foto_keberangkatan)
+                    <figure>
+                        <a href="{{ asset('storage/' . $log->foto_keberangkatan) }}" target="_blank" rel="noopener"><img src="{{ asset('storage/' . $log->foto_keberangkatan) }}" alt="Foto keberangkatan {{ $log->nama }}"></a>
+                        <figcaption><i class="fa-solid fa-camera"></i> Dokumentasi Keberangkatan</figcaption>
+                    </figure>
+                    @endif
+                    @if($log->foto_kembali)
+                    <figure>
+                        <a href="{{ asset('storage/' . $log->foto_kembali) }}" target="_blank" rel="noopener"><img src="{{ asset('storage/' . $log->foto_kembali) }}" alt="Foto kepulangan {{ $log->nama }}"></a>
+                        <figcaption><i class="fa-solid fa-camera"></i> Dokumentasi Kepulangan</figcaption>
+                    </figure>
+                    @endif
+                </div>
+                @endif
             </div>
 
-            <div class="info-grid">
-                <div class="info-item">
-                    <div class="lbl">Nama Taruna / Koordinator</div>
-                    <div class="val">{{ $log->nama }}</div>
+            {{-- Tindakan pengasuh / admin --}}
+            <div class="ds-card">
+                <div class="ds-card__head">
+                    <h3 class="ds-card__title"><i class="fa-solid fa-user-shield ds-icon"></i> Tindakan</h3>
+                    <p class="ds-card__desc">Perbarui status kepulangan dan validasi log</p>
                 </div>
-                <div class="info-item">
-                    <div class="lbl">NPM & Prodi / Jurusan</div>
-                    <div class="val">{{ $log->npm ?? '-' }} &bull; {{ $log->prodi ?? 'PPI Curug' }}</div>
-                </div>
-                <div class="info-item">
-                    <div class="lbl">Waktu Keberangkatan</div>
-                    <div class="val text-primary"><i class="far fa-clock me-1"></i> {{ $log->waktu_berangkat ? $log->waktu_berangkat->format('d F Y, H:i') : '-' }} WIB</div>
-                </div>
-                <div class="info-item">
-                    <div class="lbl">Waktu Kembali / Durasi</div>
-                    <div class="val text-success">
-                        @if($log->isSudahKembali())
-                            <i class="fas fa-check-circle me-1"></i> {{ $log->waktu_kembali ? $log->waktu_kembali->format('d F Y, H:i') : '-' }} WIB
-                            <div class="small text-muted fw-normal mt-1">Durasi total: {{ $log->getDurasiFormatted() }}</div>
+
+                <div class="lg-tindakan">
+                    @if($belum)
+                    <div class="ds-alert dt-respon dt-respon--danger">
+                        <span class="dt-respon__ikon"><i class="fa-solid fa-person-walking-arrow-right"></i></span>
+                        <div>
+                            <div class="dt-respon__judul">Taruna belum kembali</div>
+                            <div class="dt-respon__pesan">{{ auth()->user()->isAdmin() ? 'Tandai kembali saat taruna sudah tiba di asrama.' : 'Taruna menandai kembali sendiri, atau admin melalui tablet pos jaga.' }}</div>
+                        </div>
+                    </div>
+                    {{-- Tandai kembali hanya admin (route role:taruna,admin — pengasuh sebatas validator) --}}
+                    @if(auth()->user()->isAdmin())
+                    <form action="{{ route('log-pergerakan.kembali', $log->id) }}" method="POST"
+                          data-konfirmasi="{{ $log->nama }} akan ditandai sudah kembali ke asrama sekarang." data-konfirmasi-judul="Tandai Sudah Kembali?" data-konfirmasi-varian="success" data-konfirmasi-tombol="Ya, Sudah Kembali">
+                        @csrf @method('PATCH')
+                        <button type="submit" class="ds-btn lg-btn-kembali"><i class="fa-solid fa-circle-check"></i> Tandai Sudah Kembali</button>
+                    </form>
+                    @endif
+                    @endif
+
+                    <div class="ds-alert dt-respon dt-respon--{{ $log->is_validated ? 'success' : 'warning' }}">
+                        <span class="dt-respon__ikon"><i class="fa-solid {{ $log->is_validated ? 'fa-user-check' : 'fa-hourglass-half' }}"></i></span>
+                        <div>
+                            <div class="dt-respon__judul">{{ $log->is_validated ? 'Log sudah divalidasi' : 'Log belum divalidasi' }}</div>
+                            <div class="dt-respon__pesan">
+                                @if($log->is_validated && $log->validator)
+                                Oleh {{ $log->validator->name }} · {{ $log->validated_at?->locale('id')->isoFormat('D MMM Y, HH:mm') }}
+                                @else
+                                Validasi menyatakan data izin sudah diperiksa dan sesuai fakta di lapangan.
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+                    <form action="{{ route('log-pergerakan.validasi', $log->id) }}" method="POST"
+                          data-konfirmasi="{{ $log->is_validated ? 'Validasi log ini akan dibatalkan dan kembali berstatus menunggu.' : 'Log ini akan ditandai tervalidasi. Pastikan data sudah sesuai fakta di lapangan.' }}"
+                          data-konfirmasi-judul="{{ $log->is_validated ? 'Batalkan Validasi?' : 'Validasi Log?' }}"
+                          data-konfirmasi-varian="{{ $log->is_validated ? 'warning' : 'success' }}"
+                          data-konfirmasi-tombol="{{ $log->is_validated ? 'Ya, Batalkan' : 'Ya, Validasi' }}">
+                        @csrf @method('PATCH')
+                        @if($log->is_validated)
+                        <button type="submit" class="ds-btn"><i class="fa-solid fa-rotate-left"></i> Batalkan Validasi</button>
                         @else
-                            <span class="text-danger"><i class="fas fa-hourglass-half me-1"></i> Masih di Luar ({{ $log->getDurasiFormatted() }} lalu)</span>
+                        <button type="submit" class="ds-btn ds-btn--primary"><i class="fa-solid fa-circle-check"></i> Validasi Sekarang</button>
                         @endif
-                    </div>
+                    </form>
+                </div>
+
+                <div class="dt-waktu">
+                    <span><i class="fa-solid fa-clock"></i>Dicatat {{ $log->created_at?->locale('id')->isoFormat('D MMM Y, HH:mm') }}{{ $log->creator ? ' oleh ' . $log->creator->name : '' }}</span>
+                    <span><i class="fa-solid fa-rotate"></i>Diperbarui {{ $log->updated_at?->locale('id')->isoFormat('D MMM Y, HH:mm') }}</span>
                 </div>
             </div>
-
-            {{-- Detail Spesifik Kategori --}}
-            <div class="card p-3 border-0 bg-light rounded-4 mb-4">
-                <h5 class="fw-bold text-dark mb-3"><i class="fas fa-list-alt text-primary me-2"></i> Rincian Informasi Kegiatan</h5>
-                
-                @if($log->kategori === 'perizinan')
-                    <div class="mb-2"><strong>Alasan / Keterangan Keluhan:</strong></div>
-                    <div class="p-3 bg-white border rounded-3 text-dark">{{ $log->keterangan_keluhan ?? 'Tidak ada catatan tambahan.' }}</div>
-                @elseif($log->kategori === 'ekstrakurikuler')
-                    <div class="row g-3">
-                        <div class="col-md-4">
-                            <strong>Nama Ekskul:</strong>
-                            <div class="fs-6 fw-bold text-primary">{{ $log->nama_ekskul }}</div>
-                        </div>
-                        <div class="col-md-4">
-                            <strong>Jumlah Anggota:</strong>
-                            <div class="fs-6 fw-bold text-dark">{{ $log->jumlah_anggota }} Orang</div>
-                        </div>
-                        <div class="col-md-4">
-                            <strong>Lokasi Kegiatan:</strong>
-                            <div class="fs-6 fw-bold text-dark">{{ $log->lokasi_kegiatan ?? '-' }}</div>
-                        </div>
-                        @if($log->daftar_anggota)
-                        <div class="col-12">
-                            <strong>Daftar Anggota yang Ikut:</strong>
-                            <div class="p-2 bg-white border rounded-3 mt-1">{{ $log->daftar_anggota }}</div>
-                        </div>
-                        @endif
-                    </div>
-                @else
-                    <div class="row g-3">
-                        <div class="col-md-6">
-                            <strong>Rute Olahraga:</strong>
-                            <div class="fs-6 fw-bold text-success">{{ $log->rute ?? '-' }}</div>
-                        </div>
-                        <div class="col-md-6">
-                            <strong>Pengikut / Teman Olahraga:</strong>
-                            <div class="fs-6 fw-bold text-dark">{{ $log->pengikut ?? '-' }}</div>
-                        </div>
-                    </div>
-                @endif
-            </div>
-
-            {{-- Dokumentasi Foto --}}
-            <div class="row g-4 mb-4">
-                @if($log->foto_keberangkatan)
-                <div class="col-md-6">
-                    <h6 class="fw-bold mb-2"><i class="fas fa-camera text-primary me-1"></i> Dokumentasi Keberangkatan</h6>
-                    <img src="{{ asset('storage/' . $log->foto_keberangkatan) }}" alt="Foto Keberangkatan" class="doc-img">
-                </div>
-                @endif
-                @if($log->foto_kembali)
-                <div class="col-md-6">
-                    <h6 class="fw-bold mb-2"><i class="fas fa-camera text-success me-1"></i> Dokumentasi Kepulangan</h6>
-                    <img src="{{ asset('storage/' . $log->foto_kembali) }}" alt="Foto Kepulangan" class="doc-img">
-                </div>
-                @endif
-            </div>
-
-            {{-- Action jika belum kembali --}}
-            @if($log->isBelumKembali())
-            <div class="p-3 bg-white border border-warning rounded-4 d-flex align-items-center justify-content-between">
-                <div>
-                    <h6 class="fw-bold text-dark mb-1"><i class="fas fa-exclamation-circle text-warning me-1"></i> Taruna Belum Kembali ke Asrama</h6>
-                    <p class="text-muted small mb-0">Klik tombol di samping saat taruna telah tiba kembali di asrama untuk memperbarui status.</p>
-                </div>
-                <form action="{{ route('log-pergerakan.kembali', $log->id) }}" method="POST" onsubmit="return confirm('Tandai bahwa {{ $log->nama }} SUDAH KEMBALI?')">
-                    @csrf
-                    @method('PATCH')
-                    <button type="submit" class="btn btn-success fw-bold px-4 py-2 rounded-3">
-                        <i class="fas fa-check-circle me-1"></i> UBAH STATUS AKHIR: KEMBALI
-                    </button>
-                </form>
-            </div>
-            @endif
-
-            {{-- Aksi Validasi Pengasuh/Admin --}}
-            <div class="p-3 bg-white border {{ $log->is_validated ? 'border-success' : 'border-warning' }} rounded-4 d-flex align-items-center justify-content-between mt-3">
-                <div>
-                    <h6 class="fw-bold text-dark mb-1">
-                        <i class="fas fa-user-check {{ $log->is_validated ? 'text-success' : 'text-warning' }} me-1"></i>
-                        {{ $log->is_validated ? 'Log Ini Sudah Divalidasi' : 'Log Ini Belum Divalidasi' }}
-                    </h6>
-                    <p class="text-muted small mb-0">Validasi menyatakan data izin ini sudah diperiksa dan sesuai fakta di lapangan.</p>
-                </div>
-                <form action="{{ route('log-pergerakan.validasi', $log->id) }}" method="POST" onsubmit="return confirm('{{ $log->is_validated ? 'Batalkan validasi log ini?' : 'Validasi log ini?' }}')">
-                    @csrf
-                    @method('PATCH')
-                    <button type="submit" class="btn {{ $log->is_validated ? 'btn-outline-secondary' : 'btn-success' }} fw-bold px-4 py-2 rounded-3">
-                        <i class="fas {{ $log->is_validated ? 'fa-rotate-left' : 'fa-check-circle' }} me-1"></i>
-                        {{ $log->is_validated ? 'Batalkan Validasi' : 'Validasi Sekarang' }}
-                    </button>
-                </form>
-            </div>
-
         </div>
 
     </div>
-</div>
+</main>
+
+<x-konfirmasi-modal />
 </x-app-layout>

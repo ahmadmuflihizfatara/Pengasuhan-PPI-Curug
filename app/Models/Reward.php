@@ -55,6 +55,18 @@ class Reward extends Model
         return ['Diajukan', 'Diproses', 'Disetujui', 'Ditolak'];
     }
 
+    /** Varian warna PPI Curug Glass (ds-badge--*) per status — sama dengan daftar reward taruna */
+    public function getStatusVarianAttribute(): string
+    {
+        return match ($this->status) {
+            'Diajukan'  => 'warning',
+            'Diproses'  => 'info',
+            'Disetujui' => 'success',
+            'Ditolak'   => 'danger',
+            default     => 'dark',
+        };
+    }
+
     public function getStatusBadgeColorAttribute(): string
     {
         return match ($this->status) {

@@ -178,4 +178,8 @@
 
     </div>
 </main>
+
+@unless(Auth::user()->hasTarunaAccess())
+    @include('berita._modal-hapus')
+@endunless
 </x-app-layout>

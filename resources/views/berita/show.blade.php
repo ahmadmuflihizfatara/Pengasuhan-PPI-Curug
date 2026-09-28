@@ -107,9 +107,9 @@
                             @csrf @method('PATCH')
                             <button type="submit" class="ds-btn ds-btn--sm"><i class="fa-solid fa-thumbtack"></i> {{ $beritum->is_pinned ? 'Lepas Pin' : 'Pin Berita' }}</button>
                         </form>
-                        <form method="POST" action="{{ route('berita.destroy', $beritum) }}" onsubmit="return confirm('Yakin hapus berita ini? Tindakan tidak dapat dibatalkan.')">
+                        <form method="POST" action="{{ route('berita.destroy', $beritum) }}">
                             @csrf @method('DELETE')
-                            <button type="submit" class="ds-btn ds-btn--sm ds-btn--danger"><i class="fa-solid fa-trash"></i> Hapus</button>
+                            <button type="button" class="ds-btn ds-btn--sm ds-btn--danger" onclick="bukaHapusBerita(this.form, @js($beritum->judul))"><i class="fa-solid fa-trash"></i> Hapus</button>
                         </form>
                     </div>
                     @endunless
@@ -151,4 +151,8 @@
 
     </div>
 </main>
+
+@unless(Auth::user()->hasTarunaAccess())
+    @include('berita._modal-hapus')
+@endunless
 </x-app-layout>

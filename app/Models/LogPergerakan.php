@@ -21,6 +21,32 @@ class LogPergerakan extends Model
     const KAT_EKSTRAKURIKULER = 'ekstrakurikuler';
     const KAT_OLAHRAGA        = 'olahraga';
 
+    // Jenis izin cabang Perizinan (disimpan di kolom subkategori).
+    // 'Kesehatan' lama digantikan 'Unit Kesehatan'; data lama tetap tampil apa adanya.
+    const SUBKAT_KHUSUS = 'Izin Khusus';
+    const SUBKAT_PERIZINAN = [
+        'Unit Kesehatan' => [
+            'ikon' => 'fa-house-medical', 'ket' => 'Menuju klinik, puskesmas, atau rumah sakit',
+            'label_ket' => 'Keluhan & Unit Kesehatan Tujuan', 'contoh' => 'Contoh: demam tinggi sejak pagi, menuju Klinik PPI Curug untuk diperiksa...',
+        ],
+        self::SUBKAT_KHUSUS => [
+            'ikon' => 'fa-bolt', 'ket' => 'Urgensi tinggi — tidak memerlukan surat izin',
+            'label_ket' => 'Alasan Urgensi', 'contoh' => 'Jelaskan keadaan mendesak yang membuat izin tidak dapat menunggu surat...',
+        ],
+        'Izin Terstruktur' => [
+            'ikon' => 'fa-list-check', 'ket' => 'Izin terjadwal sesuai ketentuan pengasuhan',
+            'label_ket' => 'Keterangan Izin Terstruktur', 'contoh' => 'Contoh: izin bermalam akhir pekan sesuai jadwal angkatan...',
+        ],
+        'Berduka' => [
+            'ikon' => 'fa-hands-praying', 'ket' => 'Keluarga atau kerabat berduka',
+            'label_ket' => 'Keterangan', 'contoh' => 'Contoh: ayah kandung meninggal dunia di Bandung...',
+        ],
+        'Lainnya' => [
+            'ikon' => 'fa-ellipsis', 'ket' => 'Keperluan keluarga / dinas luar',
+            'label_ket' => 'Keterangan / Keperluan', 'contoh' => 'Jelaskan alasan dan tujuan izin keluar...',
+        ],
+    ];
+
     protected $fillable = [
         'user_id',
         'nama',
@@ -120,6 +146,31 @@ class LogPergerakan extends Model
             return '<span class="badge-status-belum"><span class="pulse-dot"></span> Belum Kembali</span>';
         }
         return '<span class="badge-status-sudah"><i class="fas fa-check-circle me-1"></i> Sudah Kembali</span>';
+    }
+
+    /** Label tampilan sub-kategori ('Izin Khusus' → 'Izin Keluar Khusus') */
+    public function getSubkategoriLabelAttribute(): ?string
+    {
+        return $this->isUrgensiTinggi() ? 'Izin Keluar Khusus' : $this->subkategori;
+    }
+
+    /** Izin Keluar Khusus: urgensi tinggi, tanpa surat — disorot agar cepat divalidasi pengasuh */
+    public function isUrgensiTinggi(): bool
+    {
+        return $this->kategori === self::KAT_PERIZINAN && $this->subkategori === self::SUBKAT_KHUSUS;
+    }
+
+    /**
+     * [label, ikon, varian ds-badge] kategori — untuk tampilan PPI Curug Glass (rekap & detail log)
+     */
+    public function kategoriMeta(): array
+    {
+        return match ($this->kategori) {
+            self::KAT_PERIZINAN       => ['Perizinan', 'fa-notes-medical', 'danger'],
+            self::KAT_EKSTRAKURIKULER => ['Ekstrakurikuler', 'fa-people-group', 'accent'],
+            self::KAT_OLAHRAGA        => ['Olahraga', 'fa-person-running', 'success'],
+            default                   => [ucfirst((string) $this->kategori), 'fa-circle-info', 'info'],
+        };
     }
 
     public function getKategoriBadgeHtml(): string

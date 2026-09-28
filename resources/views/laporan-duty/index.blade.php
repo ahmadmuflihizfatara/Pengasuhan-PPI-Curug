@@ -30,7 +30,7 @@
             <div class="tanggal-card__item">
                 <span class="tanggal-card__ikon"><i class="fa-solid fa-calendar-week"></i></span>
                 <div>
-                    <div class="tanggal-card__label">{{ $isTaruna ? 'Periode Duty Anda' : 'Periode Duty' }}</div>
+                    <div class="tanggal-card__label">{{ $isTaruna ? 'Periode Duty Anda' : 'Periode Duty Minggu Ini' }}</div>
                     <div class="tanggal-card__value">{{ \App\Models\DutyTaruna::labelPeriode(\App\Models\DutyTaruna::awalMinggu()) }}</div>
                 </div>
             </div>
@@ -114,17 +114,42 @@
             .lapor-card .ds-input, .lapor-card .ds-textarea { font-size: 13px; line-height: 18px; background: var(--glass-solid); resize: vertical; }
         </style>
         @else
-        {{-- Pilih tanggal (pengasuh/admin) --}}
-        <form method="GET" action="{{ route('laporan-duty.index') }}" class="ds-card mb-6" style="display:flex; align-items:flex-end; gap:var(--space-3); flex-wrap:wrap;">
-            <div style="flex:0 1 260px; min-width:200px;">
-                <label for="tanggalLaporan" class="ds-label">Tanggal Laporan</label>
+        {{-- Pilih tanggal (pengasuh/admin) — pola pencarian tanggal tab Apel --}}
+        <x-form-glass-style />
+        @php
+            $kemarin = $tanggal->copy()->subDay();
+            $besok   = $tanggal->copy()->addDay();
+        @endphp
+        <form method="GET" action="{{ route('laporan-duty.index') }}" class="ds-card ld-cari mb-6" role="search">
+            <div class="form-group">
+                <label for="tanggalLaporan" class="form-label">Tanggal Laporan</label>
                 <input type="date" id="tanggalLaporan" name="tanggal" value="{{ $tanggal->toDateString() }}" max="{{ now()->toDateString() }}"
-                       class="ds-input" onchange="this.form.submit()">
+                       class="form-control" onchange="this.form.submit()">
             </div>
-            @unless($tanggal->isToday())
-            <a href="{{ route('laporan-duty.index') }}" class="ds-btn ds-btn--ghost"><i class="fa-solid fa-rotate-left"></i> Hari ini</a>
-            @endunless
+            <div class="ld-cari__nav">
+                <a href="{{ route('laporan-duty.index', ['tanggal' => $kemarin->toDateString()]) }}" class="ds-btn ds-btn--pill" title="{{ $kemarin->locale('id')->isoFormat('D MMM Y') }}">
+                    <i class="fa-solid fa-chevron-left"></i> Hari sebelumnya
+                </a>
+                @unless($tanggal->isToday())
+                <a href="{{ route('laporan-duty.index', ['tanggal' => $besok->toDateString()]) }}" class="ds-btn ds-btn--pill" title="{{ $besok->locale('id')->isoFormat('D MMM Y') }}">
+                    Hari berikutnya <i class="fa-solid fa-chevron-right"></i>
+                </a>
+                <a href="{{ route('laporan-duty.index') }}" class="ds-btn ds-btn--pill"><i class="fa-solid fa-rotate-left"></i> Hari ini</a>
+                @endunless
+            </div>
+            <span class="ds-badge {{ $laporan->isEmpty() ? 'ds-badge--success' : 'ds-badge--danger' }} ld-cari__info">
+                {{ $laporan->count() }} taruna sakit · {{ $tanggal->isToday() ? 'Hari ini' : $tanggal->locale('id')->isoFormat('D MMM Y') }}
+            </span>
         </form>
+        <style>
+            .ld-cari { display: flex; align-items: flex-end; gap: var(--space-3); flex-wrap: wrap; }
+            .ld-cari .form-group { flex: 0 1 260px; min-width: 200px; margin: 0; }
+            .ld-cari .form-control { cursor: pointer; }
+            .ld-cari__nav { display: flex; align-items: center; gap: var(--space-2); flex-wrap: wrap; }
+            .ld-cari__nav .ds-btn { height: 38px; }
+            .ld-cari__info { margin-left: auto; }
+            @media (max-width: 640px) { .ld-cari .form-group { flex-basis: 100%; } .ld-cari__info { margin-left: 0; } }
+        </style>
         @endif
 
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-5">
@@ -178,7 +203,8 @@
                                         </td>
                                         <td class="ds-right">
                                             @if($bolehHapus)
-                                            <form method="POST" action="{{ route('laporan-duty.destroy', $l) }}" onsubmit="return confirm('Hapus laporan {{ $l->mahasiswa->nama }}?')">
+                                            <form method="POST" action="{{ route('laporan-duty.destroy', $l) }}"
+                                                  data-konfirmasi="Laporan sakit {{ $l->mahasiswa->nama }} ({{ $l->tanggal->locale('id')->isoFormat('D MMM Y') }}) akan dihapus permanen." data-konfirmasi-judul="Hapus Laporan?" data-konfirmasi-tombol="Ya, Hapus">
                                                 @csrf @method('DELETE')
                                                 <button type="submit" class="ds-btn ds-btn--icon ds-btn--danger" title="Hapus laporan" aria-label="Hapus laporan {{ $l->mahasiswa->nama }}"><i class="fa-solid fa-trash"></i></button>
                                             </form>
@@ -248,6 +274,8 @@
 
     </div>
 </main>
+
+<x-konfirmasi-modal />
 
 @if($isTaruna)
 <script>
