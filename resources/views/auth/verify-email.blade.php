@@ -1,31 +1,23 @@
 <x-guest-layout>
-    <div class="mb-4 text-sm text-gray-600">
-        {{ __('Thanks for signing up! Before getting started, could you verify your email address by clicking on the link we just emailed to you? If you didn\'t receive the email, we will gladly send you another.') }}
-    </div>
+    <x-auth-card title="Verifikasi Email" subtitle="Terima kasih telah mendaftar! Klik tautan verifikasi yang kami kirim ke email Anda sebelum melanjutkan. Belum menerima email? Kirim ulang di bawah.">
+        @if (session('status') == 'verification-link-sent')
+            <div class="ds-alert ds-alert--success" role="status" style="margin-bottom:var(--space-5)">
+                <i class="fa-solid fa-circle-check ds-icon"></i><span>Tautan verifikasi baru telah dikirim ke email yang Anda daftarkan.</span>
+            </div>
+        @endif
 
-    @if (session('status') == 'verification-link-sent')
-        <div class="mb-4 font-medium text-sm text-green-600">
-            {{ __('A new verification link has been sent to the email address you provided during registration.') }}
-        </div>
-    @endif
-
-    <div class="mt-4 flex items-center justify-between">
         <form method="POST" action="{{ route('verification.send') }}">
             @csrf
-
-            <div>
-                <x-primary-button>
-                    {{ __('Resend Verification Email') }}
-                </x-primary-button>
-            </div>
-        </form>
-
-        <form method="POST" action="{{ route('logout') }}">
-            @csrf
-
-            <button type="submit" class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                {{ __('Log Out') }}
+            <button type="submit" class="ds-btn ds-btn--primary" style="width:100%;padding:var(--space-3) var(--space-5)">
+                <i class="fa-solid fa-envelope ds-icon"></i> Kirim Ulang Email Verifikasi
             </button>
         </form>
-    </div>
+
+        <form method="POST" action="{{ route('logout') }}" style="margin-top:var(--space-3)">
+            @csrf
+            <button type="submit" class="ds-btn ds-btn--ghost" style="width:100%;padding:var(--space-3) var(--space-5)">
+                <i class="fa-solid fa-right-from-bracket ds-icon"></i> Keluar
+            </button>
+        </form>
+    </x-auth-card>
 </x-guest-layout>

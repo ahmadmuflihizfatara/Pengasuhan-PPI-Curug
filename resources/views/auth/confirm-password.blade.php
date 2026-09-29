@@ -1,27 +1,18 @@
 <x-guest-layout>
-    <div class="mb-4 text-sm text-gray-600">
-        {{ __('This is a secure area of the application. Please confirm your password before continuing.') }}
-    </div>
+    <x-auth-card title="Konfirmasi Kata Sandi" subtitle="Ini area aman aplikasi. Masukkan kata sandi Anda untuk melanjutkan.">
+        <form method="POST" action="{{ route('password.confirm') }}" novalidate>
+            @csrf
 
-    <form method="POST" action="{{ route('password.confirm') }}">
-        @csrf
+            <div class="ds-field" style="margin-bottom:var(--space-6)">
+                <label for="password" class="ds-label">Kata Sandi</label>
+                <input id="password" type="password" name="password" required autofocus autocomplete="current-password"
+                       class="ds-input {{ $errors->has('password') ? 'ds-input--invalid' : '' }}" placeholder="••••••••">
+                @error('password') <div class="ds-error">{{ $message }}</div> @enderror
+            </div>
 
-        <!-- Password -->
-        <div>
-            <x-input-label for="password" :value="__('Password')" />
-
-            <x-text-input id="password" class="block mt-1 w-full"
-                            type="password"
-                            name="password"
-                            required autocomplete="current-password" />
-
-            <x-input-error :messages="$errors->get('password')" class="mt-2" />
-        </div>
-
-        <div class="flex justify-end mt-4">
-            <x-primary-button>
-                {{ __('Confirm') }}
-            </x-primary-button>
-        </div>
-    </form>
+            <button type="submit" class="ds-btn ds-btn--primary" style="width:100%;padding:var(--space-3) var(--space-5)">
+                <i class="fa-solid fa-shield-halved ds-icon"></i> Konfirmasi
+            </button>
+        </form>
+    </x-auth-card>
 </x-guest-layout>
